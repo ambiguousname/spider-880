@@ -21,7 +21,8 @@
         "xhash": "cpp",
         "xtree": "cpp",
         "unordered_map": "cpp",
-        "cmath": "cpp"
+        "cmath": "cpp",
+        "filesystem": "cpp"
     },
     "cmake.configureOnOpen": false
 }
