@@ -1,1 +1,1 @@
-utillib = static_library('util', 'image_window.cpp')
+utillib = static_library('util', ['color.cpp', 'image_box.cpp'])
