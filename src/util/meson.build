@@ -1,0 +1,1 @@
+utillib = static_library('util', 'image_window.cpp')

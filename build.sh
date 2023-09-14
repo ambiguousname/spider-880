@@ -3,5 +3,8 @@
 
 [ $? -ne 0 ] && read -p "Press enter to continue..."
 
-./build/spider-880.exe
+# TODO: Move into meson.build file?
+cp /ucrt64/bin/libfltk.dll /ucrt64/bin/libfltk_images.dll --target=./build/src/ 
+
+./build/src/spider-880.exe
 [ $? -ne 0 ] && read -p "Press enter to exit..."

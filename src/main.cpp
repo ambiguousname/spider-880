@@ -6,6 +6,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
+#include "util/image_window.h"
 
 void draw_img(void*) {
 	static Fl_PNG_Image *img = new Fl_PNG_Image("./assets/test.png");
@@ -27,9 +28,9 @@ void draw_img(void*) {
 		}
 		long index = (y * temp->w() * temp->d()) + (x * temp->d());
 
-		char r = *(buf + index);
-		char g = *(buf + index + 1);
-		char b = *(buf + index + 2);
+		unsigned char r = *(buf + index);
+		unsigned char g = *(buf + index + 1);
+		unsigned char b = *(buf + index + 2);
 
 		fl_color(r, g, b);
 		fl_point(x, y);
@@ -38,8 +39,8 @@ void draw_img(void*) {
 	Fl::repeat_timeout(0.01, draw_img);
 }
 
-	int main(int argc, char **argv) {
-	Fl_Window *window = new Fl_Window(340,180, "Test");
+int main(int argc, char **argv) {
+	ImageWindow *window = new ImageWindow("t", 340,180, "Test");
 	Fl_Box *box = new Fl_Box(20,40,300,100);
 
 	// box->image(temp);
@@ -47,6 +48,6 @@ void draw_img(void*) {
 	window->end();
 	window->show(argc, argv);
 
-	Fl::add_timeout(0.01, draw_img);
+	// Fl::add_timeout(0.01, draw_img);
 	return Fl::run();
 }
