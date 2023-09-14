@@ -3,8 +3,8 @@
 #include "util/image_box.h"
 
 int main(int argc, char **argv) {
-	Fl_Window *window = new Fl_Window(340,180, "Test");
-	ImageBox *box = new ImageBox("assets/test.png", 20,40,300,100);
+	Fl_Window *window = new Fl_Window(340,480, "Test");
+	ImageBox *box = new ImageBox("assets/test.png", 20,40,300,400);
 	// box->box(FL_UP_BOX);
 
 	// box->image(temp);

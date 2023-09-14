@@ -41,8 +41,13 @@ void ImageBox::drawProgress(int speed) {
 
 void ImageBox::draw() {
 	fl_draw_box(FL_UP_BOX, x(), y(), w(), h(), FL_BACKGROUND_COLOR);
+	// TODO: More efficient code for damaged or fully drawn ("cached") images.
 	while(Fl::check()) {
 		drawProgress(1);
+		if (rendered == true) {
+			rendered = false;
+			break;
+		}
 	}
 	// fl_color(FL_FOREGROUND_COLOR);
 	// fl_draw("Hallo?", x(), y() - fl_descent());
