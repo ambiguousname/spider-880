@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "array": "cpp",
+        "span": "cpp",
+        "vector": "cpp",
+        "xstring": "cpp",
+        "xutility": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "charconv": "cpp",
+        "ostream": "cpp",
+        "queue": "cpp",
+        "stack": "cpp",
+        "random": "cpp"
+    }
+}
