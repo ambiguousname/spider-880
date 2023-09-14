@@ -9,7 +9,9 @@ int main(int argc, char **argv) {
 
   Fl_PNG_Image *img = new Fl_PNG_Image("./test.png");
 
-  box->image(img);
+  Fl_Image* temp = img->copy(box->w(), box->h() * img->h()/img->w());
+
+  box->image(temp);
   
   window->end();
   window->show(argc, argv);
