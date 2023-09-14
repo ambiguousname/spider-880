@@ -1,0 +1,15 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+	{
+		"label": "Build",
+		"group":"build",
+		"type": "process",
+		"command": "C:\\msys64\\ucrt64.exe",
+		"args": ["./build.sh"],
+		"options": {
+			"cwd": "${workspaceFolder}"
+		}
+	}
+	]
+}
