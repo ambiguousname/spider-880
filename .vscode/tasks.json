@@ -1,15 +1,24 @@
 {
 	"version": "2.0.0",
 	"tasks": [
-	{
-		"label": "Build",
-		"group":"build",
-		"type": "process",
-		"command": "C:\\msys64\\ucrt64.exe",
-		"args": ["./build.sh"],
-		"options": {
-			"cwd": "${workspaceFolder}"
+		{
+			"label": "Build",
+			"group": "build",
+			"type": "process",
+			"command": "C:\\msys64\\ucrt64.exe",
+			"args": [
+				"./build.sh"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			}
+		},
+		{
+			"label": "FLUID",
+			"group": "none",
+			"type": "process",
+			"command": "C:\\msys64\\ucrt64\\bin\\fluid.exe",
+			"problemMatcher": []
 		}
-	}
 	]
 }

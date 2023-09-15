@@ -1,4 +1,5 @@
 subdir('util')
+subdir('spider-navigator')
 # fltk = dependency('fltk', version : '>=1.3.8')
 
 flags = run_command('fltk-config', '--ldflags')

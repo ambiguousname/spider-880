@@ -1,0 +1,12 @@
+<html>
+	<script>
+		void onStart() {
+			std::cout << "Hello world!";
+		}
+	</script>
+	<body>
+		<p id="test">
+			This is a CPPHTML webpage!
+		</p>
+	</body>
+</html>
