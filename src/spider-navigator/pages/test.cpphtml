@@ -2,7 +2,7 @@
 	<headers>
 		&lt;iostream&gt;
 	</headers>
-	<script>
+	<script type="text/cpp">
 		void onStart() {
 			std::cout << "Hello world!";
 		}

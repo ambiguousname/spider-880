@@ -1,7 +1,7 @@
-#include <iostream>
-#include <FL/Fl_Output.h>
 #include <FL/Fl_Group.h>
+#include <iostream>
 #include <FL/Fl_Window.h>
+#include <FL/Fl_Output.h>
 
 void onStart() {
 	std::cout << "Hello world!";

@@ -42,7 +42,7 @@ class HtmlStackNode():
 	def close(self):
 		pass
 
-class Body(HtmlStackNode):
+class Html(HtmlStackNode):
 	headers = ["<FL/Fl_Window.h>"]
 
 	def open(self):
@@ -116,7 +116,7 @@ class HTMLCPPParser(HTMLParser):
 	def match_node(self):
 		return {
 			"p": {"type": PNode, "stream": self.draw_stream},
-			"body": {"type": Body, "stream": self.draw_stream},
+			"html": {"type": Html, "stream": self.draw_stream},
 			"script": {"type": Script, "stream": self.custom_script_dat},
 			"headers": {"type": Headers, "stream": self.draw_stream}
 		}
