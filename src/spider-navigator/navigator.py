@@ -79,7 +79,10 @@ class Script(HtmlStackNode):
 
 class Headers(HtmlStackNode):
 	def data(self, data):
-		self.headers.add(data.lstrip())
+		lines = data.split("\n")
+		for line in lines:
+			if len(line) > 0 and not str.isspace(line):
+				self.headers.add(line.lstrip())
 		return super().data(data)
 
 class HTMLCPPParser(HTMLParser):
