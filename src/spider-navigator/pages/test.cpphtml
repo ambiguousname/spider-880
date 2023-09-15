@@ -1,12 +1,16 @@
 <html>
+	<headers>
+		&lt;iostream&gt;
+	</headers>
 	<script>
 		void onStart() {
 			std::cout << "Hello world!";
 		}
 	</script>
-	<body>
+	<body> <!-- Represents the Window object. -->
 		<p id="test">
-			This is a CPPHTML webpage!
+			This is a .CPPHTML webpage!
+			You can write multiple lines!
 		</p>
 	</body>
 </html>
