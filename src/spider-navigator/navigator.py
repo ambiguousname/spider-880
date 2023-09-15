@@ -46,7 +46,7 @@ class Html(HtmlStackNode):
 	headers = ["<FL/Fl_Window.h>"]
 
 	def open(self):
-		self.writeln(f"Fl_Window *window = new Fl_Window(340, 480, \"Test\");")
+		self.writeln(f"Fl_Window *window = new Fl_Window(340, 480, \"{self.id}\");")
 	
 	def close(self):
 		self.writeln("window->end();")
