@@ -176,31 +176,38 @@ class HTMLCPPParser(HTMLParser):
 			self.stack[-1].data(data)
 		return super().handle_data(data)
 
+def writeHeader(pth, includes, header_info):
+	header = open(path.join(pth, "pages.h"), "w")
+	header.write("#pragma once\n")
+
+	for include in includes:
+		header.write(f"#include {include}\n")
+
+
+	for namespace in header_info:
+		header.write(f"namespace {namespace} {{\n\tvoid draw();\n}}\n")
 
 if __name__ == "__main__":
 	includes = set()
 	header_info = []
+	prev_dir = ""
 	for line in fileinput.input():
 		if "DIR:" in line:
-			header = open(path.join(line, "pages.h"), "w")
-			header.write("#pragma once\n")
-
-			for include in includes:
-				header.write(f"#include {include}\n")
-
-
-			for namespace in header_info:
-				header.write(f"namespace {namespace} {{\n\tvoid draw();\n}}\n")
-
-			header.close()
-			header_info = []
-			includes = set()
+			if prev_dir != "":
+				header_info = []
+				includes = set()
+				writeHeader(prev_dir, includes, header_info)
 		else:
-			cpp_stream = open(line, "w")
-			parser = HTMLCPPParser(cpp_stream, line)
-			file = open(line, "w")
+			pth = line.replace("\n", "")
+			cpp_file = pth.replace(".cpphtml", ".cpp")
+			prev_dir = path.join(pth, "../")
+			
+			cpp_stream = open(cpp_file, "w")
+			parser = HTMLCPPParser(cpp_stream, cpp_file)
+			file = open(pth, "r")
 			parser.feed(file.read())
 			parser.close()
 			file.close()
 			includes.update(parser.includes)
 			header_info.append(parser.namespace)
+	writeHeader(prev_dir, includes, header_info)
