@@ -47,7 +47,19 @@ class Body(HtmlStackNode):
 	headers = ["<FL/Fl_Window.h>"]
 
 	def open(self):
-		self.writeln(f"Fl_Window *window = new Fl_Window(340, 480, \"{self.id}\");")
+		if "x" in self.attrs:
+			self.x = int(self.attrs["x"])
+
+		if "y" in self.attrs:
+			self.y = int(self.attrs["y"])
+		
+		if "w" in self.attrs:
+			self.w = int(self.attrs["w"])
+		
+		if "h" in self.attrs:
+			self.h = int(self.attrs["h"])
+		
+		self.writeln(f"Fl_Window *window = new Fl_Window({self.x}, {self.y}, {self.w}, {self.h}, \"{self.id}\");")
 	
 	def close(self):
 		self.writeln("window->end();")
@@ -86,18 +98,13 @@ class Headers(HtmlStackNode):
 				self.headers.add(line.lstrip())
 		return super().data(data)
 
-def path_to_namespace(pth):
-	matches = re.match(".*pages(.*)", path.splitext(pth)[0])
-	title = matches[1].replace(sep, " ").replace("_", " ").title().replace(" ", "")
-
-	return title
-
 class HTMLCPPParser(HTMLParser):
 	def __init__(self, p, convert_charrefs: bool = True) -> None:
 		super().__init__(convert_charrefs=convert_charrefs)
 
 		self.path = p
 
+		self.cpp_stream = io.StringIO()
 		self.draw_stream = io.StringIO("void draw() {\n")
 		self.custom_script_dat = io.StringIO()
 
@@ -107,18 +114,21 @@ class HTMLCPPParser(HTMLParser):
 		self.headers = set()
 
 
-	def close(self):
-		with open(self.path, 'w') as cpp_file:
-			for header in self.headers:
-				cpp_file.write(f"#include {header}\n")
+		matches = re.match(".*pages(.*)", path.splitext(p)[0])
+		self.namespace = matches[1].replace(sep, " ").replace("_", " ").title().replace(" ", "")
 
-			cpp_file.write(f"namespace {path_to_namespace(self.path)} {{")
-			self.custom_script_dat.seek(0)
-			cpp_file.write(self.custom_script_dat.read())
-			self.draw_stream.seek(0)
-			cpp_file.write("\tvoid draw() {\n")
-			cpp_file.write(self.draw_stream.read())
-			cpp_file.write("\t\tonStart();\n\t}\n}")
+
+	def close(self):
+		self.cpp_stream.write(f"namespace {self.namespace} {{")
+		self.custom_script_dat.seek(0)
+		self.cpp_stream.write(self.custom_script_dat.read())
+		self.draw_stream.seek(0)
+		self.cpp_stream.write("\tvoid draw() {\n")
+		self.cpp_stream.write(self.draw_stream.read())
+		self.cpp_stream.write("\t\tonStart();\n\t}\n}")
+
+		self.custom_script_dat.close()
+		self.draw_stream.close()
 		if len(self.stack) > 0:
 			print("Unclosed tags: " + self.stack)
 
@@ -160,6 +170,8 @@ class HTMLCPPParser(HTMLParser):
 		
 
 def searchDir(dir : PathLike):
+	cpp_to_write = []
+	headers = set()
 	for entry in scandir(dir):
 		print("Found: ", entry.name)
 		filename, extension = path.splitext(entry.name)
@@ -172,6 +184,26 @@ def searchDir(dir : PathLike):
 				parser = HTMLCPPParser(path.join(base, filename + ".cpp"))
 				parser.feed(file.read())
 				parser.close()
+				headers.update(parser.headers)
+				cpp_to_write.append((parser.cpp_stream, parser.namespace))
+	
+	header = open(path.join(dir, "/pages.h"), "w")
+	cpp = open(path.join(dir, "/pages.cpp"), "w")
+
+	for header in headers:
+			headers.write(f"#include {header}\n")
+
+
+	for stream, namespace in cpp_to_write:
+		cpp.write(stream.read())
+		stream.close()
+
+
+
+	header.close()
+	cpp.close()
+
+
 
 		
 

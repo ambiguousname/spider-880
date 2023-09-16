@@ -1,4 +1,4 @@
-<html id="Test">
+<html>
 	<headers>
 		&lt;iostream&gt;
 	</headers>
@@ -7,7 +7,7 @@
 			std::cout << "Hello world!";
 		}
 	</script>
-	<body> <!-- Represents the Window object. -->
+	<body id="Test"> <!-- Represents the Window object. -->
 		<p id="test">
 			This is a .CPPHTML webpage!
 			You can write multiple lines!
