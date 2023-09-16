@@ -11,6 +11,7 @@
 		}
 	</script>
 	<body id="My Blog (GEANE: CHANGE TITLE TEXT)" w=300 h=300> <!-- Represents the Window object. -->
+		<img src="./assets/test.png"/>
 		<p>
 			Howdy folks! Welcome to the murder show.
 		</p>

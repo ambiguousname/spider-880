@@ -85,6 +85,15 @@ class PNode(HtmlStackNode):
 	def close(self):
 		self.writeln(f"p_{self.id}->end();")
 
+class ImageNode(HtmlStackNode):
+	includes = ["<util/ImageBox.h>"]
+
+	def open(self):
+		if "src" in self.attrs:
+			self.writeln(f"ImageBox *img_{self.id} = new ImageBox({self.attrs['src']}, {self.x}, {self.y}, {self.w}, {self.h});")
+		else:
+			sys.stderr.write("Could not find source for image box with ID: " + self.id)
+
 class Script(HtmlStackNode):
 	tabs = 1
 	def data(self, data):
@@ -144,7 +153,8 @@ class HTMLCPPParser(HTMLParser):
 			"p": {"type": PNode, "stream": self.draw_stream},
 			"body": {"type": Body, "stream": self.draw_stream},
 			"script": {"type": Script, "stream": self.custom_script_dat},
-			"includes": {"type": Includes, "stream": self.draw_stream}
+			"includes": {"type": Includes, "stream": self.draw_stream},
+			"img": {"type": ImageNode, "stream": self.draw_stream}
 		}
 
 	def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
@@ -215,6 +225,17 @@ def searchDir(dir):
 			f = open(path.join(root, "../list.txt"), "a")
 			f.write(pth + "\n")
 			f.close()
+	
+	if num_entries > 0:
+		header = open(path.join(dir, "pages.h"), "w")
+		header.write("#pragma once\n")
+
+		for include in includes:
+			header.write(f"#include {include}\n")
+
+		for namespace in header_info:
+			header.write(f"namespace {namespace} {{\n\tvoid draw();\n}}\n")
+		header.close()
 
 if __name__ == "__main__":
 	f = open(path.join(root, "../list.txt"), "w")
