@@ -5,7 +5,7 @@ status=$?
 [ $status -ne 0 ] && read -p "meson compile: error $status Press enter to continue..."
 
 # TODO: Move into meson.build file?
-cp /ucrt64/bin/libfltk.dll /ucrt64/bin/libfltk_images.dll /ucrt64/bin/libpng-16-16.dll --target=./build/src/ 
+cp /ucrt64/bin/libfltk.dll /ucrt64/bin/libfltk_images.dll /ucrt64/bin/libpng16-16.dll --target=./build/src/ 
 
 cp -r ./assets/ --target=./build/src
 
