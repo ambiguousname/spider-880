@@ -3,12 +3,13 @@
 # Requires Python >=3.11.4
 
 from html.parser import HTMLParser
-from os import PathLike, path, scandir
+from os import PathLike, path, scandir, sep
+import re
 import io
 
 class HtmlStackNode():
 	headers = set()
-	tabs = 1
+	tabs = 2
 	def __init__(self, stream, id : int, tag : str, attrs: list[tuple[str, str | None]], x : int, y : int, w : int, h : int) -> None:
 		self.tag = tag
 		self.attrs = {}
@@ -42,7 +43,7 @@ class HtmlStackNode():
 	def close(self):
 		pass
 
-class Html(HtmlStackNode):
+class Body(HtmlStackNode):
 	headers = ["<FL/Fl_Window.h>"]
 
 	def open(self):
@@ -70,7 +71,7 @@ class PNode(HtmlStackNode):
 		self.writeln(f"p_{self.id}->end();")
 
 class Script(HtmlStackNode):
-	tabs = 0
+	tabs = 1
 	def data(self, data):
 		lines = data.split("\n")
 		num_tabs = lines[1].count('\t')
@@ -84,6 +85,12 @@ class Headers(HtmlStackNode):
 			if len(line) > 0 and not str.isspace(line):
 				self.headers.add(line.lstrip())
 		return super().data(data)
+
+def path_to_namespace(pth):
+	matches = re.match(".*pages(.*)", path.splitext(pth)[0])
+	title = matches[1].replace(sep, " ").replace("_", " ").title().replace(" ", "")
+
+	return title
 
 class HTMLCPPParser(HTMLParser):
 	def __init__(self, p, convert_charrefs: bool = True) -> None:
@@ -104,19 +111,21 @@ class HTMLCPPParser(HTMLParser):
 		with open(self.path, 'w') as cpp_file:
 			for header in self.headers:
 				cpp_file.write(f"#include {header}\n")
+
+			cpp_file.write(f"namespace {path_to_namespace(self.path)} {{")
 			self.custom_script_dat.seek(0)
 			cpp_file.write(self.custom_script_dat.read())
 			self.draw_stream.seek(0)
-			cpp_file.write("void draw() {\n")
+			cpp_file.write("\tvoid draw() {\n")
 			cpp_file.write(self.draw_stream.read())
-			cpp_file.write("\tonStart();\n}\n")
+			cpp_file.write("\t\tonStart();\n\t}\n}")
 		if len(self.stack) > 0:
 			print("Unclosed tags: " + self.stack)
 
 	def match_node(self):
 		return {
 			"p": {"type": PNode, "stream": self.draw_stream},
-			"html": {"type": Html, "stream": self.draw_stream},
+			"body": {"type": Body, "stream": self.draw_stream},
 			"script": {"type": Script, "stream": self.custom_script_dat},
 			"headers": {"type": Headers, "stream": self.draw_stream}
 		}
