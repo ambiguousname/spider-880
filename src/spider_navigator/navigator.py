@@ -69,21 +69,15 @@ class Body(HtmlStackNode):
 		self.writeln("window->show();")
 
 class PNode(HtmlStackNode):
-	includes = ["<FL/Fl_Group.h>", "<FL/Fl_Box.h>"]
-	text_id = 0
+	includes = ["<FL/Fl_Box.h>"]
 
 	def open(self):
-		self.writeln(f"Fl_Group *p_{self.id} = new Fl_Group({self.x}, {self.y}, {self.w}, {self.h});")
+		self.writeln(f"Fl_Box *p_{self.id} = new Fl_Box({self.x}, {self.y}, {self.w}, {self.h});")
 	
 	def data(self, data):
-		lines = data.split("\n")
-		for line in lines:
-			if line and not str.isspace(line):
-				self.writeln(f"Fl_Box *p_{self.id}_text_{self.text_id} = new Fl_Box({self.x}, {self.y + (20 * self.text_id)}, {self.w}, {self.h}, \"{line.lstrip()}\");")
-				self.text_id += 1
-
-	def close(self):
-		self.writeln(f"p_{self.id}->end();")
+		lines = data.replace("\n", "")
+		full_data =lines.replace('"', "\\\"")
+		self.writeln(f"p_{self.id}->label(\"{full_data}\");")
 
 class ImageNode(HtmlStackNode):
 	includes = ["<util/image_box.h>"]
