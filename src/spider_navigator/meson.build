@@ -1,8 +1,7 @@
 python = find_program('python')
 
-custom_target('htmltocppfiles', build_always_stale: true, build_by_default: true, input: 'navigator.py', output: 'list.txt', command: [python, '@INPUT@'])
+cpp_files = run_command('cat', 'list.txt')
+files = cpp_files.stdout().strip()
 
-cat = run_command('cat', 'list.txt')
-files = cat.stdout().strip()
-
-pageslib = static_library('pages', files.split('\n'))
+# Modify python script to just instead write to here?
+pageslib = static_library('pages', files.split('\n'), build_by_default: true)

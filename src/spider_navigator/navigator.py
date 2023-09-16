@@ -79,7 +79,7 @@ class PNode(HtmlStackNode):
 		lines = data.split("\n")
 		for line in lines:
 			if line and not str.isspace(line):
-				self.writeln(f"Fl_Box *p_{self.id}_text_{self.text_id} = new Fl_Box({self.x}, {self.y * (20 * self.text_id)}, {self.w}, {self.h}, \"{line.lstrip()}\");")
+				self.writeln(f"Fl_Box *p_{self.id}_text_{self.text_id} = new Fl_Box({self.x}, {self.y + (20 * self.text_id)}, {self.w}, {self.h}, \"{line.lstrip()}\");")
 				self.text_id += 1
 
 	def close(self):
