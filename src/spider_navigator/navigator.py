@@ -3,8 +3,7 @@
 # Requires Python >=3.11.4
 
 from html.parser import HTMLParser
-from os import PathLike, path, sep
-import fileinput
+from os import PathLike, path, sep, scandir
 import re
 import io
 import sys
@@ -187,27 +186,38 @@ def writeHeader(pth, includes, header_info):
 	for namespace in header_info:
 		header.write(f"namespace {namespace} {{\n\tvoid draw();\n}}\n")
 
-if __name__ == "__main__":
+def searchDir(dir):
 	includes = set()
 	header_info = []
-	prev_dir = ""
-	for line in fileinput.input():
-		if "DIR:" in line:
-			if prev_dir != "":
-				header_info = []
-				includes = set()
-				writeHeader(prev_dir, includes, header_info)
-		else:
-			pth = line.replace("\n", "")
-			cpp_file = pth.replace(".cpphtml", ".cpp")
-			prev_dir = path.join(pth, "../")
-			
-			cpp_stream = open(cpp_file, "w")
-			parser = HTMLCPPParser(cpp_stream, cpp_file)
-			file = open(pth, "r")
+	num_entries = 0
+
+	for entry in scandir(dir):
+		filename, extension = path.splitext(entry.name)
+		if entry.is_dir():
+			searchDir(entry)
+		elif extension == ".cpphtml":
+			num_entries += 1
+
+			entry_path = path.abspath(entry.path)
+			base, full_filename = path.split(entry_path)
+			pth = path.join(base, filename + ".cpp")
+
+			cpp_stream = open(pth, "w")
+			parser = HTMLCPPParser(cpp_stream, pth)
+			file = open(entry.path, "r")
 			parser.feed(file.read())
 			parser.close()
 			file.close()
+			
 			includes.update(parser.includes)
 			header_info.append(parser.namespace)
-	writeHeader(prev_dir, includes, header_info)
+			
+			f = open(path.join(root, "../list.txt"), "a")
+			f.write(pth + "\n")
+			f.close()
+
+if __name__ == "__main__":
+	searchDir(root)
+	f = open(path.join(root, "../list.txt"), "w")
+	f.truncate()
+	f.close()
