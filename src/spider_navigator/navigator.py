@@ -86,11 +86,11 @@ class PNode(HtmlStackNode):
 		self.writeln(f"p_{self.id}->end();")
 
 class ImageNode(HtmlStackNode):
-	includes = ["<util/ImageBox.h>"]
+	includes = ["<util/image_box.h>"]
 
 	def open(self):
 		if "src" in self.attrs:
-			self.writeln(f"ImageBox *img_{self.id} = new ImageBox({self.attrs['src']}, {self.x}, {self.y}, {self.w}, {self.h});")
+			self.writeln(f"ImageBox *img_{self.id} = new ImageBox(\"{self.attrs['src']}\", {self.x}, {self.y}, {self.w}, {self.h});")
 		else:
 			sys.stderr.write("Could not find source for image box with ID: " + self.id)
 

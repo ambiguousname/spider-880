@@ -1,5 +1,5 @@
 #include <FL/Fl.H>
-#include "spider_navigator/pages/murder_blog/pages.h"
+#include <murder_blog/pages.h>
 
 int main(int argc, char **argv) {
 	MurderBlogIndexHTMLPage::draw();
