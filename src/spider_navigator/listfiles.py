@@ -19,9 +19,9 @@ def searchDir(dir):
 
 			files.append(entry.path)
 	if len(files) > 0:
+		print('DIR:')
 		for file in files:
-			print(file)
-		print("DIR:" + str(dir.path))
+			print(path.abspath(file))
 		
 if __name__ == "__main__":
 	f = open(path.join(root, "../list.txt"), "w")
