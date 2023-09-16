@@ -216,8 +216,10 @@ def searchDir(dir):
 			f.write(pth + "\n")
 			f.close()
 
+print("A")
 if __name__ == "__main__":
-	searchDir(root)
+	print("TEST?")
 	f = open(path.join(root, "../list.txt"), "w")
 	f.truncate()
 	f.close()
+	searchDir(root)
