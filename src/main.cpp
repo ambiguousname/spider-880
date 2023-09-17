@@ -3,7 +3,8 @@
 
 int main(int argc, char **argv) {
 	MurderBlogIndexHTMLPage::draw();
-	return Fl::run();
+	// return Fl::run();
+	return 0;
 }
 
 /*

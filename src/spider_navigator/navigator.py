@@ -66,14 +66,20 @@ class Body(HtmlStackNode):
 	
 	def close(self):
 		self.writeln("window->end();")
+		self.writeln("window->resizable(*window);")
 		self.writeln("window->show();")
 
 class PNode(HtmlStackNode):
 	includes = ["<FL/Fl_Text_Display.h>", "<Fl/Fl_Text_Buffer.h>"]
 
+	styles = [{ "color": "FL_FOREGROUND_COLOR", "font": "FL_COURIER", "size": "16" }]
+
 	def open(self):
 		self.writeln(f"Fl_Text_Display *p_{self.id} = new Fl_Text_Display({self.x}, {self.y}, {self.w}, {self.h});")
+		self.writeln(f"p_{self.id}->box(FL_NO_BOX);")
+
 		self.writeln(f"Fl_Text_Buffer *p_{self.id}_text = new Fl_Text_Buffer();")
+		self.writeln(f"Fl_Text_Buffer *p_{self.id}_style = new Fl_Text_Buffer();")
 		self.writeln(f"p_{self.id}->buffer(p_{self.id}_text);")
 	
 	def data(self, data):
@@ -81,6 +87,18 @@ class PNode(HtmlStackNode):
 		for line in lines:
 			if len(line) > 0 and not str.isspace(line):
 				self.writeln(f"p_{self.id}_text->append(\"{line.lstrip()}\");")
+				self.writeln(f"p_{self.id}_style->append(\"{'A' * len(line.lstrip())}\");")
+		
+	def close(self):
+		self.writeln(f"Fl_Text_Display::Style_Table_Entry p_{self.id}_style_table[] = {{")
+		for style in self.styles:
+			color = style["color"]
+			font = style["font"]
+			size = style["size"]
+			self.writeln(f"\t {{ {color}, {font}, {size} }},")
+		self.writeln("};")
+		self.writeln(f"p_{self.id}->highlight_data(p_{self.id}_style, p_{self.id}_style_table, {len(self.styles)}, 'A', 0, 0);")
+		self.writeln(f"p_{self.id}->wrap_mode(3, 0);")
 
 class ImageNode(HtmlStackNode):
 	includes = ["<util/image_box.h>"]
@@ -123,7 +141,7 @@ class HTMLCPPParser(HTMLParser):
 		self.id = 0
 
 		self.stack = []
-		self.includes = set()
+		self.includes = set(["<FL/Fl.h>"])
 
 
 		matches = re.match(".*pages(.*)", path.splitext(p)[0])
@@ -138,7 +156,7 @@ class HTMLCPPParser(HTMLParser):
 		self.draw_stream.seek(0)
 		self.cpp_stream.write("\tvoid draw() {\n")
 		self.cpp_stream.write(self.draw_stream.read())
-		self.cpp_stream.write("\t\tonStart();\n\t}\n}")
+		self.cpp_stream.write("\t\tonStart();\n\tFl::run();\n\t}\n}")
 
 		self.custom_script_dat.close()
 		self.draw_stream.close()
@@ -188,7 +206,6 @@ def writeHeader(pth, includes, header_info):
 
 	for include in includes:
 		header.write(f"#include {include}\n")
-
 
 	for namespace in header_info:
 		header.write(f"namespace {namespace} {{\n\tvoid draw();\n}}\n")
