@@ -1,8 +1,8 @@
 #pragma once
-#include <iostream>
-#include <FL/Fl_Box.h>
+#include <FL/Fl_Text_Display.h>
+#include <Fl/Fl_Text_Buffer.h>
 #include <FL/Fl_Window.h>
-#include <util/image_box.h>
+#include <iostream>
 namespace MurderBlogIndexHTMLPage {
 	void draw();
 }

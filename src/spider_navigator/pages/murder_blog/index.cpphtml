@@ -11,7 +11,7 @@
 		}
 	</script>
 	<body id="My Blog (GEANE: CHANGE TITLE TEXT)" w=300 h=300> <!-- Represents the Window object. -->
-		<img src="./assets/test.png" w=100 h=100 />
+		<!-- <img src="./assets/test.png" w=100 h=100 /> -->
 		<p>
 			Image courtesy of <a>user:engounge</a>
 		</p>
@@ -36,8 +36,8 @@
 		<p>
 			To all of the loud-mouthed Rorikenders I know: shut your gagging SPNPOLICY200 flaps. And remember to stay safe out there.
 		</p>
-		<p>
-			Kurt Hawkins, Site Admin.
-		</p>
+		<!-- <p> -->
+			<!-- Kurt Hawkins, Site Admin. -->
+		<!-- </p> -->
 	</body>
 </html>
