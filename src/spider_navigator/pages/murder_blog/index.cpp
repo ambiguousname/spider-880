@@ -5,7 +5,7 @@ namespace MurderBlogIndexHTMLPage {
 	}
 		
 	void draw() {
-		Fl_Window *window = new Fl_Window(0, 0, 300, 300, "My Blog (GEANE: CHANGE TITLE TEXT)");
+		Fl_Window *window = new Fl_Window(0, 0, 300, 300, "5");
 		Fl_Text_Display *p_6 = new Fl_Text_Display(0, 0, 300, 300);
 		p_6->box(FL_NO_BOX);
 		Fl_Text_Buffer *p_6_text = new Fl_Text_Buffer();
@@ -51,8 +51,8 @@ namespace MurderBlogIndexHTMLPage {
 		Fl_Text_Buffer *p_13_text = new Fl_Text_Buffer();
 		Fl_Text_Buffer *p_13_style = new Fl_Text_Buffer();
 		p_13->buffer(p_13_text);
-		p_13_text->append("Details as I can get them are scarce. Police aren't saying much other than that the body was found in the abandoned caves by Rorik End's scenic, beautiful, tourist-attracting, all around pleasant space, Garbage Park.");
-		p_13_style->append("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+		p_13_text->append("Details as I can get them are scarce. Police aren't saying much other than that the body was found in the abandoned caves by Rorik End's scenic, beautiful, tourist-attracting, all around pleasant space, Egg Park.");
+		p_13_style->append("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 		Fl_Text_Display::Style_Table_Entry p_13_style_table[] = {
 			 { FL_FOREGROUND_COLOR, FL_COURIER, 16 },
 		};
@@ -110,6 +110,6 @@ namespace MurderBlogIndexHTMLPage {
 		window->resizable(*window);
 		window->show();
 		onStart();
-	Fl::run();
+		Fl::run();
 	}
 }

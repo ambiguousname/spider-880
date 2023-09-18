@@ -13,7 +13,7 @@ root = path.abspath(__file__ + "/../pages/")
 class HtmlStackNode():
 	includes = set()
 	tabs = 2
-	def __init__(self, stream, id : int, tag : str, attrs: list[tuple[str, str | None]], parent = None) -> None:
+	def __init__(self, stream, id : int, tag : str, attrs: list[tuple[str, str | None]], parent = None, prev = None) -> None:
 		self.tag = tag
 		self.attrs = {}
 		self.id = id
@@ -27,8 +27,13 @@ class HtmlStackNode():
 		self.w = 300
 		self.h = 300
 
+		self.prev = prev
+		if self.prev != None:
+			self.x = self.prev.x
+			self.y = self.prev.y + 20
+
 		self.parent = parent
-		if parent != None:
+		if self.parent != None:
 			self.w = self.parent.w
 			self.h = self.parent.h
 		
@@ -148,12 +153,16 @@ class HTMLCPPParser(HTMLParser):
 		self.stack = []
 		self.includes = set(["<FL/Fl.h>"])
 
+		self.prev = None
+
 
 		matches = re.match(".*pages(.*)", path.splitext(p)[0])
 		self.namespace = matches[1].replace(sep, " ").replace("_", " ").title().replace(" ", "") + "HTMLPage"
 
 
 	def close(self):
+		if self.custom_script_dat.tell() == 0:
+			self.custom_script_dat.write("\n\tvoid onStart() {}\n")
 		self.cpp_stream.write(f"#include \"pages.h\"\n")
 		self.cpp_stream.write(f"namespace {self.namespace} {{")
 		self.custom_script_dat.seek(0)
@@ -161,7 +170,7 @@ class HTMLCPPParser(HTMLParser):
 		self.draw_stream.seek(0)
 		self.cpp_stream.write("\tvoid draw() {\n")
 		self.cpp_stream.write(self.draw_stream.read())
-		self.cpp_stream.write("\t\tonStart();\n\tFl::run();\n\t}\n}")
+		self.cpp_stream.write("\t\tonStart();\n\t\tFl::run();\n\t}\n}")
 
 		self.custom_script_dat.close()
 		self.draw_stream.close()
@@ -196,6 +205,7 @@ class HTMLCPPParser(HTMLParser):
 			sys.stderr.write("Error: starting tag not found for " + str(self.stack[-1]))
 		else:
 			closing = self.stack.pop()
+			self.prev = closing
 			self.includes.update(closing.includes)
 			closing.close()
 		return super().handle_endtag(tag)
