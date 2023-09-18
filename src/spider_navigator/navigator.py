@@ -13,7 +13,7 @@ root = path.abspath(__file__ + "/../pages/")
 class HtmlStackNode():
 	includes = set()
 	tabs = 2
-	def __init__(self, stream, id : int, tag : str, attrs: list[tuple[str, str | None]], x : int, y : int, w : int, h : int) -> None:
+	def __init__(self, stream, id : int, tag : str, attrs: list[tuple[str, str | None]], parent = None) -> None:
 		self.tag = tag
 		self.attrs = {}
 		self.id = id
@@ -22,10 +22,15 @@ class HtmlStackNode():
 		if "id" in self.attrs:
 			self.id = self.attrs["id"]
 				
-		self.x = x
-		self.y = y
-		self.w = w
-		self.h = h
+		self.x = 0
+		self.y = 0
+		self.w = 300
+		self.h = 300
+
+		self.parent = parent
+		if parent != None:
+			self.w = self.parent.w
+			self.h = self.parent.h
 		
 		if "x" in self.attrs:
 			self.x = int(self.attrs["x"])
@@ -179,9 +184,9 @@ class HTMLCPPParser(HTMLParser):
 		node = None
 		if len(self.stack) > 0:
 			prev = self.stack[-1]
-			node = info["type"](info["stream"], self.id, tag, attrs, prev.x, prev.y, prev.w, prev.h)
+			node = info["type"](info["stream"], self.id, tag, attrs, prev)
 		else:
-			node = info["type"](info["stream"], self.id, tag, attrs, 0, 0, 100, 100)
+			node = info["type"](info["stream"], self.id, tag, attrs)
 		node.open()
 		self.stack.append(node)
 		return super().handle_starttag(tag, attrs)

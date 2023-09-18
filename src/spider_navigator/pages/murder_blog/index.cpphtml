@@ -10,7 +10,7 @@
 			std::cout << "Hello world!";
 		}
 	</script>
-	<body id="My Blog (GEANE: CHANGE TITLE TEXT)" w=300 h=300> <!-- Represents the Window object. -->
+	<body title="My Blog (GEANE: CHANGE TITLE TEXT)" w=300 h=300> <!-- Represents the Window object. -->
 		<!-- <img src="./assets/test.png" w=100 h=100 /> -->
 		<p>
 			Image courtesy of <a>user:engounge</a>
@@ -22,7 +22,7 @@
 			In case I happen to shock and/or surprise any of the slow-witted among you. <a>Rorik</a> <a>End</a> is a <a>SPNPOLICY200</a>. I just pray that you're not as stupid as everyone makes you out to be. 
 		</p>
 		<p>
-			Details as I can get them are scarce. Police aren't saying much other than that the body was found in the abandoned caves by Rorik End's scenic, beautiful, tourist-attracting, all around pleasant space, Garbage Park.
+			Details as I can get them are scarce. Police aren't saying much other than that the body was found in the abandoned caves by Rorik End's scenic, beautiful, tourist-attracting, all around pleasant space, Egg Park.
 		</p>
 		<p>
 			I want all the viewers at home to know that I am not heartless. In fact, the more I stare at the blood and sinews and guts leaking out of this poor fellow, the more I am completely unnerved. I guess with 24-bit colors you can really see the whole enchilada.
