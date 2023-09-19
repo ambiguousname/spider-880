@@ -5,5 +5,8 @@ files = cpp_files.stdout().strip()
 
 incdir = include_directories('../')
 
+to_compile = ['page.cpp']
+to_compile += files.split('\n')
+
 # Modify python script to just instead write to here?
-pageslib = static_library('pages', files.split('\n'), build_by_default: true, include_directories: incdir)
+pageslib = static_library('pages', to_compile, build_by_default: true, include_directories: incdir)

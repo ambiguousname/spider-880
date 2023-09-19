@@ -13,6 +13,12 @@ root = path.abspath(__file__ + "/../pages/")
 class HtmlStackNode():
 	includes = set()
 	tabs = 2
+
+	x = 0
+	y = 0
+	h = 0
+	w = 0
+	
 	def __init__(self, stream, id : int, tag : str, attrs: list[tuple[str, str | None]], parent = None, prev = None) -> None:
 		self.tag = tag
 		self.attrs = {}
@@ -21,16 +27,11 @@ class HtmlStackNode():
 			self.attrs[attr[0]] = attr[1]
 		if "id" in self.attrs:
 			self.id = self.attrs["id"]
-				
-		self.x = 0
-		self.y = 0
-		self.w = 300
-		self.h = 300
 
 		self.prev = prev
 		if self.prev != None:
 			self.x = self.prev.x
-			self.y = self.prev.y + 20
+			self.y = self.prev.y + self.prev.h
 
 		self.parent = parent
 		if self.parent != None:
@@ -70,6 +71,8 @@ class HtmlStackNode():
 
 class Body(HtmlStackNode):
 	includes = ["<FL/Fl_Window.h>"]
+	w = 300
+	h = 300
 
 	def open(self):
 		self.writeln(f"Fl_Window *window = new Fl_Window({self.x}, {self.y}, {self.w}, {self.h}, \"{self.id}\");")
@@ -80,35 +83,50 @@ class Body(HtmlStackNode):
 		self.writeln("window->show();")
 
 class PNode(HtmlStackNode):
-	includes = ["<FL/Fl_Text_Display.h>", "<Fl/Fl_Text_Buffer.h>"]
+	includes = ["<FL/fl_draw.h>"]
 
-	styles = [{ "color": "FL_FOREGROUND_COLOR", "font": "FL_COURIER", "size": "16" }]
+	# styles = [{ "color": "FL_FOREGROUND_COLOR", "font": "FL_COURIER", "size": "16" }]
+
+	data_len = 0
+
+	h = 1000
 
 	def open(self):
-		self.writeln(f"Fl_Text_Display *p_{self.id} = new Fl_Text_Display({self.x}, {self.y}, {self.w}, {self.h});")
-		self.writeln(f"p_{self.id}->box(FL_NO_BOX);")
+		self.writeln("fl_draw(\"Test\", 0, 0);")
+		# self.writeln(f"Fl_Text_Display *p_{self.id} = new Fl_Text_Display({self.x}, {self.y}, {self.w}, {self.h});")
+		# self.writeln(f"p_{self.id}->box(FL_NO_BOX);")
 
-		self.writeln(f"Fl_Text_Buffer *p_{self.id}_text = new Fl_Text_Buffer();")
-		self.writeln(f"Fl_Text_Buffer *p_{self.id}_style = new Fl_Text_Buffer();")
-		self.writeln(f"p_{self.id}->buffer(p_{self.id}_text);")
+		# self.writeln(f"Fl_Text_Buffer *p_{self.id}_text = new Fl_Text_Buffer();")
+		# self.writeln(f"Fl_Text_Buffer *p_{self.id}_style = new Fl_Text_Buffer();")
+		# self.writeln(f"p_{self.id}->buffer(p_{self.id}_text);")
 	
 	def data(self, data):
-		lines = data.replace('"', "\\\"").split("\n")
-		for line in lines:
-			if len(line) > 0 and not str.isspace(line):
-				self.writeln(f"p_{self.id}_text->append(\"{line.lstrip()}\");")
-				self.writeln(f"p_{self.id}_style->append(\"{'A' * len(line.lstrip())}\");")
+		pass
+		# lines = data.replace('"', "\\\"").split("\n")
+		# for line in lines:
+			# if len(line) > 0 and not str.isspace(line):
+				# self.data_len += len(line.lstrip().replace("\\\"", '"'))
+				# self.writeln(f"p_{self.id}_text->append(\"{line.lstrip()}\");")
+				# self.writeln(f"p_{self.id}_style->append(\"{'A' * len(line.lstrip())}\");")
 		
 	def close(self):
-		self.writeln(f"Fl_Text_Display::Style_Table_Entry p_{self.id}_style_table[] = {{")
-		for style in self.styles:
-			color = style["color"]
-			font = style["font"]
-			size = style["size"]
-			self.writeln(f"\t {{ {color}, {font}, {size} }},")
-		self.writeln("};")
-		self.writeln(f"p_{self.id}->highlight_data(p_{self.id}_style, p_{self.id}_style_table, {len(self.styles)}, 'A', 0, 0);")
-		self.writeln(f"p_{self.id}->wrap_mode(3, 0);")
+		pass
+		# self.writeln(f"Fl_Text_Display::Style_Table_Entry p_{self.id}_style_table[] = {{")
+		# for style in self.styles:
+			# color = style["color"]
+			# font = style["font"]
+			# size = style["size"]
+			# self.writeln(f"\t {{ {color}, {font}, {size} }},")
+		# self.writeln("};")
+		# self.writeln(f"p_{self.id}->highlight_data(p_{self.id}_style, p_{self.id}_style_table, {len(self.styles)}, 'A', 0, 0);")
+		# self.writeln(f"p_{self.id}->wrap_mode(3, 0);")
+		# self.writeln(f"int w_{self.id}, h_{self.id};")
+		# self.writeln(f"p_{self.id}->position_to_xy({self.data_len}, &w_{self.id}, &h_{self.id});")
+
+		# if self.prev != None:
+			# self.writeln(f"w_{self.id} = w_{self.id} - {self.prev.x};")
+			# self.writeln(f"h_{self.id} = h_{self.id} - {self.prev.y};")
+		# self.writeln(f"p_{self.id}->resize({self.x}, {self.y}, {self.w}, h_{self.id});")
 
 class ImageNode(HtmlStackNode):
 	includes = ["<util/image_box.h>"]

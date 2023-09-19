@@ -1,10 +1,19 @@
 #include <FL/Fl.H>
-#include <murder_blog/pages.h>
+#include "spider_navigator/page.h"
 
 int main(int argc, char **argv) {
-	MurderBlogIndexHTMLPage::draw();
+	const struct HTMLNode root_info = HTMLNode {
+		"html",
+		"Testing",
+		nullptr,
+		{},
+		{}
+	};
+	shared_ptr<HTMLNode> root = make_shared<HTMLNode>(root_info);
+	HTMLPage* page = new HTMLPage(root, 0, 0, 300, 300);
+	page->show();
 	// return Fl::run();
-	return 0;
+	return Fl::run();
 }
 
 /*
