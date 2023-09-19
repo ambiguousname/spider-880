@@ -18,7 +18,6 @@ HTMLPage::HTMLPage(shared_ptr<HTMLNode> root, int x, int y, int w, int h) : Fl_G
 	end();
 }
 
-#include <iostream>
 void HTMLPage::drawChildren() {
 	vector<shared_ptr<HTMLNode>> stack = {root};
 
