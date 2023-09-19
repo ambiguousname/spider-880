@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include <unordered_map>
+#include <FL/Fl_Scroll.H>
 
 using namespace std;
 
@@ -23,12 +24,22 @@ struct HTMLNode {
 
 typedef shared_ptr<HTMLNode> HTMLNodePtr;
 
-class HTMLPage : public Fl_Window {
+class HTMLPage : public Fl_Group {
 	void drawChildren();
+	
 	protected:
 	shared_ptr<HTMLNode> root = nullptr;
 	public:
 	HTMLPage(shared_ptr<HTMLNode> root, int x, int y, int w, int h);
 
 	virtual void draw();
+};
+
+class HTMLWindow : public Fl_Window {
+	void drawChildren();
+
+	HTMLPage* page;
+	Fl_Scroll* scrollbar;
+	public:
+	HTMLWindow(shared_ptr<HTMLNode> root, int x, int y, int w, int h);
 };

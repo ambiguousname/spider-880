@@ -1,8 +1,8 @@
 #pragma once
-#include <FL/Fl.h>
 #include <iostream>
 #include "spider_navigator/page.h"
-class MurderBlogIndexHTMLPage : public HTMLPage {
+#include <FL/Fl.h>
+class MurderBlogIndexHTMLWindow : public HTMLWindow {
 	public:
-	MurderBlogIndexHTMLPage(int x, int y, int w, int h);
+	MurderBlogIndexHTMLWindow(int x, int y, int w, int h);
 };

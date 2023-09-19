@@ -134,6 +134,6 @@ const HTMLNode html_1 = {
 	{
 	},
 };
-CoolMythsTheendHTMLPage::CoolMythsTheendHTMLPage(int x, int y, int w, int h) : HTMLPage(make_shared<HTMLNode>(html_1), x, y, w, h) {
+CoolMythsTheendHTMLWindow::CoolMythsTheendHTMLWindow(int x, int y, int w, int h) : HTMLWindow(make_shared<HTMLNode>(html_1), x, y, w, h) {
 
 }

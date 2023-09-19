@@ -26,6 +26,6 @@ const HTMLNode html_1 = {
 	{
 	},
 };
-CoolMythsScreamHTMLPage::CoolMythsScreamHTMLPage(int x, int y, int w, int h) : HTMLPage(make_shared<HTMLNode>(html_1), x, y, w, h) {
+CoolMythsScreamHTMLWindow::CoolMythsScreamHTMLWindow(int x, int y, int w, int h) : HTMLWindow(make_shared<HTMLNode>(html_1), x, y, w, h) {
 
 }

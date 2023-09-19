@@ -116,6 +116,6 @@ const HTMLNode html_1 = {
 	{
 	},
 };
-HistoryRoriksendHTMLPage::HistoryRoriksendHTMLPage(int x, int y, int w, int h) : HTMLPage(make_shared<HTMLNode>(html_1), x, y, w, h) {
+HistoryRoriksendHTMLWindow::HistoryRoriksendHTMLWindow(int x, int y, int w, int h) : HTMLWindow(make_shared<HTMLNode>(html_1), x, y, w, h) {
 
 }

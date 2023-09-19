@@ -3,10 +3,18 @@
 #include <stdexcept>
 #include <string>
 
-HTMLPage::HTMLPage(shared_ptr<HTMLNode> root, int x, int y, int w, int h) : Fl_Window(x, y, w, h) {
+HTMLWindow::HTMLWindow(shared_ptr<HTMLNode> root, int x, int y, int w, int h) : Fl_Window(x, y, w, h) {
+	scrollbar = new Fl_Scroll(x, y, w, h);
+	page = new HTMLPage(root, x, y, w - 20, h);
+	scrollbar->end();
+	// scrollbar.type(6);
+	resizable(this);
+	end();
+}
+
+HTMLPage::HTMLPage(shared_ptr<HTMLNode> root, int x, int y, int w, int h) : Fl_Group(x, y, w, h) {
 	this->root.swap(root);
 	root.reset();
-	resizable(this);
 	end();
 }
 
@@ -14,8 +22,8 @@ HTMLPage::HTMLPage(shared_ptr<HTMLNode> root, int x, int y, int w, int h) : Fl_W
 void HTMLPage::drawChildren() {
 	vector<shared_ptr<HTMLNode>> stack = {root};
 
-	int cursor_x = 0;
-	int cursor_y = 20;
+	int cursor_x = x();
+	int cursor_y = y();
 	while (stack.size() > 0) {
 		shared_ptr<HTMLNode> node = stack.back();
 		stack.pop_back();
@@ -33,10 +41,11 @@ void HTMLPage::drawChildren() {
 			}
 		}
 	}
+	resize(x(), y(), w(), cursor_y - y());
 }
 
 void HTMLPage::draw() {
-	Fl_Window::draw();
+	Fl_Group::draw();
 	if (root == nullptr) {
 		throw std::logic_error("HTMLPage root not defined.");
 	} else {

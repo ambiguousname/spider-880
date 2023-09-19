@@ -1,11 +1,11 @@
 #pragma once
-#include <FL/Fl.h>
 #include "spider_navigator/page.h"
-class CoolMythsScreamHTMLPage : public HTMLPage {
+#include <FL/Fl.h>
+class CoolMythsScreamHTMLWindow : public HTMLWindow {
 	public:
-	CoolMythsScreamHTMLPage(int x, int y, int w, int h);
+	CoolMythsScreamHTMLWindow(int x, int y, int w, int h);
 };
-class CoolMythsTheendHTMLPage : public HTMLPage {
+class CoolMythsTheendHTMLWindow : public HTMLWindow {
 	public:
-	CoolMythsTheendHTMLPage(int x, int y, int w, int h);
+	CoolMythsTheendHTMLWindow(int x, int y, int w, int h);
 };

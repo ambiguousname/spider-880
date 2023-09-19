@@ -141,7 +141,7 @@ class HTMLCPPParser(HTMLParser):
 
 
 		matches = re.match(".*pages(.*)", path.splitext(p)[0])
-		self.namespace = matches[1].replace(sep, " ").replace("_", " ").title().replace(" ", "") + "HTMLPage"
+		self.namespace = matches[1].replace(sep, " ").replace("_", " ").title().replace(" ", "") + "HTMLWindow"
 
 
 	def close(self):
@@ -153,7 +153,7 @@ class HTMLCPPParser(HTMLParser):
 		self.struct_stream.seek(0)
 		self.cpp_stream.write(self.struct_stream.read())
 
-		self.cpp_stream.write(f"{self.namespace}::{self.namespace}(int x, int y, int w, int h) : HTMLPage(make_shared<HTMLNode>(html_1), x, y, w, h) {{\n\n}}")
+		self.cpp_stream.write(f"{self.namespace}::{self.namespace}(int x, int y, int w, int h) : HTMLWindow(make_shared<HTMLNode>(html_1), x, y, w, h) {{\n\n}}")
 
 		self.custom_script_dat.close()
 		self.struct_stream.close()
@@ -242,7 +242,7 @@ def searchDir(dir):
 			header.write(f"#include {include}\n")
 
 		for namespace in header_info:
-			header.write(f"class {namespace} : public HTMLPage {{\n\tpublic:\n\t{namespace}(int x, int y, int w, int h);\n}};\n")
+			header.write(f"class {namespace} : public HTMLWindow {{\n\tpublic:\n\t{namespace}(int x, int y, int w, int h);\n}};\n")
 		header.close()
 
 if __name__ == "__main__":

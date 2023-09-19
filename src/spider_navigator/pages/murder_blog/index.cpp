@@ -139,6 +139,6 @@ const HTMLNode html_1 = {
 	{
 	},
 };
-MurderBlogIndexHTMLPage::MurderBlogIndexHTMLPage(int x, int y, int w, int h) : HTMLPage(make_shared<HTMLNode>(html_1), x, y, w, h) {
+MurderBlogIndexHTMLWindow::MurderBlogIndexHTMLWindow(int x, int y, int w, int h) : HTMLWindow(make_shared<HTMLNode>(html_1), x, y, w, h) {
 
 }
