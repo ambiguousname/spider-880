@@ -1,9 +1,7 @@
 #include "pages.h"
-void onStart() {}
 const HTMLNode header_3 = {
 	"header",
 	"",
-	make_shared<HTMLNode>(html_1),
 	{
 	},
 	{
@@ -15,7 +13,6 @@ void onStart() {
 const HTMLNode a_7 = {
 	"a",
 	"user:engounge",
-	make_shared<HTMLNode>(p_6),
 	{
 	},
 	{
@@ -24,7 +21,6 @@ const HTMLNode a_7 = {
 const HTMLNode p_6 = {
 	"p",
 	"Image courtesy of ",
-	make_shared<HTMLNode>(body_5),
 	{
 		make_shared<HTMLNode>(a_7),
 	},
@@ -34,7 +30,6 @@ const HTMLNode p_6 = {
 const HTMLNode p_8 = {
 	"p",
 	"The adage holds true. I've been getting too many \"customer complaints\" in my spam box to say it again, but just imagine my words now.",
-	make_shared<HTMLNode>(body_5),
 	{
 	},
 	{
@@ -43,7 +38,6 @@ const HTMLNode p_8 = {
 const HTMLNode a_10 = {
 	"a",
 	"Rorik",
-	make_shared<HTMLNode>(p_9),
 	{
 	},
 	{
@@ -52,7 +46,6 @@ const HTMLNode a_10 = {
 const HTMLNode a_11 = {
 	"a",
 	"End",
-	make_shared<HTMLNode>(p_9),
 	{
 	},
 	{
@@ -61,7 +54,6 @@ const HTMLNode a_11 = {
 const HTMLNode a_12 = {
 	"a",
 	"SPNPOLICY200",
-	make_shared<HTMLNode>(p_9),
 	{
 	},
 	{
@@ -70,7 +62,6 @@ const HTMLNode a_12 = {
 const HTMLNode p_9 = {
 	"p",
 	"In case I happen to shock and/or surprise any of the slow-witted among you. is a . I just pray that you're not as stupid as everyone makes you out to be. ",
-	make_shared<HTMLNode>(body_5),
 	{
 		make_shared<HTMLNode>(a_10),
 		make_shared<HTMLNode>(a_11),
@@ -82,7 +73,6 @@ const HTMLNode p_9 = {
 const HTMLNode p_13 = {
 	"p",
 	"Details as I can get them are scarce. Police aren't saying much other than that the body was found in the abandoned caves by Rorik End's scenic, beautiful, tourist-attracting, all around pleasant space, Egg Park.",
-	make_shared<HTMLNode>(body_5),
 	{
 	},
 	{
@@ -91,7 +81,6 @@ const HTMLNode p_13 = {
 const HTMLNode p_14 = {
 	"p",
 	"I want all the viewers at home to know that I am not heartless. In fact, the more I stare at the blood and sinews and guts leaking out of this poor fellow, the more I am completely unnerved. I guess with 24-bit colors you can really see the whole enchilada.",
-	make_shared<HTMLNode>(body_5),
 	{
 	},
 	{
@@ -100,7 +89,6 @@ const HTMLNode p_14 = {
 const HTMLNode p_15 = {
 	"p",
 	"Corpses typically don't float. Speaking as an expert in murder (with a focus in fluid dynamics), they don't float unless they weigh less than the fluid they are displacing. That's a little scientific thing called the Archimedes Principle, and it doesn't allow for violations. For any of you wondering if the corpse is floating because of the stalactite protruding through the chest: no.",
-	make_shared<HTMLNode>(body_5),
 	{
 	},
 	{
@@ -109,7 +97,6 @@ const HTMLNode p_15 = {
 const HTMLNode p_16 = {
 	"p",
 	"The friction of the organs on the stalactite is too weak compared to the force of gravity. So we should be sinking down. And instead our remains trapped in the fluid. Just like when I shoved Jim's dog in the lake.",
-	make_shared<HTMLNode>(body_5),
 	{
 	},
 	{
@@ -118,7 +105,6 @@ const HTMLNode p_16 = {
 const HTMLNode p_17 = {
 	"p",
 	"To all of the loud-mouthed Rorikenders I know: shut your gagging SPNPOLICY200 flaps. And remember to stay safe out there.",
-	make_shared<HTMLNode>(body_5),
 	{
 	},
 	{
@@ -127,7 +113,6 @@ const HTMLNode p_17 = {
 const HTMLNode body_5 = {
 	"body",
 	"",
-	make_shared<HTMLNode>(html_1),
 	{
 		make_shared<HTMLNode>(p_6),
 		make_shared<HTMLNode>(p_8),
@@ -147,7 +132,6 @@ const HTMLNode body_5 = {
 const HTMLNode html_1 = {
 	"html",
 	"",
-nullptr,
 	{
 		make_shared<HTMLNode>(header_3),
 		make_shared<HTMLNode>(body_5),
@@ -155,6 +139,6 @@ nullptr,
 	{
 	},
 };
-MurderBlogIndexHTMLPage::MurderBlogIndexHTMLPage(int x, int y, int w, int h) : HTMLPage(make_shared<HTMLNode>(page), x, y, w, h) {
+MurderBlogIndexHTMLPage::MurderBlogIndexHTMLPage(int x, int y, int w, int h) : HTMLPage(make_shared<HTMLNode>(html_1), x, y, w, h) {
 
 }

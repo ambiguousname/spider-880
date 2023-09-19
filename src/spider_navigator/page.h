@@ -10,7 +10,6 @@ using namespace std;
 struct HTMLNode {
 	const char* tag_name;
 	const char* data;
-	const shared_ptr<HTMLNode> parent;
 	const vector<shared_ptr<HTMLNode>> children;
 	const unordered_map<const char*, const char*> attributes;
 };

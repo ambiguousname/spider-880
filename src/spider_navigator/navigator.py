@@ -58,10 +58,6 @@ class HtmlStackNode():
 			self.writeln(f"const HTMLNode {self} = {{")
 			self.writeln(f"\t\"{self.tag}\",")
 			self.writeln(f"\t\"{self.dat}\",")
-			if self.parent is None:
-				self.writeln("nullptr,")
-			else:
-				self.writeln(f"\tmake_shared<HTMLNode>({self.parent}),")
 			self.writeln("\t{")
 			for child in self.children:
 				if not child.invisible:
@@ -129,8 +125,6 @@ class HTMLCPPParser(HTMLParser):
 
 
 	def close(self):
-		if self.custom_script_dat.tell() == 0:
-			self.custom_script_dat.write("void onStart() {}\n")
 		self.cpp_stream.write(f"#include \"pages.h\"\n")
 		
 		self.custom_script_dat.seek(0)
@@ -139,7 +133,7 @@ class HTMLCPPParser(HTMLParser):
 		self.struct_stream.seek(0)
 		self.cpp_stream.write(self.struct_stream.read())
 
-		self.cpp_stream.write(f"{self.namespace}::{self.namespace}(int x, int y, int w, int h) : HTMLPage(make_shared<HTMLNode>(page), x, y, w, h) {{\n\n}}")
+		self.cpp_stream.write(f"{self.namespace}::{self.namespace}(int x, int y, int w, int h) : HTMLPage(make_shared<HTMLNode>(html_1), x, y, w, h) {{\n\n}}")
 
 		self.custom_script_dat.close()
 		self.struct_stream.close()
@@ -228,7 +222,7 @@ def searchDir(dir):
 			header.write(f"#include {include}\n")
 
 		for namespace in header_info:
-			header.write(f"class {namespace} : public HTMLPage {{\n\t{namespace}(int x, int y, int w, int h);\n}};\n")
+			header.write(f"class {namespace} : public HTMLPage {{\n\tpublic:\n\t{namespace}(int x, int y, int w, int h);\n}};\n")
 		header.close()
 
 if __name__ == "__main__":

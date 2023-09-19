@@ -3,7 +3,7 @@
 
 #include <iostream>
 int main(int argc, char **argv) {
-	MurderBlogIndexHTMLPage* page = new MurderBlogIndexHTMLPage();
+	MurderBlogIndexHTMLPage* page = new MurderBlogIndexHTMLPage(0, 0, 300, 300);
 	page->show();
 
 
