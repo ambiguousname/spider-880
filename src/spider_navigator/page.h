@@ -7,8 +7,15 @@
 
 using namespace std;
 
+enum NodeType {
+	DEFAULT,
+	P,
+	A,
+	IMG,
+};
+
 struct HTMLNode {
-	const char* tag_name;
+	const NodeType tag;
 	const char* data;
 	const vector<shared_ptr<HTMLNode>> children;
 	const unordered_map<const char*, const char*> attributes;
@@ -17,7 +24,7 @@ struct HTMLNode {
 typedef shared_ptr<HTMLNode> HTMLNodePtr;
 
 class HTMLPage : public Fl_Window {
-	void drawChildren(shared_ptr<HTMLNode> node);
+	void drawChildren();
 	protected:
 	shared_ptr<HTMLNode> root = nullptr;
 	public:

@@ -1,6 +1,6 @@
 #include "pages.h"
 const HTMLNode p_3 = {
-	"p",
+	P,
 	"Scream all you want. No one will hear you.",
 	{
 	},
@@ -8,7 +8,7 @@ const HTMLNode p_3 = {
 	},
 };
 const HTMLNode body_2 = {
-	"body",
+	DEFAULT,
 	"",
 	{
 		make_shared<HTMLNode>(p_3),
@@ -18,7 +18,7 @@ const HTMLNode body_2 = {
 	},
 };
 const HTMLNode html_1 = {
-	"html",
+	DEFAULT,
 	"",
 	{
 		make_shared<HTMLNode>(body_2),

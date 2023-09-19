@@ -10,6 +10,22 @@ import sys
 
 root = path.abspath(__file__ + "/../pages/")
 
+supported_nodes = set()
+with open(path.join(root, "../page.h"), "r") as f:
+	found_types = False
+	for line in f.readlines():
+		if len(line) <= 0 or str.isspace(line):
+			continue
+		if "NodeType" in line:
+			found_types = True
+			continue
+		if found_types:
+			if "}" in line:
+				break
+			if "DEFAULT" in line:
+				continue
+			supported_nodes.add(line.replace(",","").replace("\n", "").lstrip())
+
 class HtmlStackNode():
 	
 	def __init__(self, id : str, tag : str, attrs: list[tuple[str, str | None]], parent = None, prev = None) -> None:
@@ -56,7 +72,11 @@ class HtmlStackNode():
 	def close(self):
 		if not self.invisible:
 			self.writeln(f"const HTMLNode {self} = {{")
-			self.writeln(f"\t\"{self.tag}\",")
+
+			if self.tag.upper() in supported_nodes:
+				self.writeln(f"\t{self.tag.upper()},")
+			else:
+				self.writeln("\tDEFAULT,")
 			self.writeln(f"\t\"{self.dat}\",")
 			self.writeln("\t{")
 			for child in self.children:
