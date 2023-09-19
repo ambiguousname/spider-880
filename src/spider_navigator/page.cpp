@@ -7,7 +7,6 @@ HTMLWindow::HTMLWindow(shared_ptr<HTMLNode> root, int x, int y, int w, int h) : 
 	scrollbar = new Fl_Scroll(x, y, w, h);
 	page = new HTMLPage(root, x, y, w - 20, h);
 	scrollbar->end();
-	// scrollbar.type(6);
 	resizable(this);
 	end();
 }
@@ -40,7 +39,7 @@ void HTMLPage::drawChildren() {
 			}
 		}
 	}
-	resize(x(), y(), w(), cursor_y - y());
+	resize(x(), y(), this->parent()->w() - 20, cursor_y - y());
 }
 
 void HTMLPage::draw() {
