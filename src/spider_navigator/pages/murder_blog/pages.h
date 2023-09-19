@@ -1,8 +1,7 @@
 #pragma once
+#include "spider_navigator/page.h"
 #include <FL/Fl.h>
-#include <FL/fl_draw.h>
 #include <iostream>
-#include <FL/Fl_Window.h>
-namespace MurderBlogIndexHTMLPage {
-	void draw();
-}
+class MurderBlogIndexHTMLPage : public HTMLPage {
+	MurderBlogIndexHTMLPage(int x, int y, int w, int h);
+};

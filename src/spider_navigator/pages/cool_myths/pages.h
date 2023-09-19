@@ -1,10 +1,9 @@
 #pragma once
-#include <FL/Fl_Window.h>
+#include "spider_navigator/page.h"
 #include <FL/Fl.h>
-#include <FL/fl_draw.h>
-namespace CoolMythsScreamHTMLPage {
-	void draw();
-}
-namespace CoolMythsTheendHTMLPage {
-	void draw();
-}
+class CoolMythsScreamHTMLPage : public HTMLPage {
+	CoolMythsScreamHTMLPage(int x, int y, int w, int h);
+};
+class CoolMythsTheendHTMLPage : public HTMLPage {
+	CoolMythsTheendHTMLPage(int x, int y, int w, int h);
+};

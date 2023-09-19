@@ -1,7 +1,6 @@
 #pragma once
+#include "spider_navigator/page.h"
 #include <FL/Fl.h>
-#include <FL/fl_draw.h>
-#include <FL/Fl_Window.h>
-namespace HistoryRoriksendHTMLPage {
-	void draw();
-}
+class HistoryRoriksendHTMLPage : public HTMLPage {
+	HistoryRoriksendHTMLPage(int x, int y, int w, int h);
+};

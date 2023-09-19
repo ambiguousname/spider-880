@@ -15,6 +15,8 @@ struct HTMLNode {
 	const unordered_map<const char*, const char*> attributes;
 };
 
+typedef shared_ptr<HTMLNode> HTMLNodePtr;
+
 class HTMLPage : public Fl_Window {
 	void drawChildren(shared_ptr<HTMLNode> node);
 	protected:

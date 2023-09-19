@@ -8,8 +8,6 @@ HTMLPage::HTMLPage(shared_ptr<HTMLNode> root, int x, int y, int w, int h) : Fl_W
 	end();
 }
 
-#include <iostream>
-
 void HTMLPage::drawChildren(shared_ptr<HTMLNode> node) {
 	for (auto child : node->children) {
 		if (child->children.size() > 0) {

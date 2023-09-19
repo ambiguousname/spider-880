@@ -11,141 +11,91 @@ import sys
 root = path.abspath(__file__ + "/../pages/")
 
 class HtmlStackNode():
-	includes = set()
-	tabs = 2
-
-	x = 0
-	y = 0
-	h = 0
-	w = 0
 	
-	def __init__(self, stream, id : int, tag : str, attrs: list[tuple[str, str | None]], parent = None, prev = None) -> None:
-		self.tag = tag
+	def __init__(self, id : str, tag : str, attrs: list[tuple[str, str | None]], parent = None, prev = None) -> None:
+		self.includes = set()
+
+		self.element_stream = io.StringIO()
+
+		self.tag = None
+		self.parent = None
+		self.children = []
 		self.attrs = {}
+		self.dat = ""
+
+		self.tag = tag
 		self.id = id
+
 		for attr in attrs:
 			self.attrs[attr[0]] = attr[1]
+
 		if "id" in self.attrs:
 			self.id = self.attrs["id"]
 
 		self.prev = prev
-		if self.prev != None:
-			self.x = self.prev.x
-			self.y = self.prev.y + self.prev.h
-
 		self.parent = parent
-		if self.parent != None:
-			self.w = self.parent.w
-			self.h = self.parent.h
-		
-		if "x" in self.attrs:
-			self.x = int(self.attrs["x"])
-
-		if "y" in self.attrs:
-			self.y = int(self.attrs["y"])
-		
-		if "w" in self.attrs:
-			self.w = int(self.attrs["w"])
-		
-		if "h" in self.attrs:
-			self.h = int(self.attrs["h"])
-		self.stream = stream
 	
+	def append(self, child):
+		self.children.append(child)
+
 	def writeln(self, line):
-		self.stream.write(("\t" * self.tabs) + line + "\n")
+		self.element_stream.write(line + "\n")
 	
 	def __str__(self) -> str:
-		return str(self.tag) + " - " + str(self.id)
-
-	def __eq__(self, __value: object) -> bool:
-		return __value == self.tag
+		return str(self.tag) + "_" + str(self.id)
 	
 	def open(self):
-		pass
-
-	def data(self, data):
 		return
 
-	def close(self):
-		pass
-
-class Body(HtmlStackNode):
-	includes = ["<FL/Fl_Window.h>"]
-	w = 300
-	h = 300
-
-	def open(self):
-		self.writeln(f"Fl_Window *window = new Fl_Window({self.x}, {self.y}, {self.w}, {self.h}, \"{self.id}\");")
-	
-	def close(self):
-		self.writeln("window->end();")
-		self.writeln("window->resizable(*window);")
-		self.writeln("window->show();")
-
-class PNode(HtmlStackNode):
-	includes = ["<FL/fl_draw.h>"]
-
-	# styles = [{ "color": "FL_FOREGROUND_COLOR", "font": "FL_COURIER", "size": "16" }]
-
-	data_len = 0
-
-	h = 1000
-
-	def open(self):
-		self.writeln("fl_draw(\"Test\", 0, 0);")
-		# self.writeln(f"Fl_Text_Display *p_{self.id} = new Fl_Text_Display({self.x}, {self.y}, {self.w}, {self.h});")
-		# self.writeln(f"p_{self.id}->box(FL_NO_BOX);")
-
-		# self.writeln(f"Fl_Text_Buffer *p_{self.id}_text = new Fl_Text_Buffer();")
-		# self.writeln(f"Fl_Text_Buffer *p_{self.id}_style = new Fl_Text_Buffer();")
-		# self.writeln(f"p_{self.id}->buffer(p_{self.id}_text);")
-	
 	def data(self, data):
-		pass
-		# lines = data.replace('"', "\\\"").split("\n")
-		# for line in lines:
-			# if len(line) > 0 and not str.isspace(line):
-				# self.data_len += len(line.lstrip().replace("\\\"", '"'))
-				# self.writeln(f"p_{self.id}_text->append(\"{line.lstrip()}\");")
-				# self.writeln(f"p_{self.id}_style->append(\"{'A' * len(line.lstrip())}\");")
-		
-	def close(self):
-		pass
-		# self.writeln(f"Fl_Text_Display::Style_Table_Entry p_{self.id}_style_table[] = {{")
-		# for style in self.styles:
-			# color = style["color"]
-			# font = style["font"]
-			# size = style["size"]
-			# self.writeln(f"\t {{ {color}, {font}, {size} }},")
-		# self.writeln("};")
-		# self.writeln(f"p_{self.id}->highlight_data(p_{self.id}_style, p_{self.id}_style_table, {len(self.styles)}, 'A', 0, 0);")
-		# self.writeln(f"p_{self.id}->wrap_mode(3, 0);")
-		# self.writeln(f"int w_{self.id}, h_{self.id};")
-		# self.writeln(f"p_{self.id}->position_to_xy({self.data_len}, &w_{self.id}, &h_{self.id});")
+		if not str.isspace(data):
+			self.dat += data
+		return
 
-		# if self.prev != None:
-			# self.writeln(f"w_{self.id} = w_{self.id} - {self.prev.x};")
-			# self.writeln(f"h_{self.id} = h_{self.id} - {self.prev.y};")
-		# self.writeln(f"p_{self.id}->resize({self.x}, {self.y}, {self.w}, h_{self.id});")
+	invisible = False
+	def close(self):
+		if not self.invisible:
+			self.writeln(f"const HTMLNode {self} = {{")
+			self.writeln(f"\t\"{self.tag}\",")
+			self.writeln(f"\t\"{self.dat}\",")
+			if self.parent is None:
+				self.writeln("nullptr,")
+			else:
+				self.writeln(f"\tmake_shared<HTMLNode>({self.parent}),")
+			self.writeln("\t{")
+			for child in self.children:
+				if not child.invisible:
+					self.writeln(f"\t\tmake_shared<HTMLNode>({child}),")
+			self.writeln("\t},")
+			self.writeln("\t{")
+			for attr, val in self.attrs.items():
+				self.writeln(f"\t\t{{\"{attr}\", \"{val}\"}},")
+			self.writeln("\t},")
+			self.writeln("};")
 
 class ImageNode(HtmlStackNode):
 	includes = ["<util/image_box.h>"]
 
-	def open(self):
-		if "src" in self.attrs:
-			self.writeln(f"ImageBox *img_{self.id} = new ImageBox(\"{self.attrs['src']}\", {self.x}, {self.y}, {self.w}, {self.h});")
-		else:
-			sys.stderr.write("Could not find source for image box with ID: " + self.id)
+class PNode(HtmlStackNode):
+	def data(self, data):
+		lines = data.replace("\"", "\\\"").split("\n")
+		for line in lines:
+			self.dat += line.lstrip()
 
 class Script(HtmlStackNode):
-	tabs = 1
+	invisible = True
 	def data(self, data):
 		lines = data.split("\n")
 		num_tabs = lines[1].count('\t')
 		for line in lines:
-			self.writeln(line.replace('\t' * num_tabs, ""))
+			if len(line) > 0 and not str.isspace(line):
+				self.writeln(line.replace('\t' * num_tabs, ""))
+	
+	def close(self):
+		return
 
 class Includes(HtmlStackNode):
+	invisible = True
 	def data(self, data):
 		lines = data.split("\n")
 		for line in lines:
@@ -163,13 +113,13 @@ class HTMLCPPParser(HTMLParser):
 		self.path = p
 
 		self.cpp_stream = stream
-		self.draw_stream = io.StringIO("void draw() {\n")
+		self.struct_stream = io.StringIO()
 		self.custom_script_dat = io.StringIO()
 
 		self.id = 0
 
 		self.stack = []
-		self.includes = set(["<FL/Fl.h>"])
+		self.includes = set(["<FL/Fl.h>", "\"spider_navigator/page.h\""])
 
 		self.prev = None
 
@@ -180,40 +130,41 @@ class HTMLCPPParser(HTMLParser):
 
 	def close(self):
 		if self.custom_script_dat.tell() == 0:
-			self.custom_script_dat.write("\n\tvoid onStart() {}\n")
+			self.custom_script_dat.write("void onStart() {}\n")
 		self.cpp_stream.write(f"#include \"pages.h\"\n")
-		self.cpp_stream.write(f"namespace {self.namespace} {{")
+		
 		self.custom_script_dat.seek(0)
 		self.cpp_stream.write(self.custom_script_dat.read())
-		self.draw_stream.seek(0)
-		self.cpp_stream.write("\tvoid draw() {\n")
-		self.cpp_stream.write(self.draw_stream.read())
-		self.cpp_stream.write("\t\tonStart();\n\t\tFl::run();\n\t}\n}")
+
+		self.struct_stream.seek(0)
+		self.cpp_stream.write(self.struct_stream.read())
+
+		self.cpp_stream.write(f"{self.namespace}::{self.namespace}(int x, int y, int w, int h) : HTMLPage(make_shared<HTMLNode>(page), x, y, w, h) {{\n\n}}")
 
 		self.custom_script_dat.close()
-		self.draw_stream.close()
+		self.struct_stream.close()
 		if len(self.stack) > 0:
 			sys.stderr.write("Unclosed tags: " + self.stack)
 
 	def match_node(self):
 		return {
-			"p": {"type": PNode, "stream": self.draw_stream},
-			"body": {"type": Body, "stream": self.draw_stream},
-			"script": {"type": Script, "stream": self.custom_script_dat},
-			"includes": {"type": Includes, "stream": self.draw_stream},
-			"img": {"type": ImageNode, "stream": self.draw_stream}
+			"script": Script,
+			"includes": Includes,
+			"p": PNode,
+			"img": ImageNode
 		}
 
 	def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
 		self.id += 1
 		
-		info = self.match_node().get(tag, {"type": HtmlStackNode, "stream": self.draw_stream})
+		info = self.match_node().get(tag, HtmlStackNode)
 		node = None
 		if len(self.stack) > 0:
 			prev = self.stack[-1]
-			node = info["type"](info["stream"], self.id, tag, attrs, prev)
+			node = info(self.id, tag, attrs, prev)
+			prev.append(node)
 		else:
-			node = info["type"](info["stream"], self.id, tag, attrs)
+			node = info(self.id, tag, attrs)
 		node.open()
 		self.stack.append(node)
 		return super().handle_starttag(tag, attrs)
@@ -226,22 +177,18 @@ class HTMLCPPParser(HTMLParser):
 			self.prev = closing
 			self.includes.update(closing.includes)
 			closing.close()
+			closing.element_stream.seek(0)
+			if closing is Script:
+				self.custom_script_dat.write(closing.element_stream.read())
+			else:
+				self.struct_stream.write(closing.element_stream.read())
+			closing.element_stream.close()
 		return super().handle_endtag(tag)
 	
 	def handle_data(self, data: str) -> None:
 		if len(self.stack) > 0:
 			self.stack[-1].data(data)
 		return super().handle_data(data)
-
-def writeHeader(pth, includes, header_info):
-	header = open(path.join(pth, "pages.h"), "w")
-	header.write("#pragma once\n")
-
-	for include in includes:
-		header.write(f"#include {include}\n")
-
-	for namespace in header_info:
-		header.write(f"namespace {namespace} {{\n\tvoid draw();\n}}\n")
 
 def searchDir(dir):
 	includes = set()
@@ -281,7 +228,7 @@ def searchDir(dir):
 			header.write(f"#include {include}\n")
 
 		for namespace in header_info:
-			header.write(f"namespace {namespace} {{\n\tvoid draw();\n}}\n")
+			header.write(f"class {namespace} : public HTMLPage {{\n\t{namespace}(int x, int y, int w, int h);\n}};\n")
 		header.close()
 
 if __name__ == "__main__":
