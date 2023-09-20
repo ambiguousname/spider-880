@@ -170,7 +170,7 @@ class HTMLCPPParser(HTMLParser):
 		linked_page_str = ""
 		for i in range(len(self.linked_pages)):
 			href, page = self.linked_pages[i]
-			linked_page_str += f"\tlinked_windows[\"{href}\"] = ({page}::createWindow);\n"
+			linked_page_str += f"\tlinked_windows.insert({{\"{href}\", {page}::createWindow}});\n"
 
 		self.cpp_stream.write(f"{self.namespace}::{self.namespace}(int x, int y, int w, int h) : HTMLWindow(make_shared<HTMLNode>(html_1), x, y, w, h) {{\n{linked_page_str}\n}}\n")
 

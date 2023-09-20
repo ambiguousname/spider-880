@@ -10,6 +10,9 @@
 
 using namespace std;
 
+class HTMLPage;
+class HTMLWindow;
+
 enum NodeType {
 	DEFAULT,
 	TEXT,
@@ -63,6 +66,8 @@ class HTMLPage : public Fl_Group {
 	int cursor_y = 0;
 	int height_buffer = 0;
 
+	HTMLWindow* parent_window;
+
 	shared_ptr<HTMLNode> root = nullptr;
 
 	// For clicking on stuff:
@@ -72,7 +77,7 @@ class HTMLPage : public Fl_Group {
 
 	int handle(int event);
 	public:
-	HTMLPage(shared_ptr<HTMLNode> root, int x, int y, int w, int h);
+	HTMLPage(shared_ptr<HTMLNode> root, HTMLWindow* parent, int x, int y, int w, int h);
 };
 
 class HTMLWindow : public Fl_Window {
@@ -82,7 +87,7 @@ class HTMLWindow : public Fl_Window {
 	Fl_Scroll* scrollbar;
 	protected:
 	// Other HTML pages (or just FL_Windows) linked by <a> tags.
-	unordered_map<string, function<HTMLWindow*(int, int, int, int)> > linked_windows;
+	unordered_map<string, function<HTMLWindow*(int, int, int, int)>> linked_windows;
 
 	public:
 	HTMLWindow(shared_ptr<HTMLNode> root, int x, int y, int w, int h);

@@ -10,22 +10,27 @@ HTMLWindow::HTMLWindow(shared_ptr<HTMLNode> root, int x, int y, int w, int h) : 
 		label(find_title->second.c_str());
 	}
 	scrollbar = new Fl_Scroll(x, y, w, h);
-	page = new HTMLPage(root, x, y, w - 20, h);
+	page = new HTMLPage(root, this, x, y, w - 20, h);
 	scrollbar->end();
+
 	resizable(this);
 	end();
 }
 
+#include <murder_blog/pages.h>
+#include <iostream>
 bool HTMLWindow::getLinkedWindow(string name, windowCreation& out) {
-	auto search = linked_windows.find(name);
+	linked_windows.find(name);
 	if (search != linked_windows.end()) {
+		cout << name << " ";
 		out = search->second;
 		return true;
 	}
 	return false;
 }
 
-HTMLPage::HTMLPage(shared_ptr<HTMLNode> root, int x, int y, int w, int h) : Fl_Group(x, y, w, h), rendered_nodes() {
+HTMLPage::HTMLPage(shared_ptr<HTMLNode> root, HTMLWindow* parent, int x, int y, int w, int h) : Fl_Group(x, y, w, h), rendered_nodes() {
+	parent_window = parent;
 	this->root.swap(root);
 	root.reset();
 	end();
@@ -122,38 +127,35 @@ bool HTMLPage::getRenderedFromPos(int x, int y, RenderedNode& out) {
 }
 
 int HTMLPage::hoverRendered() {
-	HTMLWindow* parent = (HTMLWindow*)this->parent();
 
 	int x = Fl::event_x();
 	int y = Fl::event_y();
 	RenderedNode rendered;
 	if (getRenderedFromPos(x, y, rendered)) {
-		parent->cursor(rendered.cursor);
+		parent_window->cursor(rendered.cursor);
 		return 1;
 	} else {
-		parent->cursor(FL_CURSOR_DEFAULT);
+		parent_window->cursor(FL_CURSOR_DEFAULT);
 		return 0;
 	}
 }
 
-#include <iostream>
 int HTMLPage::clickRendered() {
 	int x = Fl::event_x();
 	int y = Fl::event_y();
-	cout << "CLICK";
 	RenderedNode rendered;
-	HTMLWindow* parent = (HTMLWindow*)this->parent();
 	if (getRenderedFromPos(x, y, rendered)) {
-		if (rendered.node_info.node->tag == A) {
-			auto attrs = rendered.node_info.node->attributes;
+		HTMLNodePtr rendered_parent = rendered.node_info.parent;
+		if (rendered_parent->tag == A) {
+			auto attrs = rendered_parent->attributes;
 			auto search = attrs.find("href");
-			if (search != attrs.begin()) {
+			if (search != attrs.end()) {
 				// TODO: Move on-click logic to python scripting.
 				
 				windowCreation constructor;
-				cout << search->first;
-				if (parent->getLinkedWindow(search->second, constructor)) {
-					auto window = constructor(this->x(), this->y(), w(), h());
+				if (parent_window->getLinkedWindow(search->second, constructor)) {
+					// auto window = constructor(this->x(), this->y(), w(), h());
+					// window->show(0, nullptr);
 				}
 			}
 		}
