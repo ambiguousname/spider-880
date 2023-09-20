@@ -17,12 +17,9 @@ HTMLWindow::HTMLWindow(shared_ptr<HTMLNode> root, int x, int y, int w, int h) : 
 	end();
 }
 
-#include <murder_blog/pages.h>
-#include <iostream>
 bool HTMLWindow::getLinkedWindow(string name, windowCreation& out) {
-	linked_windows.find(name);
+	auto search = linked_windows.find(name);
 	if (search != linked_windows.end()) {
-		cout << name << " ";
 		out = search->second;
 		return true;
 	}
@@ -154,8 +151,8 @@ int HTMLPage::clickRendered() {
 				
 				windowCreation constructor;
 				if (parent_window->getLinkedWindow(search->second, constructor)) {
-					// auto window = constructor(this->x(), this->y(), w(), h());
-					// window->show(0, nullptr);
+					auto window = constructor(this->x(), this->y(), parent_window->w(), parent_window->h());
+					window->show();
 				}
 			}
 		}
