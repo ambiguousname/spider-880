@@ -26,13 +26,6 @@ struct HTMLNode {
 
 typedef shared_ptr<HTMLNode> HTMLNodePtr;
 
-struct RenderedNode {
-	int x;
-	int y;
-	int w;
-	int h;
-};
-
 enum NodeQueueInfoEnum {
 	OPEN_NODE,
 	CLOSE_NODE
@@ -44,11 +37,25 @@ struct NodeQueueInfo {
 	NodeQueueInfoEnum type;
 };
 
+struct RenderedNode {
+	int x;
+	int y;
+	int w;
+	int h;
+	NodeQueueInfo node_info;
+	Fl_Cursor cursor;
+};
+
 class HTMLPage : public Fl_Group {
 	void drawChildren();
 
 	void closeNode(vector<NodeQueueInfo>& queue, NodeQueueInfo info);
 	void openNode(vector<NodeQueueInfo>& queue, NodeQueueInfo info);
+
+	bool getRenderedFromPos(int x, int y, RenderedNode& out);
+
+	int hoverRendered();
+	int clickRendered();
 	
 	protected:
 	int cursor_x = 0;

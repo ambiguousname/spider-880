@@ -136,7 +136,7 @@ class HTMLCPPParser(HTMLParser):
 		self.id = 0
 
 		self.stack = []
-		self.includes = set(["<FL/Fl.h>", "\"spider_navigator/page.h\""])
+		self.includes = set(["\"spider_navigator/page.h\""])
 
 		self.prev = None
 
@@ -153,8 +153,10 @@ class HTMLCPPParser(HTMLParser):
 
 		self.struct_stream.seek(0)
 		self.cpp_stream.write(self.struct_stream.read())
+		
+		pth = str(path.relpath(self.path, root)).replace("\\", "/")
 
-		self.cpp_stream.write(f"{self.namespace}::{self.namespace}(int x, int y, int w, int h) : HTMLWindow(make_shared<HTMLNode>(html_1), x, y, w, h) {{\n\n}}")
+		self.cpp_stream.write(f"{self.namespace}::{self.namespace}(int x, int y, int w, int h) : HTMLWindow(make_shared<HTMLNode>(html_1), x, y, w, h) {{\n\n}}\n")
 
 		self.custom_script_dat.close()
 		self.struct_stream.close()
