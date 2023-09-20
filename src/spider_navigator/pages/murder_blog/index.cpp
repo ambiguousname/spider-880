@@ -99,6 +99,7 @@ const HTMLNode text_17 = {
 	{
 	},
 	{
+		{"href", "cool_myths/theend"},
 	},
 };
 const HTMLNode a_17 = {
@@ -108,6 +109,7 @@ const HTMLNode a_17 = {
 		make_shared<HTMLNode>(text_17),
 	},
 	{
+		{"href", "cool_myths/theend"},
 	},
 };
 const HTMLNode text_18 = {
@@ -256,9 +258,6 @@ const HTMLNode body_5 = {
 		make_shared<HTMLNode>(p_6),
 	},
 	{
-		{"title", "My Blog (GEANE: CHANGE TITLE TEXT)"},
-		{"w", "300"},
-		{"h", "300"},
 	},
 };
 const HTMLNode html_1 = {
@@ -269,6 +268,7 @@ const HTMLNode html_1 = {
 		make_shared<HTMLNode>(header_3),
 	},
 	{
+		{"title", "My Blog (GEANE: CHANGE TITLE TEXT)"},
 	},
 };
 MurderBlogIndexHTMLWindow::MurderBlogIndexHTMLWindow(int x, int y, int w, int h) : HTMLWindow(make_shared<HTMLNode>(html_1), x, y, w, h) {

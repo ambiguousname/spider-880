@@ -21,7 +21,7 @@ struct HTMLNode {
 	const NodeType tag;
 	const char* data;
 	const vector<shared_ptr<HTMLNode>> children;
-	const unordered_map<const char*, const char*> attributes;
+	const unordered_map<string, string> attributes;
 };
 
 typedef shared_ptr<HTMLNode> HTMLNodePtr;
@@ -40,14 +40,15 @@ enum NodeQueueInfoEnum {
 
 struct NodeQueueInfo {
 	HTMLNodePtr node;
+	HTMLNodePtr parent;
 	NodeQueueInfoEnum type;
 };
 
 class HTMLPage : public Fl_Group {
 	void drawChildren();
 
-	void closeNode(vector<NodeQueueInfo>& queue, HTMLNodePtr node);
-	void openNode(vector<NodeQueueInfo>& queue, HTMLNodePtr node);
+	void closeNode(vector<NodeQueueInfo>& queue, NodeQueueInfo info);
+	void openNode(vector<NodeQueueInfo>& queue, NodeQueueInfo info);
 	
 	protected:
 	int cursor_x = 0;
