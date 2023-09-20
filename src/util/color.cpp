@@ -2,7 +2,7 @@
 #include <math.h>
 #include <FL/Fl.H>
 
-const Fl_Color PALETTE[16] = {FL_BLACK, FL_RED, FL_GREEN, FL_YELLOW, FL_BLUE, FL_MAGENTA, FL_CYAN, FL_WHITE, FL_DARK_RED, FL_DARK_GREEN, FL_DARK_YELLOW, FL_DARK_BLUE, FL_DARK_MAGENTA, FL_DARK_CYAN, FL_DARK3, FL_DARK1}; 
+const Fl_Color PALETTE[16] = {0, 1, 2, 3, 4, 5, 6, 7, 8, FL_DARK_RED, 9, 10, 11, 12, 13, 14}; 
 
 Fl_Color rgb_to_palette(unsigned char r, unsigned char g, unsigned char b) {
 	int len = sizeof(PALETTE)/sizeof(Fl_Color);
