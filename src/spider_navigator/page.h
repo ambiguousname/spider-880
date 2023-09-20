@@ -4,12 +4,14 @@
 #include <memory>
 #include <vector>
 #include <unordered_map>
+#include <string>
 #include <FL/Fl_Scroll.H>
 
 using namespace std;
 
 enum NodeType {
 	DEFAULT,
+	TEXT,
 	P,
 	A,
 	IMG,
@@ -24,15 +26,25 @@ struct HTMLNode {
 
 typedef shared_ptr<HTMLNode> HTMLNodePtr;
 
+struct RenderedNode {
+	int x;
+	int y;
+	int w;
+	int h;
+};
+
 class HTMLPage : public Fl_Group {
 	void drawChildren();
 	
 	protected:
 	shared_ptr<HTMLNode> root = nullptr;
+	vector<RenderedNode> rendered_nodes;
+	
+	virtual void draw();
+
+	int handle(int event);
 	public:
 	HTMLPage(shared_ptr<HTMLNode> root, int x, int y, int w, int h);
-
-	virtual void draw();
 };
 
 class HTMLWindow : public Fl_Window {

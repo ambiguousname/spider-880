@@ -7,12 +7,34 @@ const HTMLNode header_3 = {
 	{
 	},
 };
-void onStart() {
-	std::cout << "Hello world!";
-}
-const HTMLNode a_7 = {
-	A,
+const HTMLNode text_6 = {
+	TEXT,
+	"			Image courtesy of ",
+	{
+	},
+	{
+	},
+};
+const HTMLNode text_8 = {
+	TEXT,
 	"user:engounge",
+	{
+	},
+	{
+	},
+};
+const HTMLNode a_8 = {
+	A,
+	"",
+	{
+		make_shared<HTMLNode>(text_8),
+	},
+	{
+	},
+};
+const HTMLNode text_9 = {
+	TEXT,
+	".		",
 	{
 	},
 	{
@@ -20,92 +42,202 @@ const HTMLNode a_7 = {
 };
 const HTMLNode p_6 = {
 	P,
-	"Image courtesy of ",
+	"",
 	{
-		make_shared<HTMLNode>(a_7),
+		make_shared<HTMLNode>(text_9),
+		make_shared<HTMLNode>(a_8),
+		make_shared<HTMLNode>(text_6),
 	},
 	{
 	},
 };
-const HTMLNode p_8 = {
+const HTMLNode text_11 = {
+	TEXT,
+	"			The adage holds true. I've been getting too many \"customer complaints\" in my spam box to say it again, but just imagine my words now.		",
+	{
+	},
+	{
+	},
+};
+const HTMLNode p_11 = {
 	P,
-	"The adage holds true. I've been getting too many \"customer complaints\" in my spam box to say it again, but just imagine my words now.",
+	"",
+	{
+		make_shared<HTMLNode>(text_11),
+	},
+	{
+	},
+};
+const HTMLNode text_13 = {
+	TEXT,
+	"			In case I happen to shock and/or surprise any of the slow-witted among you. ",
 	{
 	},
 	{
 	},
 };
-const HTMLNode a_10 = {
-	A,
-	"Rorik",
+const HTMLNode text_15 = {
+	TEXT,
+	"Rorik's",
 	{
 	},
 	{
 	},
 };
-const HTMLNode a_11 = {
+const HTMLNode a_15 = {
 	A,
+	"",
+	{
+		make_shared<HTMLNode>(text_15),
+	},
+	{
+	},
+};
+const HTMLNode text_17 = {
+	TEXT,
 	"End",
 	{
 	},
 	{
 	},
 };
-const HTMLNode a_12 = {
+const HTMLNode a_17 = {
 	A,
+	"",
+	{
+		make_shared<HTMLNode>(text_17),
+	},
+	{
+	},
+};
+const HTMLNode text_18 = {
+	TEXT,
+	" is a ",
+	{
+	},
+	{
+	},
+};
+const HTMLNode text_20 = {
+	TEXT,
 	"SPNPOLICY200",
 	{
 	},
 	{
 	},
 };
-const HTMLNode p_9 = {
-	P,
-	"In case I happen to shock and/or surprise any of the slow-witted among you. is a . I just pray that you're not as stupid as everyone makes you out to be. ",
+const HTMLNode a_20 = {
+	A,
+	"",
 	{
-		make_shared<HTMLNode>(a_10),
-		make_shared<HTMLNode>(a_11),
-		make_shared<HTMLNode>(a_12),
+		make_shared<HTMLNode>(text_20),
+	},
+	{
+	},
+};
+const HTMLNode text_21 = {
+	TEXT,
+	". I just pray that you're not as stupid as everyone makes you out to be. 		",
+	{
 	},
 	{
 	},
 };
 const HTMLNode p_13 = {
 	P,
-	"Details as I can get them are scarce. Police aren't saying much other than that the body was found in the abandoned caves by Rorik End's scenic, beautiful, tourist-attracting, all around pleasant space, Egg Park.",
+	"",
+	{
+		make_shared<HTMLNode>(text_21),
+		make_shared<HTMLNode>(a_20),
+		make_shared<HTMLNode>(text_18),
+		make_shared<HTMLNode>(a_17),
+		make_shared<HTMLNode>(a_15),
+		make_shared<HTMLNode>(text_13),
+	},
+	{
+	},
+};
+const HTMLNode text_23 = {
+	TEXT,
+	"			Details as I can get them are scarce. Police aren't saying much other than that the body was found in the abandoned caves by Rorik End's scenic, beautiful, tourist-attracting, all around pleasant space, Egg Park.		",
 	{
 	},
 	{
 	},
 };
-const HTMLNode p_14 = {
+const HTMLNode p_23 = {
 	P,
-	"I want all the viewers at home to know that I am not heartless. In fact, the more I stare at the blood and sinews and guts leaking out of this poor fellow, the more I am completely unnerved. I guess with 24-bit colors you can really see the whole enchilada.",
+	"",
+	{
+		make_shared<HTMLNode>(text_23),
+	},
+	{
+	},
+};
+const HTMLNode text_25 = {
+	TEXT,
+	"			I want all the viewers at home to know that I am not heartless. In fact, the more I stare at the blood and sinews and guts leaking out of this poor fellow, the more I am completely unnerved. I guess with 24-bit colors you can really see the whole enchilada.		",
 	{
 	},
 	{
 	},
 };
-const HTMLNode p_15 = {
+const HTMLNode p_25 = {
 	P,
-	"Corpses typically don't float. Speaking as an expert in murder (with a focus in fluid dynamics), they don't float unless they weigh less than the fluid they are displacing. That's a little scientific thing called the Archimedes Principle, and it doesn't allow for violations. For any of you wondering if the corpse is floating because of the stalactite protruding through the chest: no.",
+	"",
+	{
+		make_shared<HTMLNode>(text_25),
+	},
+	{
+	},
+};
+const HTMLNode text_27 = {
+	TEXT,
+	"			Corpses typically don't float. Speaking as an expert in murder (with a focus in fluid dynamics), they don't float unless they weigh less than the fluid they are displacing. That's a little scientific thing called the Archimedes Principle, and it doesn't allow for violations. For any of you wondering if the corpse is floating because of the stalactite protruding through the chest: no.		",
 	{
 	},
 	{
 	},
 };
-const HTMLNode p_16 = {
+const HTMLNode p_27 = {
 	P,
-	"The friction of the organs on the stalactite is too weak compared to the force of gravity. So we should be sinking down. And instead our remains trapped in the fluid. Just like when I shoved Jim's dog in the lake.",
+	"",
+	{
+		make_shared<HTMLNode>(text_27),
+	},
+	{
+	},
+};
+const HTMLNode text_29 = {
+	TEXT,
+	"			The friction of the organs on the stalactite is too weak compared to the force of gravity. So we should be sinking down. And instead our remains trapped in the fluid. Just like when I shoved Jim's dog in the lake.		",
 	{
 	},
 	{
 	},
 };
-const HTMLNode p_17 = {
+const HTMLNode p_29 = {
 	P,
-	"To all of the loud-mouthed Rorikenders I know: shut your gagging SPNPOLICY200 flaps. And remember to stay safe out there.",
+	"",
 	{
+		make_shared<HTMLNode>(text_29),
+	},
+	{
+	},
+};
+const HTMLNode text_31 = {
+	TEXT,
+	"			To all of the loud-mouthed Rorikenders I know: shut your gagging SPNPOLICY200 flaps. And remember to stay safe out there.		",
+	{
+	},
+	{
+	},
+};
+const HTMLNode p_31 = {
+	P,
+	"",
+	{
+		make_shared<HTMLNode>(text_31),
 	},
 	{
 	},
@@ -114,14 +246,14 @@ const HTMLNode body_5 = {
 	DEFAULT,
 	"",
 	{
-		make_shared<HTMLNode>(p_6),
-		make_shared<HTMLNode>(p_8),
-		make_shared<HTMLNode>(p_9),
+		make_shared<HTMLNode>(p_31),
+		make_shared<HTMLNode>(p_29),
+		make_shared<HTMLNode>(p_27),
+		make_shared<HTMLNode>(p_25),
+		make_shared<HTMLNode>(p_23),
 		make_shared<HTMLNode>(p_13),
-		make_shared<HTMLNode>(p_14),
-		make_shared<HTMLNode>(p_15),
-		make_shared<HTMLNode>(p_16),
-		make_shared<HTMLNode>(p_17),
+		make_shared<HTMLNode>(p_11),
+		make_shared<HTMLNode>(p_6),
 	},
 	{
 		{"title", "My Blog (GEANE: CHANGE TITLE TEXT)"},
@@ -133,8 +265,8 @@ const HTMLNode html_1 = {
 	DEFAULT,
 	"",
 	{
-		make_shared<HTMLNode>(header_3),
 		make_shared<HTMLNode>(body_5),
+		make_shared<HTMLNode>(header_3),
 	},
 	{
 	},

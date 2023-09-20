@@ -88,7 +88,8 @@
         "xtr1common": "cpp",
         "*.tcc": "cpp",
         "memory_resource": "cpp",
-        "cinttypes": "cpp"
+        "cinttypes": "cpp",
+        "regex": "cpp"
     },
     "cmake.configureOnOpen": false
 }

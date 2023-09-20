@@ -1,8 +1,17 @@
 #include "pages.h"
+const HTMLNode text_3 = {
+	TEXT,
+	"			Scream all you want. No one will hear you.		",
+	{
+	},
+	{
+	},
+};
 const HTMLNode p_3 = {
 	P,
-	"Scream all you want. No one will hear you.",
+	"",
 	{
+		make_shared<HTMLNode>(text_3),
 	},
 	{
 	},

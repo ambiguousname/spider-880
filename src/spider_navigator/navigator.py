@@ -79,6 +79,7 @@ class HtmlStackNode():
 				self.writeln("\tDEFAULT,")
 			self.writeln(f"\t\"{self.dat}\",")
 			self.writeln("\t{")
+			self.children.reverse()
 			for child in self.children:
 				if not child.invisible:
 					self.writeln(f"\t\tmake_shared<HTMLNode>({child}),")
@@ -89,14 +90,14 @@ class HtmlStackNode():
 			self.writeln("\t},")
 			self.writeln("};")
 
-class ImageNode(HtmlStackNode):
-	includes = ["<util/image_box.h>"]
-
-class PNode(HtmlStackNode):
+class TextNode(HtmlStackNode):
 	def data(self, data):
 		lines = data.replace("\"", "\\\"").split("\n")
 		for line in lines:
-			self.dat += line.lstrip()
+			self.dat += line
+
+class ImageNode(HtmlStackNode):
+	includes = ["<util/image_box.h>"]
 
 class Script(HtmlStackNode):
 	invisible = True
@@ -164,7 +165,6 @@ class HTMLCPPParser(HTMLParser):
 		return {
 			"script": Script,
 			"includes": Includes,
-			"p": PNode,
 			"img": ImageNode
 		}
 
@@ -200,8 +200,26 @@ class HTMLCPPParser(HTMLParser):
 		return super().handle_endtag(tag)
 	
 	def handle_data(self, data: str) -> None:
-		if len(self.stack) > 0:
-			self.stack[-1].data(data)
+		if len(self.stack) > 0 and not str.isspace(data):
+			prev = self.stack[-1]
+
+			if prev is Script:
+				prev.data(data)
+			elif not prev.invisible:
+				attr_list = []
+				for key, attr in prev.attrs.items():
+					attr_list.append((key, attr))
+
+				node = TextNode(self.id, "text", attr_list, prev)
+				node.data(data)
+				node.close()
+				node.element_stream.seek(0)
+				self.struct_stream.write(node.element_stream.read())
+				node.element_stream.close()
+
+				prev.append(node)
+
+				self.id += 1
 		return super().handle_data(data)
 
 def searchDir(dir):
