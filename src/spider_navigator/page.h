@@ -2,11 +2,11 @@
 
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Scroll.H>
+#include <functional>
 #include <memory>
 #include <vector>
 #include <unordered_map>
 #include <string>
-#include <functional>
 
 using namespace std;
 
@@ -75,7 +75,6 @@ class HTMLPage : public Fl_Group {
 	HTMLPage(shared_ptr<HTMLNode> root, int x, int y, int w, int h);
 };
 
-
 class HTMLWindow : public Fl_Window {
 	void drawChildren();
 
@@ -83,8 +82,11 @@ class HTMLWindow : public Fl_Window {
 	Fl_Scroll* scrollbar;
 	protected:
 	// Other HTML pages (or just FL_Windows) linked by <a> tags.
-	vector<function<HTMLWindow*>> linked_windows;
+	unordered_map<string, function<HTMLWindow*(int, int, int, int)> > linked_windows;
 
 	public:
 	HTMLWindow(shared_ptr<HTMLNode> root, int x, int y, int w, int h);
+
+	bool getLinkedWindow(string name, function<HTMLWindow*(int, int, int, int)> &out);
 };
+typedef function<HTMLWindow*(int, int, int, int)> windowCreation; 

@@ -16,6 +16,15 @@ HTMLWindow::HTMLWindow(shared_ptr<HTMLNode> root, int x, int y, int w, int h) : 
 	end();
 }
 
+bool HTMLWindow::getLinkedWindow(string name, windowCreation& out) {
+	auto search = linked_windows.find(name);
+	if (search != linked_windows.end()) {
+		out = search->second;
+		return true;
+	}
+	return false;
+}
+
 HTMLPage::HTMLPage(shared_ptr<HTMLNode> root, int x, int y, int w, int h) : Fl_Group(x, y, w, h), rendered_nodes() {
 	this->root.swap(root);
 	root.reset();
@@ -127,17 +136,25 @@ int HTMLPage::hoverRendered() {
 	}
 }
 
+#include <iostream>
 int HTMLPage::clickRendered() {
 	int x = Fl::event_x();
 	int y = Fl::event_y();
+	cout << "CLICK";
 	RenderedNode rendered;
+	HTMLWindow* parent = (HTMLWindow*)this->parent();
 	if (getRenderedFromPos(x, y, rendered)) {
 		if (rendered.node_info.node->tag == A) {
 			auto attrs = rendered.node_info.node->attributes;
 			auto search = attrs.find("href");
 			if (search != attrs.begin()) {
 				// TODO: Move on-click logic to python scripting.
-				// 
+				
+				windowCreation constructor;
+				cout << search->first;
+				if (parent->getLinkedWindow(search->second, constructor)) {
+					auto window = constructor(this->x(), this->y(), w(), h());
+				}
 			}
 		}
 		return 1;

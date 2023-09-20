@@ -106,7 +106,7 @@ class ANode(HtmlStackNode):
 			self.includes.add(f"<{pages_link}>")
 			if self.reader is not None:
 				abs_path = path.abspath(path.join(root, self.attrs["href"]))
-				self.reader.linked_pages.append(get_namespace_from_path(abs_path))
+				self.reader.linked_pages.append((self.attrs["href"], get_namespace_from_path(abs_path)))
 		return super().open()
 
 class Script(HtmlStackNode):
@@ -167,16 +167,12 @@ class HTMLCPPParser(HTMLParser):
 		self.struct_stream.seek(0)
 		self.cpp_stream.write(self.struct_stream.read())
 
-		linked_page_str = "linked_windows = {"
+		linked_page_str = ""
 		for i in range(len(self.linked_pages)):
-			page = self.linked_pages[i]
-			linked_page_str += page + "::createWindow"
-			if i < len(self.linked_pages) - 1:
-				linked_page_str += ","
-		linked_page_str += "};"
+			href, page = self.linked_pages[i]
+			linked_page_str += f"\tlinked_windows[\"{href}\"] = ({page}::createWindow);\n"
 
-		self.cpp_stream.write(f"{self.namespace}::{self.namespace}(int x, int y, int w, int h) : HTMLWindow(make_shared<HTMLNode>(html_1), x, y, w, h) {{\n\t{linked_page_str}\n}}\n")
-		self.cpp_stream.write(f"HTMLWindow* {self.namespace}::createWindow(int x, int y, int w, int h) {{\n\t return new {self.namespace}(x, y, w, h);\n}}\n")
+		self.cpp_stream.write(f"{self.namespace}::{self.namespace}(int x, int y, int w, int h) : HTMLWindow(make_shared<HTMLNode>(html_1), x, y, w, h) {{\n{linked_page_str}\n}}\n")
 
 		self.custom_script_dat.close()
 		self.struct_stream.close()
@@ -284,7 +280,7 @@ def searchDir(dir):
 			header.write(f"#include {include}\n")
 
 		for namespace in header_info:
-			header.write(f"class {namespace} : public HTMLWindow {{\n\tpublic:\n\t{namespace}(int x, int y, int w, int h);\n\tstatic HTMLWindow* createWindow(int x, int y, int w, int h);\n}};\n")
+			header.write(f"class {namespace} : public HTMLWindow {{\n\tpublic:\n\t{namespace}(int x, int y, int w, int h);\n\tstatic HTMLWindow* createWindow(int x, int y, int w, int h) {{\n\t\treturn new {namespace}(x, y, w, h);\n\t}}\n}};\n")
 		header.close()
 
 if __name__ == "__main__":
