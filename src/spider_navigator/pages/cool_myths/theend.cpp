@@ -252,5 +252,8 @@ const HTMLNode html_1 = {
 	},
 };
 CoolMythsTheendHTMLWindow::CoolMythsTheendHTMLWindow(int x, int y, int w, int h) : HTMLWindow(make_shared<HTMLNode>(html_1), x, y, w, h) {
-
+	linked_windows = {};
+}
+HTMLWindow* CoolMythsTheendHTMLWindow::createWindow(int x, int y, int w, int h) {
+	 return new CoolMythsTheendHTMLWindow(x, y, w, h);
 }

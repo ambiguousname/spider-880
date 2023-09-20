@@ -3,7 +3,7 @@ python = find_program('python')
 cpp_files = run_command('cat', 'list.txt')
 files = cpp_files.stdout().strip()
 
-incdir = include_directories('../')
+incdir = include_directories(['../', './pages'])
 
 to_compile = ['page.cpp']
 to_compile += files.split('\n')

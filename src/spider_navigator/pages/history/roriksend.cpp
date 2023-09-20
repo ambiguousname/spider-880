@@ -216,5 +216,8 @@ const HTMLNode html_1 = {
 	},
 };
 HistoryRoriksendHTMLWindow::HistoryRoriksendHTMLWindow(int x, int y, int w, int h) : HTMLWindow(make_shared<HTMLNode>(html_1), x, y, w, h) {
-
+	linked_windows = {};
+}
+HTMLWindow* HistoryRoriksendHTMLWindow::createWindow(int x, int y, int w, int h) {
+	 return new HistoryRoriksendHTMLWindow(x, y, w, h);
 }

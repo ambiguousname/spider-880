@@ -28,7 +28,7 @@ with open(path.join(root, "../page.h"), "r") as f:
 
 class HtmlStackNode():
 	
-	def __init__(self, id : str, tag : str, attrs: list[tuple[str, str | None]], parent = None, prev = None) -> None:
+	def __init__(self, id : str, tag : str, attrs: list[tuple[str, str | None]], parent = None, reader=None) -> None:
 		self.includes = set()
 
 		self.element_stream = io.StringIO()
@@ -48,7 +48,7 @@ class HtmlStackNode():
 		if "id" in self.attrs:
 			self.id = self.attrs["id"]
 
-		self.prev = prev
+		self.reader = reader
 		self.parent = parent
 	
 	def append(self, child):
@@ -99,6 +99,16 @@ class TextNode(HtmlStackNode):
 class ImageNode(HtmlStackNode):
 	includes = ["<util/image_box.h>"]
 
+class ANode(HtmlStackNode):
+	def open(self):
+		if "href" in self.attrs:
+			pages_link = path.relpath(path.join(self.attrs["href"], "../pages.h")).replace("\\", "/")
+			self.includes.add(f"<{pages_link}>")
+			if self.reader is not None:
+				abs_path = path.abspath(path.join(root, self.attrs["href"]))
+				self.reader.linked_pages.append(get_namespace_from_path(abs_path))
+		return super().open()
+
 class Script(HtmlStackNode):
 	invisible = True
 	def data(self, data):
@@ -123,6 +133,10 @@ class Includes(HtmlStackNode):
 class Header(HtmlStackNode):
 	pass
 
+def get_namespace_from_path(p):
+	rel = path.relpath(p, root)
+	return rel.replace(".cpp", "").replace(sep, " ").replace("_", " ").title().replace(" ", "") + "HTMLWindow"
+
 class HTMLCPPParser(HTMLParser):
 	def __init__(self, stream, p, convert_charrefs: bool = True) -> None:
 		super().__init__(convert_charrefs=convert_charrefs)
@@ -132,6 +146,7 @@ class HTMLCPPParser(HTMLParser):
 		self.cpp_stream = stream
 		self.struct_stream = io.StringIO()
 		self.custom_script_dat = io.StringIO()
+		self.linked_pages = []
 
 		self.id = 0
 
@@ -140,9 +155,7 @@ class HTMLCPPParser(HTMLParser):
 
 		self.prev = None
 
-
-		matches = re.match(".*pages(.*)", path.splitext(p)[0])
-		self.namespace = matches[1].replace(sep, " ").replace("_", " ").title().replace(" ", "") + "HTMLWindow"
+		self.namespace = get_namespace_from_path(p)
 
 
 	def close(self):
@@ -153,10 +166,17 @@ class HTMLCPPParser(HTMLParser):
 
 		self.struct_stream.seek(0)
 		self.cpp_stream.write(self.struct_stream.read())
-		
-		pth = str(path.relpath(self.path, root)).replace("\\", "/")
 
-		self.cpp_stream.write(f"{self.namespace}::{self.namespace}(int x, int y, int w, int h) : HTMLWindow(make_shared<HTMLNode>(html_1), x, y, w, h) {{\n\n}}\n")
+		linked_page_str = "linked_windows = {"
+		for i in range(len(self.linked_pages)):
+			page = self.linked_pages[i]
+			linked_page_str += page + "::createWindow"
+			if i < len(self.linked_pages) - 1:
+				linked_page_str += ","
+		linked_page_str += "};"
+
+		self.cpp_stream.write(f"{self.namespace}::{self.namespace}(int x, int y, int w, int h) : HTMLWindow(make_shared<HTMLNode>(html_1), x, y, w, h) {{\n\t{linked_page_str}\n}}\n")
+		self.cpp_stream.write(f"HTMLWindow* {self.namespace}::createWindow(int x, int y, int w, int h) {{\n\t return new {self.namespace}(x, y, w, h);\n}}\n")
 
 		self.custom_script_dat.close()
 		self.struct_stream.close()
@@ -167,6 +187,7 @@ class HTMLCPPParser(HTMLParser):
 		return {
 			"script": Script,
 			"includes": Includes,
+			"a": ANode,
 			"img": ImageNode
 		}
 
@@ -177,10 +198,10 @@ class HTMLCPPParser(HTMLParser):
 		node = None
 		if len(self.stack) > 0:
 			prev = self.stack[-1]
-			node = info(self.id, tag, attrs, prev)
+			node = info(self.id, tag, attrs, prev, self)
 			prev.append(node)
 		else:
-			node = info(self.id, tag, attrs)
+			node = info(self.id, tag, attrs, None, self)
 		node.open()
 		self.stack.append(node)
 		return super().handle_starttag(tag, attrs)
@@ -212,7 +233,7 @@ class HTMLCPPParser(HTMLParser):
 				for key, attr in prev.attrs.items():
 					attr_list.append((key, attr))
 
-				node = TextNode(self.id, "text", attr_list, prev)
+				node = TextNode(self.id, "text", attr_list, prev, self)
 				node.data(data)
 				node.close()
 				node.element_stream.seek(0)
@@ -246,6 +267,7 @@ def searchDir(dir):
 			parser.feed(file.read())
 			parser.close()
 			file.close()
+			cpp_stream.close()
 			
 			includes.update(parser.includes)
 			header_info.append(parser.namespace)
@@ -262,7 +284,7 @@ def searchDir(dir):
 			header.write(f"#include {include}\n")
 
 		for namespace in header_info:
-			header.write(f"class {namespace} : public HTMLWindow {{\n\tpublic:\n\t{namespace}(int x, int y, int w, int h);\n}};\n")
+			header.write(f"class {namespace} : public HTMLWindow {{\n\tpublic:\n\t{namespace}(int x, int y, int w, int h);\n\tstatic HTMLWindow* createWindow(int x, int y, int w, int h);\n}};\n")
 		header.close()
 
 if __name__ == "__main__":

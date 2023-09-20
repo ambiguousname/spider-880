@@ -6,6 +6,7 @@
 #include <vector>
 #include <unordered_map>
 #include <string>
+#include <functional>
 
 using namespace std;
 
@@ -63,6 +64,8 @@ class HTMLPage : public Fl_Group {
 	int height_buffer = 0;
 
 	shared_ptr<HTMLNode> root = nullptr;
+
+	// For clicking on stuff:
 	vector<RenderedNode> rendered_nodes;
 	
 	virtual void draw();
@@ -72,11 +75,16 @@ class HTMLPage : public Fl_Group {
 	HTMLPage(shared_ptr<HTMLNode> root, int x, int y, int w, int h);
 };
 
+
 class HTMLWindow : public Fl_Window {
 	void drawChildren();
 
 	HTMLPage* page;
 	Fl_Scroll* scrollbar;
+	protected:
+	// Other HTML pages (or just FL_Windows) linked by <a> tags.
+	vector<function<HTMLWindow*>> linked_windows;
+
 	public:
 	HTMLWindow(shared_ptr<HTMLNode> root, int x, int y, int w, int h);
 };

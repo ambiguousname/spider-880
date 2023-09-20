@@ -136,7 +136,8 @@ int HTMLPage::clickRendered() {
 			auto attrs = rendered.node_info.node->attributes;
 			auto search = attrs.find("href");
 			if (search != attrs.begin()) {
-				
+				// TODO: Move on-click logic to python scripting.
+				// 
 			}
 		}
 		return 1;

@@ -36,5 +36,8 @@ const HTMLNode html_1 = {
 	},
 };
 CoolMythsScreamHTMLWindow::CoolMythsScreamHTMLWindow(int x, int y, int w, int h) : HTMLWindow(make_shared<HTMLNode>(html_1), x, y, w, h) {
-
+	linked_windows = {};
+}
+HTMLWindow* CoolMythsScreamHTMLWindow::createWindow(int x, int y, int w, int h) {
+	 return new CoolMythsScreamHTMLWindow(x, y, w, h);
 }

@@ -272,5 +272,8 @@ const HTMLNode html_1 = {
 	},
 };
 MurderBlogIndexHTMLWindow::MurderBlogIndexHTMLWindow(int x, int y, int w, int h) : HTMLWindow(make_shared<HTMLNode>(html_1), x, y, w, h) {
-
+	linked_windows = {CoolMythsTheendHTMLWindow::createWindow};
+}
+HTMLWindow* MurderBlogIndexHTMLWindow::createWindow(int x, int y, int w, int h) {
+	 return new MurderBlogIndexHTMLWindow(x, y, w, h);
 }
