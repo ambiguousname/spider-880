@@ -1,6 +1,7 @@
 #include "page.h"
 #include <FL/fl_draw.H>
 #include <stdexcept>
+#include <variant>
 
 HTMLWindow::HTMLWindow(shared_ptr<HTMLNode> root, int x, int y, int w, int h) : Fl_Window(x, y, w, h) {
 	scrollbar = new Fl_Scroll(x, y, w, h);
@@ -16,36 +17,64 @@ HTMLPage::HTMLPage(shared_ptr<HTMLNode> root, int x, int y, int w, int h) : Fl_G
 	end();
 }
 
-#include <iostream>
-void HTMLPage::drawChildren() {
-	// TODO: This is a queue.
-	vector<shared_ptr<HTMLNode>> stack = {root};
-	// TODO: To allow for showing when tags close, add it as a struct to the queue. You can use the std::variant type: https://en.cppreference.com/w/cpp/utility/variant
-	// Either that or a struct holding either.
+void HTMLPage::closeNode(vector<NodeQueueInfo>& queue, HTMLNodePtr node) {
+	// cursor_y += 20;
+	if (node->tag == P) {
+		cursor_y += height_buffer + 20;
+		cursor_x = x();
+		height_buffer = 0;
+	}
+}
 
-	int cursor_x = x();
-	int cursor_y = y();
-	rendered_nodes = {};
-	while (stack.size() > 0) {
-		shared_ptr<HTMLNode> node = stack.front();
-		stack.erase(stack.begin());
+void HTMLPage::openNode(vector<NodeQueueInfo>& queue, HTMLNodePtr node) {
+	if (node->tag == TEXT) {
+		int text_width = w();
+		int text_height = 0;
 
-		cout << node->tag;
-		// TODO: Add a way to insert text nodes with navigator.py.
-		if (node->tag == TEXT) {
-			int text_width = w();
-			int text_height = 0;
-
-			fl_measure(node->data, text_width, text_height);
-			fl_color(FL_FOREGROUND_COLOR);
-			fl_draw(node->data, cursor_x, cursor_y, text_width, text_height, FL_ALIGN_WRAP | FL_ALIGN_CENTER);
-			// cout << text_width << "," << text_height << endl;
-			cursor_y += text_height + 20;
+		fl_measure(node->data, text_width, text_height);
+		fl_color(FL_FOREGROUND_COLOR);
+		// TODO: Cut text up into chunks and wrap from that?
+		if (cursor_x + text_width > w()) {
+			cursor_x = x();
+			cursor_y += height_buffer;
+			height_buffer = 0;
 		}
-		for (auto c : node->children) {
-			stack.insert(stack.begin(), c);
+		fl_draw(node->data, cursor_x, cursor_y, text_width, text_height, FL_ALIGN_WRAP | FL_ALIGN_CENTER);
+		cursor_x += text_width;
+
+		height_buffer = text_height;
+		// TODO: Is this hack okay? Does it not work with other displays?
+		if (text_height > fl_size() + 2) {
+			cursor_y += height_buffer;
+			height_buffer = 0;
 		}
 	}
+}
+
+void HTMLPage::drawChildren() {
+	vector<NodeQueueInfo> queue = {{root, OPEN_NODE}};
+
+	cursor_x = x();
+	cursor_y = y();
+	height_buffer = 0;
+	rendered_nodes = {};
+	while (queue.size() > 0) {
+		NodeQueueInfo node_info = queue.front();
+		queue.erase(queue.begin());
+
+
+		shared_ptr<HTMLNode> node = node_info.node;
+		if (node_info.type == OPEN_NODE) {
+			openNode(queue, node);
+			queue.insert(queue.begin(), {node, CLOSE_NODE});
+			for (auto c : node->children) {
+				queue.insert(queue.begin(), {c, OPEN_NODE});
+			}
+		} else if (node_info.type == CLOSE_NODE) {
+			closeNode(queue, node);
+		}
+	}
+	cout << "-----" << endl;
 	resize(x(), y(), this->parent()->w() - 20, cursor_y - y());
 }
 

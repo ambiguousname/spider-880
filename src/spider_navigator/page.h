@@ -1,11 +1,11 @@
 #pragma once
 
 #include <FL/Fl_Window.H>
+#include <FL/Fl_Scroll.H>
 #include <memory>
 #include <vector>
 #include <unordered_map>
 #include <string>
-#include <FL/Fl_Scroll.H>
 
 using namespace std;
 
@@ -33,10 +33,27 @@ struct RenderedNode {
 	int h;
 };
 
+enum NodeQueueInfoEnum {
+	OPEN_NODE,
+	CLOSE_NODE
+};
+
+struct NodeQueueInfo {
+	HTMLNodePtr node;
+	NodeQueueInfoEnum type;
+};
+
 class HTMLPage : public Fl_Group {
 	void drawChildren();
+
+	void closeNode(vector<NodeQueueInfo>& queue, HTMLNodePtr node);
+	void openNode(vector<NodeQueueInfo>& queue, HTMLNodePtr node);
 	
 	protected:
+	int cursor_x = 0;
+	int cursor_y = 0;
+	int height_buffer = 0;
+
 	shared_ptr<HTMLNode> root = nullptr;
 	vector<RenderedNode> rendered_nodes;
 	

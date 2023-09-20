@@ -94,7 +94,7 @@ class TextNode(HtmlStackNode):
 	def data(self, data):
 		lines = data.replace("\"", "\\\"").split("\n")
 		for line in lines:
-			self.dat += line
+			self.dat += line.lstrip('\t')
 
 class ImageNode(HtmlStackNode):
 	includes = ["<util/image_box.h>"]

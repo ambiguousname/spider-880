@@ -1,4 +1,4 @@
-C:\msys64\home\ambiguousname\spider-880\src\spider_navigator\pages\cool_myths\scream.cpp
-C:\msys64\home\ambiguousname\spider-880\src\spider_navigator\pages\cool_myths\theend.cpp
-C:\msys64\home\ambiguousname\spider-880\src\spider_navigator\pages\history\roriksend.cpp
-C:\msys64\home\ambiguousname\spider-880\src\spider_navigator\pages\murder_blog\index.cpp
+C:/msys64/home/ambiguousname/spider-880/src/spider_navigator/pages/cool_myths/scream.cpp
+C:/msys64/home/ambiguousname/spider-880/src/spider_navigator/pages/cool_myths/theend.cpp
+C:/msys64/home/ambiguousname/spider-880/src/spider_navigator/pages/history/roriksend.cpp
+C:/msys64/home/ambiguousname/spider-880/src/spider_navigator/pages/murder_blog/index.cpp

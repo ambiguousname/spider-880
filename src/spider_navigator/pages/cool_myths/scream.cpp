@@ -1,7 +1,7 @@
 #include "pages.h"
 const HTMLNode text_3 = {
 	TEXT,
-	"			Scream all you want. No one will hear you.		",
+	"Scream all you want. No one will hear you.",
 	{
 	},
 	{
