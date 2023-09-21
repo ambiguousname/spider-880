@@ -1,36 +1,36 @@
 #include "pages.h"
-const Text text_3 = {
+Text text_3 = Text {
 	"Scream all you want. No one will hear you.",
 	{
 	},
 	{
 	},
 };
-const P p_3 = {
+P p_3 = P {
 	"",
 	{
-		make_shared<HTMLNode>(text_3),
+		std::make_shared<HTMLNode>(text_3),
 	},
 	{
 	},
 };
-const HTMLNode body_2 = {
+HTMLNode body_2 = HTMLNode {
 	"",
 	{
-		make_shared<HTMLNode>(p_3),
+		std::make_shared<HTMLNode>(p_3),
 	},
 	{
 		{"title", "The Scream"},
 	},
 };
-const HTMLNode html_1 = {
+HTMLNode html_1 = HTMLNode {
 	"",
 	{
-		make_shared<HTMLNode>(body_2),
+		std::make_shared<HTMLNode>(body_2),
 	},
 	{
 	},
 };
-CoolMythsScreamHTMLWindow::CoolMythsScreamHTMLWindow(int x, int y, int w, int h) : HTMLWindow(make_shared<HTMLNode>(html_1), x, y, w, h) {
+CoolMythsScreamHTMLWindow::CoolMythsScreamHTMLWindow(int x, int y, int w, int h) : HTMLWindow(std::make_shared<HTMLNode>(html_1), x, y, w, h) {
 
 }

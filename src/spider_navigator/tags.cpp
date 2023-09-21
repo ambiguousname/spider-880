@@ -2,11 +2,15 @@
 #include "page.h"
 #include <FL/fl_draw.H>
 
-void Text::open(HTMLPage* current_page) {
+void HTMLNode::hover(int x, int y, std::unique_ptr<HTMLPage> current_page) {
+	current_page->parent_window->cursor(cursor);
+}
+
+void Text::open(std::unique_ptr<HTMLPage> current_page) {
 	int text_width = current_page->w();
 	int text_height = 0;
 
-	fl_measure(data, text_width, text_height);
+	fl_measure(data.c_str(), text_width, text_height);
 	fl_color(color);
 
 	int cursor_x, cursor_y;
@@ -18,7 +22,7 @@ void Text::open(HTMLPage* current_page) {
 		// cursor_y += height_buffer;
 		// height_buffer = 0;
 	}
-	fl_draw(data, cursor_x, cursor_y, text_width, text_height, FL_ALIGN_WRAP | FL_ALIGN_CENTER);
+	fl_draw(data.c_str(), cursor_x, cursor_y, text_width, text_height, FL_ALIGN_WRAP | FL_ALIGN_CENTER);
 	cursor_x += text_width;
 
 	// height_buffer = text_height;
@@ -30,7 +34,7 @@ void Text::open(HTMLPage* current_page) {
 	current_page->setCursor(cursor_x, cursor_y);
 }
 
-void A::click(int x, int y, HTMLPage* current_page) {
+void A::click(int x, int y, std::unique_ptr<HTMLPage> current_page) {
 	auto search = attributes.find("href");
 	if (search != attributes.end()) {
 		// TODO: Move on-click logic to python scripting.
@@ -43,7 +47,7 @@ void A::click(int x, int y, HTMLPage* current_page) {
 	}
 }
 
-void P::close(HTMLPage* current_page) {
+void P::close(std::unique_ptr<HTMLPage> current_page) {
 	// cursor_y += height_buffer + 20;
 	int cursor_x, cursor_y;
 	current_page->getCursor(cursor_x, cursor_y);

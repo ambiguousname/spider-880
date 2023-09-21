@@ -1,228 +1,228 @@
 #include "pages.h"
-const Text text_3 = {
+Text text_3 = Text {
 	"As a native of Rorik's End myself, there's a somewhat buried tale about Rorik Andersen himself that I think deserves attention. It comes from his grandniece (on his wife's side): Eliza Anderson's \"History of the Andersens\" (1962). I've excerpted the relevant portions here, but for contex the story itself takes place after he filed for bankruptcy and sold Andersen Mining:",
 	{
 	},
 	{
 	},
 };
-const P p_3 = {
+P p_3 = P {
 	"",
 	{
-		make_shared<HTMLNode>(text_3),
+		std::make_shared<HTMLNode>(text_3),
 	},
 	{
 	},
 };
-const Text text_5 = {
+Text text_5 = Text {
 	"What follows is an amalgamation of records of speculation from local sources (mostly rumor mills), and my grandmother's own recollection of what her brother-in-law said at the time.",
 	{
 	},
 	{
 	},
 };
-const P p_5 = {
+P p_5 = P {
 	"",
 	{
-		make_shared<HTMLNode>(text_5),
+		std::make_shared<HTMLNode>(text_5),
 	},
 	{
 	},
 };
-const Text text_7 = {
+Text text_7 = Text {
 	"Rorik decided to walk home after a long day in court, and for whatever reason decided to make a detour. He recalled swinging by the Emerald Meadows (colloquially known as Egg Park), and encountering a man with an apparently long coat.",
 	{
 	},
 	{
 	},
 };
-const P p_7 = {
+P p_7 = P {
 	"",
 	{
-		make_shared<HTMLNode>(text_7),
+		std::make_shared<HTMLNode>(text_7),
 	},
 	{
 	},
 };
-const Text text_9 = {
+Text text_9 = Text {
 	"The man asks Rorik what he's doing there.",
 	{
 	},
 	{
 	},
 };
-const P p_9 = {
+P p_9 = P {
 	"",
 	{
-		make_shared<HTMLNode>(text_9),
+		std::make_shared<HTMLNode>(text_9),
 	},
 	{
 	},
 };
-const Text text_11 = {
+Text text_11 = Text {
 	"\"I own this park. Haven't you heard of me?\"",
 	{
 	},
 	{
 	},
 };
-const P p_11 = {
+P p_11 = P {
 	"",
 	{
-		make_shared<HTMLNode>(text_11),
+		std::make_shared<HTMLNode>(text_11),
 	},
 	{
 	},
 };
-const Text text_13 = {
+Text text_13 = Text {
 	"The man says he has. But he says it's not Rorik's park, and something to the effect that it belongs to the city.",
 	{
 	},
 	{
 	},
 };
-const P p_13 = {
+P p_13 = P {
 	"",
 	{
-		make_shared<HTMLNode>(text_13),
+		std::make_shared<HTMLNode>(text_13),
 	},
 	{
 	},
 };
-const Text text_15 = {
+Text text_15 = Text {
 	"\"Show some respect for your betters.\"",
 	{
 	},
 	{
 	},
 };
-const P p_15 = {
+P p_15 = P {
 	"",
 	{
-		make_shared<HTMLNode>(text_15),
+		std::make_shared<HTMLNode>(text_15),
 	},
 	{
 	},
 };
-const Text text_17 = {
+Text text_17 = Text {
 	"The man assaults Rorik, and there's a scuffle. Rorik shows up to the police station about an hour later, very beaten and bruised. He claims to have driven the other man off, and eventually returns home.",
 	{
 	},
 	{
 	},
 };
-const P p_17 = {
+P p_17 = P {
 	"",
 	{
-		make_shared<HTMLNode>(text_17),
+		std::make_shared<HTMLNode>(text_17),
 	},
 	{
 	},
 };
-const Text text_19 = {
+Text text_19 = Text {
 	"The next day, Rorik orders newspapers to run a front-page piece the next day, the headline reading: \"Death to Traitors\".",
 	{
 	},
 	{
 	},
 };
-const P p_19 = {
+P p_19 = P {
 	"",
 	{
-		make_shared<HTMLNode>(text_19),
+		std::make_shared<HTMLNode>(text_19),
 	},
 	{
 	},
 };
-const Text text_21 = {
+Text text_21 = Text {
 	"The content of the article is a matter of public record, and one I will not repeat here.",
 	{
 	},
 	{
 	},
 };
-const P p_21 = {
+P p_21 = P {
 	"",
 	{
-		make_shared<HTMLNode>(text_21),
+		std::make_shared<HTMLNode>(text_21),
 	},
 	{
 	},
 };
-const Text text_23 = {
+Text text_23 = Text {
 	"What was not in the public record, is my grandmother's sole recollection of Rorik's behavior on the night in question. He apparently called my grandmother to let her know that our family was to be disinherited.",
 	{
 	},
 	{
 	},
 };
-const P p_23 = {
+P p_23 = P {
 	"",
 	{
-		make_shared<HTMLNode>(text_23),
+		std::make_shared<HTMLNode>(text_23),
 	},
 	{
 	},
 };
-const Text text_25 = {
+Text text_25 = Text {
 	"TODO:",
 	{
 	},
 	{
 	},
 };
-const P p_25 = {
+P p_25 = P {
 	"",
 	{
-		make_shared<HTMLNode>(text_25),
+		std::make_shared<HTMLNode>(text_25),
 	},
 	{
 	},
 };
-const Text text_27 = {
+Text text_27 = Text {
 	"Rorik was found dead 3 weeks later, ruled a suicide.",
 	{
 	},
 	{
 	},
 };
-const P p_27 = {
+P p_27 = P {
 	"",
 	{
-		make_shared<HTMLNode>(text_27),
+		std::make_shared<HTMLNode>(text_27),
 	},
 	{
 	},
 };
-const HTMLNode body_2 = {
+HTMLNode body_2 = HTMLNode {
 	"",
 	{
-		make_shared<HTMLNode>(p_27),
-		make_shared<HTMLNode>(p_25),
-		make_shared<HTMLNode>(p_23),
-		make_shared<HTMLNode>(p_21),
-		make_shared<HTMLNode>(p_19),
-		make_shared<HTMLNode>(p_17),
-		make_shared<HTMLNode>(p_15),
-		make_shared<HTMLNode>(p_13),
-		make_shared<HTMLNode>(p_11),
-		make_shared<HTMLNode>(p_9),
-		make_shared<HTMLNode>(p_7),
-		make_shared<HTMLNode>(p_5),
-		make_shared<HTMLNode>(p_3),
+		std::make_shared<HTMLNode>(p_27),
+		std::make_shared<HTMLNode>(p_25),
+		std::make_shared<HTMLNode>(p_23),
+		std::make_shared<HTMLNode>(p_21),
+		std::make_shared<HTMLNode>(p_19),
+		std::make_shared<HTMLNode>(p_17),
+		std::make_shared<HTMLNode>(p_15),
+		std::make_shared<HTMLNode>(p_13),
+		std::make_shared<HTMLNode>(p_11),
+		std::make_shared<HTMLNode>(p_9),
+		std::make_shared<HTMLNode>(p_7),
+		std::make_shared<HTMLNode>(p_5),
+		std::make_shared<HTMLNode>(p_3),
 	},
 	{
 		{"title", "The End"},
 	},
 };
-const HTMLNode html_1 = {
+HTMLNode html_1 = HTMLNode {
 	"",
 	{
-		make_shared<HTMLNode>(body_2),
+		std::make_shared<HTMLNode>(body_2),
 	},
 	{
 	},
 };
-CoolMythsTheendHTMLWindow::CoolMythsTheendHTMLWindow(int x, int y, int w, int h) : HTMLWindow(make_shared<HTMLNode>(html_1), x, y, w, h) {
+CoolMythsTheendHTMLWindow::CoolMythsTheendHTMLWindow(int x, int y, int w, int h) : HTMLWindow(std::make_shared<HTMLNode>(html_1), x, y, w, h) {
 
 }

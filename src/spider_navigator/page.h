@@ -9,8 +9,6 @@
 #include <unordered_map>
 #include <string>
 
-using namespace std;
-
 class HTMLPage;
 class HTMLWindow;
 
@@ -39,16 +37,16 @@ class HTMLPage : public Fl_Group {
 	int height_buffer = 0;
 
 
-	shared_ptr<HTMLNode> root = nullptr;
+	std::shared_ptr<HTMLNode> root = nullptr;
 
-	vector<shared_ptr<HTMLNode>> interactive_nodes;
+	std::vector<std::shared_ptr<HTMLNode>> interactive_nodes;
 	
 	virtual void draw();
 
 	int handle(int event);
 	public:
-	const shared_ptr<HTMLWindow> parent_window;
-	HTMLPage(shared_ptr<HTMLNode> root, shared_ptr<HTMLWindow> parent, int x, int y, int w, int h);
+	const std::shared_ptr<HTMLWindow> parent_window;
+	HTMLPage(std::shared_ptr<HTMLNode> root, std::shared_ptr<HTMLWindow> parent, int x, int y, int w, int h);
 	void getCursor(int& outX, int& outY) { outX = cursor_x; outY = cursor_y; }
 	void setCursor(int inX, int inY) { cursor_x = inX; cursor_y = inY; }
 };
@@ -65,11 +63,11 @@ class HTMLWindow : public Fl_Window {
 	Fl_Scroll* scrollbar;
 	protected:
 	// Other HTML pages (or just FL_Windows) linked by <a> tags.
-	unordered_map<string, function<HTMLWindow*(int, int, int, int)>> linked_windows;
+	std::unordered_map<std::string, std::function<HTMLWindow*(int, int, int, int)>> linked_windows;
 
 	public:
-	HTMLWindow(shared_ptr<HTMLNode> root, int x, int y, int w, int h);
+	HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int h);
 
-	bool getLinkedWindow(string name, function<HTMLWindow*(int, int, int, int)> &out);
+	bool getLinkedWindow(std::string name, std::function<HTMLWindow*(int, int, int, int)> &out);
 };
-typedef function<HTMLWindow*(int, int, int, int)> windowCreation; 
+typedef std::function<HTMLWindow*(int, int, int, int)> windowCreation; 

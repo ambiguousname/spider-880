@@ -1,88 +1,88 @@
 #include "pages.h"
-const HTMLNode header_3 = {
+HTMLNode header_3 = HTMLNode {
 	"",
 	{
 	},
 	{
 	},
 };
-const Text text_6 = {
+Text text_6 = Text {
 	"Image courtesy of ",
 	{
 	},
 	{
 	},
 };
-const Text text_8 = {
+Text text_8 = Text {
 	"user:engounge",
 	{
 	},
 	{
 	},
 };
-const A a_8 = {
+A a_8 = A {
 	"",
 	{
-		make_shared<HTMLNode>(text_8),
+		std::make_shared<HTMLNode>(text_8),
 	},
 	{
 	},
 };
-const Text text_9 = {
+Text text_9 = Text {
 	".",
 	{
 	},
 	{
 	},
 };
-const P p_6 = {
+P p_6 = P {
 	"",
 	{
-		make_shared<HTMLNode>(text_9),
-		make_shared<HTMLNode>(a_8),
-		make_shared<HTMLNode>(text_6),
+		std::make_shared<HTMLNode>(text_9),
+		std::make_shared<HTMLNode>(a_8),
+		std::make_shared<HTMLNode>(text_6),
 	},
 	{
 	},
 };
-const Text text_11 = {
+Text text_11 = Text {
 	"The adage holds true. I've been getting too many \"customer complaints\" in my spam box to say it again, but just imagine my words now.",
 	{
 	},
 	{
 	},
 };
-const P p_11 = {
+P p_11 = P {
 	"",
 	{
-		make_shared<HTMLNode>(text_11),
+		std::make_shared<HTMLNode>(text_11),
 	},
 	{
 	},
 };
-const Text text_13 = {
+Text text_13 = Text {
 	"In case I happen to shock and/or surprise any of the slow-witted among you. ",
 	{
 	},
 	{
 	},
 };
-const Text text_15 = {
+Text text_15 = Text {
 	"Rorik's ",
 	{
 	},
 	{
 	},
 };
-const A a_15 = {
+A a_15 = A {
 	"",
 	{
-		make_shared<HTMLNode>(text_15),
+		std::make_shared<HTMLNode>(text_15),
 	},
 	{
 	},
 };
-const Text text_17 = {
+Text text_17 = Text {
 	"End",
 	{
 	},
@@ -90,158 +90,158 @@ const Text text_17 = {
 		{"href", "cool_myths/theend"},
 	},
 };
-const A a_17 = {
+A a_17 = A {
 	"",
 	{
-		make_shared<HTMLNode>(text_17),
+		std::make_shared<HTMLNode>(text_17),
 	},
 	{
 		{"href", "cool_myths/theend"},
 	},
 };
-const Text text_18 = {
+Text text_18 = Text {
 	" is a ",
 	{
 	},
 	{
 	},
 };
-const Text text_20 = {
+Text text_20 = Text {
 	"SPNPOLICY200",
 	{
 	},
 	{
 	},
 };
-const A a_20 = {
+A a_20 = A {
 	"",
 	{
-		make_shared<HTMLNode>(text_20),
+		std::make_shared<HTMLNode>(text_20),
 	},
 	{
 	},
 };
-const Text text_21 = {
+Text text_21 = Text {
 	". I just pray that you're not as stupid as everyone makes you out to be. ",
 	{
 	},
 	{
 	},
 };
-const P p_13 = {
+P p_13 = P {
 	"",
 	{
-		make_shared<HTMLNode>(text_21),
-		make_shared<HTMLNode>(a_20),
-		make_shared<HTMLNode>(text_18),
-		make_shared<HTMLNode>(a_17),
-		make_shared<HTMLNode>(a_15),
-		make_shared<HTMLNode>(text_13),
+		std::make_shared<HTMLNode>(text_21),
+		std::make_shared<HTMLNode>(a_20),
+		std::make_shared<HTMLNode>(text_18),
+		std::make_shared<HTMLNode>(a_17),
+		std::make_shared<HTMLNode>(a_15),
+		std::make_shared<HTMLNode>(text_13),
 	},
 	{
 	},
 };
-const Text text_23 = {
+Text text_23 = Text {
 	"Details as I can get them are scarce. Police aren't saying much other than that the body was found in the abandoned caves by Rorik End's scenic, beautiful, tourist-attracting, all around pleasant space, Egg Park.",
 	{
 	},
 	{
 	},
 };
-const P p_23 = {
+P p_23 = P {
 	"",
 	{
-		make_shared<HTMLNode>(text_23),
+		std::make_shared<HTMLNode>(text_23),
 	},
 	{
 	},
 };
-const Text text_25 = {
+Text text_25 = Text {
 	"I want all the viewers at home to know that I am not heartless. In fact, the more I stare at the blood and sinews and guts leaking out of this poor fellow, the more I am completely unnerved. I guess with 24-bit colors you can really see the whole enchilada.",
 	{
 	},
 	{
 	},
 };
-const P p_25 = {
+P p_25 = P {
 	"",
 	{
-		make_shared<HTMLNode>(text_25),
+		std::make_shared<HTMLNode>(text_25),
 	},
 	{
 	},
 };
-const Text text_27 = {
+Text text_27 = Text {
 	"Corpses typically don't float. Speaking as an expert in murder (with a focus in fluid dynamics), they don't float unless they weigh less than the fluid they are displacing. That's a little scientific thing called the Archimedes Principle, and it doesn't allow for violations. For any of you wondering if the corpse is floating because of the stalactite protruding through the chest: no.",
 	{
 	},
 	{
 	},
 };
-const P p_27 = {
+P p_27 = P {
 	"",
 	{
-		make_shared<HTMLNode>(text_27),
+		std::make_shared<HTMLNode>(text_27),
 	},
 	{
 	},
 };
-const Text text_29 = {
+Text text_29 = Text {
 	"The friction of the organs on the stalactite is too weak compared to the force of gravity. So we should be sinking down. And instead our remains trapped in the fluid. Just like when I shoved Jim's dog in the lake.",
 	{
 	},
 	{
 	},
 };
-const P p_29 = {
+P p_29 = P {
 	"",
 	{
-		make_shared<HTMLNode>(text_29),
+		std::make_shared<HTMLNode>(text_29),
 	},
 	{
 	},
 };
-const Text text_31 = {
+Text text_31 = Text {
 	"To all of the loud-mouthed Rorikenders I know: shut your gagging SPNPOLICY200 flaps. And remember to stay safe out there.",
 	{
 	},
 	{
 	},
 };
-const P p_31 = {
+P p_31 = P {
 	"",
 	{
-		make_shared<HTMLNode>(text_31),
+		std::make_shared<HTMLNode>(text_31),
 	},
 	{
 	},
 };
-const HTMLNode body_5 = {
+HTMLNode body_5 = HTMLNode {
 	"",
 	{
-		make_shared<HTMLNode>(p_31),
-		make_shared<HTMLNode>(p_29),
-		make_shared<HTMLNode>(p_27),
-		make_shared<HTMLNode>(p_25),
-		make_shared<HTMLNode>(p_23),
-		make_shared<HTMLNode>(p_13),
-		make_shared<HTMLNode>(p_11),
-		make_shared<HTMLNode>(p_6),
+		std::make_shared<HTMLNode>(p_31),
+		std::make_shared<HTMLNode>(p_29),
+		std::make_shared<HTMLNode>(p_27),
+		std::make_shared<HTMLNode>(p_25),
+		std::make_shared<HTMLNode>(p_23),
+		std::make_shared<HTMLNode>(p_13),
+		std::make_shared<HTMLNode>(p_11),
+		std::make_shared<HTMLNode>(p_6),
 	},
 	{
 	},
 };
-const HTMLNode html_1 = {
+HTMLNode html_1 = HTMLNode {
 	"",
 	{
-		make_shared<HTMLNode>(body_5),
-		make_shared<HTMLNode>(header_3),
+		std::make_shared<HTMLNode>(body_5),
+		std::make_shared<HTMLNode>(header_3),
 	},
 	{
 		{"title", "My Blog (GEANE: CHANGE TITLE TEXT)"},
 	},
 };
-MurderBlogIndexHTMLWindow::MurderBlogIndexHTMLWindow(int x, int y, int w, int h) : HTMLWindow(make_shared<HTMLNode>(html_1), x, y, w, h) {
+MurderBlogIndexHTMLWindow::MurderBlogIndexHTMLWindow(int x, int y, int w, int h) : HTMLWindow(std::make_shared<HTMLNode>(html_1), x, y, w, h) {
 	linked_windows.insert({"cool_myths/theend", CoolMythsTheendHTMLWindow::createWindow});
 
 }

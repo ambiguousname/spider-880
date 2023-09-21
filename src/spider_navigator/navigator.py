@@ -69,14 +69,14 @@ class HtmlStackNode():
 			camel_case = get_camel_case(self.tag)
 			if camel_case in supported_nodes:
 				struct_type = camel_case
-			self.writeln(f"const {struct_type} {self} = {{")
+			self.writeln(f"{struct_type} {self} = {struct_type} {{")
 
 			self.writeln(f"\t\"{self.dat}\",")
 			self.writeln("\t{")
 			self.children.reverse()
 			for child in self.children:
 				if not child.invisible:
-					self.writeln(f"\t\tmake_shared<HTMLNode>({child}),")
+					self.writeln(f"\t\tstd::make_shared<HTMLNode>({child}),")
 			self.writeln("\t},")
 			self.writeln("\t{")
 			for attr, val in self.attrs.items():
@@ -166,7 +166,7 @@ class HTMLCPPParser(HTMLParser):
 			href, page = self.linked_pages[i]
 			linked_page_str += f"\tlinked_windows.insert({{\"{href}\", {page}::createWindow}});\n"
 
-		self.cpp_stream.write(f"{self.namespace}::{self.namespace}(int x, int y, int w, int h) : HTMLWindow(make_shared<HTMLNode>(html_1), x, y, w, h) {{\n{linked_page_str}\n}}\n")
+		self.cpp_stream.write(f"{self.namespace}::{self.namespace}(int x, int y, int w, int h) : HTMLWindow(std::make_shared<HTMLNode>(html_1), x, y, w, h) {{\n{linked_page_str}\n}}\n")
 
 		self.custom_script_dat.close()
 		self.struct_stream.close()
