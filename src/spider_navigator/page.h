@@ -1,5 +1,6 @@
 #pragma once
 
+#include "tags.h"
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Scroll.H>
 #include <functional>
@@ -13,23 +14,6 @@ using namespace std;
 class HTMLPage;
 class HTMLWindow;
 
-enum NodeType {
-	DEFAULT,
-	TEXT,
-	P,
-	A,
-	IMG,
-};
-
-struct HTMLNode {
-	const NodeType tag;
-	const char* data;
-	const vector<shared_ptr<HTMLNode>> children;
-	const unordered_map<string, string> attributes;
-};
-
-typedef shared_ptr<HTMLNode> HTMLNodePtr;
-
 enum NodeQueueInfoEnum {
 	OPEN_NODE,
 	CLOSE_NODE
@@ -37,26 +21,14 @@ enum NodeQueueInfoEnum {
 
 struct NodeQueueInfo {
 	HTMLNodePtr node;
-	HTMLNodePtr parent;
 	NodeQueueInfoEnum type;
 };
 
-struct RenderedNode {
-	int x;
-	int y;
-	int w;
-	int h;
-	NodeQueueInfo node_info;
-	Fl_Cursor cursor;
-};
-
 class HTMLPage : public Fl_Group {
+	void initNode(HTMLNodePtr node);
 	void drawChildren();
 
-	void closeNode(vector<NodeQueueInfo>& queue, NodeQueueInfo info);
-	void openNode(vector<NodeQueueInfo>& queue, NodeQueueInfo info);
-
-	bool getRenderedFromPos(int x, int y, RenderedNode& out);
+	bool getInteractiveFromPos(int x, int y, HTMLNodePtr out);
 
 	int hoverRendered();
 	int clickRendered();
@@ -66,20 +38,26 @@ class HTMLPage : public Fl_Group {
 	int cursor_y = 0;
 	int height_buffer = 0;
 
-	HTMLWindow* parent_window;
 
 	shared_ptr<HTMLNode> root = nullptr;
 
-	// For clicking on stuff:
-	vector<RenderedNode> rendered_nodes;
+	vector<shared_ptr<HTMLNode>> interactive_nodes;
 	
 	virtual void draw();
 
 	int handle(int event);
 	public:
-	HTMLPage(shared_ptr<HTMLNode> root, HTMLWindow* parent, int x, int y, int w, int h);
+	const shared_ptr<HTMLWindow> parent_window;
+	HTMLPage(shared_ptr<HTMLNode> root, shared_ptr<HTMLWindow> parent, int x, int y, int w, int h);
+	void getCursor(int& outX, int& outY) { outX = cursor_x; outY = cursor_y; }
+	void setCursor(int inX, int inY) { cursor_x = inX; cursor_y = inY; }
 };
 
+
+// Mostly for storing an HTML page. Might put some browser looking things (search bar?) on the top.
+// TODO: When an HTMLWindow is constructed from a root node, it returns a shared pointer 
+// May not pose a problem right now, but what if we need to make multiple windows of the same page that show different information?
+// Mayhaps some copying is in order in the future.
 class HTMLWindow : public Fl_Window {
 	void drawChildren();
 

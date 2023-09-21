@@ -10,7 +10,7 @@ HTMLWindow::HTMLWindow(shared_ptr<HTMLNode> root, int x, int y, int w, int h) : 
 		label(find_title->second.c_str());
 	}
 	scrollbar = new Fl_Scroll(x, y, w, h);
-	page = new HTMLPage(root, this, x, y, w - 20, h);
+	page = new HTMLPage(root, make_shared<HTMLWindow>(this), x, y, w - 20, h);
 	scrollbar->end();
 
 	resizable(this);
@@ -26,78 +26,42 @@ bool HTMLWindow::getLinkedWindow(string name, windowCreation& out) {
 	return false;
 }
 
-HTMLPage::HTMLPage(shared_ptr<HTMLNode> root, HTMLWindow* parent, int x, int y, int w, int h) : Fl_Group(x, y, w, h), rendered_nodes() {
-	parent_window = parent;
+HTMLPage::HTMLPage(shared_ptr<HTMLNode> root, shared_ptr<HTMLWindow> parent, int x, int y, int w, int h) : Fl_Group(x, y, w, h), parent_window(parent), interactive_nodes() {
 	this->root.swap(root);
 	root.reset();
+	initNode(root);
 	end();
 }
 
-void HTMLPage::closeNode(vector<NodeQueueInfo>& queue, NodeQueueInfo info) {
-	HTMLNodePtr node = info.node;
-	// cursor_y += 20;
-	if (node->tag == P) {
-		cursor_y += height_buffer + 20;
-		cursor_x = x();
-		height_buffer = 0;
+void HTMLPage::initNode(HTMLNodePtr node) {
+	if (node->interactive) {
+		interactive_nodes.push_back(node);
 	}
-}
-
-void HTMLPage::openNode(vector<NodeQueueInfo>& queue, NodeQueueInfo info) {
-	HTMLNodePtr node = info.node;
-	if (node->tag == TEXT) {
-		Fl_Color color = FL_FOREGROUND_COLOR;
-		Fl_Cursor cursor = FL_CURSOR_INSERT;
-		if (info.parent->tag == A) {
-			color = FL_BLUE;
-			cursor = FL_CURSOR_HAND;
-		}
-
-		int text_width = w();
-		int text_height = 0;
-
-		fl_measure(node->data, text_width, text_height);
-		fl_color(color);
-		// TODO: Cut text up into chunks and wrap from that?
-		if (cursor_x + text_width > w()) {
-			cursor_x = x();
-			cursor_y += height_buffer;
-			height_buffer = 0;
-		}
-		fl_draw(node->data, cursor_x, cursor_y, text_width, text_height, FL_ALIGN_WRAP | FL_ALIGN_CENTER);
-		rendered_nodes.push_back({cursor_x, cursor_y, text_width, text_height, info, cursor});
-		cursor_x += text_width;
-
-		height_buffer = text_height;
-		// TODO: Is this hack okay? Does it not work with other displays?
-		if (text_height > fl_size() + 2) {
-			cursor_y += height_buffer;
-			height_buffer = 0;
-		}
+	for (auto c : node->children) {
+		c->setParent(node);
+		initNode(node);
 	}
 }
 
 void HTMLPage::drawChildren() {
-	vector<NodeQueueInfo> queue = {{root, nullptr, OPEN_NODE}};
+	vector<NodeQueueInfo> queue = {{root, OPEN_NODE}};
 
 	cursor_x = x();
 	cursor_y = y();
 	height_buffer = 0;
-	rendered_nodes = {};
 	while (queue.size() > 0) {
 		NodeQueueInfo node_info = queue.front();
 		queue.erase(queue.begin());
 
-
 		shared_ptr<HTMLNode> node = node_info.node;
 		if (node_info.type == OPEN_NODE) {
-			openNode(queue, node_info);
-			queue.insert(queue.begin(), {node, node_info.parent, CLOSE_NODE});
+			node_info.node->open(cursor_x, cursor_y);
+			queue.insert(queue.begin(), {node, CLOSE_NODE});
 			for (auto c : node->children) {
-				queue.insert(queue.begin(), {c, node, OPEN_NODE});
+				queue.insert(queue.begin(), {c, OPEN_NODE});
 			}
 		} else if (node_info.type == CLOSE_NODE) {
-			closeNode(queue, node_info);
+			node_info.node->close();
 		}
 	}
 	// cout << "-----" << endl;
@@ -113,8 +77,8 @@ void HTMLPage::draw() {
 	}
 }
 
-bool HTMLPage::getRenderedFromPos(int x, int y, RenderedNode& out) {
-	for (auto c : rendered_nodes) {
+bool HTMLPage::getInteractiveFromPos(int x, int y, HTMLNodePtr out) {
+	for (auto c : interactive_nodes) {
 		if (x >= c.x && x <= c.x + c.w && y >= c.y && y <= c.y + c.h) {
 			out = c;
 			return true;
@@ -127,9 +91,9 @@ int HTMLPage::hoverRendered() {
 
 	int x = Fl::event_x();
 	int y = Fl::event_y();
-	RenderedNode rendered;
-	if (getRenderedFromPos(x, y, rendered)) {
-		parent_window->cursor(rendered.cursor);
+	HTMLNodePtr rendered;
+	if (getInteractiveFromPos(x, y, rendered)) {
+		rendered->hover(x, y, this);
 		return 1;
 	} else {
 		parent_window->cursor(FL_CURSOR_DEFAULT);
@@ -140,22 +104,9 @@ int HTMLPage::hoverRendered() {
 int HTMLPage::clickRendered() {
 	int x = Fl::event_x();
 	int y = Fl::event_y();
-	RenderedNode rendered;
-	if (getRenderedFromPos(x, y, rendered)) {
-		HTMLNodePtr rendered_parent = rendered.node_info.parent;
-		if (rendered_parent->tag == A) {
-			auto attrs = rendered_parent->attributes;
-			auto search = attrs.find("href");
-			if (search != attrs.end()) {
-				// TODO: Move on-click logic to python scripting.
-				
-				windowCreation constructor;
-				if (parent_window->getLinkedWindow(search->second, constructor)) {
-					auto window = constructor(this->x(), this->y(), parent_window->w(), parent_window->h());
-					window->show();
-				}
-			}
-		}
+	HTMLNodePtr rendered;
+	if (getInteractiveFromPos(x, y, rendered)) {
+		rendered->click();
 		return 1;
 	} else {
 		return 0;

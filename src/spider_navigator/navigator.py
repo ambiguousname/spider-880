@@ -11,20 +11,14 @@ import sys
 root = path.abspath(__file__ + "/../pages/")
 
 supported_nodes = set()
-with open(path.join(root, "../page.h"), "r") as f:
+with open(path.join(root, "../tags.h"), "r") as f:
 	found_types = False
-	for line in f.readlines():
-		if len(line) <= 0 or str.isspace(line):
-			continue
-		if "NodeType" in line:
-			found_types = True
-			continue
-		if found_types:
-			if "}" in line:
-				break
-			if "DEFAULT" in line:
-				continue
-			supported_nodes.add(line.replace(",","").replace("\n", "").lstrip())
+	structs = re.findall("class (\w+)", f.read())
+	for node in structs:
+		supported_nodes.add(node)
+
+def get_camel_case(string):
+	return string.replace(sep, " ").replace("_", " ").title().replace(" ", "")
 
 class HtmlStackNode():
 	
@@ -71,12 +65,12 @@ class HtmlStackNode():
 	invisible = False
 	def close(self):
 		if not self.invisible:
-			self.writeln(f"const HTMLNode {self} = {{")
+			struct_type = "HTMLNode"
+			camel_case = get_camel_case(self.tag)
+			if camel_case in supported_nodes:
+				struct_type = camel_case
+			self.writeln(f"const {struct_type} {self} = {{")
 
-			if self.tag.upper() in supported_nodes:
-				self.writeln(f"\t{self.tag.upper()},")
-			else:
-				self.writeln("\tDEFAULT,")
 			self.writeln(f"\t\"{self.dat}\",")
 			self.writeln("\t{")
 			self.children.reverse()
@@ -135,7 +129,7 @@ class Header(HtmlStackNode):
 
 def get_namespace_from_path(p):
 	rel = path.relpath(p, root)
-	return rel.replace(".cpp", "").replace(sep, " ").replace("_", " ").title().replace(" ", "") + "HTMLWindow"
+	return get_camel_case(rel.replace(".cpp", "")) + "HTMLWindow"
 
 class HTMLCPPParser(HTMLParser):
 	def __init__(self, stream, p, convert_charrefs: bool = True) -> None:
