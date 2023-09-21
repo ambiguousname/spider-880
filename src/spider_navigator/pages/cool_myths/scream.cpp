@@ -6,7 +6,7 @@ const Text text_3 = {
 	{
 	},
 };
-const HTMLNode p_3 = {
+const P p_3 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_3),

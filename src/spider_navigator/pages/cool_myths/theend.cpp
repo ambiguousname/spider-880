@@ -6,7 +6,7 @@ const Text text_3 = {
 	{
 	},
 };
-const HTMLNode p_3 = {
+const P p_3 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_3),
@@ -21,7 +21,7 @@ const Text text_5 = {
 	{
 	},
 };
-const HTMLNode p_5 = {
+const P p_5 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_5),
@@ -36,7 +36,7 @@ const Text text_7 = {
 	{
 	},
 };
-const HTMLNode p_7 = {
+const P p_7 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_7),
@@ -51,7 +51,7 @@ const Text text_9 = {
 	{
 	},
 };
-const HTMLNode p_9 = {
+const P p_9 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_9),
@@ -66,7 +66,7 @@ const Text text_11 = {
 	{
 	},
 };
-const HTMLNode p_11 = {
+const P p_11 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_11),
@@ -81,7 +81,7 @@ const Text text_13 = {
 	{
 	},
 };
-const HTMLNode p_13 = {
+const P p_13 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_13),
@@ -96,7 +96,7 @@ const Text text_15 = {
 	{
 	},
 };
-const HTMLNode p_15 = {
+const P p_15 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_15),
@@ -111,7 +111,7 @@ const Text text_17 = {
 	{
 	},
 };
-const HTMLNode p_17 = {
+const P p_17 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_17),
@@ -126,7 +126,7 @@ const Text text_19 = {
 	{
 	},
 };
-const HTMLNode p_19 = {
+const P p_19 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_19),
@@ -141,7 +141,7 @@ const Text text_21 = {
 	{
 	},
 };
-const HTMLNode p_21 = {
+const P p_21 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_21),
@@ -156,7 +156,7 @@ const Text text_23 = {
 	{
 	},
 };
-const HTMLNode p_23 = {
+const P p_23 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_23),
@@ -171,7 +171,7 @@ const Text text_25 = {
 	{
 	},
 };
-const HTMLNode p_25 = {
+const P p_25 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_25),
@@ -186,7 +186,7 @@ const Text text_27 = {
 	{
 	},
 };
-const HTMLNode p_27 = {
+const P p_27 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_27),

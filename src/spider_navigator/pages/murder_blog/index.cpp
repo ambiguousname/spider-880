@@ -20,7 +20,7 @@ const Text text_8 = {
 	{
 	},
 };
-const HTMLNode a_8 = {
+const A a_8 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_8),
@@ -35,7 +35,7 @@ const Text text_9 = {
 	{
 	},
 };
-const HTMLNode p_6 = {
+const P p_6 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_9),
@@ -52,7 +52,7 @@ const Text text_11 = {
 	{
 	},
 };
-const HTMLNode p_11 = {
+const P p_11 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_11),
@@ -74,7 +74,7 @@ const Text text_15 = {
 	{
 	},
 };
-const HTMLNode a_15 = {
+const A a_15 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_15),
@@ -90,7 +90,7 @@ const Text text_17 = {
 		{"href", "cool_myths/theend"},
 	},
 };
-const HTMLNode a_17 = {
+const A a_17 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_17),
@@ -113,7 +113,7 @@ const Text text_20 = {
 	{
 	},
 };
-const HTMLNode a_20 = {
+const A a_20 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_20),
@@ -128,7 +128,7 @@ const Text text_21 = {
 	{
 	},
 };
-const HTMLNode p_13 = {
+const P p_13 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_21),
@@ -148,7 +148,7 @@ const Text text_23 = {
 	{
 	},
 };
-const HTMLNode p_23 = {
+const P p_23 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_23),
@@ -163,7 +163,7 @@ const Text text_25 = {
 	{
 	},
 };
-const HTMLNode p_25 = {
+const P p_25 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_25),
@@ -178,7 +178,7 @@ const Text text_27 = {
 	{
 	},
 };
-const HTMLNode p_27 = {
+const P p_27 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_27),
@@ -193,7 +193,7 @@ const Text text_29 = {
 	{
 	},
 };
-const HTMLNode p_29 = {
+const P p_29 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_29),
@@ -208,7 +208,7 @@ const Text text_31 = {
 	{
 	},
 };
-const HTMLNode p_31 = {
+const P p_31 = {
 	"",
 	{
 		make_shared<HTMLNode>(text_31),

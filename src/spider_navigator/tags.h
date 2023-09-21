@@ -6,17 +6,17 @@
 #include <string>
 
 class HTMLNode {
-	public:
-	const char* data;
-	const vector<shared_ptr<HTMLNode>> children;
-	const unordered_map<string, string> attributes;
-	// Does this node need to have stuff like onHover, onClick, etc.
-	const bool interactive = false;
-
 	protected:
 	int x, y, w, h = 0;
 	Fl_Cursor cursor = FL_CURSOR_DEFAULT;
 	Fl_Color color = FL_FOREGROUND_COLOR;
+
+	
+	char* data;
+	vector<shared_ptr<HTMLNode>> children;
+	unordered_map<string, string> attributes;
+	// Does this node need to have stuff like onHover, onClick, etc.
+	bool interactive = false;
 	shared_ptr<HTMLNode> parent;
 
 	public:
@@ -43,7 +43,7 @@ class Text : public HTMLNode {
 };
 
 class A : public HTMLNode {
-	const bool interactive = true;
+	bool interactive = true;
 	Fl_Cursor cursor = FL_CURSOR_HAND;
 	// TODO: Use some sort of palette constants.
 	Fl_Color color = 4;
