@@ -6,28 +6,28 @@ void HTMLNode::hover(int x, int y, std::unique_ptr<HTMLPage> current_page) {
 	current_page->parent_window->cursor(cursor);
 }
 
-void Text::open(std::unique_ptr<HTMLPage> current_page) {
-	int text_width = current_page->w();
-	int text_height = 0;
+void Text::open(std::unique_ptr<HTMLPage> current_page, int& out_w, int& out_h) {
+	out_w = current_page->w();
+	out_h = 0;
 
-	fl_measure(data.c_str(), text_width, text_height);
+	fl_measure(data.c_str(), out_w, out_h);
 	fl_color(color);
 
 	int cursor_x, cursor_y;
 	current_page->getCursor(cursor_x, cursor_y);
 
 	// TODO: Cut text up into chunks and wrap from that?
-	if (cursor_x + text_width > current_page->w()) {
+	if (cursor_x + out_w > current_page->w()) {
 		cursor_x = current_page->x();
 		// cursor_y += height_buffer;
 		// height_buffer = 0;
 	}
-	fl_draw(data.c_str(), cursor_x, cursor_y, text_width, text_height, FL_ALIGN_WRAP | FL_ALIGN_CENTER);
-	cursor_x += text_width;
+	fl_draw(data.c_str(), cursor_x, cursor_y, out_h, out_h, FL_ALIGN_WRAP | FL_ALIGN_CENTER);
+	cursor_x += out_w;
 
 	// height_buffer = text_height;
 	// TODO: Is this hack okay? Does it not work with other displays?
-	if (text_height > fl_size() + 2) {
+	if (out_h > fl_size() + 2) {
 		// cursor_y += height_buffer;
 		// height_buffer = 0;
 	}

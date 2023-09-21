@@ -1,6 +1,6 @@
 #pragma once
-#include <cool_myths/pages.h>
 #include "spider_navigator/page.h"
+#include <cool_myths/pages.h>
 class MurderBlogIndexHTMLWindow : public HTMLWindow {
 	public:
 	MurderBlogIndexHTMLWindow(int x, int y, int w, int h);

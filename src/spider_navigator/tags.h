@@ -11,7 +11,6 @@ class HTMLPage;
 
 class HTMLNode {
 	protected:
-	int x, y, w, h = 0;
 	Fl_Cursor cursor = FL_CURSOR_DEFAULT;
 	Fl_Color color = FL_FOREGROUND_COLOR;
 
@@ -31,22 +30,21 @@ class HTMLNode {
 
 	// Draw using the current x and y provided. Passed as reference so they're modifiable.
 	// Passing the current page because this node has to be shared with all pages rendering.
-	virtual void open(std::unique_ptr<HTMLPage> current_page) {}
+	virtual void open(std::unique_ptr<HTMLPage> current_page, int& out_w, int& out_h) {}
 	virtual void close(std::unique_ptr<HTMLPage> current_page) {}
 	virtual void click(int x, int y, std::unique_ptr<HTMLPage> current_page) {}
 	virtual void hover(int x, int y, std::unique_ptr<HTMLPage> current_page);
 
  
 	HTMLNode(const char* dat, std::vector<std::shared_ptr<HTMLNode>> c, std::unordered_map<std::string, std::string> attr) : data(dat), _children(c), attributes(attr) {
-		x = y = w = h = 0;
-	};
+	}
 };
 
 typedef std::shared_ptr<HTMLNode> HTMLNodePtr;
 
 class Text : public HTMLNode {
 	bool _interactive = true;
-	void open(std::unique_ptr<HTMLPage> current_page);
+	void open(std::unique_ptr<HTMLPage> current_page, int& out_w, int& out_h);
 };
 
 class A : public HTMLNode {

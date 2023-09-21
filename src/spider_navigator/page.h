@@ -22,6 +22,12 @@ struct NodeQueueInfo {
 	NodeQueueInfoEnum type;
 };
 
+// Because again, the nodes themselves as they exist are not unique across webpages.
+struct InteractiveNode {
+	HTMLNodePtr node;
+	int x, y, w, h;
+};
+
 class HTMLPage : public Fl_Group {
 	void initNode(HTMLNodePtr node);
 	void drawChildren();
@@ -39,7 +45,7 @@ class HTMLPage : public Fl_Group {
 
 	std::shared_ptr<HTMLNode> root = nullptr;
 
-	std::vector<std::shared_ptr<HTMLNode>> interactive_nodes;
+	std::vector<InteractiveNode> interactive_nodes;
 	
 	virtual void draw();
 

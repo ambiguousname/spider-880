@@ -34,9 +34,6 @@ HTMLPage::HTMLPage(std::shared_ptr<HTMLNode> root, std::shared_ptr<HTMLWindow> p
 }
 
 void HTMLPage::initNode(HTMLNodePtr node) {
-	if (node->interactive()) {
-		interactive_nodes.push_back(node);
-	}
 	for (auto c : node->children()) {
 		c->setParent(node);
 		initNode(node);
@@ -45,6 +42,7 @@ void HTMLPage::initNode(HTMLNodePtr node) {
 
 void HTMLPage::drawChildren() {
 	std::vector<NodeQueueInfo> queue = {{root, OPEN_NODE}};
+	interactive_nodes.clear();
 
 	cursor_x = x();
 	cursor_y = y();
@@ -55,7 +53,11 @@ void HTMLPage::drawChildren() {
 
 		std::shared_ptr<HTMLNode> node = node_info.node;
 		if (node_info.type == OPEN_NODE) {
-			node_info.node->open(std::make_unique<HTMLPage>(this));
+			int out_w, out_h;
+			node_info.node->open(std::make_unique<HTMLPage>(this), out_w, out_h);
+			if (node->interactive()) {
+				interactive_nodes.push_back({node, cursor_x, cursor_y, out_w, out_h});
+			}
 			queue.insert(queue.begin(), {node, CLOSE_NODE});
 			for (auto c : node->children) {
 				queue.insert(queue.begin(), {c, OPEN_NODE});
