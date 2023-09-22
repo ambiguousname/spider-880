@@ -1,5 +1,10 @@
 #include "tags.h"
 #include <FL/fl_draw.H>
+#include <typeinfo>
+
+void HTMLNode::init() {
+	return;
+}
 
 void HTMLNode::open(HTMLPage* current_page, int& out_w, int& out_h) {
 	return;
@@ -56,6 +61,14 @@ void A::click(int x, int y, HTMLPage* current_page) {
 		if (current_page->parent_window->getLinkedWindow(search->second, constructor)) {
 			auto window = constructor(current_page->x(), current_page->y(), current_page->parent_window->w(), current_page->parent_window->h());
 			window->show();
+		}
+	}
+}
+
+void A::init() {
+	for (auto c: _children) {
+		if (typeid(*c).hash_code() == typeid(Text).hash_code()) {
+			c->setColor(color);
 		}
 	}
 }

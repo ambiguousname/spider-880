@@ -35,6 +35,7 @@ HTMLPage::HTMLPage(std::shared_ptr<HTMLNode> r, std::shared_ptr<HTMLWindow> pare
 }
 
 void HTMLPage::initNode(HTMLNodePtr node) {
+	node->init();
 	for (auto c : node->children()) {
 		c->setParent(node);
 		initNode(c);
