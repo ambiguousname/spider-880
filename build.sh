@@ -11,6 +11,6 @@ cp /ucrt64/bin/libfltk.dll /ucrt64/bin/libfltk_images.dll /ucrt64/bin/libpng16-1
 
 cp -r ./assets/ --target=./build/src
 
-./build/src/spider-880.exe
+gdb ./build/src/spider-880.exe
 status=$?
 [ $status -ne 0 ] && read -p ".exe: error $status Press enter to exit..."

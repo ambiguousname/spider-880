@@ -87,7 +87,8 @@ void Img::init() {
 	auto src = _attributes.find("src");
 	
 	if (src != _attributes.end()) {
-		box = std::make_unique<ImageBox>(src->second.c_str());
+		// TODO: Fix.
+		// box = std::make_unique<ImageBox>(src->second.c_str());
 	}
 }
 

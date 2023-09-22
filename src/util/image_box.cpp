@@ -5,7 +5,29 @@
 #include <FL/Fl.H>
 
 ImageBox::ImageBox(const char* image_loc) {
-	full_image = std::make_unique<Fl_PNG_Image>(image_loc);
+	Fl_PNG_Image temp = Fl_PNG_Image(image_loc);
+	
+	const char* buf = temp.data()[0];
+
+	char* new_buf = new char[temp.h() * temp.w() * temp.d()];
+	for (int x = 0; x < temp.w(); x++) {
+		for (int y = 0; y < temp.h(); y++) {
+			long index = (y * temp.w() * temp.d()) + (x * temp.d());
+			unsigned char r = *(buf + index);
+			unsigned char g = *(buf + index + 1);
+			unsigned char b = *(buf + index + 2);
+			Fl_Color result = rgb_to_palette(r, g, b);
+
+			unsigned char out_r, out_g, out_b;
+			Fl::get_color(result, out_r, out_g, out_b);
+
+			new_buf[index] = out_r;
+			new_buf[index + 1] = out_g;
+			new_buf[index + 2] = out_b;
+		}
+	}
+
+	full_image = std::make_unique<Fl_PNG_Image>(nullptr, (const unsigned char*) new_buf, sizeof(buf)/sizeof(char));
 }
 
 void ImageBox::prepareDraw(int x, int y, int w, int h) {
@@ -32,32 +54,28 @@ void ImageBox::drawProgress(int speed) {
 		if (draw_cursor_y >= image->h()) {
 			draw_cursor_x = 0;
 			draw_cursor_y = 0;
-			rendered = true;
+			cached = true;
 			return;
 		}
 		long index = (draw_cursor_y * image->w() * image->d()) + (draw_cursor_x * image->d());
-
+		
 		unsigned char r = *(image_buffer + index);
 		unsigned char g = *(image_buffer + index + 1);
 		unsigned char b = *(image_buffer + index + 2);
 
-		Fl_Color result = rgb_to_palette(r, g, b);
-		fl_color(result);
-
+		fl_color(r, g, b);
 		fl_point(draw_cursor_x + start_x, draw_cursor_y + start_y);
 		draw_cursor_x += 1;
 	}
 }
 
 void ImageBox::draw() {
-	if (rendered) {
-		// TODO: Cache this:
-		draw_cursor_x = 0;
-		draw_cursor_y = 0;
-		drawProgress(image->w() * image->h());
+	// image->draw(start_x, start_y);
+	if (cached) {
+		// image->draw(start_x, start_y);
 	} else {
-		while(!rendered) {
-			drawProgress(1);
-		}
+		// while(!cached) {
+		// 	drawProgress(1);
+		// }
 	}
 }

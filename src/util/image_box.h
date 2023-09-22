@@ -20,7 +20,7 @@ class ImageBox {
 	std::unique_ptr<Fl_Image> image;
 	const char* image_buffer;
 
-	bool rendered = false;
+	bool cached = false;
 	public:
 	void getFullDimensions(int& out_w, int& out_h) { out_w = full_image->w(); out_h = full_image->h(); }
 	void prepareDraw(int x, int y, int w, int h);
