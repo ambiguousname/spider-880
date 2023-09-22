@@ -1,23 +1,24 @@
 #include "tags.h"
 #include <FL/fl_draw.H>
 
-void HTMLNode::open(std::unique_ptr<HTMLPage> current_page, int& out_w, int& out_h) {
+void HTMLNode::open(HTMLPage* current_page, int& out_w, int& out_h) {
 	return;
 }
 
-void HTMLNode::close(std::unique_ptr<HTMLPage> current_page) {
+void HTMLNode::close(HTMLPage* current_page) {
 	return;
 }
 
-void HTMLNode::click(int x, int y, std::unique_ptr<HTMLPage> current_page) {
+void HTMLNode::click(int x, int y, HTMLPage* current_page) {
 	return;
 }
 
-void HTMLNode::hover(int x, int y, std::unique_ptr<HTMLPage> current_page) {
+void HTMLNode::hover(int x, int y, HTMLPage* current_page) {
 	current_page->parent_window->cursor(cursor);
 }
 
-void Text::open(std::unique_ptr<HTMLPage> current_page, int& out_w, int& out_h) {
+#include <iostream>
+void Text::open(HTMLPage* current_page, int& out_w, int& out_h) {
 	out_w = current_page->w();
 	out_h = 0;
 
@@ -45,7 +46,7 @@ void Text::open(std::unique_ptr<HTMLPage> current_page, int& out_w, int& out_h) 
 	current_page->setCursor(cursor_x, cursor_y);
 }
 
-void A::click(int x, int y, std::unique_ptr<HTMLPage> current_page) {
+void A::click(int x, int y, HTMLPage* current_page) {
 	auto search = _attributes.find("href");
 	if (search != _attributes.end()) {
 		// TODO: Move on-click logic to python scripting.
@@ -58,7 +59,7 @@ void A::click(int x, int y, std::unique_ptr<HTMLPage> current_page) {
 	}
 }
 
-void P::close(std::unique_ptr<HTMLPage> current_page) {
+void P::close(HTMLPage* current_page) {
 	// cursor_y += height_buffer + 20;
 	int cursor_x, cursor_y;
 	current_page->getCursor(cursor_x, cursor_y);
