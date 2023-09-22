@@ -23,12 +23,12 @@ class HTMLNode {
 	std::shared_ptr<HTMLNode> _parent;
 
 	public:
-	std::shared_ptr<HTMLNode> parent() { return _parent; }
+	const std::shared_ptr<HTMLNode> parent() const { return _parent; }
 	void setParent(std::shared_ptr<HTMLNode> p) { _parent = p; }
 	bool interactive() { return _interactive; }
-	std::vector<std::shared_ptr<HTMLNode>> children() { return _children; }
-	std::unordered_map<std::string, std::string> attributes() { return _attributes; }
-	std::string data() { return _data; }
+	const std::vector<std::shared_ptr<HTMLNode>> children() const { return {}/*_children*/; } //TODO: FIX THIS
+	const std::unordered_map<std::string, std::string> attributes() const { return _attributes; }
+	const std::string data() const { return _data; }
 
 	// Draw using the current x and y provided. Passed as reference so they're modifiable.
 	// Passing the current page because this node has to be shared with all pages rendering.
@@ -39,6 +39,7 @@ class HTMLNode {
 
  
 	HTMLNode(const char* dat, std::vector<std::shared_ptr<HTMLNode>> c, std::unordered_map<std::string, std::string> attr) : _data(dat), _children(c), _attributes(attr) {
+		
 	}
 };
 

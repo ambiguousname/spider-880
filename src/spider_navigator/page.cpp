@@ -27,10 +27,11 @@ bool HTMLWindow::getLinkedWindow(std::string name, windowCreation& out) {
 	return false;
 }
 
-HTMLPage::HTMLPage(std::shared_ptr<HTMLNode> root, std::shared_ptr<HTMLWindow> parent, int x, int y, int w, int h) : Fl_Group(x, y, w, h), interactive_nodes(), parent_window(parent) {
-	this->root.swap(root);
-	root.reset();
-	// initNode(root);
+#include <iostream>
+HTMLPage::HTMLPage(std::shared_ptr<HTMLNode> r, std::shared_ptr<HTMLWindow> parent, int x, int y, int w, int h) : Fl_Group(x, y, w, h), interactive_nodes(), parent_window(parent) {
+	root.swap(r);
+	r.reset();
+	initNode(root);
 	end();
 }
 
@@ -64,7 +65,7 @@ void HTMLPage::drawChildren() {
 				queue.insert(queue.begin(), {c, OPEN_NODE});
 			}
 		} else if (node_info.type == CLOSE_NODE) {
-			// node_info.node->close(std::unique_ptr<HTMLPage>(this));
+			node_info.node->close(std::unique_ptr<HTMLPage>(this));
 		}
 	}
 	// cout << "-----" << endl;
@@ -76,7 +77,7 @@ void HTMLPage::draw() {
 	if (root == nullptr) {
 		throw std::logic_error("HTMLPage root not defined.");
 	} else {
-		// drawChildren();
+		drawChildren();
 	}
 }
 
