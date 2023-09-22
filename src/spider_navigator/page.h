@@ -78,6 +78,7 @@ class HTMLWindow : public Fl_Window {
 	protected:
 	// Other HTML pages (or just FL_Windows) linked by <a> tags.
 	std::unordered_map<std::string, std::function<HTMLWindow*(int, int, int, int)>> linked_windows;
+	std::string title;
 
 	public:
 	HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int h);

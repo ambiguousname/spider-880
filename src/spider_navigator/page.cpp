@@ -8,7 +8,9 @@ HTMLWindow::HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int 
 	auto attributes = root->attributes();
 	auto find_title = attributes.find("title");
 	if (find_title != attributes.end()) {
-		label(find_title->second.c_str());
+		// Create a constant reference to the title so c_str doesn't bug out:
+		title = find_title->second;
+		label(title.c_str());
 	}
 	scrollbar = new Fl_Scroll(x, y, w, h);
 	page = new HTMLPage(root, std::shared_ptr<HTMLWindow>(this), x, y, w - 20, h);
