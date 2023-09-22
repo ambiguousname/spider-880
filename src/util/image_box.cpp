@@ -12,8 +12,10 @@ void ImageBox::prepareDraw(int x, int y, int w, int h) {
 	image.reset();
 	image = std::unique_ptr<Fl_Image>(full_image->copy(w, h));
 	image_buffer = image->data()[0];
-	start_x = draw_cursor_x = x;
-	start_y = draw_cursor_y = y;
+	start_x = x;
+	start_y = y;
+	draw_cursor_x = 0;
+	draw_cursor_y = 0;
 }
 
 ImageBox::~ImageBox() {
@@ -41,16 +43,18 @@ void ImageBox::drawProgress(int speed) {
 
 		Fl_Color result = rgb_to_palette(r, g, b);
 		fl_color(result);
-		
+
 		fl_point(draw_cursor_x + start_x, draw_cursor_y + start_y);
 		draw_cursor_x += 1;
 	}
 }
 
 void ImageBox::draw() {
-	// TODO: More efficient code for damaged or fully drawn ("cached") images.
 	if (rendered) {
-		image->draw(start_x, start_y);
+		// TODO: Cache this:
+		draw_cursor_x = 0;
+		draw_cursor_y = 0;
+		drawProgress(image->w() * image->h());
 	} else {
 		while(Fl::check()) {
 			drawProgress(1);
