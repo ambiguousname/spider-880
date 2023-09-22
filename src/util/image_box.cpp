@@ -56,7 +56,7 @@ void ImageBox::draw() {
 		draw_cursor_y = 0;
 		drawProgress(image->w() * image->h());
 	} else {
-		while(Fl::check()) {
+		while(!rendered) {
 			drawProgress(1);
 		}
 	}

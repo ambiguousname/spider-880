@@ -79,6 +79,7 @@ void HTMLPage::drawChildren() {
 
 void HTMLPage::draw() {
 	Fl_Group::draw();
+	// TODO: Use damage mask.
 	if (root == nullptr) {
 		throw std::logic_error("HTMLPage root not defined.");
 	} else {
