@@ -30,14 +30,14 @@ bool HTMLWindow::getLinkedWindow(std::string name, windowCreation& out) {
 HTMLPage::HTMLPage(std::shared_ptr<HTMLNode> root, std::shared_ptr<HTMLWindow> parent, int x, int y, int w, int h) : Fl_Group(x, y, w, h), interactive_nodes(), parent_window(parent) {
 	this->root.swap(root);
 	root.reset();
-	initNode(root);
+	// initNode(root);
 	end();
 }
 
 void HTMLPage::initNode(HTMLNodePtr node) {
 	for (auto c : node->children()) {
 		c->setParent(node);
-		initNode(node);
+		initNode(c);
 	}
 }
 
@@ -55,7 +55,7 @@ void HTMLPage::drawChildren() {
 		std::shared_ptr<HTMLNode> node = node_info.node;
 		if (node_info.type == OPEN_NODE) {
 			int out_w, out_h;
-			node_info.node->open(std::unique_ptr<HTMLPage>(this), out_w, out_h);
+			// node_info.node->open(std::unique_ptr<HTMLPage>(this), out_w, out_h);
 			if (node->interactive()) {
 				interactive_nodes.push_back({node, cursor_x, cursor_y, out_w, out_h});
 			}
@@ -64,7 +64,7 @@ void HTMLPage::drawChildren() {
 				queue.insert(queue.begin(), {c, OPEN_NODE});
 			}
 		} else if (node_info.type == CLOSE_NODE) {
-			node_info.node->close(std::unique_ptr<HTMLPage>(this));
+			// node_info.node->close(std::unique_ptr<HTMLPage>(this));
 		}
 	}
 	// cout << "-----" << endl;
@@ -96,7 +96,7 @@ int HTMLPage::hoverRendered() {
 	int y = Fl::event_y();
 	HTMLNodePtr rendered;
 	if (getInteractiveFromPos(x, y, rendered)) {
-		rendered->hover(x, y, std::unique_ptr<HTMLPage>(this));
+		// rendered->hover(x, y, std::unique_ptr<HTMLPage>(this));
 		return 1;
 	} else {
 		parent_window->cursor(FL_CURSOR_DEFAULT);
@@ -109,7 +109,7 @@ int HTMLPage::clickRendered() {
 	int y = Fl::event_y();
 	HTMLNodePtr rendered;
 	if (getInteractiveFromPos(x, y, rendered)) {
-		rendered->click(x, y, std::unique_ptr<HTMLPage>(this));
+		// rendered->click(x, y, std::unique_ptr<HTMLPage>(this));
 		return 1;
 	} else {
 		return 0;
