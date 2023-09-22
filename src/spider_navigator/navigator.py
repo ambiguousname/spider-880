@@ -71,14 +71,14 @@ class HtmlStackNode():
 				struct_type = camel_case
 			self.writeln(f"std::shared_ptr<{struct_type}> {self} = std::make_shared<{struct_type}>(")
 
-			self.writeln(f"\t(const char*)\"{self.dat}\",")
-			self.writeln("\t(std::vector<std::shared_ptr<HTMLNode>>){")
+			self.writeln(f"\t\"{self.dat}\",")
+			self.writeln("\tstd::vector<std::shared_ptr<HTMLNode>>{")
 			self.children.reverse()
 			for child in self.children:
 				if not child.invisible:
 					self.writeln(f"\t\t{child},")
 			self.writeln("\t},")
-			self.writeln("\t(std::unordered_map<std::string, std::string>){")
+			self.writeln("\tstd::unordered_map<std::string, std::string>{")
 			for attr, val in self.attrs.items():
 				self.writeln(f"\t\t{{\"{attr}\", \"{val}\"}},")
 			self.writeln("\t}")

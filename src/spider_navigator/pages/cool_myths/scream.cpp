@@ -1,35 +1,35 @@
 #include "scream.h"
 namespace CoolMythsScreamHTMLWindowNamespace {
 std::shared_ptr<Text> text_3 = std::make_shared<Text>(
-	(const char*)"Scream all you want. No one will hear you.",
-	(std::vector<std::shared_ptr<HTMLNode>>){
+	"Scream all you want. No one will hear you.",
+	std::vector<std::shared_ptr<HTMLNode>>{
 	},
-	(std::unordered_map<std::string, std::string>){
+	std::unordered_map<std::string, std::string>{
 	}
 );
 std::shared_ptr<P> p_3 = std::make_shared<P>(
-	(const char*)"",
-	(std::vector<std::shared_ptr<HTMLNode>>){
+	"",
+	std::vector<std::shared_ptr<HTMLNode>>{
 		text_3,
 	},
-	(std::unordered_map<std::string, std::string>){
+	std::unordered_map<std::string, std::string>{
 	}
 );
 std::shared_ptr<HTMLNode> body_2 = std::make_shared<HTMLNode>(
-	(const char*)"",
-	(std::vector<std::shared_ptr<HTMLNode>>){
+	"",
+	std::vector<std::shared_ptr<HTMLNode>>{
 		p_3,
 	},
-	(std::unordered_map<std::string, std::string>){
+	std::unordered_map<std::string, std::string>{
 		{"title", "The Scream"},
 	}
 );
 std::shared_ptr<HTMLNode> html_1 = std::make_shared<HTMLNode>(
-	(const char*)"",
-	(std::vector<std::shared_ptr<HTMLNode>>){
+	"",
+	std::vector<std::shared_ptr<HTMLNode>>{
 		body_2,
 	},
-	(std::unordered_map<std::string, std::string>){
+	std::unordered_map<std::string, std::string>{
 	}
 );
 }
