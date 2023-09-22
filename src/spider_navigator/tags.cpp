@@ -26,22 +26,24 @@ void Text::open(HTMLPage* current_page, int& out_w, int& out_h) {
 
 	int cursor_x, cursor_y;
 	current_page->getCursor(cursor_x, cursor_y);
+	int height_buffer = current_page->getHeightBuffer();
 
 	// TODO: Cut text up into chunks and wrap from that?
 	if (cursor_x + out_w > current_page->w()) {
 		cursor_x = current_page->x();
-		// cursor_y += height_buffer;
-		// height_buffer = 0;
+		cursor_y += height_buffer;
+		height_buffer = 0;
 	}
-	fl_draw(_data.c_str(), cursor_x, cursor_y, out_h, out_h, FL_ALIGN_WRAP | FL_ALIGN_CENTER);
+	fl_draw(_data.c_str(), cursor_x, cursor_y, out_w, out_h, FL_ALIGN_WRAP | FL_ALIGN_CENTER);
 	cursor_x += out_w;
 
-	// height_buffer = text_height;
+	height_buffer = out_h;
 	// TODO: Is this hack okay? Does it not work with other displays?
 	if (out_h > fl_size() + 2) {
-		// cursor_y += height_buffer;
-		// height_buffer = 0;
+		cursor_y += height_buffer;
+		height_buffer = 0;
 	}
+	current_page->setHeightBuffer(height_buffer);
 	current_page->setCursor(cursor_x, cursor_y);
 }
 
@@ -59,9 +61,11 @@ void A::click(int x, int y, HTMLPage* current_page) {
 }
 
 void P::close(HTMLPage* current_page) {
-	// cursor_y += height_buffer + 20;
 	int cursor_x, cursor_y;
 	current_page->getCursor(cursor_x, cursor_y);
+	int height_buffer = current_page->getHeightBuffer();
+	cursor_y += height_buffer + 20;
+	height_buffer = 0;
 	current_page->setCursor(current_page->x(), cursor_y);
-	// height_buffer = 0;
+	current_page->setHeightBuffer(height_buffer);
 }

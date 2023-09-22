@@ -54,8 +54,12 @@ class HTMLPage : public Fl_Group {
 	public:
 	const std::shared_ptr<HTMLWindow> parent_window;
 	HTMLPage(std::shared_ptr<HTMLNode> root, std::shared_ptr<HTMLWindow> parent, int x, int y, int w, int h);
+	
 	void getCursor(int& outX, int& outY) { outX = cursor_x; outY = cursor_y; }
 	void setCursor(int inX, int inY) { cursor_x = inX; cursor_y = inY; }
+
+	int getHeightBuffer() { return height_buffer; }
+	void setHeightBuffer(int in) { height_buffer = in; }
 };
 
 
