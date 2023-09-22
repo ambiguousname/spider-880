@@ -26,14 +26,17 @@ struct NodeQueueInfo {
 // Because again, the nodes themselves as they exist are not unique across webpages.
 struct InteractiveNode {
 	std::shared_ptr<HTMLNode> node;
-	int x, y, w, h;
+	int x;
+	int y;
+	int w;
+	int h;
 };
 
 class HTMLPage : public Fl_Group {
 	void initNode(std::shared_ptr<HTMLNode> node);
 	void drawChildren();
 
-	bool getInteractiveFromPos(int x, int y, std::shared_ptr<HTMLNode> out);
+	bool getInteractiveFromPos(int x, int y, std::shared_ptr<HTMLNode>& out);
 
 	int hoverRendered();
 	int clickRendered();

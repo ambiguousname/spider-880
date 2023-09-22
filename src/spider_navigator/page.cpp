@@ -27,7 +27,6 @@ bool HTMLWindow::getLinkedWindow(std::string name, windowCreation& out) {
 	return false;
 }
 
-#include <iostream>
 HTMLPage::HTMLPage(std::shared_ptr<HTMLNode> r, std::shared_ptr<HTMLWindow> parent, int x, int y, int w, int h) : Fl_Group(x, y, w, h), interactive_nodes(), parent_window(parent) {
 	root.swap(r);
 	r.reset();
@@ -71,7 +70,6 @@ void HTMLPage::drawChildren() {
 			node_info.node->close(this);
 		}
 	}
-	// cout << "-----" << endl;
 	resize(x(), y(), this->parent()->w() - 20, cursor_y - y());
 }
 
@@ -84,7 +82,7 @@ void HTMLPage::draw() {
 	}
 }
 
-bool HTMLPage::getInteractiveFromPos(int x, int y, HTMLNodePtr out) {
+bool HTMLPage::getInteractiveFromPos(int x, int y, HTMLNodePtr& out) {
 	for (auto c : interactive_nodes) {
 		if (x >= c.x && x <= c.x + c.w && y >= c.y && y <= c.y + c.h) {
 			out = c.node;
@@ -95,9 +93,9 @@ bool HTMLPage::getInteractiveFromPos(int x, int y, HTMLNodePtr out) {
 }
 
 int HTMLPage::hoverRendered() {
-
 	int x = Fl::event_x();
 	int y = Fl::event_y();
+
 	HTMLNodePtr rendered;
 	if (getInteractiveFromPos(x, y, rendered)) {
 		rendered->hover(x, y, this);
