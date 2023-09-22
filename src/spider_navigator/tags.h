@@ -32,9 +32,9 @@ class HTMLNode {
 
 	// Draw using the current x and y provided. Passed as reference so they're modifiable.
 	// Passing the current page because this node has to be shared with all pages rendering.
-	virtual void open(std::unique_ptr<HTMLPage> current_page, int& out_w, int& out_h) {}
-	virtual void close(std::unique_ptr<HTMLPage> current_page) {}
-	virtual void click(int x, int y, std::unique_ptr<HTMLPage> current_page) {}
+	virtual void open(std::unique_ptr<HTMLPage> current_page, int& out_w, int& out_h);
+	virtual void close(std::unique_ptr<HTMLPage> current_page);
+	virtual void click(int x, int y, std::unique_ptr<HTMLPage> current_page);
 	virtual void hover(int x, int y, std::unique_ptr<HTMLPage> current_page);
 
  

@@ -27,7 +27,7 @@ bool HTMLWindow::getLinkedWindow(std::string name, windowCreation& out) {
 	return false;
 }
 
-HTMLPage::HTMLPage(std::shared_ptr<HTMLNode> root, std::shared_ptr<HTMLWindow> parent, int x, int y, int w, int h) : Fl_Group(x, y, w, h), parent_window(parent), interactive_nodes() {
+HTMLPage::HTMLPage(std::shared_ptr<HTMLNode> root, std::shared_ptr<HTMLWindow> parent, int x, int y, int w, int h) : Fl_Group(x, y, w, h), interactive_nodes(), parent_window(parent) {
 	this->root.swap(root);
 	root.reset();
 	initNode(root);
