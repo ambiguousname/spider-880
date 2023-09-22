@@ -1,230 +1,230 @@
 #include "theend.h"
 namespace CoolMythsTheendHTMLWindowNamespace {
-Text text_3 = Text {
-	"As a native of Rorik's End myself, there's a somewhat buried tale about Rorik Andersen himself that I think deserves attention. It comes from his grandniece (on his wife's side): Eliza Anderson's \"History of the Andersens\" (1962). I've excerpted the relevant portions here, but for contex the story itself takes place after he filed for bankruptcy and sold Andersen Mining:",
-	{
+std::shared_ptr<Text> text_3 = std::make_shared<Text>(
+	(const char*)"As a native of Rorik's End myself, there's a somewhat buried tale about Rorik Andersen himself that I think deserves attention. It comes from his grandniece (on his wife's side): Eliza Anderson's \"History of the Andersens\" (1962). I've excerpted the relevant portions here, but for contex the story itself takes place after he filed for bankruptcy and sold Andersen Mining:",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<P> p_3 = std::make_shared<P>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		text_3,
 	},
-};
-P p_3 = P {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&text_3),
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_5 = std::make_shared<Text>(
+	(const char*)"What follows is an amalgamation of records of speculation from local sources (mostly rumor mills), and my grandmother's own recollection of what her brother-in-law said at the time.",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<P> p_5 = std::make_shared<P>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		text_5,
 	},
-};
-Text text_5 = Text {
-	"What follows is an amalgamation of records of speculation from local sources (mostly rumor mills), and my grandmother's own recollection of what her brother-in-law said at the time.",
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_7 = std::make_shared<Text>(
+	(const char*)"Rorik decided to walk home after a long day in court, and for whatever reason decided to make a detour. He recalled swinging by the Emerald Meadows (colloquially known as Egg Park), and encountering a man with an apparently long coat.",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<P> p_7 = std::make_shared<P>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		text_7,
 	},
-};
-P p_5 = P {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&text_5),
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_9 = std::make_shared<Text>(
+	(const char*)"The man asks Rorik what he's doing there.",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<P> p_9 = std::make_shared<P>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		text_9,
 	},
-};
-Text text_7 = Text {
-	"Rorik decided to walk home after a long day in court, and for whatever reason decided to make a detour. He recalled swinging by the Emerald Meadows (colloquially known as Egg Park), and encountering a man with an apparently long coat.",
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_11 = std::make_shared<Text>(
+	(const char*)"\"I own this park. Haven't you heard of me?\"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<P> p_11 = std::make_shared<P>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		text_11,
 	},
-};
-P p_7 = P {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&text_7),
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_13 = std::make_shared<Text>(
+	(const char*)"The man says he has. But he says it's not Rorik's park, and something to the effect that it belongs to the city.",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<P> p_13 = std::make_shared<P>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		text_13,
 	},
-};
-Text text_9 = Text {
-	"The man asks Rorik what he's doing there.",
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_15 = std::make_shared<Text>(
+	(const char*)"\"Show some respect for your betters.\"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<P> p_15 = std::make_shared<P>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		text_15,
 	},
-};
-P p_9 = P {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&text_9),
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_17 = std::make_shared<Text>(
+	(const char*)"The man assaults Rorik, and there's a scuffle. Rorik shows up to the police station about an hour later, very beaten and bruised. He claims to have driven the other man off, and eventually returns home.",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<P> p_17 = std::make_shared<P>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		text_17,
 	},
-};
-Text text_11 = Text {
-	"\"I own this park. Haven't you heard of me?\"",
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_19 = std::make_shared<Text>(
+	(const char*)"The next day, Rorik orders newspapers to run a front-page piece the next day, the headline reading: \"Death to Traitors\".",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<P> p_19 = std::make_shared<P>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		text_19,
 	},
-};
-P p_11 = P {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&text_11),
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_21 = std::make_shared<Text>(
+	(const char*)"The content of the article is a matter of public record, and one I will not repeat here.",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<P> p_21 = std::make_shared<P>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		text_21,
 	},
-};
-Text text_13 = Text {
-	"The man says he has. But he says it's not Rorik's park, and something to the effect that it belongs to the city.",
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_23 = std::make_shared<Text>(
+	(const char*)"What was not in the public record, is my grandmother's sole recollection of Rorik's behavior on the night in question. He apparently called my grandmother to let her know that our family was to be disinherited.",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<P> p_23 = std::make_shared<P>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		text_23,
 	},
-};
-P p_13 = P {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&text_13),
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_25 = std::make_shared<Text>(
+	(const char*)"TODO:",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<P> p_25 = std::make_shared<P>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		text_25,
 	},
-};
-Text text_15 = Text {
-	"\"Show some respect for your betters.\"",
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_27 = std::make_shared<Text>(
+	(const char*)"Rorik was found dead 3 weeks later, ruled a suicide.",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<P> p_27 = std::make_shared<P>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		text_27,
 	},
-};
-P p_15 = P {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&text_15),
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<HTMLNode> body_2 = std::make_shared<HTMLNode>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		p_27,
+		p_25,
+		p_23,
+		p_21,
+		p_19,
+		p_17,
+		p_15,
+		p_13,
+		p_11,
+		p_9,
+		p_7,
+		p_5,
+		p_3,
 	},
-	{
-	},
-};
-Text text_17 = Text {
-	"The man assaults Rorik, and there's a scuffle. Rorik shows up to the police station about an hour later, very beaten and bruised. He claims to have driven the other man off, and eventually returns home.",
-	{
-	},
-	{
-	},
-};
-P p_17 = P {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&text_17),
-	},
-	{
-	},
-};
-Text text_19 = Text {
-	"The next day, Rorik orders newspapers to run a front-page piece the next day, the headline reading: \"Death to Traitors\".",
-	{
-	},
-	{
-	},
-};
-P p_19 = P {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&text_19),
-	},
-	{
-	},
-};
-Text text_21 = Text {
-	"The content of the article is a matter of public record, and one I will not repeat here.",
-	{
-	},
-	{
-	},
-};
-P p_21 = P {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&text_21),
-	},
-	{
-	},
-};
-Text text_23 = Text {
-	"What was not in the public record, is my grandmother's sole recollection of Rorik's behavior on the night in question. He apparently called my grandmother to let her know that our family was to be disinherited.",
-	{
-	},
-	{
-	},
-};
-P p_23 = P {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&text_23),
-	},
-	{
-	},
-};
-Text text_25 = Text {
-	"TODO:",
-	{
-	},
-	{
-	},
-};
-P p_25 = P {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&text_25),
-	},
-	{
-	},
-};
-Text text_27 = Text {
-	"Rorik was found dead 3 weeks later, ruled a suicide.",
-	{
-	},
-	{
-	},
-};
-P p_27 = P {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&text_27),
-	},
-	{
-	},
-};
-HTMLNode body_2 = HTMLNode {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&p_27),
-		std::shared_ptr<HTMLNode>(&p_25),
-		std::shared_ptr<HTMLNode>(&p_23),
-		std::shared_ptr<HTMLNode>(&p_21),
-		std::shared_ptr<HTMLNode>(&p_19),
-		std::shared_ptr<HTMLNode>(&p_17),
-		std::shared_ptr<HTMLNode>(&p_15),
-		std::shared_ptr<HTMLNode>(&p_13),
-		std::shared_ptr<HTMLNode>(&p_11),
-		std::shared_ptr<HTMLNode>(&p_9),
-		std::shared_ptr<HTMLNode>(&p_7),
-		std::shared_ptr<HTMLNode>(&p_5),
-		std::shared_ptr<HTMLNode>(&p_3),
-	},
-	{
+	(std::unordered_map<std::string, std::string>){
 		{"title", "The End"},
+	}
+);
+std::shared_ptr<HTMLNode> html_1 = std::make_shared<HTMLNode>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		body_2,
 	},
-};
-HTMLNode html_1 = HTMLNode {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&body_2),
-	},
-	{
-	},
-};
+	(std::unordered_map<std::string, std::string>){
+	}
+);
 }
-CoolMythsTheendHTMLWindow::CoolMythsTheendHTMLWindow(int x, int y, int w, int h) : HTMLWindow(std::shared_ptr<HTMLNode>(&CoolMythsTheendHTMLWindowNamespace::html_1), x, y, w, h) {
+CoolMythsTheendHTMLWindow::CoolMythsTheendHTMLWindow(int x, int y, int w, int h) : HTMLWindow(CoolMythsTheendHTMLWindowNamespace::html_1, x, y, w, h) {
 
 }

@@ -1,249 +1,249 @@
 #include "index.h"
 namespace MurderBlogIndexHTMLWindowNamespace {
-HTMLNode header_3 = HTMLNode {
-	"",
-	{
+std::shared_ptr<HTMLNode> header_3 = std::make_shared<HTMLNode>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_6 = std::make_shared<Text>(
+	(const char*)"Image courtesy of ",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-};
-Text text_6 = Text {
-	"Image courtesy of ",
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_8 = std::make_shared<Text>(
+	(const char*)"user:engounge",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<A> a_8 = std::make_shared<A>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		text_8,
 	},
-};
-Text text_8 = Text {
-	"user:engounge",
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_9 = std::make_shared<Text>(
+	(const char*)".",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<P> p_6 = std::make_shared<P>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		text_9,
+		a_8,
+		text_6,
 	},
-};
-A a_8 = A {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&text_8),
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_11 = std::make_shared<Text>(
+	(const char*)"The adage holds true. I've been getting too many \"customer complaints\" in my spam box to say it again, but just imagine my words now.",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<P> p_11 = std::make_shared<P>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		text_11,
 	},
-};
-Text text_9 = Text {
-	".",
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_13 = std::make_shared<Text>(
+	(const char*)"In case I happen to shock and/or surprise any of the slow-witted among you. ",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_15 = std::make_shared<Text>(
+	(const char*)"Rorik's ",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-};
-P p_6 = P {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&text_9),
-		std::shared_ptr<HTMLNode>(&a_8),
-		std::shared_ptr<HTMLNode>(&text_6),
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<A> a_15 = std::make_shared<A>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		text_15,
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_17 = std::make_shared<Text>(
+	(const char*)"End",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-};
-Text text_11 = Text {
-	"The adage holds true. I've been getting too many \"customer complaints\" in my spam box to say it again, but just imagine my words now.",
-	{
-	},
-	{
-	},
-};
-P p_11 = P {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&text_11),
-	},
-	{
-	},
-};
-Text text_13 = Text {
-	"In case I happen to shock and/or surprise any of the slow-witted among you. ",
-	{
-	},
-	{
-	},
-};
-Text text_15 = Text {
-	"Rorik's ",
-	{
-	},
-	{
-	},
-};
-A a_15 = A {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&text_15),
-	},
-	{
-	},
-};
-Text text_17 = Text {
-	"End",
-	{
-	},
-	{
+	(std::unordered_map<std::string, std::string>){
 		{"href", "cool_myths/theend"},
+	}
+);
+std::shared_ptr<A> a_17 = std::make_shared<A>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		text_17,
 	},
-};
-A a_17 = A {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&text_17),
-	},
-	{
+	(std::unordered_map<std::string, std::string>){
 		{"href", "cool_myths/theend"},
+	}
+);
+std::shared_ptr<Text> text_18 = std::make_shared<Text>(
+	(const char*)" is a ",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-};
-Text text_18 = Text {
-	" is a ",
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_20 = std::make_shared<Text>(
+	(const char*)"SPNPOLICY200",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<A> a_20 = std::make_shared<A>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		text_20,
 	},
-};
-Text text_20 = Text {
-	"SPNPOLICY200",
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_21 = std::make_shared<Text>(
+	(const char*)". I just pray that you're not as stupid as everyone makes you out to be. ",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<P> p_13 = std::make_shared<P>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		text_21,
+		a_20,
+		text_18,
+		a_17,
+		a_15,
+		text_13,
 	},
-};
-A a_20 = A {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&text_20),
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_23 = std::make_shared<Text>(
+	(const char*)"Details as I can get them are scarce. Police aren't saying much other than that the body was found in the abandoned caves by Rorik End's scenic, beautiful, tourist-attracting, all around pleasant space, Egg Park.",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<P> p_23 = std::make_shared<P>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		text_23,
 	},
-};
-Text text_21 = Text {
-	". I just pray that you're not as stupid as everyone makes you out to be. ",
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_25 = std::make_shared<Text>(
+	(const char*)"I want all the viewers at home to know that I am not heartless. In fact, the more I stare at the blood and sinews and guts leaking out of this poor fellow, the more I am completely unnerved. I guess with 24-bit colors you can really see the whole enchilada.",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<P> p_25 = std::make_shared<P>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		text_25,
 	},
-};
-P p_13 = P {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&text_21),
-		std::shared_ptr<HTMLNode>(&a_20),
-		std::shared_ptr<HTMLNode>(&text_18),
-		std::shared_ptr<HTMLNode>(&a_17),
-		std::shared_ptr<HTMLNode>(&a_15),
-		std::shared_ptr<HTMLNode>(&text_13),
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_27 = std::make_shared<Text>(
+	(const char*)"Corpses typically don't float. Speaking as an expert in murder (with a focus in fluid dynamics), they don't float unless they weigh less than the fluid they are displacing. That's a little scientific thing called the Archimedes Principle, and it doesn't allow for violations. For any of you wondering if the corpse is floating because of the stalactite protruding through the chest: no.",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<P> p_27 = std::make_shared<P>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		text_27,
 	},
-};
-Text text_23 = Text {
-	"Details as I can get them are scarce. Police aren't saying much other than that the body was found in the abandoned caves by Rorik End's scenic, beautiful, tourist-attracting, all around pleasant space, Egg Park.",
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_29 = std::make_shared<Text>(
+	(const char*)"The friction of the organs on the stalactite is too weak compared to the force of gravity. So we should be sinking down. And instead our remains trapped in the fluid. Just like when I shoved Jim's dog in the lake.",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<P> p_29 = std::make_shared<P>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		text_29,
 	},
-};
-P p_23 = P {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&text_23),
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<Text> text_31 = std::make_shared<Text>(
+	(const char*)"To all of the loud-mouthed Rorikenders I know: shut your gagging SPNPOLICY200 flaps. And remember to stay safe out there.",
+	(std::vector<std::shared_ptr<HTMLNode>>){
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<P> p_31 = std::make_shared<P>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		text_31,
 	},
-};
-Text text_25 = Text {
-	"I want all the viewers at home to know that I am not heartless. In fact, the more I stare at the blood and sinews and guts leaking out of this poor fellow, the more I am completely unnerved. I guess with 24-bit colors you can really see the whole enchilada.",
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<HTMLNode> body_5 = std::make_shared<HTMLNode>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		p_31,
+		p_29,
+		p_27,
+		p_25,
+		p_23,
+		p_13,
+		p_11,
+		p_6,
 	},
-	{
+	(std::unordered_map<std::string, std::string>){
+	}
+);
+std::shared_ptr<HTMLNode> html_1 = std::make_shared<HTMLNode>(
+	(const char*)"",
+	(std::vector<std::shared_ptr<HTMLNode>>){
+		body_5,
+		header_3,
 	},
-};
-P p_25 = P {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&text_25),
-	},
-	{
-	},
-};
-Text text_27 = Text {
-	"Corpses typically don't float. Speaking as an expert in murder (with a focus in fluid dynamics), they don't float unless they weigh less than the fluid they are displacing. That's a little scientific thing called the Archimedes Principle, and it doesn't allow for violations. For any of you wondering if the corpse is floating because of the stalactite protruding through the chest: no.",
-	{
-	},
-	{
-	},
-};
-P p_27 = P {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&text_27),
-	},
-	{
-	},
-};
-Text text_29 = Text {
-	"The friction of the organs on the stalactite is too weak compared to the force of gravity. So we should be sinking down. And instead our remains trapped in the fluid. Just like when I shoved Jim's dog in the lake.",
-	{
-	},
-	{
-	},
-};
-P p_29 = P {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&text_29),
-	},
-	{
-	},
-};
-Text text_31 = Text {
-	"To all of the loud-mouthed Rorikenders I know: shut your gagging SPNPOLICY200 flaps. And remember to stay safe out there.",
-	{
-	},
-	{
-	},
-};
-P p_31 = P {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&text_31),
-	},
-	{
-	},
-};
-HTMLNode body_5 = HTMLNode {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&p_31),
-		std::shared_ptr<HTMLNode>(&p_29),
-		std::shared_ptr<HTMLNode>(&p_27),
-		std::shared_ptr<HTMLNode>(&p_25),
-		std::shared_ptr<HTMLNode>(&p_23),
-		std::shared_ptr<HTMLNode>(&p_13),
-		std::shared_ptr<HTMLNode>(&p_11),
-		std::shared_ptr<HTMLNode>(&p_6),
-	},
-	{
-	},
-};
-HTMLNode html_1 = HTMLNode {
-	"",
-	{
-		std::shared_ptr<HTMLNode>(&body_5),
-		std::shared_ptr<HTMLNode>(&header_3),
-	},
-	{
+	(std::unordered_map<std::string, std::string>){
 		{"title", "My Blog (GEANE: CHANGE TITLE TEXT)"},
-	},
-};
+	}
+);
 }
-MurderBlogIndexHTMLWindow::MurderBlogIndexHTMLWindow(int x, int y, int w, int h) : HTMLWindow(std::shared_ptr<HTMLNode>(&MurderBlogIndexHTMLWindowNamespace::html_1), x, y, w, h) {
+MurderBlogIndexHTMLWindow::MurderBlogIndexHTMLWindow(int x, int y, int w, int h) : HTMLWindow(MurderBlogIndexHTMLWindowNamespace::html_1, x, y, w, h) {
 	linked_windows.insert({"cool_myths/theend", CoolMythsTheendHTMLWindow::createWindow});
 
 }

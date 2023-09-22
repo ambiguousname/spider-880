@@ -69,20 +69,20 @@ class HtmlStackNode():
 			camel_case = get_camel_case(self.tag)
 			if camel_case in supported_nodes:
 				struct_type = camel_case
-			self.writeln(f"{struct_type} {self} = {struct_type} {{")
+			self.writeln(f"std::shared_ptr<{struct_type}> {self} = std::make_shared<{struct_type}>(")
 
-			self.writeln(f"\t\"{self.dat}\",")
-			self.writeln("\t{")
+			self.writeln(f"\t(const char*)\"{self.dat}\",")
+			self.writeln("\t(std::vector<std::shared_ptr<HTMLNode>>){")
 			self.children.reverse()
 			for child in self.children:
 				if not child.invisible:
-					self.writeln(f"\t\tstd::shared_ptr<HTMLNode>(&{child}),")
+					self.writeln(f"\t\t{child},")
 			self.writeln("\t},")
-			self.writeln("\t{")
+			self.writeln("\t(std::unordered_map<std::string, std::string>){")
 			for attr, val in self.attrs.items():
 				self.writeln(f"\t\t{{\"{attr}\", \"{val}\"}},")
-			self.writeln("\t},")
-			self.writeln("};")
+			self.writeln("\t}")
+			self.writeln(");")
 
 class TextNode(HtmlStackNode):
 	def data(self, data):
@@ -171,7 +171,7 @@ class HTMLCPPParser(HTMLParser):
 			href, page = self.linked_pages[i]
 			linked_page_str += f"\tlinked_windows.insert({{\"{href}\", {page}::createWindow}});\n"
 
-		self.cpp_stream.write(f"{self.namespace}::{self.namespace}(int x, int y, int w, int h) : HTMLWindow(std::shared_ptr<HTMLNode>(&{self.namespace}Namespace::html_1), x, y, w, h) {{\n{linked_page_str}\n}}\n")
+		self.cpp_stream.write(f"{self.namespace}::{self.namespace}(int x, int y, int w, int h) : HTMLWindow({self.namespace}Namespace::html_1, x, y, w, h) {{\n{linked_page_str}\n}}\n")
 
 		header = open(path.join(self.path, f"../{header_name}"), "w")
 		header.write("#pragma once\n")
