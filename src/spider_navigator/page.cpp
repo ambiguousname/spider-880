@@ -56,10 +56,13 @@ void HTMLPage::drawChildren() {
 		std::shared_ptr<HTMLNode> node = node_info.node;
 		if (node_info.type == OPEN_NODE) {
 			int out_w, out_h;
+
+			int local_x = cursor_x;
+			int local_y = cursor_y; 
 			node_info.node->open(this, out_w, out_h);
 			
 			if (node->interactive()) {
-				interactive_nodes.push_back({node, cursor_x, cursor_y, out_w, out_h});
+				interactive_nodes.push_back({node, local_x, local_y, out_w, out_h});
 			}
 
 			queue.insert(queue.begin(), {node, CLOSE_NODE});

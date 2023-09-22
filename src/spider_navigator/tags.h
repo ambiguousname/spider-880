@@ -48,27 +48,28 @@ class HTMLNode {
 typedef std::shared_ptr<HTMLNode> HTMLNodePtr;
 
 class Text : public HTMLNode {
-	Fl_Cursor cursor = FL_CURSOR_INSERT;
+	public:
+	Text(const char* dat, std::vector<std::shared_ptr<HTMLNode>> c, std::unordered_map<std::string, std::string> attr) : HTMLNode(dat, c, attr) {
+		cursor = FL_CURSOR_INSERT;
+	}
 	virtual bool interactive() { return true; }
 	void open(HTMLPage* current_page, int& out_w, int& out_h);
-	
-	public:
-	using HTMLNode::HTMLNode;
 };
 
 class A : public HTMLNode {
+	public:
 	virtual bool interactive() { return true; }
-	Fl_Cursor cursor = FL_CURSOR_HAND;
-	// TODO: Use some sort of palette constants.
-	Fl_Color color = 4;
 	void click(int x, int y, HTMLPage* current_page);
 	void init();
-	public:
-	using HTMLNode::HTMLNode;
+	A(const char* dat, std::vector<std::shared_ptr<HTMLNode>> c, std::unordered_map<std::string, std::string> attr) : HTMLNode(dat, c, attr) {
+		cursor = FL_CURSOR_HAND;
+		// TODO: Use some sort of palette constants.
+		color = 4;
+	}
 };
 
 class P : public HTMLNode {
-	void close(HTMLPage* current_page);
 	public:
 	using HTMLNode::HTMLNode;
+	void close(HTMLPage* current_page);
 };
