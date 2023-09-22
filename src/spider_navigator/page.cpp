@@ -5,12 +5,13 @@
 #include <variant>
 
 HTMLWindow::HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int h) : Fl_Window(x, y, w, h) {
-	auto find_title = root->attributes.find("title");
-	if (find_title != root->attributes.end()) {
+	auto attributes = root->attributes();
+	auto find_title = attributes.find("title");
+	if (find_title != attributes.end()) {
 		label(find_title->second.c_str());
 	}
 	scrollbar = new Fl_Scroll(x, y, w, h);
-	page = new HTMLPage(root, std::make_shared<HTMLWindow>(this), x, y, w - 20, h);
+	page = new HTMLPage(root, std::shared_ptr<HTMLWindow>(this), x, y, w - 20, h);
 	scrollbar->end();
 
 	resizable(this);
@@ -54,16 +55,16 @@ void HTMLPage::drawChildren() {
 		std::shared_ptr<HTMLNode> node = node_info.node;
 		if (node_info.type == OPEN_NODE) {
 			int out_w, out_h;
-			node_info.node->open(std::make_unique<HTMLPage>(this), out_w, out_h);
+			node_info.node->open(std::unique_ptr<HTMLPage>(this), out_w, out_h);
 			if (node->interactive()) {
 				interactive_nodes.push_back({node, cursor_x, cursor_y, out_w, out_h});
 			}
 			queue.insert(queue.begin(), {node, CLOSE_NODE});
-			for (auto c : node->children) {
+			for (auto c : node->children()) {
 				queue.insert(queue.begin(), {c, OPEN_NODE});
 			}
 		} else if (node_info.type == CLOSE_NODE) {
-			node_info.node->close(std::make_unique<HTMLPage>(this));
+			node_info.node->close(std::unique_ptr<HTMLPage>(this));
 		}
 	}
 	// cout << "-----" << endl;
@@ -81,8 +82,8 @@ void HTMLPage::draw() {
 
 bool HTMLPage::getInteractiveFromPos(int x, int y, HTMLNodePtr out) {
 	for (auto c : interactive_nodes) {
-		if (x >= c->x && x <= c->x + c->w && y >= c->y && y <= c->y + c->h) {
-			out = c;
+		if (x >= c.x && x <= c.x + c.w && y >= c.y && y <= c.y + c.h) {
+			out = c.node;
 			return true;
 		}
 	}
@@ -95,7 +96,7 @@ int HTMLPage::hoverRendered() {
 	int y = Fl::event_y();
 	HTMLNodePtr rendered;
 	if (getInteractiveFromPos(x, y, rendered)) {
-		rendered->hover(x, y, std::make_unique<HTMLPage>(this));
+		rendered->hover(x, y, std::unique_ptr<HTMLPage>(this));
 		return 1;
 	} else {
 		parent_window->cursor(FL_CURSOR_DEFAULT);
@@ -108,7 +109,7 @@ int HTMLPage::clickRendered() {
 	int y = Fl::event_y();
 	HTMLNodePtr rendered;
 	if (getInteractiveFromPos(x, y, rendered)) {
-		rendered->click(x, y, std::make_unique<HTMLPage>(this));
+		rendered->click(x, y, std::unique_ptr<HTMLPage>(this));
 		return 1;
 	} else {
 		return 0;

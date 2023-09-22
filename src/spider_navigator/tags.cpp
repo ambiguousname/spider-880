@@ -10,7 +10,7 @@ void Text::open(std::unique_ptr<HTMLPage> current_page, int& out_w, int& out_h) 
 	out_w = current_page->w();
 	out_h = 0;
 
-	fl_measure(data.c_str(), out_w, out_h);
+	fl_measure(_data.c_str(), out_w, out_h);
 	fl_color(color);
 
 	int cursor_x, cursor_y;
@@ -22,7 +22,7 @@ void Text::open(std::unique_ptr<HTMLPage> current_page, int& out_w, int& out_h) 
 		// cursor_y += height_buffer;
 		// height_buffer = 0;
 	}
-	fl_draw(data.c_str(), cursor_x, cursor_y, out_h, out_h, FL_ALIGN_WRAP | FL_ALIGN_CENTER);
+	fl_draw(_data.c_str(), cursor_x, cursor_y, out_h, out_h, FL_ALIGN_WRAP | FL_ALIGN_CENTER);
 	cursor_x += out_w;
 
 	// height_buffer = text_height;
@@ -35,8 +35,8 @@ void Text::open(std::unique_ptr<HTMLPage> current_page, int& out_w, int& out_h) 
 }
 
 void A::click(int x, int y, std::unique_ptr<HTMLPage> current_page) {
-	auto search = attributes.find("href");
-	if (search != attributes.end()) {
+	auto search = _attributes.find("href");
+	if (search != _attributes.end()) {
 		// TODO: Move on-click logic to python scripting.
 		
 		windowCreation constructor;
