@@ -6,19 +6,19 @@ void HTMLNode::init() {
 	return;
 }
 
-void HTMLNode::open(HTMLPage* current_page, int& out_w, int& out_h) {
+void HTMLNode::open(HTMLPage*, int&, int&) {
 	return;
 }
 
-void HTMLNode::close(HTMLPage* current_page) {
+void HTMLNode::close(HTMLPage*) {
 	return;
 }
 
-void HTMLNode::click(int x, int y, HTMLPage* current_page) {
+void HTMLNode::click(int, int, HTMLPage*) {
 	return;
 }
 
-void HTMLNode::hover(int x, int y, HTMLPage* current_page) {
+void HTMLNode::hover(int, int, HTMLPage* current_page) {
 	current_page->parent_window->cursor(cursor);
 }
 
@@ -52,7 +52,7 @@ void Text::open(HTMLPage* current_page, int& out_w, int& out_h) {
 	current_page->setCursor(cursor_x, cursor_y);
 }
 
-void A::click(int x, int y, HTMLPage* current_page) {
+void A::click(int, int, HTMLPage* current_page) {
 	auto search = _attributes.find("href");
 	if (search != _attributes.end()) {
 		// TODO: Move on-click logic to python scripting.
@@ -84,13 +84,17 @@ void P::close(HTMLPage* current_page) {
 }
 
 void Img::init() {
-	auto href = _attributes.find("href");
-	if (href != _attributes.end()) {
-		box = std::make_unique<ImageBox>(href->second);
+	auto src = _attributes.find("src");
+	
+	if (src != _attributes.end()) {
+		box = std::make_unique<ImageBox>(src->second.c_str());
 	}
 }
 
 void Img::open(HTMLPage* current_page, int& out_w, int& out_h) {
+	if (box == nullptr) {
+		return;
+	}
 	int cursor_x, cursor_y;
 	current_page->getCursor(cursor_x, cursor_y);
 	int img_w = current_page->w() * 3/4;
@@ -100,10 +104,13 @@ void Img::open(HTMLPage* current_page, int& out_w, int& out_h) {
 	// TODO: `double` math?
 	int full_w, full_h;
 	box->getFullDimensions(full_w, full_h);
-	int img_h = (full_h/full_w) * img_w;
+	double ratio = (double)full_h/(double)full_w;
+	int img_h = ratio * img_w;
 
 	box->prepareDraw(img_x, cursor_y, img_w, img_h);
 	box->draw();
+
+	cursor_y += img_h + 20;
 
 	current_page->setCursor(cursor_x, cursor_y);
 }

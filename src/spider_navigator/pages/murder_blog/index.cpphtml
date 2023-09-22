@@ -11,7 +11,7 @@
 		}
 	</script>
 	<body> <!-- Represents the Fl_Group object. -->
-		<!-- <img src="./assets/test.png" w=100 h=100 /> -->
+		<img src="./assets/victim.png" />
 		<p>
 			Image courtesy of <a>user:engounge</a>.
 		</p>

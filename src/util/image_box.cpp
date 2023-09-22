@@ -39,7 +39,9 @@ void ImageBox::drawProgress(int speed) {
 		unsigned char g = *(image_buffer + index + 1);
 		unsigned char b = *(image_buffer + index + 2);
 
-		fl_color(rgb_to_palette(r, g, b));
+		Fl_Color result = rgb_to_palette(r, g, b);
+		fl_color(result);
+		
 		fl_point(draw_cursor_x + start_x, draw_cursor_y + start_y);
 		draw_cursor_x += 1;
 	}

@@ -24,12 +24,12 @@ class HTMLNode {
 	std::shared_ptr<HTMLNode> _parent;
 
 	public:
-	const std::shared_ptr<HTMLNode> parent() const { return _parent; }
+	std::shared_ptr<HTMLNode> parent() const { return _parent; }
 	void setParent(std::shared_ptr<HTMLNode> p) { _parent = p; }
-	const std::vector<std::shared_ptr<HTMLNode>> children() const { return _children; }
-	const std::unordered_map<std::string, std::string> attributes() const { return _attributes; }
-	const std::string data() const { return _data; }
-	const Fl_Color getColor() const { return color; }
+	std::vector<std::shared_ptr<HTMLNode>> children() const { return _children; }
+	std::unordered_map<std::string, std::string> attributes() const { return _attributes; }
+	std::string data() const { return _data; }
+	Fl_Color getColor() const { return color; }
 	void setColor(Fl_Color c) { color = c; }
 
 	virtual void init();
