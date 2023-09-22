@@ -1,4 +1,5 @@
-#include "pages.h"
+#include "scream.h"
+namespace CoolMythsScreamHTMLWindowNamespace {
 Text text_3 = Text {
 	"Scream all you want. No one will hear you.",
 	{
@@ -31,6 +32,7 @@ HTMLNode html_1 = HTMLNode {
 	{
 	},
 };
-CoolMythsScreamHTMLWindow::CoolMythsScreamHTMLWindow(int x, int y, int w, int h) : HTMLWindow(std::make_shared<HTMLNode>(html_1), x, y, w, h) {
+}
+CoolMythsScreamHTMLWindow::CoolMythsScreamHTMLWindow(int x, int y, int w, int h) : HTMLWindow(std::make_shared<HTMLNode>(CoolMythsScreamHTMLWindowNamespace::html_1), x, y, w, h) {
 
 }

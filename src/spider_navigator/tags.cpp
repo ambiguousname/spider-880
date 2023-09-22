@@ -2,6 +2,18 @@
 #include "page.h"
 #include <FL/fl_draw.H>
 
+void HTMLNode::open(std::unique_ptr<HTMLPage> current_page, int& out_w, int& out_h) {
+	return;
+}
+
+void HTMLNode::close(std::unique_ptr<HTMLPage> current_page) {
+	return;
+}
+
+void HTMLNode::click(int x, int y, std::unique_ptr<HTMLPage> current_page) {
+	return;
+}
+
 void HTMLNode::hover(int x, int y, std::unique_ptr<HTMLPage> current_page) {
 	current_page->parent_window->cursor(cursor);
 }

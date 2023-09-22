@@ -1,4 +1,5 @@
-#include "pages.h"
+#include "theend.h"
+namespace CoolMythsTheendHTMLWindowNamespace {
 Text text_3 = Text {
 	"As a native of Rorik's End myself, there's a somewhat buried tale about Rorik Andersen himself that I think deserves attention. It comes from his grandniece (on his wife's side): Eliza Anderson's \"History of the Andersens\" (1962). I've excerpted the relevant portions here, but for contex the story itself takes place after he filed for bankruptcy and sold Andersen Mining:",
 	{
@@ -223,6 +224,7 @@ HTMLNode html_1 = HTMLNode {
 	{
 	},
 };
-CoolMythsTheendHTMLWindow::CoolMythsTheendHTMLWindow(int x, int y, int w, int h) : HTMLWindow(std::make_shared<HTMLNode>(html_1), x, y, w, h) {
+}
+CoolMythsTheendHTMLWindow::CoolMythsTheendHTMLWindow(int x, int y, int w, int h) : HTMLWindow(std::make_shared<HTMLNode>(CoolMythsTheendHTMLWindowNamespace::html_1), x, y, w, h) {
 
 }

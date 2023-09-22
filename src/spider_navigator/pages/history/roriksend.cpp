@@ -1,4 +1,5 @@
-#include "pages.h"
+#include "roriksend.h"
+namespace HistoryRoriksendHTMLWindowNamespace {
 Text text_3 = Text {
 	"RORIK ANDERSEN was the only son of two loving parents. A descendant of Danish immigrants, his family came to the Americas in the 1690s as sugar plantation owners in the West Indies (now the Virgin Islands) and had held onto their land ever since. Rorik himself was born in 1826 to a thriving industry, with a booming economy and many happy workers.",
 	{
@@ -191,6 +192,7 @@ HTMLNode html_1 = HTMLNode {
 	{
 	},
 };
-HistoryRoriksendHTMLWindow::HistoryRoriksendHTMLWindow(int x, int y, int w, int h) : HTMLWindow(std::make_shared<HTMLNode>(html_1), x, y, w, h) {
+}
+HistoryRoriksendHTMLWindow::HistoryRoriksendHTMLWindow(int x, int y, int w, int h) : HTMLWindow(std::make_shared<HTMLNode>(HistoryRoriksendHTMLWindowNamespace::html_1), x, y, w, h) {
 
 }

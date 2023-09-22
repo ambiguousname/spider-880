@@ -47,6 +47,7 @@ typedef std::shared_ptr<HTMLNode> HTMLNodePtr;
 class Text : public HTMLNode {
 	bool _interactive = true;
 	void open(std::unique_ptr<HTMLPage> current_page, int& out_w, int& out_h);
+	
 	public:
 	using HTMLNode::HTMLNode;
 };

@@ -96,7 +96,7 @@ class ImageNode(HtmlStackNode):
 class ANode(HtmlStackNode):
 	def open(self):
 		if "href" in self.attrs:
-			pages_link = path.relpath(path.join(self.attrs["href"], "../pages.h")).replace("\\", "/")
+			pages_link = (self.attrs["href"] + ".h").replace("\\", "/")
 			self.includes.add(f"<{pages_link}>")
 			if self.reader is not None:
 				abs_path = path.abspath(path.join(root, self.attrs["href"]))
@@ -153,23 +153,38 @@ class HTMLCPPParser(HTMLParser):
 
 
 	def close(self):
-		self.cpp_stream.write(f"#include \"pages.h\"\n")
+		header_name = path.split(self.path)[1].replace(".cpp", ".h")
+		self.cpp_stream.write(f"#include \"{header_name}\"\n")
 		
+		self.cpp_stream.write(f"namespace {self.namespace}Namespace {{\n")
+
 		self.custom_script_dat.seek(0)
 		self.cpp_stream.write(self.custom_script_dat.read())
 
 		self.struct_stream.seek(0)
 		self.cpp_stream.write(self.struct_stream.read())
 
+		self.cpp_stream.write("}\n")
+
 		linked_page_str = ""
 		for i in range(len(self.linked_pages)):
 			href, page = self.linked_pages[i]
 			linked_page_str += f"\tlinked_windows.insert({{\"{href}\", {page}::createWindow}});\n"
 
-		self.cpp_stream.write(f"{self.namespace}::{self.namespace}(int x, int y, int w, int h) : HTMLWindow(std::make_shared<HTMLNode>(html_1), x, y, w, h) {{\n{linked_page_str}\n}}\n")
+		self.cpp_stream.write(f"{self.namespace}::{self.namespace}(int x, int y, int w, int h) : HTMLWindow(std::make_shared<HTMLNode>({self.namespace}Namespace::html_1), x, y, w, h) {{\n{linked_page_str}\n}}\n")
+
+		header = open(path.join(self.path, f"../{header_name}"), "w")
+		header.write("#pragma once\n")
+
+		for include in self.includes:
+			header.write(f"#include {include}\n")
+
+		header.write(f"class {self.namespace} : public HTMLWindow {{\n\tpublic:\n\t{self.namespace}(int x, int y, int w, int h);\n\tstatic HTMLWindow* createWindow(int x, int y, int w, int h) {{\n\t\treturn new {self.namespace}(x, y, w, h);\n\t}}\n}};\n")
+		header.close()
 
 		self.custom_script_dat.close()
 		self.struct_stream.close()
+		self.cpp_stream.close()
 		if len(self.stack) > 0:
 			sys.stderr.write("Unclosed tags: " + self.stack)
 
@@ -236,17 +251,11 @@ class HTMLCPPParser(HTMLParser):
 		return super().handle_data(data)
 
 def searchDir(dir):
-	includes = set()
-	header_info = []
-	num_entries = 0
-
 	for entry in scandir(dir):
 		filename, extension = path.splitext(entry.name)
 		if entry.is_dir():
 			searchDir(entry)
 		elif extension == ".cpphtml":
-			num_entries += 1
-
 			entry_path = path.abspath(entry.path)
 			base, full_filename = path.split(entry_path)
 			pth = path.join(base, filename + ".cpp")
@@ -257,25 +266,10 @@ def searchDir(dir):
 			parser.feed(file.read())
 			parser.close()
 			file.close()
-			cpp_stream.close()
-			
-			includes.update(parser.includes)
-			header_info.append(parser.namespace)
 			
 			f = open(path.join(root, "../list.txt"), "a")
 			f.write(pth + "\n")
 			f.close()
-	
-	if num_entries > 0:
-		header = open(path.join(dir, "pages.h"), "w")
-		header.write("#pragma once\n")
-
-		for include in includes:
-			header.write(f"#include {include}\n")
-
-		for namespace in header_info:
-			header.write(f"class {namespace} : public HTMLWindow {{\n\tpublic:\n\t{namespace}(int x, int y, int w, int h);\n\tstatic HTMLWindow* createWindow(int x, int y, int w, int h) {{\n\t\treturn new {namespace}(x, y, w, h);\n\t}}\n}};\n")
-		header.close()
 
 if __name__ == "__main__":
 	f = open(path.join(root, "../list.txt"), "w")
