@@ -88,7 +88,7 @@ void Img::init() {
 	
 	if (src != _attributes.end()) {
 		// TODO: Fix.
-		// box = std::make_unique<ImageBox>(src->second.c_str());
+		box = std::make_unique<ImageBox>(src->second.c_str());
 	}
 }
 
@@ -100,7 +100,7 @@ void Img::open(HTMLPage* current_page, int& out_w, int& out_h) {
 	current_page->getCursor(cursor_x, cursor_y);
 	int img_w = current_page->w() * 3/4;
 
-	int img_x = (img_w - cursor_x)/4; 
+	int img_x = 3 * (img_w - cursor_x)/16; 
 
 	// TODO: `double` math?
 	int full_w, full_h;

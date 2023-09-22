@@ -1,0 +1,1 @@
+# Looks through the /assets/ directory for images to convert into additional palette versions.
