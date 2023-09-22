@@ -5,9 +5,12 @@
 #include <unordered_map>
 #include <string>
 #include <FL/Enumerations.H>
+#include "util/image_box.h"
 #include "page.h"
 
 class HTMLPage;
+
+#define NODE_CONSTRUCTOR const char* dat, std::vector<std::shared_ptr<HTMLNode>> c, std::unordered_map<std::string, std::string> attr
 
 class HTMLNode {
 	protected:
@@ -23,7 +26,7 @@ class HTMLNode {
 	public:
 	const std::shared_ptr<HTMLNode> parent() const { return _parent; }
 	void setParent(std::shared_ptr<HTMLNode> p) { _parent = p; }
-	const std::vector<std::shared_ptr<HTMLNode>> children() const { return _children; } //TODO: FIX THIS
+	const std::vector<std::shared_ptr<HTMLNode>> children() const { return _children; }
 	const std::unordered_map<std::string, std::string> attributes() const { return _attributes; }
 	const std::string data() const { return _data; }
 	const Fl_Color getColor() const { return color; }
@@ -40,16 +43,17 @@ class HTMLNode {
 	virtual void hover(int x, int y, HTMLPage* current_page);
 
  
-	HTMLNode(const char* dat, std::vector<std::shared_ptr<HTMLNode>> c, std::unordered_map<std::string, std::string> attr) : _data(dat), _children(c), _attributes(attr) {
+	HTMLNode(NODE_CONSTRUCTOR) : _data(dat), _children(c), _attributes(attr) {
 		
 	}
+	~HTMLNode() { _parent.reset(); for (auto c: _children) { c.reset(); } }
 };
 
 typedef std::shared_ptr<HTMLNode> HTMLNodePtr;
 
 class Text : public HTMLNode {
 	public:
-	Text(const char* dat, std::vector<std::shared_ptr<HTMLNode>> c, std::unordered_map<std::string, std::string> attr) : HTMLNode(dat, c, attr) {
+	Text(NODE_CONSTRUCTOR) : HTMLNode(dat, c, attr) {
 		cursor = FL_CURSOR_INSERT;
 	}
 	virtual bool interactive() { return true; }
@@ -61,7 +65,7 @@ class A : public HTMLNode {
 	virtual bool interactive() { return true; }
 	void click(int x, int y, HTMLPage* current_page);
 	void init();
-	A(const char* dat, std::vector<std::shared_ptr<HTMLNode>> c, std::unordered_map<std::string, std::string> attr) : HTMLNode(dat, c, attr) {
+	A(NODE_CONSTRUCTOR) : HTMLNode(dat, c, attr) {
 		cursor = FL_CURSOR_HAND;
 		// TODO: Use some sort of palette constants.
 		color = 4;
@@ -72,4 +76,13 @@ class P : public HTMLNode {
 	public:
 	using HTMLNode::HTMLNode;
 	void close(HTMLPage* current_page);
+};
+
+class Img : public HTMLNode {
+	std::unique_ptr<ImageBox> box;
+	public:
+	using HTMLNode::HTMLNode;
+	~Img() { box.release(); }
+	void init();
+	void open(HTMLPage* current_page, int& out_w, int& out_h);
 };

@@ -82,3 +82,28 @@ void P::close(HTMLPage* current_page) {
 	current_page->setCursor(current_page->x(), cursor_y);
 	current_page->setHeightBuffer(height_buffer);
 }
+
+void Img::init() {
+	auto href = _attributes.find("href");
+	if (href != _attributes.end()) {
+		box = std::make_unique<ImageBox>(href->second);
+	}
+}
+
+void Img::open(HTMLPage* current_page, int& out_w, int& out_h) {
+	int cursor_x, cursor_y;
+	current_page->getCursor(cursor_x, cursor_y);
+	int img_w = current_page->w() * 3/4;
+
+	int img_x = (img_w - cursor_x)/4; 
+
+	// TODO: `double` math?
+	int full_w, full_h;
+	box->getFullDimensions(full_w, full_h);
+	int img_h = (full_h/full_w) * img_w;
+
+	box->prepareDraw(img_x, cursor_y, img_w, img_h);
+	box->draw();
+
+	current_page->setCursor(cursor_x, cursor_y);
+}
