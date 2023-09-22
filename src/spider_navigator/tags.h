@@ -26,7 +26,7 @@ class HTMLNode {
 	const std::shared_ptr<HTMLNode> parent() const { return _parent; }
 	void setParent(std::shared_ptr<HTMLNode> p) { _parent = p; }
 	bool interactive() { return _interactive; }
-	const std::vector<std::shared_ptr<HTMLNode>> children() const { return {}/*_children*/; } //TODO: FIX THIS
+	const std::vector<std::shared_ptr<HTMLNode>> children() const { return _children; } //TODO: FIX THIS
 	const std::unordered_map<std::string, std::string> attributes() const { return _attributes; }
 	const std::string data() const { return _data; }
 

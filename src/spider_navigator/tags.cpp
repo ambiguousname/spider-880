@@ -17,7 +17,6 @@ void HTMLNode::hover(int x, int y, HTMLPage* current_page) {
 	current_page->parent_window->cursor(cursor);
 }
 
-#include <iostream>
 void Text::open(HTMLPage* current_page, int& out_w, int& out_h) {
 	out_w = current_page->w();
 	out_h = 0;

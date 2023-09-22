@@ -10,7 +10,7 @@ Text text_3 = Text {
 P p_3 = P {
 	"",
 	{
-		std::make_shared<HTMLNode>(text_3),
+		std::shared_ptr<HTMLNode>(&text_3),
 	},
 	{
 	},
@@ -18,7 +18,7 @@ P p_3 = P {
 HTMLNode body_2 = HTMLNode {
 	"",
 	{
-		std::make_shared<HTMLNode>(p_3),
+		std::shared_ptr<HTMLNode>(&p_3),
 	},
 	{
 		{"title", "The Scream"},
@@ -27,12 +27,12 @@ HTMLNode body_2 = HTMLNode {
 HTMLNode html_1 = HTMLNode {
 	"",
 	{
-		std::make_shared<HTMLNode>(body_2),
+		std::shared_ptr<HTMLNode>(&body_2),
 	},
 	{
 	},
 };
 }
-CoolMythsScreamHTMLWindow::CoolMythsScreamHTMLWindow(int x, int y, int w, int h) : HTMLWindow(std::make_shared<HTMLNode>(CoolMythsScreamHTMLWindowNamespace::html_1), x, y, w, h) {
+CoolMythsScreamHTMLWindow::CoolMythsScreamHTMLWindow(int x, int y, int w, int h) : HTMLWindow(std::shared_ptr<HTMLNode>(&CoolMythsScreamHTMLWindowNamespace::html_1), x, y, w, h) {
 
 }

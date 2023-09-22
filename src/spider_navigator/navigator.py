@@ -76,7 +76,7 @@ class HtmlStackNode():
 			self.children.reverse()
 			for child in self.children:
 				if not child.invisible:
-					self.writeln(f"\t\tstd::make_shared<HTMLNode>({child}),")
+					self.writeln(f"\t\tstd::shared_ptr<HTMLNode>(&{child}),")
 			self.writeln("\t},")
 			self.writeln("\t{")
 			for attr, val in self.attrs.items():
@@ -171,7 +171,7 @@ class HTMLCPPParser(HTMLParser):
 			href, page = self.linked_pages[i]
 			linked_page_str += f"\tlinked_windows.insert({{\"{href}\", {page}::createWindow}});\n"
 
-		self.cpp_stream.write(f"{self.namespace}::{self.namespace}(int x, int y, int w, int h) : HTMLWindow(std::make_shared<HTMLNode>({self.namespace}Namespace::html_1), x, y, w, h) {{\n{linked_page_str}\n}}\n")
+		self.cpp_stream.write(f"{self.namespace}::{self.namespace}(int x, int y, int w, int h) : HTMLWindow(std::shared_ptr<HTMLNode>(&{self.namespace}Namespace::html_1), x, y, w, h) {{\n{linked_page_str}\n}}\n")
 
 		header = open(path.join(self.path, f"../{header_name}"), "w")
 		header.write("#pragma once\n")

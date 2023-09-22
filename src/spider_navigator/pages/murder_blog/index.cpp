@@ -24,7 +24,7 @@ Text text_8 = Text {
 A a_8 = A {
 	"",
 	{
-		std::make_shared<HTMLNode>(text_8),
+		std::shared_ptr<HTMLNode>(&text_8),
 	},
 	{
 	},
@@ -39,9 +39,9 @@ Text text_9 = Text {
 P p_6 = P {
 	"",
 	{
-		std::make_shared<HTMLNode>(text_9),
-		std::make_shared<HTMLNode>(a_8),
-		std::make_shared<HTMLNode>(text_6),
+		std::shared_ptr<HTMLNode>(&text_9),
+		std::shared_ptr<HTMLNode>(&a_8),
+		std::shared_ptr<HTMLNode>(&text_6),
 	},
 	{
 	},
@@ -56,7 +56,7 @@ Text text_11 = Text {
 P p_11 = P {
 	"",
 	{
-		std::make_shared<HTMLNode>(text_11),
+		std::shared_ptr<HTMLNode>(&text_11),
 	},
 	{
 	},
@@ -78,7 +78,7 @@ Text text_15 = Text {
 A a_15 = A {
 	"",
 	{
-		std::make_shared<HTMLNode>(text_15),
+		std::shared_ptr<HTMLNode>(&text_15),
 	},
 	{
 	},
@@ -94,7 +94,7 @@ Text text_17 = Text {
 A a_17 = A {
 	"",
 	{
-		std::make_shared<HTMLNode>(text_17),
+		std::shared_ptr<HTMLNode>(&text_17),
 	},
 	{
 		{"href", "cool_myths/theend"},
@@ -117,7 +117,7 @@ Text text_20 = Text {
 A a_20 = A {
 	"",
 	{
-		std::make_shared<HTMLNode>(text_20),
+		std::shared_ptr<HTMLNode>(&text_20),
 	},
 	{
 	},
@@ -132,12 +132,12 @@ Text text_21 = Text {
 P p_13 = P {
 	"",
 	{
-		std::make_shared<HTMLNode>(text_21),
-		std::make_shared<HTMLNode>(a_20),
-		std::make_shared<HTMLNode>(text_18),
-		std::make_shared<HTMLNode>(a_17),
-		std::make_shared<HTMLNode>(a_15),
-		std::make_shared<HTMLNode>(text_13),
+		std::shared_ptr<HTMLNode>(&text_21),
+		std::shared_ptr<HTMLNode>(&a_20),
+		std::shared_ptr<HTMLNode>(&text_18),
+		std::shared_ptr<HTMLNode>(&a_17),
+		std::shared_ptr<HTMLNode>(&a_15),
+		std::shared_ptr<HTMLNode>(&text_13),
 	},
 	{
 	},
@@ -152,7 +152,7 @@ Text text_23 = Text {
 P p_23 = P {
 	"",
 	{
-		std::make_shared<HTMLNode>(text_23),
+		std::shared_ptr<HTMLNode>(&text_23),
 	},
 	{
 	},
@@ -167,7 +167,7 @@ Text text_25 = Text {
 P p_25 = P {
 	"",
 	{
-		std::make_shared<HTMLNode>(text_25),
+		std::shared_ptr<HTMLNode>(&text_25),
 	},
 	{
 	},
@@ -182,7 +182,7 @@ Text text_27 = Text {
 P p_27 = P {
 	"",
 	{
-		std::make_shared<HTMLNode>(text_27),
+		std::shared_ptr<HTMLNode>(&text_27),
 	},
 	{
 	},
@@ -197,7 +197,7 @@ Text text_29 = Text {
 P p_29 = P {
 	"",
 	{
-		std::make_shared<HTMLNode>(text_29),
+		std::shared_ptr<HTMLNode>(&text_29),
 	},
 	{
 	},
@@ -212,7 +212,7 @@ Text text_31 = Text {
 P p_31 = P {
 	"",
 	{
-		std::make_shared<HTMLNode>(text_31),
+		std::shared_ptr<HTMLNode>(&text_31),
 	},
 	{
 	},
@@ -220,14 +220,14 @@ P p_31 = P {
 HTMLNode body_5 = HTMLNode {
 	"",
 	{
-		std::make_shared<HTMLNode>(p_31),
-		std::make_shared<HTMLNode>(p_29),
-		std::make_shared<HTMLNode>(p_27),
-		std::make_shared<HTMLNode>(p_25),
-		std::make_shared<HTMLNode>(p_23),
-		std::make_shared<HTMLNode>(p_13),
-		std::make_shared<HTMLNode>(p_11),
-		std::make_shared<HTMLNode>(p_6),
+		std::shared_ptr<HTMLNode>(&p_31),
+		std::shared_ptr<HTMLNode>(&p_29),
+		std::shared_ptr<HTMLNode>(&p_27),
+		std::shared_ptr<HTMLNode>(&p_25),
+		std::shared_ptr<HTMLNode>(&p_23),
+		std::shared_ptr<HTMLNode>(&p_13),
+		std::shared_ptr<HTMLNode>(&p_11),
+		std::shared_ptr<HTMLNode>(&p_6),
 	},
 	{
 	},
@@ -235,15 +235,15 @@ HTMLNode body_5 = HTMLNode {
 HTMLNode html_1 = HTMLNode {
 	"",
 	{
-		std::make_shared<HTMLNode>(body_5),
-		std::make_shared<HTMLNode>(header_3),
+		std::shared_ptr<HTMLNode>(&body_5),
+		std::shared_ptr<HTMLNode>(&header_3),
 	},
 	{
 		{"title", "My Blog (GEANE: CHANGE TITLE TEXT)"},
 	},
 };
 }
-MurderBlogIndexHTMLWindow::MurderBlogIndexHTMLWindow(int x, int y, int w, int h) : HTMLWindow(std::make_shared<HTMLNode>(MurderBlogIndexHTMLWindowNamespace::html_1), x, y, w, h) {
+MurderBlogIndexHTMLWindow::MurderBlogIndexHTMLWindow(int x, int y, int w, int h) : HTMLWindow(std::shared_ptr<HTMLNode>(&MurderBlogIndexHTMLWindowNamespace::html_1), x, y, w, h) {
 	linked_windows.insert({"cool_myths/theend", CoolMythsTheendHTMLWindow::createWindow});
 
 }

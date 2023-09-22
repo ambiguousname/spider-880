@@ -57,10 +57,13 @@ void HTMLPage::drawChildren() {
 		if (node_info.type == OPEN_NODE) {
 			int out_w, out_h;
 			node_info.node->open(this, out_w, out_h);
+			
 			if (node->interactive()) {
 				interactive_nodes.push_back({node, cursor_x, cursor_y, out_w, out_h});
 			}
+
 			queue.insert(queue.begin(), {node, CLOSE_NODE});
+			
 			for (auto c : node->children()) {
 				queue.insert(queue.begin(), {c, OPEN_NODE});
 			}
