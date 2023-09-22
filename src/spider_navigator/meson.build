@@ -5,7 +5,7 @@ files = cpp_files.stdout().strip()
 
 incdir = include_directories(['../', './pages'])
 
-to_compile = ['page.cpp']
+to_compile = ['page.cpp', 'tags.cpp']
 to_compile += files.split('\n')
 
 # Modify python script to just instead write to here?

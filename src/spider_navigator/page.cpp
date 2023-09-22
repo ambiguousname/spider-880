@@ -55,7 +55,7 @@ void HTMLPage::drawChildren() {
 		std::shared_ptr<HTMLNode> node = node_info.node;
 		if (node_info.type == OPEN_NODE) {
 			int out_w, out_h;
-			// node_info.node->open(std::unique_ptr<HTMLPage>(this), out_w, out_h);
+			node_info.node->open(std::unique_ptr<HTMLPage>(this), out_w, out_h);
 			if (node->interactive()) {
 				interactive_nodes.push_back({node, cursor_x, cursor_y, out_w, out_h});
 			}
@@ -76,7 +76,7 @@ void HTMLPage::draw() {
 	if (root == nullptr) {
 		throw std::logic_error("HTMLPage root not defined.");
 	} else {
-		drawChildren();
+		// drawChildren();
 	}
 }
 

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "tags.h"
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Scroll.H>
 #include <functional>
@@ -8,9 +7,11 @@
 #include <vector>
 #include <unordered_map>
 #include <string>
+#include "tags.h"
 
 class HTMLPage;
 class HTMLWindow;
+class HTMLNode;
 
 enum NodeQueueInfoEnum {
 	OPEN_NODE,
@@ -18,21 +19,21 @@ enum NodeQueueInfoEnum {
 };
 
 struct NodeQueueInfo {
-	HTMLNodePtr node;
+	std::shared_ptr<HTMLNode> node;
 	NodeQueueInfoEnum type;
 };
 
 // Because again, the nodes themselves as they exist are not unique across webpages.
 struct InteractiveNode {
-	HTMLNodePtr node;
+	std::shared_ptr<HTMLNode> node;
 	int x, y, w, h;
 };
 
 class HTMLPage : public Fl_Group {
-	void initNode(HTMLNodePtr node);
+	void initNode(std::shared_ptr<HTMLNode> node);
 	void drawChildren();
 
-	bool getInteractiveFromPos(int x, int y, HTMLNodePtr out);
+	bool getInteractiveFromPos(int x, int y, std::shared_ptr<HTMLNode> out);
 
 	int hoverRendered();
 	int clickRendered();
