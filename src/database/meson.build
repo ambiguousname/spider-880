@@ -1,0 +1,1 @@
+databaselib = static_library('database', ['database.cpp'])

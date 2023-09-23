@@ -24,6 +24,9 @@ ImageBox::~ImageBox() {
 	full_image.reset();
 }
 
+// Best-ish: New file type? Just insert the 4 extra bits for the palette somewhere.
+// For PNGs, you could probably use transparency? (Should check how Fl_PNG_Image will read that though)
+// Probably just easiest to pre-generate the image with the palette.
 void ImageBox::drawProgress(int speed) {
 	for (int i = 0; i < speed; i++) {
 		if (draw_cursor_x >= image->w()) {
@@ -56,6 +59,9 @@ void ImageBox::draw() {
 	} else {
 		while(!cached) {
 			drawProgress(1);
+		}
+		if (cached) {
+			cached = false;
 		}
 	}
 }
