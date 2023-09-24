@@ -13,8 +13,8 @@ if ! command -v meson > /dev/null; then
 
 
 	script_path=$(cygpath -u $USERPROFILE)/.local/bin
-	echo "export PATH=\$PATH:$script_path" >> ~/.profile
-	source ~/.profile
+	echo "export PATH=\$PATH:$script_path" >> ~/.bash_profile
+	source ~/.bash_profile
 fi
 
 if  command -v pacman > /dev/null ; then
