@@ -18,7 +18,7 @@ if ! command -v meson > /dev/null; then
 fi
 
 if  command -v pacman > /dev/null ; then
-	pacman -S mingw-w64-ucrt-x86_64-fltk
+	pacman -U https://mirror.msys2.org/mingw/ucrt64/mingw-w64-ucrt-x86_64-fltk-1.3.8-1-any.pkg.tar.zst
 else
 	sudo apt-get install libfltk1.3-dev libx11-dev
 fi
