@@ -9,12 +9,7 @@ if ! command -v pip > /dev/null; then
 fi
 
 if ! command -v meson > /dev/null; then
-	pip3 install --user meson
-
-
-	script_path=$(cygpath -u $USERPROFILE)/.local/bin
-	echo "export PATH=\$PATH:$script_path" >> ~/.bash_profile
-	source ~/.bash_profile
+	pip3 install meson
 fi
 
 if  command -v pacman > /dev/null ; then
