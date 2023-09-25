@@ -4,12 +4,18 @@ if ! command -v pip > /dev/null; then
 		pacman -S mingw-w64-ucrt-x86_64-python mingw-w64-ucrt-x86_64-python-pip
 	else
 		sudo apt-get install python3 python3-pip python3-setuptools \
-							python3-wheel ninja-build
+							python3-wheel
 	fi
 fi
 
 if ! command -v meson > /dev/null; then
+	if  command -v pacman > /dev/null ; then
+		pacman -S mingw-w64-ucrt-x86_64-ninja
+	else
+		sudo apt-get install ninja-build
+		
 	pip3 install meson
+	fi
 fi
 
 if  command -v pacman > /dev/null ; then
