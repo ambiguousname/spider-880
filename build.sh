@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 python ./src/spider_navigator/navigator.py
 
 /ucrt64/bin/meson compile -C build
