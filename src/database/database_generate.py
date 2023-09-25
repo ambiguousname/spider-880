@@ -38,7 +38,7 @@ class YoungerThan(HouseholdConstraint):
 	@staticmethod
 	def constrain(citizens, other_citizens=None):
 		for citizen in citizens:
-			citizen.age = other_citizens[0].age - random.normal(20)
+			citizen.age = round(other_citizens[0].age - random.normal(20))
 		OlderThanZero.constrain(citizens)
 
 class Family(HouseholdConstraint):
@@ -68,7 +68,7 @@ class OverEighteen(HouseholdConstraint):
 	def constrain(citizens):
 		for citizen in citizens:
 			if citizen.age < 18:
-				citizen.age = 18
+				citizen.age = citizen.age + 18
 
 class AtLeastOne(HouseholdConstraint):
 	@staticmethod
@@ -89,6 +89,8 @@ class SimilarAges(HouseholdConstraint):
 
 	def constrain(citizens, other_citizens):
 		citizens[0].age = (other_citizens[0].age/2) + 7
+		citizens[0].spouse = other_citizens[0].id
+		other_citizens[0].spouse = citizens[0].id
 
 class Married(HouseholdConstraint):
 	@staticmethod
@@ -119,7 +121,21 @@ class MarriedHousehold(HouseholdConstraint):
 		remaining = list(citizens)
 		del remaining[remaining.index(to_marry[0])]
 		del remaining[remaining.index(to_marry[1])]
-		Family.constrain(citizens, [to_marry[0]])
+		Family.constrain(remaining, [to_marry[0]])
+
+class NonMarriedFamily(HouseholdConstraint):
+	@staticmethod
+	def is_constrainted(citizens, other_citizens=None):
+		copy = list(citizens)
+		del copy[0]
+		return Family.is_constrainted(copy, [citizens[0]]) and AtLeastOne.is_constrainted(citizens, OverEighteen)
+	
+	@staticmethod
+	def constrain(citizens, other_citizens=None):
+		copy = list(citizens)
+		del copy[0]
+		Family.constrain(copy, [citizens[0]])
+		AtLeastOne.constrain(citizens, OverEighteen)
 
 citizen_id = 0
 class Citizen():
@@ -130,10 +146,11 @@ class Citizen():
 		self.household = household
 		self.first_name = fake.first_name()
 		self.last_name = fake.last_name()
-		self.age = abs(random.normal(22, 18))
+		self.spouse = None
+		self.age = round(abs(random.normal(22, 18)))
 
 	def get_tuple(self):
-		return (self.id, self.age, self.first_name, self.last_name)
+		return (self.id, self.age, self.first_name, self.last_name, self.spouse)
 
 	def __str__(self):
 		return str(self.get_tuple())
@@ -167,7 +184,7 @@ class Household():
 		if self.family_type == FamilyTypes.MARRIED_FAMILY:
 			MarriedHousehold.constrain(self.citizens)
 		elif self.family_type == FamilyTypes.NOT_MARRIED_FAMILY:
-			AtLeastOne.constrain(self.citizens, OverEighteen)
+			NonMarriedFamily.constrain(self.citizens)
 		elif self.family_type == FamilyTypes.NOT_LIVING_ALONE:
 			OverEighteen.constrain(self.citizens)
 	
@@ -184,7 +201,7 @@ class CitizensDB():
 		self.households = []
 	
 	def generate(self):
-		town_size = round(random.uniform(300, 600))
+		town_size = round(random.uniform(200, 400))
 		for i in range(town_size):
 			self.households.append(Household())
 
