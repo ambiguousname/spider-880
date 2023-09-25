@@ -3,7 +3,7 @@ from numpy import random
 from enum import Enum
 from faker import Faker # https://faker.readthedocs.io/en/master/
 import time
-from math import pow, sqrt
+from math import pow, sqrt, floor
 Faker.seed(time.time())
 fake = Faker()
 
@@ -91,8 +91,6 @@ class SimilarAges(HouseholdConstraint):
 
 	def constrain(citizens, other_citizens):
 		citizens[0].age = (other_citizens[0].age/2) + 7
-		citizens[0].spouse = other_citizens[0].id
-		other_citizens[0].spouse = citizens[0].id
 
 class Married(HouseholdConstraint):
 	@staticmethod
@@ -110,6 +108,9 @@ class Married(HouseholdConstraint):
 			SimilarAges.constrain(citizens, other_citizens)
 		if not OverEighteen.is_constrainted(citizens + other_citizens):
 			OverEighteen.constrain(citizens + other_citizens)
+		
+		citizens[0].spouse = other_citizens[0].id
+		other_citizens[0].spouse = citizens[0].id
 
 class MarriedHousehold(HouseholdConstraint):
 	@staticmethod
@@ -151,11 +152,11 @@ class Citizen():
 		self.household = household
 		self.first_name = fake.first_name()
 		self.last_name = fake.last_name()
-		self.spouse = None
+		self.spouse = "NULL"
 		self.age = round(abs(random.normal(22, 18)))
 
 	def get_tuple(self):
-		return (self.id, self.age, self.first_name, self.last_name, self.spouse)
+		return (self.id, floor(self.age), self.first_name, self.last_name, self.spouse)
 
 	def __str__(self):
 		return str(self.get_tuple())
@@ -206,7 +207,7 @@ class CitizensDB():
 		self.households = []
 	
 	def generate(self):
-		town_size = round(random.uniform(200, 400))
+		town_size = round(random.uniform(200, 300))
 		for i in range(town_size):
 			self.households.append(Household())
 
