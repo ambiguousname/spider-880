@@ -39,7 +39,8 @@ class YoungerThan(HouseholdConstraint):
 	def constrain(citizens, other_citizens=None):
 		for citizen in citizens:
 			citizen.age = round(other_citizens[0].age - random.normal(20))
-		OlderThanZero.constrain(citizens)
+		if not OlderThanZero.is_constrainted(citizens):
+			OlderThanZero.constrain(citizens)
 
 class Family(HouseholdConstraint):
 	@staticmethod
@@ -54,7 +55,8 @@ class Family(HouseholdConstraint):
 		last_name = other_citizens[0].last_name
 		for citizen in citizens:
 			citizen.last_name = last_name
-		YoungerThan.constrain(citizens, other_citizens)
+		if not YoungerThan.is_constrainted(citizens, other_citizens):
+			YoungerThan.constrain(citizens, other_citizens)
 
 class OverEighteen(HouseholdConstraint):
 	@staticmethod
@@ -85,7 +87,7 @@ class AtLeastOne(HouseholdConstraint):
 class SimilarAges(HouseholdConstraint):
 	@staticmethod
 	def is_constrainted(citizens, other_citizens):
-		return sqrt(pow(citizens[0].age - other_citizens[0].age), 2) <= sqrt(citizens[0].age - ((citizens[0].age/2) + 7))
+		return sqrt(pow(citizens[0].age - other_citizens[0].age, 2)) <= sqrt(pow(citizens[0].age - ((citizens[0].age/2) + 7), 2))
 
 	def constrain(citizens, other_citizens):
 		citizens[0].age = (other_citizens[0].age/2) + 7
@@ -102,9 +104,12 @@ class Married(HouseholdConstraint):
 
 	@staticmethod
 	def constrain(citizens, other_citizens=None):
-		Family.constrain(citizens, other_citizens)
-		SimilarAges.constrain(citizens, other_citizens)
-		OverEighteen.constrain(citizens + other_citizens)
+		if not Family.is_constrainted(citizens, other_citizens):
+			Family.constrain(citizens, other_citizens)
+		if not SimilarAges.is_constrainted(citizens, other_citizens):
+			SimilarAges.constrain(citizens, other_citizens)
+		if not OverEighteen.is_constrainted(citizens + other_citizens):
+			OverEighteen.constrain(citizens + other_citizens)
 
 class MarriedHousehold(HouseholdConstraint):
 	@staticmethod
