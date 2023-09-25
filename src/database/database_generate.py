@@ -26,7 +26,7 @@ class OlderThanZero(HouseholdConstraint):
 	@staticmethod
 	def constrain(citizens, other_citizens=None):
 		for citizen in citizens:
-			citizen.age = 0
+			citizen.age = abs(citizen.age)
 
 class YoungerThan(HouseholdConstraint):
 	@staticmethod
@@ -80,7 +80,7 @@ class AtLeastOne(HouseholdConstraint):
 
 	@staticmethod
 	def constrain(citizens, constraint):
-		constraint.constrain(random.choice(citizens))
+		constraint.constrain([random.choice(citizens)])
 
 class SimilarAges(HouseholdConstraint):
 	@staticmethod
@@ -100,7 +100,9 @@ class Married(HouseholdConstraint):
 
 	@staticmethod
 	def constrain(citizens, other_citizens=None):
-		return Family.constrain(citizens, other_citizens) and SimilarAges.constrain(citizens, other_citizens) and OverEighteen.constrain(citizens + other_citizens)
+		Family.constrain(citizens, other_citizens)
+		SimilarAges.constrain(citizens, other_citizens)
+		OverEighteen.constrain(citizens + other_citizens)
 
 class MarriedHousehold(HouseholdConstraint):
 	@staticmethod
@@ -112,16 +114,17 @@ class MarriedHousehold(HouseholdConstraint):
 		return len(spouses) == 2 and Married.is_constrainted(spouses[0], spouses[1]) and Family.is_constrainted(citizens)
 	@staticmethod
 	def constrain(citizens, other_citizens=None):
-		to_marry = random.choice(len(citizens), 2)
-		Married.constrain(citizens[to_marry[0]], citizens[to_marry[1]])
-		married = citizens[to_marry[0]]
-		del citizens[to_marry[0]]
-		del citizens[to_marry[1]]
-		Family.constrain(citizens, married)
+		to_marry = random.choice(citizens, 2, replace=False)
+		Married.constrain([to_marry[0]], [to_marry[1]])
+		remaining = list(citizens)
+		del remaining[remaining.index(to_marry[0])]
+		del remaining[remaining.index(to_marry[1])]
+		Family.constrain(citizens, [to_marry[0]])
 
 citizen_id = 0
 class Citizen():
 	def __init__(self, household):
+		global citizen_id
 		self.id = citizen_id
 		citizen_id += 1
 		self.household = household
@@ -133,7 +136,7 @@ class Citizen():
 		return (self.id, self.age, self.first_name, self.last_name)
 
 	def __str__(self):
-		print(self.get_tuple())
+		return str(self.get_tuple())
 
 class FamilyTypes(Enum):
 	MARRIED_FAMILY=0, #If there is a couple married. Family (i.e., kids) may also be present.
@@ -146,33 +149,34 @@ household_id = 0
 
 class Household():
 	def __init__(self):
+		global household_id
 		self.household_id = household_id
 		household_id += 1
 		self.family_type = random.choice([FamilyTypes.MARRIED_FAMILY, FamilyTypes.NOT_MARRIED_FAMILY, FamilyTypes.LIVING_ALONE, FamilyTypes.NOT_LIVING_ALONE], p=[0.55, 0.16, 0.24, 0.05])
 		self.citizens = []
-		self.family_type = FamilyTypes.LIVING_ALONE
 		num_occupants = 1
 		if self.family_type == FamilyTypes.NOT_LIVING_ALONE:
 			num_occupants = max(round(random.normal(2.63)), 2)
 		
-		if self.family_type == FamilyTypes.MARRIED_FAMILY or self.family_types == FamilyTypes.NOT_MARRIED_FAMILY:
+		if self.family_type == FamilyTypes.MARRIED_FAMILY or self.family_type == FamilyTypes.NOT_MARRIED_FAMILY:
 			num_occupants = max(round(random.normal(3.16)), 2)
 		
 		for i in range(num_occupants):
 			self.citizens.append(Citizen(self))
 		
 		if self.family_type == FamilyTypes.MARRIED_FAMILY:
-			MarriedHousehold.constraint(self.citizens)
+			MarriedHousehold.constrain(self.citizens)
 		elif self.family_type == FamilyTypes.NOT_MARRIED_FAMILY:
 			AtLeastOne.constrain(self.citizens, OverEighteen)
 		elif self.family_type == FamilyTypes.NOT_LIVING_ALONE:
 			OverEighteen.constrain(self.citizens)
 	
 	def __str__(self) -> str:
-		print("Household: ", self.family_type, " - ")
+		house_str = "Household: " + str(self.family_type) + " - \n"
 		for citizen in self.citizens:
-			print(citizen)
-		print("----")
+			house_str += str(citizen) + "\n"
+		house_str += "----"
+		return house_str
 
 
 class CitizensDB():
@@ -180,7 +184,7 @@ class CitizensDB():
 		self.households = []
 	
 	def generate(self):
-		town_size = random.uniform(300, 600)
+		town_size = round(random.uniform(300, 600))
 		for i in range(town_size):
 			self.households.append(Household())
 
@@ -189,23 +193,26 @@ class CitizensDB():
 			print(household)
 
 if __name__ == "__main__":
-	db = sqlite3.connect("citizens.db")
-	cursor = db.cursor()
-	cursor.execute("DROP TABLE IF EXISTS citizens households;")
-	cursor.execute("""""")
-	cursor.execute("""CREATE TABLE citizens (
-			id INT PRIMARY KEY,
-			age INT CHECK(age >= 0),
-			first_name TEXT NOT NULL,
-			last_name TEXT NOT NULL,
-			income INT NOT NULL,
-			household_id INT,
-			FOREIGN KEY(household_id) REFERENCES households(id),
-	);""")
-	cursor.execute("""CREATE TABLE households (
-			id INT PRIMARY KEY,
-			family_status INT NOT NULL CHECK(family_status >= 0 AND family_status <= 3), -- 0: Married w/ Family, 1: Not Married w/ Family, 2: Living Alone, 3: Not Living Alone without family.
-			zip INT NOT NULL, -- Represent as XYZ, where X is the area, Y is the subarea, and Z is the district.
-	);""")
+	db = CitizensDB()
+	db.generate()
+	db.writeValues()
+	# db = sqlite3.connect("citizens.db")
+	# cursor = db.cursor()
+	# cursor.execute("DROP TABLE IF EXISTS citizens households;")
+	# cursor.execute("""""")
+	# cursor.execute("""CREATE TABLE citizens (
+	# 		id INT PRIMARY KEY,
+	# 		age INT CHECK(age >= 0),
+	# 		first_name TEXT NOT NULL,
+	# 		last_name TEXT NOT NULL,
+	# 		income INT NOT NULL,
+	# 		household_id INT,
+	# 		FOREIGN KEY(household_id) REFERENCES households(id),
+	# );""")
+	# cursor.execute("""CREATE TABLE households (
+	# 		id INT PRIMARY KEY,
+	# 		family_status INT NOT NULL CHECK(family_status >= 0 AND family_status <= 3), -- 0: Married w/ Family, 1: Not Married w/ Family, 2: Living Alone, 3: Not Living Alone without family.
+	# 		zip INT NOT NULL, -- Represent as XYZ, where X is the area, Y is the subarea, and Z is the district.
+	# );""")
 
-	db.close()
+	# db.close()

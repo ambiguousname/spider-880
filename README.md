@@ -4,3 +4,4 @@
 - [LibPNG](http://www.libpng.org/pub/png/libpng.html)
 - [Meson](https://mesonbuild.com/)
 - [SQLite >=3.43.1](https://www.sqlite.org/index.html)
+- [Faker](https://faker.readthedocs.io/en/master/)
