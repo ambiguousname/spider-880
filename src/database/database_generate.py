@@ -1,6 +1,6 @@
 import sqlite3
 from numpy import random
-from enum import Enum
+from enum import IntEnum
 from faker import Faker # https://faker.readthedocs.io/en/master/
 import time
 from math import pow, sqrt, floor
@@ -154,14 +154,15 @@ class Citizen():
 		self.last_name = fake.last_name()
 		self.spouse = "NULL"
 		self.age = round(abs(random.normal(22, 18)))
+		self.income = round(abs(random.normal(10000, 5000)))
 
 	def get_tuple(self):
-		return (self.id, floor(self.age), self.first_name, self.last_name, self.spouse)
+		return (self.id, floor(self.age), self.first_name, self.last_name, floor(self.income), self.household.household_id, self.spouse)
 
 	def __str__(self):
 		return str(self.get_tuple())
 
-class FamilyTypes(Enum):
+class FamilyTypes(IntEnum):
 	MARRIED_FAMILY=0, #If there is a couple married. Family (i.e., kids) may also be present.
 	NOT_MARRIED_FAMILY=1, #A couple that isn't married, and may also have kids.
 	LIVING_ALONE=2, # Self explanatory.
@@ -193,6 +194,8 @@ class Household():
 			NonMarriedFamily.constrain(self.citizens)
 		elif self.family_type == FamilyTypes.NOT_LIVING_ALONE:
 			OverEighteen.constrain(self.citizens)
+		
+		self.zip = 000
 	
 	def __str__(self) -> str:
 		house_str = "Household: " + str(self.family_type) + " - \n"
@@ -200,6 +203,9 @@ class Household():
 			house_str += str(citizen) + "\n"
 		house_str += "----"
 		return house_str
+	
+	def get_tuple(self):
+		return (self.household_id, int(self.family_type), self.zip)
 
 
 class CitizensDB():
@@ -211,31 +217,37 @@ class CitizensDB():
 		for i in range(town_size):
 			self.households.append(Household())
 
-	def writeValues(self):
+	def writeValues(self, cursor):
 		for household in self.households:
-			print(household)
+			cursor.executemany("INSERT INTO households (id, family_status, zip) VALUES (?, ?, ?)", [household.get_tuple()])
+			tuples = []
+			for citizen in household.citizens:
+				tuples.append(citizen.get_tuple())
+			cursor.executemany("INSERT INTO citizens (id, age, first_name, last_name, income, household_id, spouse_id) VALUES(?, ?, ?, ?, ?, ?, ?);", tuples)
 
 if __name__ == "__main__":
-	db = CitizensDB()
-	db.generate()
-	db.writeValues()
-	# db = sqlite3.connect("citizens.db")
-	# cursor = db.cursor()
-	# cursor.execute("DROP TABLE IF EXISTS citizens households;")
-	# cursor.execute("""""")
-	# cursor.execute("""CREATE TABLE citizens (
-	# 		id INT PRIMARY KEY,
-	# 		age INT CHECK(age >= 0),
-	# 		first_name TEXT NOT NULL,
-	# 		last_name TEXT NOT NULL,
-	# 		income INT NOT NULL,
-	# 		household_id INT,
-	# 		FOREIGN KEY(household_id) REFERENCES households(id),
-	# );""")
-	# cursor.execute("""CREATE TABLE households (
-	# 		id INT PRIMARY KEY,
-	# 		family_status INT NOT NULL CHECK(family_status >= 0 AND family_status <= 3), -- 0: Married w/ Family, 1: Not Married w/ Family, 2: Living Alone, 3: Not Living Alone without family.
-	# 		zip INT NOT NULL, -- Represent as XYZ, where X is the area, Y is the subarea, and Z is the district.
-	# );""")
+	citizens = CitizensDB()
+	citizens.generate()
+	db = sqlite3.connect("citizens.db")
+	cursor = db.cursor()
+	cursor.execute("DROP TABLE IF EXISTS citizens;")
+	cursor.execute("DROP TABLE IF EXISTS households;")
+	cursor.execute("""CREATE TABLE citizens (
+			id INT PRIMARY KEY,
+			age INT CHECK(age >= 0),
+			first_name TEXT NOT NULL,
+			last_name TEXT NOT NULL,
+			income INT NOT NULL,
+			household_id INT,
+			spouse_id INT,
+			FOREIGN KEY(household_id) REFERENCES households(id)
+	)""")
+	cursor.execute("""CREATE TABLE households (
+			id INT PRIMARY KEY,
+			family_status INT NOT NULL CHECK(family_status >= 0 AND family_status <= 3), -- 0: Married w/ Family, 1: Not Married w/ Family, 2: Living Alone, 3: Not Living Alone without family.
+			zip INT NOT NULL CHECK(zip >= 0 AND zip <= 1000) -- Represent as XYZ, where X is the area, Y is the subarea, and Z is the district.
+	);""")
+	citizens.writeValues(cursor)
+	db.commit()
 
-	# db.close()
+	db.close()
