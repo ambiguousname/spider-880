@@ -195,7 +195,7 @@ class Household():
 		elif self.family_type == FamilyTypes.NOT_LIVING_ALONE:
 			OverEighteen.constrain(self.citizens)
 		
-		self.zip = 000
+		self.zip = floor(random.uniform(0, 999))
 	
 	def __str__(self) -> str:
 		house_str = "Household: " + str(self.family_type) + " - \n"
