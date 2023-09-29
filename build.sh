@@ -1,7 +1,8 @@
 #!/bin/sh
 python ./src/spider_navigator/navigator.py
 
-/ucrt64/bin/meson compile -C build
+# If this doesn't work, add C:/msys64/ucrt64/bin to your PATH
+meson compile -C build
 
 status=$?
 [ $status -ne 0 ] && read -p "meson compile: error $status Press enter to continue..."

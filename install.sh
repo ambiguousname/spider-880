@@ -1,4 +1,5 @@
 #!/bin/sh
+# If you're looking for VS Code integration with Msys, see: https://code.visualstudio.com/docs/cpp/config-mingw
 if ! command -v pip > /dev/null; then
 	if  command -v pacman > /dev/null ; then
 		pacman -S mingw-w64-ucrt-x86_64-python mingw-w64-ucrt-x86_64-python-pip
