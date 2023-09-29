@@ -1,23 +1,25 @@
 #include "database.h"
 #include <stdexcept>
-#include <format>
 
 CitizenDatabase::CitizenDatabase(const char* filename) {
 	sqlite3_open(filename, &database);
 }
 
-static int query_callback(db_callback callback, int argc, char** argv, char** azColName) {
+template<class T>
+static int query_callback(db_callback<T> callback, int argc, char** argv, char** azColName) {
+	T columns;
 	for (int i = 0; i < argc; i++) {
-		columns.cols[azColName[i]] = argv[i];
+		columns.update(azColName[i], argv[i]);
 	}
-	callback();
+	callback(columns);
 	return 0;
 }
 
-void CitizenDatabase::query(const char *query_text, db_callback callback) {
+template<class T>
+void CitizenDatabase::query(const char *query_text, db_callback<T> callback) {
 	char *errMessage = 0;
-	int code = sqlite3_exec(database, query_text, query_callback, &columns, &errMessage);
-	if (errMessage > 0) {
+	int code = sqlite3_exec(database, query_text, query_callback, callback, &errMessage);
+	if (code != SQLITE_OK) {
 		throw std::runtime_error(std::format("SQL Error: {}", errMessage));
 	}
 }

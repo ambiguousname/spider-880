@@ -1,5 +1,6 @@
 #pragma once
 #include <sqlite3.h>
+#include <concepts>
 
 class SQLColumns {
 	protected:
@@ -12,12 +13,13 @@ class Citizen : SQLColumns {
 };
 
 
-template<typename T>
-typedef void (*db_callback)(T* columns);
+template<class ColType> requires std::derived_from<ColType, SQLColumns>
+using db_callback = void (*)(ColType* columns);
 
 class CitizenDatabase {
 	sqlite3 *database;
-	void query(const char* query_text, db_callback callback);
+	template<class T>
+	void query(const char* query_text, db_callback<T> callback);
 	public:
 	CitizenDatabase(const char* filename);
 	void QueryCitizen();
