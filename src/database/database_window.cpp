@@ -19,7 +19,7 @@ std::string selectIncome(int tier, int value) {
 	if (tier == 0) {
 		return "SELECT households.* FROM households JOIN citizens ON households.id = citizens.household_id WHERE citizens.income >" + std::to_string(value) + " GROUP BY household_id;";
 	}
-	return "SELECT households.* FROM households JOIN citizens ON households.id = citizens.household_id WHERE citizens.income > X GROUP BY household_id, or for percentile rankings: SELECT households.* FROM (SELECT household_id, PERCENT_RANK() OVER(ORDER BY income) AS Percent FROM citizens JOIN households ON households.id = citizens.household_id) rankings JOIN households ON households.id = rankings.household_id WHERE rankings.Percent > " + std::to_string(value) + " GROUP BY household_id;";
+	return "SELECT households.* FROM households JOIN citizens ON households.id = citizens.household_id WHERE citizens.income > X GROUP BY household_id, or for percentile rankings: SELECT households.* FROM (SELECT household_id, PERCENT_RANK() OVER(ORDER BY income) AS percent FROM citizens JOIN households ON households.id = citizens.household_id) rankings JOIN households ON households.id = rankings.household_id WHERE rankings.percent > " + std::to_string(value) + " GROUP BY household_id;";
 }
 
 std::string selectFamily(int tier, int value) {
