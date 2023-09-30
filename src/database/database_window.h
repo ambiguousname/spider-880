@@ -10,6 +10,9 @@ class DatabaseWindow : public Fl_Window {
 	Fl_Light_Button area;
 	Fl_Light_Button income;
 	Fl_Light_Button family;
+
+	protected:
+	void hide();
 	public:
 	DatabaseWindow(int x, int y, int w, int h);
 };
