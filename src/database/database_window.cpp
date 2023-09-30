@@ -1,7 +1,7 @@
 #include "database_window.h"
 #include "util/hide_all_windows.h"
 
-DatabaseChoice::DatabaseChoice(int x, int y, int w, int h, database_selector first, database_selector second, database_selector third) : choice(x, y, w, h), selectors({first, second, third}) {
+DatabaseChoice::DatabaseChoice(int x, int y, int w, int h, database_selector selector_func) : choice(x, y, w, h), selector(selector_func) {
 	
 }
 
@@ -29,7 +29,7 @@ std::string selectFamily(int tier, int value) {
 	return "SELECT * FROM households WHERE family_status = " + std::to_string(value) + ";";
 }
 
-DatabaseWindow::DatabaseWindow(int x, int y, int w, int h) : Fl_Window(x, y, w, h, "Citizen Database"), citizen_db(), area(0, 0, 100, 20), income(0, 20, 100, 20), family(0, 40, 100, 20), database_display(0, 80, w, h - 80) {
+DatabaseWindow::DatabaseWindow(int x, int y, int w, int h) : Fl_Window(x, y, w, h, "Citizen Database"), citizen_db(), area(0, 0, 100, 20, selectArea), income(0, 20, 100, 20, selectIncome), family(0, 40, 100, 20, selectFamily), database_display(0, 80, w, h - 80) {
 	resizable(this);
 	end();
 }

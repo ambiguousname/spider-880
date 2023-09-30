@@ -10,8 +10,8 @@ typedef std::string (*database_selector)(int tier, int value);
 
 struct DatabaseChoice {
 	Fl_Choice choice;
-	database_selector selectors[3];
-	DatabaseChoice(int x, int y, int w, int h, database_selector first, database_selector second, database_selector third);
+	database_selector selector;
+	DatabaseChoice(int x, int y, int w, int h, database_selector selector_func);
 };
 
 class DatabaseWindow : public Fl_Window {
