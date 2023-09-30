@@ -27,8 +27,9 @@ fi
 
 if command -v pacman > /dev/null; then
 	pacman -S mingw-w64-ucrt-x86_64-sqlite3
+	 pacman -S libsqlite-devel
 else
-	sudo apt install sqlite3 
+	sudo apt install sqlite3 libsqlite3-dev
 fi
 
 meson setup build

@@ -1,1 +1,1 @@
-databaselib = static_library('database', ['database.cpp'])
+databaselib = static_library('database', ['database.cpp', 'database_window.cpp'])

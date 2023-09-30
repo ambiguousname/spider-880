@@ -7,6 +7,7 @@ flags = run_command('fltk-config', '--ldflags')
 
 links = flags.stdout().strip().split(' ')
 links += '-lfltk_images'
+links += '-lsqlite3'
 
 
 incdir = include_directories('./spider_navigator/pages')
