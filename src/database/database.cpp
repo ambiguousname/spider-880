@@ -20,11 +20,12 @@ void CitizenDatabase::query(const char *query_text, db_callback<T> callback) {
 	char *errMessage = 0;
 	int code = sqlite3_exec(database, query_text, query_callback, callback, &errMessage);
 	if (code != SQLITE_OK) {
-		throw std::runtime_error(errMessage);
+		char* msg = errMessage;
+		sqlite3_free(errMessage); 
+		throw std::runtime_error(msg);
 	}
 }
 
 CitizenDatabase::~CitizenDatabase() {
-	sqlite3_free(database);
-	delete database;
+	sqlite3_close(database);
 }
