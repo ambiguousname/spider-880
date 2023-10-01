@@ -4,9 +4,11 @@
 #include <murder_blog/index.h>
 
 int main(int argc, char **argv) {
-	DatabaseWindow* db = new DatabaseWindow(100, 100, 300, 300);
+	int x, y, w, h;
+	Fl::screen_work_area(x, y, w, h);
+	DatabaseWindow* db = new DatabaseWindow(x + w/2, y + h/4, 300, 300);
 	db->show();
-	MurderBlogIndexHTMLWindow* page = new MurderBlogIndexHTMLWindow(0, 0, 300, 300);
+	MurderBlogIndexHTMLWindow* page = new MurderBlogIndexHTMLWindow(x + w/4, y + h/4, 300, 300);
 	page->show();
 
 	Fl::run();

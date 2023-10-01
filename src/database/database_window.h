@@ -4,14 +4,29 @@
 #include <FL/Fl_Table.H>
 #include <memory>
 #include <string>
+#include <vector>
 #include "database.h"
 
 typedef std::string (*database_selector)(int tier, int value);
+typedef int (*database_choice)();
+
+struct ChoiceOptions {
+	std::string name;
+	int value;
+};
+
+struct ChoiceCategory {
+	std::string name;
+	std::vector<ChoiceOptions> options;
+};
 
 struct DatabaseChoice {
 	Fl_Choice choice;
 	database_selector selector;
-	DatabaseChoice(int x, int y, int w, int h, database_selector selector_func);
+	std::string label_text;
+	ChoiceCategory categories[3];
+
+	DatabaseChoice(int x, int y, int w, int h, database_selector selector_func, ChoiceCategory choice_categories[3]);
 };
 
 class DatabaseWindow : public Fl_Window {
