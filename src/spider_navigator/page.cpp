@@ -13,7 +13,7 @@ HTMLWindow::HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int 
 		label(title.c_str());
 	}
 	scrollbar = new Fl_Scroll(0, 0, w, h);
-	page = new HTMLPage(root, std::shared_ptr<HTMLWindow>(this), 0, 0, w - 20, h);
+	page = new HTMLPage(root, std::shared_ptr<HTMLWindow>(this), 20, 0, w - 20, h);
 	scrollbar->end();
 
 	resizable(this);

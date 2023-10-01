@@ -48,9 +48,6 @@ class DatabaseWindow : public Fl_Window {
 
 	Fl_Button search_button;
 	Fl_Table database_display;
-
-	protected:
-	void hide();
 	public:
 	void updateCategories(int tier);
 	int getCategoryTier() const { return category_tier; }

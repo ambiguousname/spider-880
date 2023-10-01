@@ -1,5 +1,5 @@
 #include "database_window.h"
-#include "util/hide_all_windows.h"
+#include "util/window_management.h"
 
 DatabaseChoice::DatabaseChoice(int x, int y, int w, int h, database_selector selector_func, ChoiceCategory choice_categories[3]) : Fl_Choice(x, y, w, h), selector(selector_func) {
 
@@ -18,6 +18,7 @@ void DatabaseChoice::selectCategory(int index) {
 		// TODO: I doubt this works.
 		int negative = -1;
 		add(categories[index].name.c_str(), 0, update, &negative);
+		value(1);
 		for (ChoiceOptions option : categories[index].options) {
 			add(option.name.c_str(), 0, update, &option.value);
 		}
@@ -177,6 +178,7 @@ ChoiceCategory income_arr[3] = {income_range, income_percent, income_percent_fin
 ChoiceCategory family_arr[3] = {family_married, family_spouse, family_count};
 
 DatabaseWindow::DatabaseWindow(int x, int y, int w, int h) : Fl_Window(x, y, w, h, "Citizen Database"), citizen_db(), choices{new DatabaseChoice(100, 0, w - 100, 20, selectArea, area_arr), new DatabaseChoice(100, 20, w - 100, 20, selectIncome, income_arr), new DatabaseChoice(100, 40, w - 100, 20, selectFamily, family_arr)}, search_button(0, 60, w, 20, "Search"), database_display(0, 80, w, h - 80) {
+	callback(WindowManagement::essential_hide);
 	updateCategories(category_tier);
 	resizable(this);
 	end();
@@ -193,11 +195,4 @@ void DatabaseWindow::updateCategories(int tier) {
 	for (DatabaseChoice* i : choices) {
 		i->selectCategory(category_tier);
 	}
-}
-
-
-
-void DatabaseWindow::hide() {
-	Fl_Window::hide();
-	hide_all_windows();
 }
