@@ -29,15 +29,19 @@ class DatabaseChoice : public Fl_Choice {
 	int current_option_value = -1;
 	bool categoryLocked = false;
 	ChoiceCategory categories[3];
+	std::vector<int*> options_val_store;
 
 	database_selector selector;
 	std::string label_text;
 	
 	static void update(Fl_Widget * self, void* option);
+
+	void clearStore();
 	public:
 	int getCategory() const {return current_category; }
 	void selectCategory(int index);
 	DatabaseChoice(int x, int y, int w, int h, database_selector selector_func, ChoiceCategory choice_categories[3]);
+	~DatabaseChoice();
 };
 
 class DatabaseWindow : public Fl_Window {

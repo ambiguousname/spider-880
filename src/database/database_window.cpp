@@ -10,18 +10,32 @@ DatabaseChoice::DatabaseChoice(int x, int y, int w, int h, database_selector sel
 	label(label_text.c_str());
 }
 
+DatabaseChoice::~DatabaseChoice() {
+	clearStore();
+}
+
+void DatabaseChoice::clearStore() {
+	for (int* val : options_val_store) {
+		delete val;
+	}
+	options_val_store.clear();
+}
+
 void DatabaseChoice::selectCategory(int index) {
 	if (!categoryLocked) {
 		current_category = index;
 		clear();
+		clearStore();
 		label_text = std::string("Tier ") + std::to_string(index) + " " + categories[index].name + ":";
-		// TODO: I doubt this works.
-		int negative = -1;
-		add(categories[index].name.c_str(), 0, update, &negative);
-		value(1);
+		static int negative = -1;
+		add("No Selection", 0, update, &negative);
 		for (ChoiceOptions option : categories[index].options) {
-			add(option.name.c_str(), 0, update, &option.value);
+			int* val = new int(option.value);
+			options_val_store.push_back(val);
+			add(option.name.c_str(), 0, update, val);
 		}
+		
+		value(0);
 	}
 }
 
@@ -36,7 +50,7 @@ void DatabaseChoice::update(Fl_Widget* s, void* option) {
 		if (value == -1) {
 			self->categoryLocked = false;
 			tier -= 1;
-		} else {
+		} else if (!self->categoryLocked) {
 			self->categoryLocked = true;
 			tier += 1;
 		}
