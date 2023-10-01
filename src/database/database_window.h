@@ -46,9 +46,8 @@ class DatabaseWindow : public Fl_Window {
 	DatabaseChoice* choices[3];
 	int category_tier = 0;
 
-	Fl_Table database_display;
-
 	Fl_Button search_button;
+	Fl_Table database_display;
 
 	protected:
 	void hide();

@@ -3,7 +3,9 @@
 
 DatabaseChoice::DatabaseChoice(int x, int y, int w, int h, database_selector selector_func, ChoiceCategory choice_categories[3]) : Fl_Choice(x, y, w, h), selector(selector_func) {
 
-	memcpy(choice_categories, categories, sizeof(choice_categories));
+	for (int i = 0; i < 3; i++) {
+		categories[i] = choice_categories[i];
+	}
 	
 	label(label_text.c_str());
 }
@@ -168,7 +170,13 @@ std::string selectFamily(int tier, int value) {
 
 #pragma endregion SQL_Definitions
 
-DatabaseWindow::DatabaseWindow(int x, int y, int w, int h) : Fl_Window(x, y, w, h, "Citizen Database"), citizen_db(), choices({new DatabaseChoice(100, 0, w - 100, 20, selectArea, (ChoiceCategory[]){{"Area", area_options}, {"District", area_options}, {"Subdistrict", area_options}}), new DatabaseChoice(100, 20, w - 100, 20, selectIncome, (ChoiceCategory[]){income_range, income_percent, income_percent_fine}), new DatabaseChoice(100, 40, w - 100, 20, selectFamily, (ChoiceCategory[]){family_married, family_spouse, family_count})}), search_button(0, 60, w, 20, "Search"), database_display(0, 80, w, h - 80) {
+ChoiceCategory area_arr[3] = {{"Area", area_options}, {"District", area_options}, {"Subdistrict", area_options}};
+
+ChoiceCategory income_arr[3] = {income_range, income_percent, income_percent_fine};
+
+ChoiceCategory family_arr[3] = {family_married, family_spouse, family_count};
+
+DatabaseWindow::DatabaseWindow(int x, int y, int w, int h) : Fl_Window(x, y, w, h, "Citizen Database"), citizen_db(), choices{new DatabaseChoice(100, 0, w - 100, 20, selectArea, area_arr), new DatabaseChoice(100, 20, w - 100, 20, selectIncome, income_arr), new DatabaseChoice(100, 40, w - 100, 20, selectFamily, family_arr)}, search_button(0, 60, w, 20, "Search"), database_display(0, 80, w, h - 80) {
 	updateCategories(category_tier);
 	resizable(this);
 	end();
