@@ -1,15 +1,36 @@
 #include "database_window.h"
 #include "util/hide_all_windows.h"
 
-DatabaseChoice::DatabaseChoice(int x, int y, int w, int h, database_selector selector_func, ChoiceCategory choice_categories[3]) : choice(x, y, w, h), selector(selector_func) {
-	choice.label(label_text.c_str());
+void databaseCallback(Fl_Widget* widget, void*) {
+	((DatabaseChoice*)widget)->update();
+}
+
+DatabaseChoice::DatabaseChoice(int x, int y, int w, int h, database_selector selector_func, ChoiceCategory choice_categories[3]) : Fl_Choice(x, y, w, h), selector(selector_func) {
+	callback(databaseCallback);
 
 	memcpy(choice_categories, categories, sizeof(choice_categories));
 	
-	label_text = std::string("Tier 0 ") + categories[0].name + ":";
+	selectCategory(0);
+	label(label_text.c_str());
+}
+
+void DatabaseChoice::selectCategory(int index) {
+	clear();
+	label_text = std::string("Tier ") + std::to_string(index) + " " + categories[index].name + ":";
+	add(categories[index].name.c_str());
+	for (auto i : categories[index].options) {
+		add(i.name.c_str());
+	}
+}
+
+void DatabaseChoice::update() {
+	
+	label_text = std::string("Tier ");
 }
 
 // TODO: Combine with INTERSECT statements.
+
+#pragma region SQL_Definitions
 
 // TODO: Area/District/Subdistrict names.
 std::vector<ChoiceOptions> area_options {{"0", 0}, {"1", 1}, {"2", 2}, {"3", 3}, {"4", 4}, {"5", 5}, {"6", 6}, {"7", 7}, {"8", 8}, {"9", 9}};
@@ -132,7 +153,9 @@ std::string selectFamily(int tier, int value) {
 	return "SELECT * FROM households WHERE family_status = " + std::to_string(value);
 }
 
-DatabaseWindow::DatabaseWindow(int x, int y, int w, int h) : Fl_Window(x, y, w, h, "Citizen Database"), citizen_db(), area(100, 0, w - 100, 20, selectArea, (ChoiceCategory[]){{"Area", area_options}, {"District", area_options}, {"Subdistrict", area_options}}), income(100, 20, w - 100, 20, selectIncome, (ChoiceCategory[]){income_range, income_percent, income_percent_fine}), family(100, 40, w - 100, 20, selectFamily, (ChoiceCategory[]){family_married, family_spouse, family_count}), database_display(0, 80, w, h - 80) {
+#pragma endregion SQL_Definitions
+
+DatabaseWindow::DatabaseWindow(int x, int y, int w, int h) : Fl_Window(x, y, w, h, "Citizen Database"), citizen_db(), area(100, 0, w - 100, 20, selectArea, (ChoiceCategory[]){{"Area", area_options}, {"District", area_options}, {"Subdistrict", area_options}}), income(100, 20, w - 100, 20, selectIncome, (ChoiceCategory[]){income_range, income_percent, income_percent_fine}), family(100, 40, w - 100, 20, selectFamily, (ChoiceCategory[]){family_married, family_spouse, family_count}), search_button(0, 60, w, 20, "Search"), database_display(0, 80, w, h - 80) {
 	resizable(this);
 	end();
 }

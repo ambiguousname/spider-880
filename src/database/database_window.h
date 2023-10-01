@@ -2,6 +2,7 @@
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Table.H>
+#include <FL/Fl_Button.H>
 #include <memory>
 #include <string>
 #include <vector>
@@ -20,12 +21,15 @@ struct ChoiceCategory {
 	std::vector<ChoiceOptions> options;
 };
 
-struct DatabaseChoice {
-	Fl_Choice choice;
+class DatabaseChoice : public Fl_Choice {
 	database_selector selector;
 	std::string label_text;
 	ChoiceCategory categories[3];
 
+	protected:
+	void selectCategory(int index);
+	public:
+	void update();
 	DatabaseChoice(int x, int y, int w, int h, database_selector selector_func, ChoiceCategory choice_categories[3]);
 };
 
@@ -38,6 +42,8 @@ class DatabaseWindow : public Fl_Window {
 	DatabaseChoice family; // SELECT * FROM households WHERE family_status = X, SELECT households.* FROM households JOIN citizens ON households.id = citizens.household_id GROUP BY household_id HAVING count(household_id) > X
 
 	Fl_Table database_display;
+
+	Fl_Button search_button;
 
 	protected:
 	void hide();
