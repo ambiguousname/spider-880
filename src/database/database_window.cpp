@@ -1,31 +1,44 @@
 #include "database_window.h"
 #include "util/hide_all_windows.h"
 
-void databaseCallback(Fl_Widget* widget, void*) {
-	((DatabaseChoice*)widget)->update();
-}
-
 DatabaseChoice::DatabaseChoice(int x, int y, int w, int h, database_selector selector_func, ChoiceCategory choice_categories[3]) : Fl_Choice(x, y, w, h), selector(selector_func) {
-	callback(databaseCallback);
 
 	memcpy(choice_categories, categories, sizeof(choice_categories));
 	
-	selectCategory(0);
 	label(label_text.c_str());
 }
 
 void DatabaseChoice::selectCategory(int index) {
-	clear();
-	label_text = std::string("Tier ") + std::to_string(index) + " " + categories[index].name + ":";
-	add(categories[index].name.c_str());
-	for (auto i : categories[index].options) {
-		add(i.name.c_str());
+	if (!categoryLocked) {
+		current_category = index;
+		clear();
+		label_text = std::string("Tier ") + std::to_string(index) + " " + categories[index].name + ":";
+		// TODO: I doubt this works.
+		int negative = -1;
+		add(categories[index].name.c_str(), 0, update, &negative);
+		for (ChoiceOptions option : categories[index].options) {
+			add(option.name.c_str(), 0, update, &option.value);
+		}
 	}
 }
 
-void DatabaseChoice::update() {
+void DatabaseChoice::update(Fl_Widget* s, void* option) {
+	int value = (*static_cast<int*>(option));
 	
-	label_text = std::string("Tier ");
+	DatabaseChoice* self = static_cast<DatabaseChoice*>(s);
+	if (value != self->current_option_value){
+		self->current_option_value = value;
+		DatabaseWindow* parent = static_cast<DatabaseWindow*>(self->parent());
+		int tier = parent->getCategoryTier();
+		if (value == -1) {
+			self->categoryLocked = false;
+			tier -= 1;
+		} else {
+			self->categoryLocked = true;
+			tier += 1;
+		}
+		parent->updateCategories(tier);
+	}
 }
 
 // TODO: Combine with INTERSECT statements.
@@ -155,10 +168,26 @@ std::string selectFamily(int tier, int value) {
 
 #pragma endregion SQL_Definitions
 
-DatabaseWindow::DatabaseWindow(int x, int y, int w, int h) : Fl_Window(x, y, w, h, "Citizen Database"), citizen_db(), area(100, 0, w - 100, 20, selectArea, (ChoiceCategory[]){{"Area", area_options}, {"District", area_options}, {"Subdistrict", area_options}}), income(100, 20, w - 100, 20, selectIncome, (ChoiceCategory[]){income_range, income_percent, income_percent_fine}), family(100, 40, w - 100, 20, selectFamily, (ChoiceCategory[]){family_married, family_spouse, family_count}), search_button(0, 60, w, 20, "Search"), database_display(0, 80, w, h - 80) {
+DatabaseWindow::DatabaseWindow(int x, int y, int w, int h) : Fl_Window(x, y, w, h, "Citizen Database"), citizen_db(), choices({new DatabaseChoice(100, 0, w - 100, 20, selectArea, (ChoiceCategory[]){{"Area", area_options}, {"District", area_options}, {"Subdistrict", area_options}}), new DatabaseChoice(100, 20, w - 100, 20, selectIncome, (ChoiceCategory[]){income_range, income_percent, income_percent_fine}), new DatabaseChoice(100, 40, w - 100, 20, selectFamily, (ChoiceCategory[]){family_married, family_spouse, family_count})}), search_button(0, 60, w, 20, "Search"), database_display(0, 80, w, h - 80) {
+	updateCategories(category_tier);
 	resizable(this);
 	end();
 }
+
+DatabaseWindow::~DatabaseWindow() {
+	for (DatabaseChoice* i : choices) {
+		delete i;
+	}
+}
+
+void DatabaseWindow::updateCategories(int tier) {
+	category_tier = tier;
+	for (DatabaseChoice* i : choices) {
+		i->selectCategory(category_tier);
+	}
+}
+
+
 
 void DatabaseWindow::hide() {
 	Fl_Window::hide();
