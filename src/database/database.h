@@ -1,6 +1,7 @@
 #pragma once
 #include <sqlite3.h>
 #include <memory>
+#include <vector>
 #include <concepts>
 // TODO: I wonder if there's some kind of C++ variant that allows for macros before compiling?
 // I think having a language that pre-compiles into C++ would be suuuuper useful for readability and editing.
@@ -13,13 +14,15 @@ class SQLColumns {
 	protected:
 	// Return a pointer to the smart pointer to set its value.
 	virtual column_key* getValuePtr(std::string key);
+	public:
 	void update(char* key, char* value);
 	column_key id;
 };
 
-class Citizen : SQLColumns {
+class Citizen : public SQLColumns {
 	protected:
 	column_key* getValuePtr(std::string key) override;
+	public:
 	column_key age;
 	column_key first_name;
 	column_key last_name;
@@ -28,23 +31,19 @@ class Citizen : SQLColumns {
 	column_key spouse_id;
 };
 
-class Household : SQLColumns {
+class Household : public SQLColumns {
 	protected:
 	column_key* getValuePtr(std::string key) override;
+	public:
 	column_key family_status;
 	column_key zip;
 };
 
-
-template<class ColType> requires std::derived_from<ColType, SQLColumns>
-using db_callback = void (*)(ColType* columns);
-
 class CitizenDatabase {
 	sqlite3 *database;
-	template<class T>
-	void query(const char* query_text, db_callback<T> callback);
 	public:
 	CitizenDatabase(const char* filename);
-	void QueryCitizen();
+	template<class T> requires std::derived_from<T, SQLColumns>
+	std::vector<std::shared_ptr<T>> Query(const char* query);
 	~CitizenDatabase();
 };

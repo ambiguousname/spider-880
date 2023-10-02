@@ -10,8 +10,11 @@ status=$?
 # TODO: Move into meson.build file?
 cp /ucrt64/bin/libfltk.dll /ucrt64/bin/libfltk_images.dll /ucrt64/bin/libpng16-16.dll --target=./build/src/ 
 
+cp ./src/database/citizens.db --target=./build/src
+
 cp -r ./assets/ --target=./build/src
 
-gdb ./build/src/spider-880.exe
+cd ./build/src/
+gdb spider-880.exe
 status=$?
 [ $status -ne 0 ] && read -p ".exe: error $status Press enter to exit..."

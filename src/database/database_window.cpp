@@ -58,13 +58,13 @@ void DatabaseChoice::update(Fl_Widget* s, void* option) {
 	}
 }
 
-// TODO: Combine with INTERSECT statements.
 
 #pragma region SQL_Definitions
 
 // TODO: Area/District/Subdistrict names.
 std::vector<ChoiceOptions> area_options {{"0", 0}, {"1", 1}, {"2", 2}, {"3", 3}, {"4", 4}, {"5", 5}, {"6", 6}, {"7", 7}, {"8", 8}, {"9", 9}};
 
+// TODO: Make these binding instead.
 std::string selectArea(int tier, int value) {
 	std::string base_selector = "SELECT * FROM households WHERE SUBSTRING(households.zip, " + std::to_string(tier + 1) + ", 1) = '" + std::to_string(value) + "'";
 	if (value == 0) {
@@ -73,7 +73,6 @@ std::string selectArea(int tier, int value) {
 	return base_selector;
 }
 
-// TODO: This needs to be fixed for a potential range of income values.
 // Integer formating: 1 byte for HIGH (1-255), 1 byte for LOW (1-255), so the byte formatting is: LOWHIGH on an integer.
 
 ChoiceCategory income_range {
@@ -191,9 +190,11 @@ ChoiceCategory income_arr[3] = {income_range, income_percent, income_percent_fin
 
 ChoiceCategory family_arr[3] = {family_married, family_spouse, family_count};
 
-DatabaseWindow::DatabaseWindow(int x, int y, int w, int h) : Fl_Window(x, y, w, h, "Citizen Database"), citizen_db(), choices{new DatabaseChoice(100, 0, w - 100, 20, selectArea, area_arr), new DatabaseChoice(100, 20, w - 100, 20, selectIncome, income_arr), new DatabaseChoice(100, 40, w - 100, 20, selectFamily, family_arr)}, search_button(0, 60, w, 20, "Search"), database_display(0, 80, w, h - 80) {
+DatabaseWindow::DatabaseWindow(int x, int y, int w, int h) : Fl_Window(x, y, w, h, "Citizen Database"), citizen_db(new CitizenDatabase("citizens.db")), choices{new DatabaseChoice(100, 0, w - 100, 20, selectArea, area_arr), new DatabaseChoice(100, 20, w - 100, 20, selectIncome, income_arr), new DatabaseChoice(100, 40, w - 100, 20, selectFamily, family_arr)}, search_button(0, 60, w, 20, "Search"), database_display(0, 80, w, h - 80) {
 	callback(WindowManagement::essential_hide);
 	updateCategories(category_tier);
+	search_button.callback(search, this);
+
 	resizable(this);
 	end();
 }
@@ -208,5 +209,56 @@ void DatabaseWindow::updateCategories(int tier) {
 	category_tier = tier;
 	for (DatabaseChoice* i : choices) {
 		i->selectCategory(category_tier);
+	}
+}
+
+void DatabaseWindow::search(Fl_Widget*, void* s) {
+	DatabaseWindow* self = static_cast<DatabaseWindow*>(s);
+	std::vector<std::string> search_text;
+
+	for (auto choice : self->choices) {
+		std::string sql = choice->getSQLString();
+		if (sql != "") {
+			search_text.push_back(sql);
+		}
+	}
+
+	std::string full_search_text = "";
+	for (int i = 0; i < search_text.size(); i++) {
+		full_search_text += search_text[i];
+		if (i < search_text.size() - 1) {
+			full_search_text += " INTERSECT ";
+		}
+	}
+	std::vector<std::shared_ptr<Household>> households = self->citizen_db->Query<Household>(full_search_text.c_str());
+
+
+	self->database_display.clear();
+	const int widths[] = {100, 200, 0};
+	self->database_display.column_widths(widths);
+	self->database_display.column_char('\t');
+	self->database_display.type(FL_HOLD_BROWSER);
+	self->database_display.add("ID\tFAMILY_STATUS\tZIP");
+
+	for (auto household : households) {
+		char buf[80];
+		const char* family_status = 0;
+		std::string status = *household->family_status;
+		if (status == "0") {
+			family_status = "Married w/ Family";
+		} else if (status == "1") {
+			family_status = "Unmarried W/ Family";
+		} else if (status == "2") {
+			family_status = "Living Alone";
+		} else if (status == "3") {
+			family_status = "Not Living Alone";
+		}
+
+		std::string id = *household->id;
+		std::string zip = *household->zip;
+
+		sprintf(buf, "%s\t%s\t%s", id.c_str(), family_status, zip.c_str());
+		self->database_display.add(buf);
+		self->database_display.redraw();
 	}
 }

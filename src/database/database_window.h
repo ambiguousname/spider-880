@@ -1,7 +1,7 @@
 #pragma once
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Choice.H>
-#include <FL/Fl_Table.H>
+#include <FL/Fl_Browser.H>
 #include <FL/Fl_Button.H>
 #include <memory>
 #include <string>
@@ -40,18 +40,22 @@ class DatabaseChoice : public Fl_Choice {
 	public:
 	int getCategory() const {return current_category; }
 	void selectCategory(int index);
+	std::string getSQLString() { if (current_option_value == -1) { return ""; } else { return selector(current_category, current_option_value); } }
 	DatabaseChoice(int x, int y, int w, int h, database_selector selector_func, ChoiceCategory choice_categories[3]);
 	~DatabaseChoice();
 };
 
 class DatabaseWindow : public Fl_Window {
+	protected:
 	std::unique_ptr<CitizenDatabase> citizen_db;
 	
 	DatabaseChoice* choices[3];
 	int category_tier = 0;
 
 	Fl_Button search_button;
-	Fl_Table database_display;
+	Fl_Browser database_display;
+
+	static void search(Fl_Widget* button, void* self);
 	public:
 	void updateCategories(int tier);
 	int getCategoryTier() const { return category_tier; }
