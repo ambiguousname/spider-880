@@ -229,7 +229,7 @@ void DatabaseWindow::search(Fl_Widget*, void* s) {
 	}
 
 	std::string full_search_text = "";
-	for (auto i = 0; i < search_text.size(); i++) {
+	for (long long unsigned int i = 0; i < search_text.size(); i++) {
 		full_search_text += search_text[i];
 		if (i < search_text.size() - 1) {
 			full_search_text += " INTERSECT ";
@@ -265,7 +265,7 @@ void DatabaseWindow::search(Fl_Widget*, void* s) {
 	}
 }
 
-const int citizen_widths[] = {40, 40, 70, 70, 70, 45, 0};
+const int citizen_widths[] = {40, 40, 70, 70, 70, 50, 0};
 void DatabaseWindow::selected(Fl_Widget* widget, void* parent) {
 	DatabaseWindow* self = static_cast<DatabaseWindow*>(parent);
 	Fl_Browser* browser = static_cast<Fl_Browser*>(widget);
