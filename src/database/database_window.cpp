@@ -74,15 +74,15 @@ std::string selectArea(int tier, int value) {
 	return base_selector;
 }
 
-// Integer formating: 1 byte for HIGH (1-255), 1 byte for LOW (1-255), so the byte formatting is: LOWHIGH on an integer.
+// Integer formating: 1 byte for HIGH (1-255), 1 byte for LOW (1-255), so the byte formatting is: HIGHLOW on an integer.
 
 ChoiceCategory income_range {
 	"Income",
 	{
-		{"<$5k", 0b0000000000000101},
-		{"$5k-$10k", 0b0000010100001010},
-		{"$10k-$20k", 0b0000101000010100},
-		{">$20k", 0b0001010011111111}
+		{"<$5k", 0b0000010100000000},
+		{"$10k-$5k", 0b0000101000000101},
+		{"$20k-$10k",0b0001010000001010},
+		{">$20k", 0b1111111100010100}
 	}
 };
 
@@ -128,10 +128,10 @@ ChoiceCategory income_percent_fine {
 };
 
 std::string selectIncome(int tier, int value) {
-	int low = (value >> 1) & 0b11111111;
-	int high = value & 0b11111111;
+	int high = (value >> 8) & 0b11111111;
+	int low = value & 0b11111111;
 	if (tier == 0) {
-		return "SELECT households.* FROM households JOIN citizens ON households.id = citizens.household_id WHERE citizens.income > " + std::to_string(low) + " AND citizens.income < " + std::to_string(high) + " GROUP BY household_id";
+		return "SELECT households.* FROM households JOIN citizens ON households.id = citizens.household_id WHERE citizens.income > " + std::to_string(low * 1000) + " AND citizens.income < " + std::to_string(high * 1000) + " GROUP BY household_id";
 	}
 	return "SELECT households.* FROM (SELECT household_id, PERCENT_RANK() OVER(ORDER BY income) AS percent FROM citizens JOIN households ON households.id = citizens.household_id) rankings JOIN households ON households.id = rankings.household_id WHERE rankings.percent > " + std::to_string(low) + " AND rankings.percent < " + std::to_string(high) + " GROUP BY household_id";
 }
