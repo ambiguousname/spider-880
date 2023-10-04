@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
 
 	WindowManagement::set_main(main_window);
 
-	DatabaseWindow* db = new DatabaseWindow(x + 3 * w/4, y + h/4, 350, 300);
+	DatabaseWindow* db = new DatabaseWindow(x + 3 * w/4, y + h/4, 400, 300);
 	db->show();
 	MurderBlogIndexHTMLWindow* page = new MurderBlogIndexHTMLWindow(x + w/4, y + h/4, 300, 300);
 	page->show();

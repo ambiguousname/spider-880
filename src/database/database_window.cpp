@@ -183,19 +183,23 @@ std::string selectFamily(int tier, int value) {
 	return "SELECT * FROM households WHERE family_status = " + std::to_string(value);
 }
 
-#pragma endregion SQL_Definitions
-
 ChoiceCategory area_arr[3] = {{"Area", area_options}, {"District", area_options}, {"Subdistrict", area_options}};
 
 ChoiceCategory income_arr[3] = {income_range, income_percent, income_percent_fine};
 
 ChoiceCategory family_arr[3] = {family_married, family_spouse, family_count};
 
+#pragma endregion SQL_Definitions
+
+const int database_widths[] = {40, 150, 0};
 DatabaseWindow::DatabaseWindow(int x, int y, int w, int h) : Fl_Window(x, y, w, h, "Citizen Database"), citizen_db(new CitizenDatabase("citizens.db")), choices{new DatabaseChoice(100, 0, w - 100, 20, selectArea, area_arr), new DatabaseChoice(100, 20, w - 100, 20, selectIncome, income_arr), new DatabaseChoice(100, 40, w - 100, 20, selectFamily, family_arr)}, search_button(0, 60, w, 20, "Search"), database_display(0, 80, w, h - 80) {
+	database_display.column_widths(database_widths);
+	database_display.type(FL_HOLD_BROWSER);
+
 	callback(WindowManagement::essential_hide);
 	updateCategories(category_tier);
 	search_button.callback(search, this);
-
+	database_display.callback(selected, this);
 	resizable(this);
 	end();
 }
@@ -211,14 +215,6 @@ void DatabaseWindow::updateCategories(int tier) {
 	for (DatabaseChoice* i : choices) {
 		i->selectCategory(category_tier);
 	}
-}
-
-void DatabaseWindow::draw() {
-	const int widths[] = {40, 150, 0};
-	database_display.column_widths(widths);
-	database_display.column_char('\t');
-	database_display.type(FL_HOLD_BROWSER);
-	Fl_Window::draw();
 }
 
 void DatabaseWindow::search(Fl_Widget*, void* s) {
@@ -241,12 +237,12 @@ void DatabaseWindow::search(Fl_Widget*, void* s) {
 	}
 	std::vector<std::shared_ptr<Household>> households = self->citizen_db->Query<Household>(full_search_text.c_str());
 
-
+	self->household_ids.clear();
 	self->database_display.clear();
 	self->database_display.add("ID\tFAMILY_STATUS\tZIP");
 
 	for (auto household : households) {
-		char buf[80];
+		char buf[50];
 		const char* family_status = 0;
 		std::string status = *household->family_status;
 		if (status == "0") {
@@ -260,10 +256,40 @@ void DatabaseWindow::search(Fl_Widget*, void* s) {
 		}
 
 		std::string id = *household->id;
+		self->household_ids.push_back(std::stoi(id));
 		std::string zip = *household->zip;
 
 		sprintf(buf, "%s\t%s\t%s", id.c_str(), family_status, zip.c_str());
 		self->database_display.add(buf);
 		self->database_display.redraw();
+	}
+}
+
+const int citizen_widths[] = {40, 40, 70, 70, 70, 45, 0};
+void DatabaseWindow::selected(Fl_Widget* widget, void* parent) {
+	DatabaseWindow* self = static_cast<DatabaseWindow*>(parent);
+	Fl_Browser* browser = static_cast<Fl_Browser*>(widget);
+	int index = browser->value() - 2;
+	if (index > 0) {
+		int household_id = self->household_ids[index];
+		char buf[50];
+		sprintf(buf, "SELECT * FROM citizens WHERE household_id=%i", household_id);
+		std::vector<std::shared_ptr<Citizen>> citizens = self->citizen_db->Query<Citizen>(buf);
+		Fl_Window* household_window = new Fl_Window(self->w(), self->h(), buf);
+		Fl_Browser* citizen_browser = new Fl_Browser(0, 0, household_window->w(), household_window->h());
+
+		citizen_browser->column_widths(citizen_widths);
+		citizen_browser->type(FL_HOLD_BROWSER);
+		citizen_browser->add("ID\tAGE\tF.NAME\tL.NAME\tINCOME\tHOUSE\tSPOUSE");
+		for (auto citizen: citizens) {
+			char citizen_text[200];
+			sprintf(citizen_text, "%s\t%s\t%s\t%s\t%s\t%s\t%s", citizen->id->c_str(), citizen->age->c_str(), citizen->first_name->c_str(), citizen->last_name->c_str(), citizen->income->c_str(), citizen->household_id->c_str(), citizen->spouse_id->c_str());
+			
+			citizen_browser->add(citizen_text);
+		}
+		household_window->resizable(citizen_browser);
+
+		household_window->end();
+		household_window->show();
 	}
 }

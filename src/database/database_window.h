@@ -56,10 +56,12 @@ class DatabaseWindow : public Fl_Window {
 	Fl_Button search_button;
 	Fl_Browser database_display;
 
+	std::vector<int> household_ids;
 	static void search(Fl_Widget* button, void* self);
+
+	static void selected(Fl_Widget* browser, void* self);
 	public:
 	void updateCategories(int tier);
-	void draw();
 	int getCategoryTier() const { return category_tier; }
 	DatabaseWindow(int x, int y, int w, int h);
 	~DatabaseWindow();
