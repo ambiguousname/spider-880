@@ -37,6 +37,7 @@ class DatabaseChoice : public Fl_Choice {
 	static void update(Fl_Widget * self, void* option);
 
 	void clearStore();
+
 	public:
 	int getCategory() const {return current_category; }
 	void selectCategory(int index);
@@ -58,6 +59,7 @@ class DatabaseWindow : public Fl_Window {
 	static void search(Fl_Widget* button, void* self);
 	public:
 	void updateCategories(int tier);
+	void draw();
 	int getCategoryTier() const { return category_tier; }
 	DatabaseWindow(int x, int y, int w, int h);
 	~DatabaseWindow();

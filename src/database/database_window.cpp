@@ -27,6 +27,7 @@ void DatabaseChoice::selectCategory(int index) {
 		clear();
 		clearStore();
 		label_text = std::string("Tier ") + std::to_string(index) + " " + categories[index].name + ":";
+		label(label_text.c_str());
 		static int negative = -1;
 		add("No Selection", 0, update, &negative);
 		for (ChoiceOptions option : categories[index].options) {
@@ -136,7 +137,7 @@ std::string selectIncome(int tier, int value) {
 }
 
 ChoiceCategory family_married {
-	"Household Marriage Status",
+	"Family",
 	{
 		{"Lives In A Family", 0},
 		{"Does Not Live In A Family", 1}
@@ -144,7 +145,7 @@ ChoiceCategory family_married {
 };
 
 ChoiceCategory family_spouse {
-	"Household Living Status",
+	"Living",
 	{
 		{"Married, Living With Family", 0},
 		{"Not Married, Living With Family", 1},
@@ -154,7 +155,7 @@ ChoiceCategory family_spouse {
 };
 
 ChoiceCategory family_count {
-	"Size of Household",
+	"Size",
 	{
 		{"1", 1},
 		{"2", 2},
@@ -212,6 +213,14 @@ void DatabaseWindow::updateCategories(int tier) {
 	}
 }
 
+void DatabaseWindow::draw() {
+	const int widths[] = {40, 150, 0};
+	database_display.column_widths(widths);
+	database_display.column_char('\t');
+	database_display.type(FL_HOLD_BROWSER);
+	Fl_Window::draw();
+}
+
 void DatabaseWindow::search(Fl_Widget*, void* s) {
 	DatabaseWindow* self = static_cast<DatabaseWindow*>(s);
 	std::vector<std::string> search_text;
@@ -234,10 +243,6 @@ void DatabaseWindow::search(Fl_Widget*, void* s) {
 
 
 	self->database_display.clear();
-	const int widths[] = {100, 200, 0};
-	self->database_display.column_widths(widths);
-	self->database_display.column_char('\t');
-	self->database_display.type(FL_HOLD_BROWSER);
 	self->database_display.add("ID\tFAMILY_STATUS\tZIP");
 
 	for (auto household : households) {

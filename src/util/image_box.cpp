@@ -4,7 +4,6 @@
 #include <FL/Fl_PNG_Image.H>
 #include <FL/Fl.H>
 
-#include <iostream>
 ImageBox::ImageBox(const char* image_loc) {
 	full_image = std::make_unique<Fl_PNG_Image>(image_loc);
 }
