@@ -6,6 +6,11 @@
 #include "util/window_management.h"
 #include <murder_blog/index.h>
 
+#ifdef __WIN32
+#include <FL/x.H>
+#include <windows.h>
+#endif
+
 int main(int argc, char **argv) {
 	int x, y, w, h;
 	Fl::screen_work_area(x, y, w, h);
@@ -18,6 +23,10 @@ int main(int argc, char **argv) {
 	Fl_Button* button = new Fl_Button(100, 240, 100, 50, "Quit");
 	button->box(FL_UP_BOX);
 	button->callback(WindowManagement::hide_all_windows);
+
+	#ifdef __WIN32
+	main_window->icon((char*)LoadIcon(fl_display, MAKEINTRESOURCE(100)));
+	#endif
 	main_window->end();
 	main_window->show(argc, argv);
 
