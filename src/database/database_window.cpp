@@ -133,7 +133,7 @@ std::string selectIncome(int tier, int value) {
 	if (tier == 0) {
 		return "SELECT households.* FROM households JOIN citizens ON households.id = citizens.household_id WHERE citizens.income > " + std::to_string(low * 1000) + " AND citizens.income < " + std::to_string(high * 1000) + " GROUP BY household_id";
 	}
-	return "SELECT households.* FROM (SELECT household_id, PERCENT_RANK() OVER(ORDER BY income) AS percent FROM citizens JOIN households ON households.id = citizens.household_id) rankings JOIN households ON households.id = rankings.household_id WHERE rankings.percent > " + std::to_string(low) + " AND rankings.percent < " + std::to_string(high) + " GROUP BY household_id";
+	return "SELECT households.* FROM (SELECT household_id, PERCENT_RANK() OVER(ORDER BY income) AS percent FROM citizens JOIN households ON households.id = citizens.household_id) rankings JOIN households ON households.id = rankings.household_id WHERE rankings.percent > 0." + std::to_string(low) + " AND rankings.percent < 0." + std::to_string(high) + " GROUP BY household_id";
 }
 
 ChoiceCategory family_married {
