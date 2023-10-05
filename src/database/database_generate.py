@@ -1,5 +1,5 @@
 import sqlite3
-from numpy import random
+from numpy import random, delete, clip
 from enum import IntEnum
 from faker import Faker # https://faker.readthedocs.io/en/master/
 import time
@@ -145,11 +145,21 @@ class NonMarriedFamily(HouseholdConstraint):
 
 citizen_id = 0
 class Citizen():
-	def __init__(self, household):
+	def set_vals(self, age, first_name, last_name, income, spouse):
+		self.first_name = first_name
+		self.last_name = last_name
+		self.spouse = spouse
+		self.age = age
+		self.income = income
+	
+	def __init__(self, household, *args):
 		global citizen_id
 		self.id = citizen_id
 		citizen_id += 1
 		self.household = household
+		if len(args) > 0:
+			self.set_vals(*args)
+			return
 		self.first_name = fake.first_name()
 		self.last_name = fake.last_name()
 		self.spouse = "NULL"
@@ -172,10 +182,18 @@ class FamilyTypes(IntEnum):
 household_id = 0
 
 class Household():
-	def __init__(self):
+	def set_vals(self, citizens : list[Citizen], family_type : FamilyTypes, zip : int):
+		self.citizens = citizens
+		self.family_type = family_type
+		self.zip = zip
+	
+	def __init__(self, citizens=None, *args):
 		global household_id
 		self.household_id = household_id
 		household_id += 1
+		if len(args) > 0:
+			self.set_vals(citizens, *args)
+			return
 		self.family_type = random.choice([FamilyTypes.MARRIED_FAMILY, FamilyTypes.NOT_MARRIED_FAMILY, FamilyTypes.LIVING_ALONE, FamilyTypes.NOT_LIVING_ALONE], p=[0.55, 0.16, 0.24, 0.05])
 		self.citizens = []
 		num_occupants = 1
@@ -198,7 +216,7 @@ class Household():
 		self.zip = floor(random.uniform(0, 999))
 	
 	def __str__(self) -> str:
-		house_str = "Household: " + str(self.family_type) + " - \n"
+		house_str = "Household " + str(self.household_id) + ": Type " + str(self.family_type) + " - \n"
 		for citizen in self.citizens:
 			house_str += str(citizen) + "\n"
 		house_str += "----"
@@ -211,11 +229,32 @@ class Household():
 class CitizensDB():
 	def __init__(self):
 		self.households = []
+		self.toAppend = []
 	
-	def generate(self):
+	def generate(self, toAppend: list[tuple[tuple, list[tuple]]]):
+		sample_loc = random.standard_normal(len(toAppend))
+		sample_loc = clip(abs(sample_loc/2), 0, 1)
+		sample_loc.sort()
 		town_size = round(random.uniform(200, 300))
+		random.shuffle(toAppend)
 		for i in range(town_size):
+			while (len(sample_loc) > 0 and sample_loc[0] <= i/(town_size - 1)):
+				household_args, citizens_list = toAppend.pop()
+				sample_loc = delete(sample_loc, 0)
+				citizens = []
+				for citizen_args in citizens_list:
+					citizens.append(Citizen(None, *citizen_args))
+				
+				household = Household(citizens, *household_args)
+
+				for citizen in citizens:
+					citizen.household = household
+
+				self.households.append(household)
+				print(str(household))
 			self.households.append(Household())
+		print("Generated", len(self.households), "households.")
+		
 
 	def writeValues(self, cursor):
 		for household in self.households:
@@ -227,7 +266,20 @@ class CitizensDB():
 
 if __name__ == "__main__":
 	citizens = CitizensDB()
-	citizens.generate()
+	to_add = [
+		((FamilyTypes.NOT_LIVING_ALONE, 180),
+		[
+			(35, "Jerry", "Seinfeld", 6512, "NULL"),
+			(30, "George", "Costanza", 7542, "NULL"),
+			(28, "Elaine", "Benes", 11120, "NULL"),
+			(40, "Cosmo", "Kramer", 0, 69)
+		]),
+		((FamilyTypes.LIVING_ALONE, 538), 
+		[
+			(32, "Wallis", "Jeanneau", 7823, "NULL")
+		]),
+	]
+	citizens.generate(to_add)
 	db = sqlite3.connect("citizens.db")
 	cursor = db.cursor()
 	cursor.execute("DROP TABLE IF EXISTS citizens;")
