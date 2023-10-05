@@ -7,6 +7,7 @@ from os import PathLike, path, sep, scandir
 import re
 import io
 import sys
+from hashlib import md5
 
 root = path.abspath(__file__ + "/../pages/")
 
@@ -260,19 +261,45 @@ def searchDir(dir):
 			base, full_filename = path.split(entry_path)
 			pth = path.join(base, filename + ".cpp")
 
-			cpp_stream = open(pth, "w")
-			parser = HTMLCPPParser(cpp_stream, pth)
-			file = open(entry.path, "r")
-			parser.feed(file.read())
-			parser.close()
+			file = open(entry.path, "rb")
+			file.seek(0)
+			hashed = md5(file.read()).hexdigest()
 			file.close()
+
+			file = open(entry.path, "r")
+			global hashes
+			if pth not in hashes or hashed != hashes[pth]:
+				cpp_stream = open(pth, "w")
+				parser = HTMLCPPParser(cpp_stream, pth)
+				parser.feed(file.read())
+				parser.close()
+				cpp_stream.close()
 			
 			f = open(path.join(root, "../list.txt"), "a")
 			f.write(pth + "\n")
 			f.close()
 
+			hash_file = open(path.join(root, "../hash.txt"), "a")
+			hash_file.write(hashed + "\n")
+			hash_file.close()
+
 if __name__ == "__main__":
-	f = open(path.join(root, "../list.txt"), "w")
+	global hashes
+	hashes = {}
+
+	f = open(path.join(root, "../list.txt"), "r+")
+
+	hash_list_pth = path.join(root, "../hash.txt")
+	if not path.exists(hash_list_pth):
+		new_f = open(hash_list_pth, "w")
+		new_f.close()
+	hash_list = open(hash_list_pth, "r+")
+	for line in f.readlines():
+		hashes[line.lstrip().replace("\n", "")] = hash_list.readline().lstrip().replace("\n", "")
+	hash_list.seek(0)
+	hash_list.truncate()
+
+	f.seek(0)
 	f.truncate()
 	f.close()
 	searchDir(root)
