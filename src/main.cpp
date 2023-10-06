@@ -4,7 +4,7 @@
 #include <FL/Fl_Box.H>
 #include "database/database_window.h"
 #include "util/window_management.h"
-#include <murder_blog/index.h>
+#include <murder_blog/murder.h>
 
 #ifdef __WIN32
 #include <FL/x.H>
@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
 
 	DatabaseWindow* db = new DatabaseWindow(x + 3 * w/4, y + h/4, 400, 300);
 	db->show();
-	MurderBlogIndexHTMLWindow* page = new MurderBlogIndexHTMLWindow(x + w/4, y + h/4, 300, 300);
+	MurderBlogMurderHTMLWindow* page = new MurderBlogMurderHTMLWindow(x + w/4, y + h/4, 300, 300);
 	page->show();
 
 	Fl::run();

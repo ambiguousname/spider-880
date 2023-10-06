@@ -26,7 +26,8 @@ void Text::open(HTMLPage* current_page, int& out_w, int& out_h) {
 	out_w = current_page->w();
 	out_h = 0;
 
-	fl_measure(_data.c_str(), out_w, out_h);
+	fl_font(FL_HELVETICA, 14);
+	current_page->measure(_data.c_str(), out_w, out_h);
 	fl_color(color);
 
 	int cursor_x, cursor_y;

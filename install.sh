@@ -1,5 +1,10 @@
 #!/bin/sh
 # If you're looking for VS Code integration with Msys, see: https://code.visualstudio.com/docs/cpp/config-mingw
+if [[ "$OSTYPE" == "darwin*" ]] && ! command -v bash > /dev/null; then
+	echo "You "
+	exit 1
+fi
+
 if ! command -v pip > /dev/null; then
 	if  command -v pacman > /dev/null ; then
 		pacman -S mingw-w64-ucrt-x86_64-python mingw-w64-ucrt-x86_64-python-pip
@@ -12,9 +17,10 @@ fi
 if ! command -v meson > /dev/null; then
 	if  command -v pacman > /dev/null ; then
 		pacman -S mingw-w64-ucrt-x86_64-ninja
+	elif command -v brew > /dev/null ; then
+		brew install meson-python
 	else
 		sudo apt-get install ninja-build
-		
 	pip3 install meson
 	fi
 fi
@@ -27,9 +33,14 @@ fi
 
 if command -v pacman > /dev/null; then
 	pacman -S mingw-w64-ucrt-x86_64-sqlite3
-	 pacman -S libsqlite-devel
+	pacman -S libsqlite-devel
+elif command -v brew > /dev/null; then
+	brew install sqlite
 else
 	sudo apt install sqlite3 libsqlite3-dev
 fi
+
+# Meson build freaks out otherwise.
+python3 ./src/spider_navigator/navigator.py
 
 meson setup build

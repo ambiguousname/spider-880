@@ -2,6 +2,7 @@
 
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Scroll.H>
+#include <FL/Fl_draw.H>
 #include <functional>
 #include <memory>
 #include <vector>
@@ -45,6 +46,7 @@ class HTMLPage : public Fl_Group {
 	int cursor_x = 0;
 	int cursor_y = 0;
 	int height_buffer = 0;
+	int padding = 0;
 
 
 	std::shared_ptr<HTMLNode> root = nullptr;
@@ -56,10 +58,17 @@ class HTMLPage : public Fl_Group {
 	int handle(int event);
 	public:
 	const std::shared_ptr<HTMLWindow> parent_window;
-	HTMLPage(std::shared_ptr<HTMLNode> root, std::shared_ptr<HTMLWindow> parent, int x, int y, int w, int h);
+	HTMLPage(std::shared_ptr<HTMLNode> root, std::shared_ptr<HTMLWindow> parent, int x, int y, int w, int h, int horizontal_padding);
 	
 	void getCursor(int& outX, int& outY) { outX = cursor_x; outY = cursor_y; }
 	void setCursor(int inX, int inY) { cursor_x = inX; cursor_y = inY; }
+	void measure(const char* str, int& out_w, int& out_h) { 
+		out_w -= padding;
+		fl_measure(str, out_w, out_h);
+	}
+	
+	int x() { return padding; }
+	int w() { return Fl_Group::w() - padding; }
 
 	int getHeightBuffer() { return height_buffer; }
 	void setHeightBuffer(int in) { height_buffer = in; }

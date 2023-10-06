@@ -1,0 +1,43 @@
+<html title="My Blog (GEANE: CHANGE TITLE TEXT)"> <!-- Represents the Window object. -->
+	<includes>
+		&lt;iostream&gt;
+	</includes>
+	<header>
+
+	</header>
+	<script type="text/cpp"> <!-- Functionally useless right now. -->
+		void onStart() {
+			std::cout << "Hello world!";
+		}
+	</script>
+	<body> <!-- Represents the Fl_Group object. -->
+		<img src="./assets/victim.png" />
+		<p>
+			Image courtesy of <a>user:engounge</a>.
+		</p>
+		<p>
+			The adage holds true. I've been getting too many "customer complaints" in my spam box to say it again, but just imagine my words now.
+		</p>
+		<p>
+			In case I happen to shock and/or surprise any of the slow-witted among you. <a>Rorik's </a> <a href="cool_myths/theend">End</a> is a <a>SPNPOLICY200</a>. I just pray that you're not as stupid as everyone makes you out to be. 
+		</p>
+		<p>
+			Details as I can get them are scarce. Police aren't saying much other than that the body was found in the abandoned caves by Rorik End's scenic, beautiful, tourist-attracting, all around pleasant space, Egg Park.
+		</p>
+		<p>
+			I want all the viewers at home to know that I am not heartless. In fact, the more I stare at the blood and sinews and guts leaking out of this poor fellow, the more I am completely unnerved. I guess with 24-bit colors you can really see the whole enchilada.
+		</p>
+		<p>
+			Corpses typically don't float. Speaking as an expert in murder (with a focus in fluid dynamics), they don't float unless they weigh less than the fluid they are displacing. That's a little scientific thing called the Archimedes Principle, and it doesn't allow for violations. For any of you wondering if the corpse is floating because of the stalactite protruding through the chest: no.
+		</p>
+		<p>
+			The friction of the organs on the stalactite is too weak compared to the force of gravity. So we should be sinking down. And instead our remains trapped in the fluid. Just like when I shoved Jim's dog in the lake.
+		</p>
+		<p>
+			To all of the loud-mouthed Rorikenders I know: shut your gagging SPNPOLICY200 flaps. And remember to stay safe out there.
+		</p>
+		<!-- <p> -->
+			<!-- Kurt Hawkins, Site Admin. -->
+		<!-- </p> -->
+	</body>
+</html>

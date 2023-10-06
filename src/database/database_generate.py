@@ -42,13 +42,26 @@ class YoungerThan(HouseholdConstraint):
 		if not OlderThanZero.is_constrainted(citizens):
 			OlderThanZero.constrain(citizens)
 
+class ChildrenMakeNoMoney(HouseholdConstraint):
+	@staticmethod
+	def is_constrainted(citizens, other_citizens=None):
+		for citizen in citizens:
+			if citizen.age < 18 and citizen.income > 0:
+				return False
+	
+	@staticmethod
+	def constrain(citizens, other_citizens=None):
+		for citizen in citizens:
+			if citizen.age < 18:
+				citizen.income = 0
+
 class Family(HouseholdConstraint):
 	@staticmethod
 	def is_constrainted(citizens, other_citizens=None):
 		for citizen in citizens:
 			if other_citizens[0].last_name != citizen.last_name:
 				return False
-		return YoungerThan.is_constrainted(citizens, other_citizens)
+		return YoungerThan.is_constrainted(citizens, other_citizens) and ChildrenMakeNoMoney.is_constrainted(citizens + other_citizens)
 	
 	@staticmethod
 	def constrain(citizens, other_citizens=None):
@@ -57,6 +70,8 @@ class Family(HouseholdConstraint):
 			citizen.last_name = last_name
 		if not YoungerThan.is_constrainted(citizens, other_citizens):
 			YoungerThan.constrain(citizens, other_citizens)
+		if not ChildrenMakeNoMoney.is_constrainted(citizens + other_citizens):
+			ChildrenMakeNoMoney.constrain(citizens + other_citizens)
 
 class OverEighteen(HouseholdConstraint):
 	@staticmethod
@@ -212,6 +227,7 @@ class Household():
 			NonMarriedFamily.constrain(self.citizens)
 		elif self.family_type == FamilyTypes.NOT_LIVING_ALONE:
 			OverEighteen.constrain(self.citizens)
+			ChildrenMakeNoMoney.constrain(self.citizens)
 		
 		self.zip = floor(random.uniform(0, 999))
 	

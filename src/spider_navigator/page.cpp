@@ -1,5 +1,4 @@
 #include "page.h"
-#include <FL/fl_draw.H>
 #include <FL/Fl.H>
 #include <stdexcept>
 #include <variant>
@@ -13,8 +12,9 @@ HTMLWindow::HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int 
 		label(title.c_str());
 	}
 	scrollbar = new Fl_Scroll(0, 0, w, h);
-	page = new HTMLPage(root, std::shared_ptr<HTMLWindow>(this), 20, 0, w - 40, h);
+	page = new HTMLPage(root, std::shared_ptr<HTMLWindow>(this), 0, 0, w, h, 20);
 	scrollbar->end();
+	scrollbar->type(Fl_Scroll::VERTICAL);
 
 	resizable(this);
 	end();
@@ -29,7 +29,7 @@ bool HTMLWindow::getLinkedWindow(std::string name, windowCreation& out) {
 	return false;
 }
 
-HTMLPage::HTMLPage(std::shared_ptr<HTMLNode> r, std::shared_ptr<HTMLWindow> parent, int x, int y, int w, int h) : Fl_Group(x, y, w, h), interactive_nodes(), parent_window(parent) {
+HTMLPage::HTMLPage(std::shared_ptr<HTMLNode> r, std::shared_ptr<HTMLWindow> parent, int x, int y, int w, int h, int horizontal_padding) : Fl_Group(x, y, w, h), interactive_nodes(), parent_window(parent), padding(horizontal_padding) {
 	root.swap(r);
 	r.reset();
 	initNode(root);
