@@ -2,7 +2,8 @@
 #include <FL/Fl.H>
 #include <FL/fl_ask.H>
 #include "pages/gertwig_blog/navsab.h"
-#include "pages/deadbeef/deadbeef.h
+#include "pages/deadbeef/deadbeef.h"
+#include "pages/deadbeef/feebdaed.h"
 #include <stdexcept>
 #include <variant>
 
@@ -14,8 +15,9 @@ void aboutCallback(Fl_Widget*, void*) {
 typedef HTMLWindow* (*page_create)(int, int, int, int);
 
 void showHTMLPage(Fl_Widget* widget, void* pg) {
-	page_create creator = static_cast<page_create>(pg);
-	HTMLWindow* page = creator(widget->x() + 10, widget->y() + 10, widget->w(), widget->h());
+	page_create creator = (page_create)(pg);
+	Fl_Window* window = widget->top_window();
+	HTMLWindow* page = creator(window->x() + 10, window->y() + 10, window->w(), window->h());
 	page->show();
 }
 
@@ -30,10 +32,11 @@ struct Password {
 };
 
 const Password passwords[] = {
-	{"deadbeef", showHTMLPage, DeadbeefDeadbeefHTMLWindow::createWindow},
-	{"feebdaed", showHTMLPage, DeadbeefFeebdaedHTMLWindow::createWindow},
+	{"deadbeef", showHTMLPage, (void*)DeadbeefDeadbeefHTMLWindow::createWindow},
+	{"feebdaed", showHTMLPage, (void*)DeadbeefFeebdaedHTMLWindow::createWindow},
 };
 
+#include <iostream>
 int HTMLWindow::handle(int event) {
 	if (event == FL_KEYDOWN) {
 		const char* key =  Fl::event_text();
@@ -42,6 +45,7 @@ int HTMLWindow::handle(int event) {
 			if (typing_buffer.size() > 20) {
 				typing_buffer.erase(typing_buffer.begin());
 			}
+			std::cout << typing_buffer.back() << std::endl;
 			
 			std::vector<Password> matches = {};
 
@@ -56,14 +60,14 @@ int HTMLWindow::handle(int event) {
 
 			// Avoid integer underflow: https://stackoverflow.com/questions/4205720/iterating-over-a-vector-in-reverse-direction
 			if (typing_buffer.size() > 1 && matches.size() > 0) {
-				for (unsigned i = typing_buffer.size() - 1; i-- > 0; ) {
+				for (unsigned i = typing_buffer.size() - 1; i-- >= 0; ) {
 					bool pwd_found = false;
 					for (auto m = matches.begin(); m != matches.end(); m++) {
 						auto prev = m;
 						m->curr_index -= 1;
 						if (m->curr_index < 0) {
 							pwd_found = true;
-							m->callback(this, 0);
+							m->callback(this, m->data);
 							break;
 						} else if (m->password[m->curr_index] != typing_buffer[i]) {
 							m++;
@@ -84,9 +88,9 @@ int HTMLWindow::handle(int event) {
 }
 
 HTMLWindow::HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int h) : Fl_Window(x, y, w, h), menu_bar(0, 0, w, 20) {
-	menu_bar.add("NavSab");
+	menu_bar.add("NavSab", 0, 0, 0, FL_MENU_INACTIVE);
 	menu_bar.add("Help/About", FL_CTRL+'a', aboutCallback);
-	menu_bar.add("Help/Website", FL_CTRL+'w', aboutWebsite);
+	menu_bar.add("Help/Website", FL_CTRL+'w', showHTMLPage, (void*)GertwigBlogNavsabHTMLWindow::createWindow);
 
 	auto attributes = root->attributes();
 	auto find_title = attributes.find("title");

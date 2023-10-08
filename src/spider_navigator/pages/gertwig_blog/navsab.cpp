@@ -26,7 +26,7 @@ std::shared_ptr<P> p_3 = std::make_shared<P>(
 	}
 );
 std::shared_ptr<Text> text_6 = std::make_shared<Text>(
-	"The current dedicated tracker for NavSab. Plans are in development for making it open source. The major issue is making the BuSab internal compiler accessible. The code is incompatible with every other compiler out there. BuSab computers screen machine code to verify where it was compiled from. It's a pain, but if any other BuSab members want to reach out, let me know. I could really use the help.",
+	"The current page for NavSab. Plans are in development for making it open source. The major issue is the BuSab Internal C Compiler. The binaries are only compatible with Spider-500+, and only on BuSab models. BuSab OS screens the machine code to verify that a compiled program has an encrypted checksum generated from the BICC. And there are some C features that are wholly unique to BICC. It's a pain, but if any other BuSab members want to reach out (especially with valid checksum generators, or any custom compiler kits), let me know. I could really use the help.",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
@@ -146,7 +146,7 @@ std::shared_ptr<P> p_20 = std::make_shared<P>(
 	}
 );
 std::shared_ptr<Text> text_22 = std::make_shared<Text>(
-	"Not all HTML tags are supported (lists, scripts, etc.).",
+	"Not all HTML tags are supported (lists, plaintext, headers, etc.)",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
@@ -183,7 +183,7 @@ std::shared_ptr<HTMLNode> html_1 = std::make_shared<HTMLNode>(
 		body_2,
 	},
 	std::unordered_map<std::string, std::string>{
-		{"title", "Brian Gertwig - NavSab Tracker"},
+		{"title", "Brian Gertwig - NavSab Tracker TEST"},
 	}
 );
 }

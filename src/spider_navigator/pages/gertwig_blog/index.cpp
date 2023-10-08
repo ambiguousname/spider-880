@@ -16,7 +16,7 @@ std::shared_ptr<P> p_3 = std::make_shared<P>(
 	}
 );
 std::shared_ptr<Text> text_5 = std::make_shared<Text>(
-	"I've been playing with this stuff for a long while now. I started on punchcards, I'm now on database management for the Bureau of Sabotage.",
+	"I've been playing with this stuff for a long while now. I started on punchcards, I'm now on database management for the Bureau of Sabotage. I'm running this server on my home BSD distribution right now.",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
@@ -46,15 +46,24 @@ std::shared_ptr<P> p_7 = std::make_shared<P>(
 	}
 );
 std::shared_ptr<Text> text_9 = std::make_shared<Text>(
-	"My apologies to everyone currently using NavSab. You can see the issues being tracked here: ",
+	"My apologies to everyone currently using NavSab. You can see NavSab's development here: ",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
 	}
 );
+std::shared_ptr<Text> text_11 = std::make_shared<Text>(
+	"NavSab Development",
+	std::vector<std::shared_ptr<HTMLNode>>{
+	},
+	std::unordered_map<std::string, std::string>{
+		{"href", "gertwig_blog/navsab"},
+	}
+);
 std::shared_ptr<A> a_11 = std::make_shared<A>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
+		text_11,
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "gertwig_blog/navsab"},
