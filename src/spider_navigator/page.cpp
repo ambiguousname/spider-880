@@ -44,36 +44,61 @@ void HTMLPage::initNode(HTMLNodePtr node) {
 	}
 }
 
+
 void HTMLPage::drawChildren() {
-	std::vector<NodeQueueInfo> queue = {{root, OPEN_NODE}};
+	std::unique_ptr<NodeQueueInfo> _root = std::make_unique<NodeQueueInfo>(root, OPEN_NODE, nullptr);
+	std::vector<std::unique_ptr<NodeQueueInfo>> queue = {};
+	queue.emplace_back(std::move(_root));
 	interactive_nodes.clear();
 
 	cursor_x = x();
 	cursor_y = y();
-	height_buffer = 0;
 	while (queue.size() > 0) {
-		NodeQueueInfo node_info = queue.front();
+		std::unique_ptr<NodeQueueInfo> node_info = move(queue.front());
 		queue.erase(queue.begin());
 
-		std::shared_ptr<HTMLNode> node = node_info.node;
-		if (node_info.type == OPEN_NODE) {
-			int out_w, out_h;
+		std::shared_ptr<HTMLNode> node = node_info->node;
+		if (node_info->type == OPEN_NODE) {
 
-			int local_x = cursor_x;
-			int local_y = cursor_y; 
-			node_info.node->open(this, out_w, out_h);
-			
-			if (node->interactive()) {
-				interactive_nodes.push_back({node, local_x, local_y, out_w, out_h});
-			}
+			int out_w, out_h, start_x, start_y;
+			out_w = 0;
+			out_h = 0;
+			start_x = cursor_x;
+			start_y = cursor_y;
+			node->open(this, start_x, start_y, out_w, out_h);
 
-			queue.insert(queue.begin(), {node, CLOSE_NODE});
-			
+			std::unique_ptr<NodeQueueInfo> closer = std::make_unique<NodeQueueInfo>(node, CLOSE_NODE, node_info->parent_closer, start_x, start_y, out_w, out_h);
+			NodeQueueInfo* ptr = closer.get();
+			queue.insert(queue.begin(), move(closer));
+
 			for (auto c : node->children()) {
-				queue.insert(queue.begin(), {c, OPEN_NODE});
+				queue.insert(queue.begin(), std::make_unique<NodeQueueInfo>(c, OPEN_NODE, ptr));
 			}
-		} else if (node_info.type == CLOSE_NODE) {
-			node_info.node->close(this);
+		} else if (node_info->type == CLOSE_NODE) {
+			int out_w, out_h, start_x, start_y;
+			out_w = node_info->w;
+			out_h = node_info->h;
+			start_x = node_info->x;
+			start_y = node_info->y;
+			node->close(this, start_x, start_y, out_w, out_h);
+			if (node->interactive()) {
+				interactive_nodes.push_back({node, start_x, start_y, out_w, out_h});
+			}
+			
+			int parent_w, parent_h, parent_x, parent_y;
+			NodeQueueInfo* parent_info = node_info->parent_closer;
+			if (parent_info != nullptr){
+				parent_w = parent_info->w;
+				parent_h = parent_info->h;
+				parent_x = parent_info->x;
+				parent_y = parent_info->y;
+
+				parent_info->node->child_closed(this, start_x, start_y, out_w, out_h, parent_x, parent_y, parent_w, parent_h);
+				parent_info->w = parent_w;
+				parent_info->h = parent_h;
+				parent_info->x = parent_x;
+				parent_info->y = parent_y;
+			}
 		}
 	}
 	resize(x(), y(), this->parent()->w() - 20, cursor_y - y());

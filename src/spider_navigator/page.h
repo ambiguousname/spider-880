@@ -22,6 +22,11 @@ enum NodeQueueInfoEnum {
 struct NodeQueueInfo {
 	std::shared_ptr<HTMLNode> node;
 	NodeQueueInfoEnum type;
+	NodeQueueInfo* parent_closer;
+	int x = 0;
+	int y = 0;
+	int w = 0;
+	int h = 0;
 };
 
 // Because again, the nodes themselves as they exist are not unique across webpages.
@@ -45,8 +50,10 @@ class HTMLPage : public Fl_Group {
 	protected:
 	int cursor_x = 0;
 	int cursor_y = 0;
-	int height_buffer = 0;
 	int padding = 0;
+
+	// Store the previous children's height.
+	int height_buffer = 0;
 
 
 	std::shared_ptr<HTMLNode> root = nullptr;
@@ -62,16 +69,12 @@ class HTMLPage : public Fl_Group {
 	
 	void getCursor(int& outX, int& outY) { outX = cursor_x; outY = cursor_y; }
 	void setCursor(int inX, int inY) { cursor_x = inX; cursor_y = inY; }
-	void measure(const char* str, int& out_w, int& out_h) { 
-		out_w -= padding;
-		fl_measure(str, out_w, out_h);
-	}
+
+	int getHeightBuffer() const { return height_buffer; }
+	void setHeightBuffer(int height) { height_buffer = height; }
 	
 	int x() { return padding; }
 	int w() { return Fl_Group::w() - padding; }
-
-	int getHeightBuffer() { return height_buffer; }
-	void setHeightBuffer(int in) { height_buffer = in; }
 };
 
 

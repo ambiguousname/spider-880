@@ -6,11 +6,15 @@ void HTMLNode::init() {
 	return;
 }
 
-void HTMLNode::open(HTMLPage*, int&, int&) {
+void HTMLNode::open(HTMLPage*, int&, int&, int&, int&) {
 	return;
 }
 
-void HTMLNode::close(HTMLPage*) {
+void HTMLNode::close(HTMLPage*, int&, int&, int&, int&) {
+	return;
+}
+
+void HTMLNode::child_closed(HTMLPage* current_page, const int child_x, const int child_y, const int child_w, const int child_h, int& start_x, int& start_y, int& out_w, int& out_h) {
 	return;
 }
 
@@ -22,35 +26,30 @@ void HTMLNode::hover(int, int, HTMLPage* current_page) {
 	current_page->parent_window->cursor(cursor);
 }
 
-void Text::open(HTMLPage* current_page, int& out_w, int& out_h) {
+void Text::open(HTMLPage* current_page, int& start_x, int& start_y, int& out_w, int& out_h) {
 	out_w = current_page->w();
 	out_h = 0;
 
 	fl_font(FL_HELVETICA, 14);
-	current_page->measure(_data.c_str(), out_w, out_h);
+	fl_measure(_data.c_str(), out_w, out_h);
 	fl_color(color);
 
-	int cursor_x, cursor_y;
-	current_page->getCursor(cursor_x, cursor_y);
 	int height_buffer = current_page->getHeightBuffer();
 
 	// TODO: Cut text up into chunks and wrap from that?
-	if (cursor_x + out_w > current_page->w()) {
-		cursor_x = current_page->x();
-		cursor_y += height_buffer;
+	if (start_x + out_w >= current_page->w()) {
+		start_x = current_page->x();
+		start_y += height_buffer;
 		height_buffer = 0;
 	}
-	fl_draw(_data.c_str(), cursor_x, cursor_y, out_w, out_h, FL_ALIGN_WRAP | FL_ALIGN_CENTER);
+	fl_draw(_data.c_str(), start_x, start_y, out_w, out_h, FL_ALIGN_WRAP | FL_ALIGN_CENTER);
+	int cursor_x = start_x;
+	int cursor_y = start_y;
 	cursor_x += out_w;
 
-	height_buffer = out_h;
 	// TODO: Is this hack okay? Does it not work with other displays?
-	if (out_h > fl_size() + 2) {
-		cursor_y += height_buffer;
-		height_buffer = 0;
-	}
-	current_page->setHeightBuffer(height_buffer);
 	current_page->setCursor(cursor_x, cursor_y);
+	current_page->setHeightBuffer(height_buffer);
 }
 
 void A::click(int, int, HTMLPage* current_page) {
@@ -74,15 +73,42 @@ void A::init() {
 	}
 }
 
-void P::close(HTMLPage* current_page) {
+void A::child_closed(HTMLPage* current_page, const int child_x, const int child_y, const int child_w, const int child_h, int& start_x, int& start_y, int& out_w, int& out_h) {
+	int localized_w = (child_x + child_w) - start_x;
+	if (localized_w > out_w) {
+		out_w = localized_w;
+	}
+
+	int localized_h = (child_y + child_h) - start_y;
+	if (localized_h > out_h) {
+		out_h = localized_h;
+	}
+}
+
+void P::child_closed(HTMLPage* current_page, const int child_x, const int child_y, const int child_w, const int child_h, int& start_x, int& start_y, int& out_w, int& out_h) {
+	int localized_w = (child_x + child_w) - start_x;
+	if (localized_w > out_w) {
+		out_w = localized_w;
+	}
+
+	int localized_h = (child_y + child_h) - start_y;
+	if (localized_h > out_h) {
+		out_h = localized_h;
+	}
+}
+
+void P::close(HTMLPage* current_page, int&, int& start_y, int&, int& out_h) {
+	// We don't want to modify start_y, since that dictates this element's starting position.
 	int cursor_x, cursor_y;
 	current_page->getCursor(cursor_x, cursor_y);
 	int height_buffer = current_page->getHeightBuffer();
-	cursor_y += height_buffer + 20;
-	height_buffer = 0;
+	// The difference between the cursor y and where the element ends.
+	int height_diff = (start_y + out_h) - cursor_y;
+	cursor_y += height_diff + height_buffer + 20;
+	current_page->setHeightBuffer(0);
 	current_page->setCursor(current_page->x(), cursor_y);
-	current_page->setHeightBuffer(height_buffer);
 }
+
 
 void Img::init() {
 	auto src = _attributes.find("src");
@@ -93,7 +119,7 @@ void Img::init() {
 	}
 }
 
-void Img::open(HTMLPage* current_page, int& out_w, int& out_h) {
+void Img::open(HTMLPage* current_page, int&, int&, int&, int&) {
 	if (box == nullptr) {
 		return;
 	}
@@ -103,7 +129,6 @@ void Img::open(HTMLPage* current_page, int& out_w, int& out_h) {
 
 	int img_x = 3 * (img_w - cursor_x)/16; 
 
-	// TODO: `double` math?
 	int full_w, full_h;
 	box->getFullDimensions(full_w, full_h);
 	double ratio = (double)full_h/(double)full_w;
