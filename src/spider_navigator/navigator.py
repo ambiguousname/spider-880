@@ -174,7 +174,7 @@ class HTMLCPPParser(HTMLParser):
 
 		self.cpp_stream.write(f"{self.namespace}::{self.namespace}(int x, int y, int w, int h) : HTMLWindow({self.namespace}Namespace::html_1, x, y, w, h) {{\n{linked_page_str}\n}}\n")
 
-		header = open(path.join(self.path, f"../{header_name}"), "w")
+		header = open(path.abspath(path.join(self.path, f"../{header_name}")), "w")
 		header.write("#pragma once\n")
 
 		for include in self.includes:

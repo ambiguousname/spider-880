@@ -1,1 +1,2 @@
-utillib = static_library('util', ['color.cpp', 'image_box.cpp', 'window_management.cpp'])
+
+utillib = static_library('util', ['color.cpp', 'image_box.cpp', 'window_management.cpp'], include_directories: '/opt/homebrew/include')
