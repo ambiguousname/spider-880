@@ -47,6 +47,8 @@ void Text::open(HTMLPage* current_page, int& start_x, int& start_y, int& out_w, 
 	int cursor_y = start_y;
 	cursor_x += out_w;
 
+	height_buffer = out_h;
+
 	// TODO: Is this hack okay? Does it not work with other displays?
 	current_page->setCursor(cursor_x, cursor_y);
 	current_page->setHeightBuffer(height_buffer);
@@ -101,10 +103,9 @@ void P::close(HTMLPage* current_page, int&, int& start_y, int&, int& out_h) {
 	// We don't want to modify start_y, since that dictates this element's starting position.
 	int cursor_x, cursor_y;
 	current_page->getCursor(cursor_x, cursor_y);
-	int height_buffer = current_page->getHeightBuffer();
 	// The difference between the cursor y and where the element ends.
 	int height_diff = (start_y + out_h) - cursor_y;
-	cursor_y += height_diff + height_buffer + 20;
+	cursor_y += height_diff + 20;
 	current_page->setHeightBuffer(0);
 	current_page->setCursor(current_page->x(), cursor_y);
 }
