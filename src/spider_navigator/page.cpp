@@ -1,9 +1,95 @@
 #include "page.h"
 #include <FL/Fl.H>
+#include <FL/fl_ask.H>
+#include "pages/gertwig_blog/navsab.h"
 #include <stdexcept>
 #include <variant>
 
-HTMLWindow::HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int h) : Fl_Window(x, y, w, h) {
+void aboutCallback(Fl_Widget*, void*) {
+	// fl_message_icon();
+	fl_alert("Bureau of Sabotage Network Navigator\nBy Brian Gertwig");
+}
+
+void aboutWebsite(Fl_Widget* widget, void*) {
+	GertwigBlogNavsabHTMLWindow* page = new GertwigBlogNavsabHTMLWindow(widget->x(), widget->y(), 300, 300);
+	page->show();
+}
+
+struct Password {
+	const char* password;
+	Fl_Callback* callback;
+	int curr_index=0;
+	bool operator==(const Password& other) {
+		return strcmp(password, other.password) == 0;
+	}
+};
+
+const Password passwords[] = {{"deadbeef", aboutWebsite}};
+
+#include <iostream>
+int HTMLWindow::handle(int event) {
+	if (event == FL_KEYDOWN) {
+		const char* key =  Fl::event_text();
+		if (key[0] != '\0'){
+			typing_buffer[typing_index] = tolower(key[0]);
+			typing_index++;
+			std::cout << typing_buffer << std::endl;
+
+			std::vector<Password> matches({});
+			// We need to save \0 for the end:
+			int len = (sizeof(typing_buffer)/sizeof(*typing_buffer)) - 1;
+			
+			if (typing_index >= len) {
+				typing_index = 0;
+			}
+
+			bool pwd_handled = false;
+			bool wrap = false;
+			for (int i = 0; i < len; i++) {
+				// TODO: Doesn't work with wrapping.
+				for (auto p : passwords) {
+					if (p.password[0] == typing_buffer[i] && std::find(matches.begin(), matches.end(), p) == matches.end()) {
+						matches.push_back(p);
+					}
+				}
+
+				for (auto m = matches.begin(); m != matches.end(); m++) {
+					if (m->password[m->curr_index] == '\0') {
+						pwd_handled = true;
+						m->callback(this, 0);
+						break;
+					}
+					if (typing_buffer[i] != m->password[m->curr_index]) {
+						auto prev = m;
+						m++;
+						matches.erase(prev); 
+						if (matches.size() == 0) {
+							break;
+						}
+					} else {
+						m->curr_index++;
+					}
+				}
+				if (pwd_handled) {
+					memset(&(typing_buffer[0]), 0, len);
+					typing_index = 0;
+					break;
+				}
+				if (i >= len - 1 && matches.size() > 0 && !wrap) {
+					i = 0;
+					wrap = true;
+				}
+			}
+		}
+	}
+	return Fl_Window::handle(event);
+}
+
+HTMLWindow::HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int h) : Fl_Window(x, y, w, h), menu_bar(0, 0, w, 20) {
+	menu_bar.add("NavSab");
+	menu_bar.add("Help/About", FL_CTRL+'a', aboutCallback);
+	menu_bar.add("Help/Website", FL_CTRL+'w', aboutWebsite);
+
 	auto attributes = root->attributes();
 	auto find_title = attributes.find("title");
 	if (find_title != attributes.end()) {
@@ -11,8 +97,8 @@ HTMLWindow::HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int 
 		title = find_title->second;
 		label(title.c_str());
 	}
-	scrollbar = new Fl_Scroll(0, 0, w, h);
-	page = new HTMLPage(root, std::shared_ptr<HTMLWindow>(this), 0, 0, w, h, 20);
+	scrollbar = new Fl_Scroll(0, 20, w, h - 20);
+	page = new HTMLPage(root, std::shared_ptr<HTMLWindow>(this), 0, 20, w, h - 20, 20);
 	scrollbar->end();
 	scrollbar->type(Fl_Scroll::VERTICAL);
 

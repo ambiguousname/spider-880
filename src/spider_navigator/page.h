@@ -3,6 +3,7 @@
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Scroll.H>
 #include <FL/Fl_draw.H>
+#include <FL/Fl_Menu_Bar.H>
 #include <functional>
 #include <memory>
 #include <vector>
@@ -77,13 +78,14 @@ class HTMLPage : public Fl_Group {
 	int w() { return Fl_Group::w() - padding; }
 };
 
-
 // Mostly for storing an HTML page. Might put some browser looking things (search bar?) on the top.
 // TODO: When an HTMLWindow is constructed from a root node, it returns a shared pointer 
 // May not pose a problem right now, but what if we need to make multiple windows of the same page that show different information?
 // Mayhaps some copying is in order in the future.
 class HTMLWindow : public Fl_Window {
 	void drawChildren();
+
+	Fl_Menu_Bar menu_bar;
 
 	HTMLPage* page;
 	Fl_Scroll* scrollbar;
@@ -92,8 +94,13 @@ class HTMLWindow : public Fl_Window {
 	std::unordered_map<std::string, std::function<HTMLWindow*(int, int, int, int)>> linked_windows;
 	std::string title;
 
+	char typing_buffer[20] = {};
+	int typing_index = 0;
+
 	public:
 	HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int h);
+
+	int handle(int event);
 
 	bool getLinkedWindow(std::string name, std::function<HTMLWindow*(int, int, int, int)> &out);
 };

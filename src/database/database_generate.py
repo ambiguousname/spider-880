@@ -164,6 +164,10 @@ class Citizen():
 		self.first_name = first_name
 		self.last_name = last_name
 		self.spouse = spouse
+		if self.spouse == "NEXT":
+			self.spouse = self.id + 1
+		elif self.spouse == "PREV":
+			self.spouse = self.id - 1
 		self.age = age
 		self.income = income
 	
@@ -294,6 +298,11 @@ if __name__ == "__main__":
 		[
 			(32, "Wallis", "Jeanneau", 7823, "NULL")
 		]),
+		((FamilyTypes.MARRIED_FAMILY), 439),
+		[
+			(56, "Brian", "Gertwig", 5342, "NEXT"),
+			(59, "Yvonne", "Gertwig", 6428, "PREV")
+		]
 	]
 	citizens.generate(to_add)
 	db = sqlite3.connect("citizens.db")

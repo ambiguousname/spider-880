@@ -1,0 +1,34 @@
+<html title="Brian Gertwig - NavSab Tracker">
+	<body>
+		<p>
+			<a href="gertwig_blog/index">Home</a>
+		</p>
+		<p>
+			The current dedicated tracker for NavSab. Plans are in development for making it open source. The major issue is making the BuSab internal compiler accessible. The code is incompatible with every other compiler out there. BuSab computers screen machine code to verify where it was compiled from. It's a pain, but if any other BuSab members want to reach out, let me know. I could really use the help.
+		</p>
+		<p>
+			Networking is in at the very least, so you can view webpages.
+		</p>
+		<p>
+			Urgent Bugs:
+		</p>
+		<p>
+			Multiple rendering issues - Image coloring and text positioning don't work on the first pass.
+		</p>
+		<p>
+			Major memory leakage for Spider-760s.
+		</p>
+		<p>
+			Typing "DEADBEEF" into NavSab window causes a crash.
+		</p>
+		<p>
+			Would be nice to have:
+		</p>
+		<p>
+			Proper text wrapping.
+		</p>
+		<p>
+			Not all HTML tags are supported (lists, scripts, etc.).
+		</p>
+	</body>
+</html>
