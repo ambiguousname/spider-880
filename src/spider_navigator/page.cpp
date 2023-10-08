@@ -46,7 +46,7 @@ int HTMLWindow::handle(int event) {
 			bool pwd_handled = false;
 			bool wrap = false;
 			for (int i = 0; i < len; i++) {
-				// TODO: Doesn't work with wrapping.
+				// TODO: Doesn't work with wrapping (or if there are partials of the password)
 				for (auto p : passwords) {
 					if (p.password[0] == typing_buffer[i] && std::find(matches.begin(), matches.end(), p) == matches.end()) {
 						matches.push_back(p);
