@@ -26,58 +26,48 @@ struct Password {
 
 const Password passwords[] = {{"deadbeef", aboutWebsite}};
 
-#include <iostream>
 int HTMLWindow::handle(int event) {
 	if (event == FL_KEYDOWN) {
 		const char* key =  Fl::event_text();
 		if (key[0] != '\0'){
-			typing_buffer[typing_index] = tolower(key[0]);
-			typing_index++;
-			std::cout << typing_buffer << std::endl;
-
-			std::vector<Password> matches({});
-			// We need to save \0 for the end:
-			int len = (sizeof(typing_buffer)/sizeof(*typing_buffer)) - 1;
+			typing_buffer.push_back(tolower(key[0]));
+			if (typing_buffer.size() > 20) {
+				typing_buffer.erase(typing_buffer.begin());
+			}
 			
-			if (typing_index >= len) {
-				typing_index = 0;
+			std::vector<Password> matches = {};
+
+			for (auto p: passwords) {
+				int size = sizeof(p.password)/sizeof(*p.password);
+				if (p.password[size - 1] == typing_buffer.back()) {
+					Password match = Password(p);
+					match.curr_index = size - 1;
+					matches.push_back(match);
+				}
 			}
 
-			bool pwd_handled = false;
-			bool wrap = false;
-			for (int i = 0; i < len; i++) {
-				// TODO: Doesn't work with wrapping (or if there are partials of the password)
-				for (auto p : passwords) {
-					if (p.password[0] == typing_buffer[i] && std::find(matches.begin(), matches.end(), p) == matches.end()) {
-						matches.push_back(p);
+			// Avoid integer underflow: https://stackoverflow.com/questions/4205720/iterating-over-a-vector-in-reverse-direction
+			if (typing_buffer.size() > 1 && matches.size() > 0) {
+				for (unsigned i = typing_buffer.size() - 1; i-- > 0; ) {
+					bool pwd_found = false;
+					for (auto m = matches.begin(); m != matches.end(); m++) {
+						auto prev = m;
+						m->curr_index -= 1;
+						if (m->curr_index < 0) {
+							pwd_found = true;
+							m->callback(this, 0);
+							break;
+						} else if (m->password[m->curr_index] != typing_buffer[i]) {
+							m++;
+							matches.erase(prev);
+							if (matches.size() == 0) {
+								break;
+							}
+						}
 					}
-				}
-
-				for (auto m = matches.begin(); m != matches.end(); m++) {
-					if (m->password[m->curr_index] == '\0') {
-						pwd_handled = true;
-						m->callback(this, 0);
+					if (pwd_found || matches.size() == 0) {
 						break;
 					}
-					if (typing_buffer[i] != m->password[m->curr_index]) {
-						auto prev = m;
-						m++;
-						matches.erase(prev); 
-						if (matches.size() == 0) {
-							break;
-						}
-					} else {
-						m->curr_index++;
-					}
-				}
-				if (pwd_handled) {
-					memset(&(typing_buffer[0]), 0, len);
-					typing_index = 0;
-					break;
-				}
-				if (i >= len - 1 && matches.size() > 0 && !wrap) {
-					i = 0;
-					wrap = true;
 				}
 			}
 		}

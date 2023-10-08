@@ -94,8 +94,7 @@ class HTMLWindow : public Fl_Window {
 	std::unordered_map<std::string, std::function<HTMLWindow*(int, int, int, int)>> linked_windows;
 	std::string title;
 
-	char typing_buffer[20] = {};
-	int typing_index = 0;
+	std::vector<char> typing_buffer = std::vector<char>();
 
 	public:
 	HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int h);
