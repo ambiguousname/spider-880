@@ -227,25 +227,9 @@ std::shared_ptr<P> p_31 = std::make_shared<P>(
 		{"color", "1"},
 	}
 );
-std::shared_ptr<Text> text_33 = std::make_shared<Text>(
-	".latrommi si regna ruo dnA",
-	std::vector<std::shared_ptr<HTMLNode>>{
-	},
-	std::unordered_map<std::string, std::string>{
-	}
-);
-std::shared_ptr<P> p_33 = std::make_shared<P>(
-	"",
-	std::vector<std::shared_ptr<HTMLNode>>{
-		text_33,
-	},
-	std::unordered_map<std::string, std::string>{
-	}
-);
 std::shared_ptr<HTMLNode> body_2 = std::make_shared<HTMLNode>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
-		p_33,
 		p_31,
 		p_29,
 		p_27,

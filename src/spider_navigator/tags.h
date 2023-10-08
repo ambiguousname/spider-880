@@ -69,6 +69,7 @@ class Text : public HTMLNode {
 
 class A : public HTMLNode {
 	public:
+	bool interactive() { return true; }
 	void click(int x, int y, HTMLPage* current_page);
 	void init();
 	A(NODE_CONSTRUCTOR) : HTMLNode(dat, c, attr) {

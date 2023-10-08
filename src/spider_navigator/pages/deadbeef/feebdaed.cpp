@@ -39,25 +39,9 @@ std::shared_ptr<P> p_6 = std::make_shared<P>(
 		{"color", "1"},
 	}
 );
-std::shared_ptr<Text> text_8 = std::make_shared<Text>(
-	"And our anger is immortal.",
-	std::vector<std::shared_ptr<HTMLNode>>{
-	},
-	std::unordered_map<std::string, std::string>{
-	}
-);
-std::shared_ptr<P> p_8 = std::make_shared<P>(
-	"",
-	std::vector<std::shared_ptr<HTMLNode>>{
-		text_8,
-	},
-	std::unordered_map<std::string, std::string>{
-	}
-);
 std::shared_ptr<HTMLNode> body_2 = std::make_shared<HTMLNode>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
-		p_8,
 		p_6,
 		p_4,
 		p_3,

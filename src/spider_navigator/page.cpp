@@ -36,7 +36,6 @@ const Password passwords[] = {
 	{"feebdaed", showHTMLPage, (void*)DeadbeefFeebdaedHTMLWindow::createWindow},
 };
 
-#include <iostream>
 int HTMLWindow::handle(int event) {
 	if (event == FL_KEYDOWN) {
 		const char* key =  Fl::event_text();
@@ -45,7 +44,6 @@ int HTMLWindow::handle(int event) {
 			if (typing_buffer.size() > 20) {
 				typing_buffer.erase(typing_buffer.begin());
 			}
-			std::cout << typing_buffer.back() << std::endl;
 			
 			std::vector<Password> matches = {};
 
@@ -132,7 +130,6 @@ void HTMLPage::initNode(HTMLNodePtr node) {
 	}
 }
 
-
 void HTMLPage::drawChildren() {
 	std::unique_ptr<NodeQueueInfo> _root = std::make_unique<NodeQueueInfo>(root, OPEN_NODE, nullptr);
 	std::vector<std::unique_ptr<NodeQueueInfo>> queue = {};
@@ -170,12 +167,14 @@ void HTMLPage::drawChildren() {
 			start_y = node_info->y;
 			node->close(this, start_x, start_y, out_w, out_h);
 			if (node->interactive()) {
-				interactive_nodes.push_back({node, start_x, start_y, out_w, out_h});
+				if (node->getCursor() != FL_CURSOR_INSERT) {
+					interactive_nodes.insert(interactive_nodes.begin(), {node, start_x, start_y, out_w, out_h});
+				}
 			}
 			
 			int parent_w, parent_h, parent_x, parent_y;
 			NodeQueueInfo* parent_info = node_info->parent_closer;
-			if (parent_info != nullptr){
+			if (parent_info != nullptr) {
 				parent_w = parent_info->w;
 				parent_h = parent_info->h;
 				parent_x = parent_info->x;

@@ -187,7 +187,7 @@ class HTMLCPPParser(HTMLParser):
 		self.struct_stream.close()
 		self.cpp_stream.close()
 		if len(self.stack) > 0:
-			sys.stderr.write("Unclosed tags: " + self.stack)
+			sys.stderr.write(self.path, "Unclosed tags: " + str(self.stack))
 
 	def match_node(self):
 		return {

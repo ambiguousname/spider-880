@@ -77,7 +77,7 @@ std::shared_ptr<Text> text_14 = std::make_shared<Text>(
 	}
 );
 std::shared_ptr<Text> text_16 = std::make_shared<Text>(
-	"Rorik's ",
+	"Rorik's",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
