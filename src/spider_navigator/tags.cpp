@@ -3,6 +3,10 @@
 #include <typeinfo>
 
 void HTMLNode::init() {
+	auto color_prop = _attributes.find("color");
+	if (color_prop != _attributes.end()) {
+		color = std::stoi(color_prop->second);
+	}
 	return;
 }
 

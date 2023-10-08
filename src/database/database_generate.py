@@ -296,7 +296,7 @@ if __name__ == "__main__":
 		]),
 		((FamilyTypes.LIVING_ALONE, 538), 
 		[
-			(32, "Wallis", "Jeanneau", 7823, "NULL")
+			(32, "Jessica", "Reyes", 7823, "NULL")
 		]),
 		((FamilyTypes.MARRIED_FAMILY), 439),
 		[

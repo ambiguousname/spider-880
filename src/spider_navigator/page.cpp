@@ -2,6 +2,7 @@
 #include <FL/Fl.H>
 #include <FL/fl_ask.H>
 #include "pages/gertwig_blog/navsab.h"
+#include "pages/deadbeef/deadbeef.h
 #include <stdexcept>
 #include <variant>
 
@@ -10,21 +11,28 @@ void aboutCallback(Fl_Widget*, void*) {
 	fl_alert("Bureau of Sabotage Network Navigator\nBy Brian Gertwig");
 }
 
-void aboutWebsite(Fl_Widget* widget, void*) {
-	GertwigBlogNavsabHTMLWindow* page = new GertwigBlogNavsabHTMLWindow(widget->x(), widget->y(), 300, 300);
+typedef HTMLWindow* (*page_create)(int, int, int, int);
+
+void showHTMLPage(Fl_Widget* widget, void* pg) {
+	page_create creator = static_cast<page_create>(pg);
+	HTMLWindow* page = creator(widget->x() + 10, widget->y() + 10, widget->w(), widget->h());
 	page->show();
 }
 
 struct Password {
 	const char* password;
 	Fl_Callback* callback;
+	void* data = 0;
 	int curr_index=0;
 	bool operator==(const Password& other) {
 		return strcmp(password, other.password) == 0;
 	}
 };
 
-const Password passwords[] = {{"deadbeef", aboutWebsite}};
+const Password passwords[] = {
+	{"deadbeef", showHTMLPage, DeadbeefDeadbeefHTMLWindow::createWindow},
+	{"feebdaed", showHTMLPage, DeadbeefFeebdaedHTMLWindow::createWindow},
+};
 
 int HTMLWindow::handle(int event) {
 	if (event == FL_KEYDOWN) {
