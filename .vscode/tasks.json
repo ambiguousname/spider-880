@@ -5,7 +5,7 @@
 			"label": "Build",
 			"group": "build",
 			"type": "process",
-			"command": "C:\\msys64\\ucrt64.exe",
+			"command": "bash",
 			"args": [
 				"./build.sh"
 			],
