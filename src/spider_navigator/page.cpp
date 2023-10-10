@@ -61,18 +61,13 @@ int HTMLWindow::handle(int event) {
 				for (unsigned i = typing_buffer.size() - 1; i-- >= 0; ) {
 					bool pwd_found = false;
 					for (auto m = matches.begin(); m != matches.end(); m++) {
-						auto prev = m;
 						m->curr_index -= 1;
 						if (m->curr_index < 0) {
 							pwd_found = true;
 							m->callback(this, m->data);
 							break;
 						} else if (m->password[m->curr_index] != typing_buffer[i]) {
-							m++;
-							matches.erase(prev);
-							if (matches.size() == 0) {
-								break;
-							}
+							matches.erase(m);
 						}
 					}
 					if (pwd_found || matches.size() == 0) {
@@ -97,8 +92,8 @@ HTMLWindow::HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int 
 		title = find_title->second;
 		label(title.c_str());
 	}
-	scrollbar = new Fl_Scroll(0, 20, w, h - 20);
-	page = new HTMLPage(root, std::shared_ptr<HTMLWindow>(this), 0, 20, w, h - 20, 20);
+	scrollbar = new Fl_Scroll(0, 25, w, h - 25);
+	page = new HTMLPage(root, std::shared_ptr<HTMLWindow>(this), 0, 25, w, h - 25, 20);
 	scrollbar->end();
 	scrollbar->type(Fl_Scroll::VERTICAL);
 

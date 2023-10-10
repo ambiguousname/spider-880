@@ -4,7 +4,13 @@
 			<a href="gertwig_blog/index">Home</a>
 		</p>
 		<p>
-			The current page for NavSab. Plans are in development for making it open source. The major issue is the BuSab Internal C Compiler. The binaries are only compatible with Spider-500+, and only on BuSab models. BuSab OS screens the machine code to verify that a compiled program has an encrypted checksum generated from the BICC. And there are some C features that are wholly unique to BICC. It's a pain, but if any other BuSab members want to reach out (especially with valid checksum generators, or any custom compiler kits), let me know. I could really use the help.
+			The current page for NavSab. Plans are in development for making it open source.
+		</p>
+		<p>
+			The major issue is the BuSab Internal C Compiler. The binaries are only compatible with Spider-500+, and only on BuSab models. BuSab OS screens the machine code to verify that a compiled program has an encrypted checksum generated from the BICC. And there are some C features that are wholly unique to BICC.
+		</p>
+		<p>
+			It's a pain, but if any other BuSab members want to reach out (especially with valid checksum generators, or any custom compiler kits), let me know. I could really use the help.
 		</p>
 		<p>
 			Networking is in at the very least, so you can view webpages.
@@ -19,16 +25,28 @@
 			Major memory leakage for Spider-760s.
 		</p>
 		<p>
-			Typing "DEADBEEF" into NavSab window causes a crash.
+			Typing "DEADBEEF" into a NavSab window causes a crash.
 		</p>
 		<p>
 			Would be nice to have:
 		</p>
 		<p>
+			Maximize button that doesn't screw up sizing.
+		</p>
+		<p>
 			Proper text wrapping.
 		</p>
 		<p>
+			Fully centered text.
+		</p>
+		<p>
 			Not all HTML tags are supported (lists, plaintext, headers, etc.)
+		</p>
+		<p>
+			Things I can't fix:
+		</p>
+		<p>
+			Swearing is blocked as per <a href="spider/policies">SPNPOLICY200</a>.
 		</p>
 	</body>
 </html>

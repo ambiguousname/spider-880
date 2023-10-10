@@ -1,5 +1,7 @@
 #pragma once
+#include <spider/policies.h>
 #include <cool_myths/theend.h>
+#include <engounge/index.h>
 #include "spider_navigator/page.h"
 class MurderBlogMurderHTMLWindow : public HTMLWindow {
 	public:

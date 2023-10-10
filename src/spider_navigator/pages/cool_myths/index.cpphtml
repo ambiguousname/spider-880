@@ -1,0 +1,16 @@
+<html title="Cool Myths">
+	<body>
+		<p>
+			HOME
+		</p>
+		<p>
+			Welcome to my home. I'm mostly figuring out how these servers work, but I've put up some cool stuff in the meantime.
+		</p>
+		<p>
+			<a href="cool_myths/scream">Story 1</a>
+		</p>
+		<p>
+			<a href="cool_myths/theend">Story 2</a>
+		</p>
+	</body>
+</html>

@@ -302,7 +302,13 @@ if __name__ == "__main__":
 		[
 			(56, "Brian", "Gertwig", 5342, "NEXT"),
 			(59, "Yvonne", "Gertwig", 6428, "PREV")
-		]
+		],
+		((FamilyTypes.NOT_LIVING_ALONE, 531),
+   		[
+			(30, "Lucas", "Friedrich", 9105, "NULL"),
+			(22, "Emilie", "Quantz", 7200, "NULL"),
+			(31, "Elizabeth", "Parton", 10239, "NULL"),
+		]),
 	]
 	citizens.generate(to_add)
 	db = sqlite3.connect("citizens.db")
