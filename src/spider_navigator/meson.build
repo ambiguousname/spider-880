@@ -1,5 +1,3 @@
-python = find_program('python3')
-
 cpp_files = run_command('cat', 'list.txt')
 files = cpp_files.stdout().strip()
 

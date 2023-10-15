@@ -1,0 +1,27 @@
+<html title="UBBS">
+	<body>
+		<p> <!-- Probably won't look right, and that's okay. It's funnier if it doesn't. -->
+			____ ___ __________ __________   _________ 
+			|    |   \\______   \\______   \ /   _____/ 
+			|    |   / |    |  _/ |    |  _/ \_____  \  
+			|    |  /  |    |   \ |    |   \ /        \ 
+			|______/   |______  / |______  //_______  / 
+							  \/         \/         \/  
+			
+			Universal Bulletin Board System
+			for Rorik's End
+		</p>
+		<p>
+			Welcome back, MIRRORAGENT
+		</p>
+		<p>
+			<a href="ubbs/bulletin">System Bulletins</a>
+		</p>
+		<p>
+			<a href="ubbs/ubulletin">User Bulletins</a>
+		</p>
+		<p>
+			Powered by <a href="mirror/index">Mirror</a>.
+		</p>
+	</body>
+</html>

@@ -1,0 +1,16 @@
+<html title="Spider Computing BBS">
+	<body>
+		<p>
+			Welcome to the Spider Computing BBS.
+		</p>
+		<p>
+			<a href="spider/announcements">Announcements</a>
+		</p>
+		<p>
+			<a href="spider/messages">All User Messages</a>
+		</p>
+		<p>
+			Powered by <a href="mirror/index">Mirror</a>.
+		</p>
+	</body>
+</html>
