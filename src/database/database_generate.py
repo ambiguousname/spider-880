@@ -300,7 +300,7 @@ if __name__ == "__main__":
 		]),
 		((FamilyTypes.MARRIED_FAMILY), 439),
 		[
-			(56, "Brian", "Gertwig", 5342, "NEXT"),
+			(60, "Brian", "Gertwig", 5342, "NEXT"),
 			(59, "Yvonne", "Gertwig", 6428, "PREV")
 		],
 		((FamilyTypes.NOT_LIVING_ALONE, 531),
