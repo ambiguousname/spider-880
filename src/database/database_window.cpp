@@ -77,7 +77,7 @@ std::string selectArea(int tier, int value) {
 // Integer formating: 1 byte for HIGH (1-255), 1 byte for LOW (1-255), so the byte formatting is: HIGHLOW on an integer.
 
 ChoiceCategory income_range {
-	"Income",
+	"Monthly Income",
 	{
 		{"<$5k", 0b0000010100000000},
 		{"$10k-$5k", 0b0000101000000101},

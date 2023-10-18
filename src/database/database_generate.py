@@ -289,25 +289,25 @@ if __name__ == "__main__":
 	to_add = [
 		((FamilyTypes.NOT_LIVING_ALONE, 180),
 		[
-			(35, "Jerry", "Seinfeld", 6512, "NULL"),
-			(30, "George", "Costanza", 7542, "NULL"),
-			(28, "Elaine", "Benes", 11120, "NULL"),
+			(35, "Jerry", "Seinfeld", 3512, "NULL"),
+			(30, "George", "Costanza", 5542, "NULL"),
+			(28, "Elaine", "Benes", 6120, "NULL"),
 			(40, "Cosmo", "Kramer", 0, 69)
 		]),
 		((FamilyTypes.LIVING_ALONE, 538), 
 		[
-			(32, "Jessica", "Reyes", 7823, "NULL")
+			(32, "Jessica", "Reyes", 4223, "NULL")
 		]),
 		((FamilyTypes.MARRIED_FAMILY), 439),
 		[
-			(60, "Brian", "Gertwig", 5342, "NEXT"),
+			(60, "Brian", "Gertwig", 2342, "NEXT"),
 			(59, "Yvonne", "Gertwig", 6428, "PREV")
 		],
 		((FamilyTypes.NOT_LIVING_ALONE, 531),
    		[
-			(30, "Lucas", "Friedrich", 9105, "NULL"),
-			(22, "Emilie", "Quantz", 7200, "NULL"),
-			(31, "Elizabeth", "Parton", 10239, "NULL"),
+			(30, "Lucas", "Friedrich", 6105, "NULL"),
+			(22, "Emilie", "Quantz", 4200, "NULL"),
+			(31, "Elizabeth", "Parton", 4239, "NULL"),
 		]),
 	]
 	citizens.generate(to_add)
