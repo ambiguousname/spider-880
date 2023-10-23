@@ -36,7 +36,6 @@ const Password passwords[] = {
 	{"feebdaed", showHTMLPage, (void*)DeadbeefFeebdaedHTMLWindow::createWindow},
 };
 
-// TODO: Still a bug on typing "dead"
 int HTMLWindow::handle(int event) {
 	if (event == FL_KEYDOWN) {
 		const char* key =  Fl::event_text();
@@ -61,7 +60,7 @@ int HTMLWindow::handle(int event) {
 			if (typing_buffer.size() > 1 && matches.size() > 0) {
 				for (unsigned i = typing_buffer.size() - 1; i-- >= 0; ) {
 					bool pwd_found = false;
-					for (auto m = matches.begin(); m != matches.end(); m++) {
+					for (auto m = matches.begin(); m != matches.end();) {
 						m->curr_index -= 1;
 						if (m->curr_index < 0) {
 							pwd_found = true;
@@ -69,6 +68,8 @@ int HTMLWindow::handle(int event) {
 							break;
 						} else if (m->password[m->curr_index] != typing_buffer[i]) {
 							matches.erase(m);
+						} else {
+							m++;
 						}
 					}
 					if (pwd_found || matches.size() == 0) {
