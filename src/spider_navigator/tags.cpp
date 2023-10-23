@@ -61,10 +61,11 @@ void Text::open(HTMLPage* current_page, int& start_x, int& start_y, int& out_w, 
 void A::click(int, int, HTMLPage* current_page) {
 	auto search = _attributes.find("href");
 	if (search != _attributes.end()) {
-		// TODO: Move on-click logic to python scripting.
+		// TODO: Move on-click logic to python scripting (?)
 		
 		windowCreation constructor;
 		if (current_page->parent_window->getLinkedWindow(search->second, constructor)) {
+			// TODO: Shouldn't be current page, should be the topmost window x and y.
 			auto window = constructor(current_page->x(), current_page->y(), current_page->parent_window->w(), current_page->parent_window->h());
 			window->show();
 		}

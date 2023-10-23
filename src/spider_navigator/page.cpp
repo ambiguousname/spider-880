@@ -36,6 +36,7 @@ const Password passwords[] = {
 	{"feebdaed", showHTMLPage, (void*)DeadbeefFeebdaedHTMLWindow::createWindow},
 };
 
+// TODO: Still a bug on typing "dead"
 int HTMLWindow::handle(int event) {
 	if (event == FL_KEYDOWN) {
 		const char* key =  Fl::event_text();
@@ -126,6 +127,7 @@ void HTMLPage::initNode(HTMLNodePtr node) {
 }
 
 void HTMLPage::drawChildren() {
+	// TODO: Fix whatever's wrong with the renderer on first go.
 	std::unique_ptr<NodeQueueInfo> _root = std::make_unique<NodeQueueInfo>(root, OPEN_NODE, nullptr);
 	std::vector<std::unique_ptr<NodeQueueInfo>> queue = {};
 	queue.emplace_back(std::move(_root));
