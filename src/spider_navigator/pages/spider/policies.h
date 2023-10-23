@@ -1,4 +1,6 @@
 #pragma once
+#include <spider/about_us.h>
+#include <spider/index.h>
 #include "spider_navigator/page.h"
 class SpiderPoliciesHTMLWindow : public HTMLWindow {
 	public:

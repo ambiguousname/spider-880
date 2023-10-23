@@ -1,7 +1,7 @@
 #include "index.h"
-namespace GertwigBlogIndexHTMLWindowNamespace {
+namespace UbbsIndexHTMLWindowNamespace {
 std::shared_ptr<Text> text_3 = std::make_shared<Text>(
-	"Hi! I'm Brian.",
+	"____ ___ __________ __________   _________ |    |   \\______   \\______   \ /   _____/ |    |   / |    |  _/ |    |  _/ \_____  \  |    |  /  |    |   \ |    |   \ /        \ |______/   |______  / |______  //_______  /   \/         \/         \/  Universal Bulletin Board Systemfor Rorik's End",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
@@ -16,7 +16,7 @@ std::shared_ptr<P> p_3 = std::make_shared<P>(
 	}
 );
 std::shared_ptr<Text> text_5 = std::make_shared<Text>(
-	"I've been playing with this stuff for a long while now (just turned 60. Boy am I old :). I started on punchcards, I'm now on database management for the Bureau of Sabotage. I'm running this server on my home BSD distribution right now.",
+	"Welcome back, MIRRORAGENT",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
@@ -30,34 +30,37 @@ std::shared_ptr<P> p_5 = std::make_shared<P>(
 	std::unordered_map<std::string, std::string>{
 	}
 );
-std::shared_ptr<Text> text_7 = std::make_shared<Text>(
-	"Currently developing the Bureau of Sabotage Network Navigator as a spare time project.",
+std::shared_ptr<Text> text_8 = std::make_shared<Text>(
+	"System Bulletins",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
+		{"href", "ubbs/bulletin"},
+	}
+);
+std::shared_ptr<A> a_8 = std::make_shared<A>(
+	"",
+	std::vector<std::shared_ptr<HTMLNode>>{
+		text_8,
+	},
+	std::unordered_map<std::string, std::string>{
+		{"href", "ubbs/bulletin"},
 	}
 );
 std::shared_ptr<P> p_7 = std::make_shared<P>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
-		text_7,
-	},
-	std::unordered_map<std::string, std::string>{
-	}
-);
-std::shared_ptr<Text> text_9 = std::make_shared<Text>(
-	"My apologies to everyone currently using NavSab. You can see NavSab's development here: ",
-	std::vector<std::shared_ptr<HTMLNode>>{
+		a_8,
 	},
 	std::unordered_map<std::string, std::string>{
 	}
 );
 std::shared_ptr<Text> text_11 = std::make_shared<Text>(
-	"NavSab Development",
+	"User Bulletins",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
-		{"href", "gertwig_blog/navsab"},
+		{"href", "ubbs/ubulletin"},
 	}
 );
 std::shared_ptr<A> a_11 = std::make_shared<A>(
@@ -66,20 +69,43 @@ std::shared_ptr<A> a_11 = std::make_shared<A>(
 		text_11,
 	},
 	std::unordered_map<std::string, std::string>{
-		{"href", "gertwig_blog/navsab"},
+		{"href", "ubbs/ubulletin"},
 	}
 );
-std::shared_ptr<P> p_9 = std::make_shared<P>(
+std::shared_ptr<P> p_10 = std::make_shared<P>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
 		a_11,
-		text_9,
 	},
 	std::unordered_map<std::string, std::string>{
 	}
 );
 std::shared_ptr<Text> text_13 = std::make_shared<Text>(
-	"I'm tired. I don't know if I can do this anymore. I'm leaving the links up here, but... yeah. I've got no money and no friends. If you find me impaled on some spike somewhere, don't be surprised by the result.",
+	"Powered by ",
+	std::vector<std::shared_ptr<HTMLNode>>{
+	},
+	std::unordered_map<std::string, std::string>{
+	}
+);
+std::shared_ptr<Text> text_15 = std::make_shared<Text>(
+	"Mirror",
+	std::vector<std::shared_ptr<HTMLNode>>{
+	},
+	std::unordered_map<std::string, std::string>{
+		{"href", "mirror/index"},
+	}
+);
+std::shared_ptr<A> a_15 = std::make_shared<A>(
+	"",
+	std::vector<std::shared_ptr<HTMLNode>>{
+		text_15,
+	},
+	std::unordered_map<std::string, std::string>{
+		{"href", "mirror/index"},
+	}
+);
+std::shared_ptr<Text> text_16 = std::make_shared<Text>(
+	".",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
@@ -88,6 +114,8 @@ std::shared_ptr<Text> text_13 = std::make_shared<Text>(
 std::shared_ptr<P> p_13 = std::make_shared<P>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
+		text_16,
+		a_15,
 		text_13,
 	},
 	std::unordered_map<std::string, std::string>{
@@ -97,7 +125,7 @@ std::shared_ptr<HTMLNode> body_2 = std::make_shared<HTMLNode>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
 		p_13,
-		p_9,
+		p_10,
 		p_7,
 		p_5,
 		p_3,
@@ -111,11 +139,13 @@ std::shared_ptr<HTMLNode> html_1 = std::make_shared<HTMLNode>(
 		body_2,
 	},
 	std::unordered_map<std::string, std::string>{
-		{"title", "Brian Gertwig's Homepage"},
+		{"title", "UBBS"},
 	}
 );
 }
-GertwigBlogIndexHTMLWindow::GertwigBlogIndexHTMLWindow(int x, int y, int w, int h) : HTMLWindow(GertwigBlogIndexHTMLWindowNamespace::html_1, x, y, w, h) {
-	linked_windows.insert({"gertwig_blog/navsab", GertwigBlogNavsabHTMLWindow::createWindow});
+UbbsIndexHTMLWindow::UbbsIndexHTMLWindow(int x, int y, int w, int h) : HTMLWindow(UbbsIndexHTMLWindowNamespace::html_1, x, y, w, h) {
+	linked_windows.insert({"ubbs/bulletin", UbbsBulletinHTMLWindow::createWindow});
+	linked_windows.insert({"ubbs/ubulletin", UbbsUbulletinHTMLWindow::createWindow});
+	linked_windows.insert({"mirror/index", MirrorIndexHTMLWindow::createWindow});
 
 }

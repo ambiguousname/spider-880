@@ -1,7 +1,7 @@
 <html title="Spider Computing">
 	<body>
 		<p>
-			Home | <a href="spider/policies">Policies</a> | <a href="spider/about-us">About Us</a>
+			Home | <a href="spider/policies">Policies</a> | <a href="spider/about_us">About Us</a>
 		</p>
 		<img src="./assets/spider.png"/>
 		<p>

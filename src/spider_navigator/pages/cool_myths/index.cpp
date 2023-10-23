@@ -1,7 +1,7 @@
 #include "index.h"
-namespace GertwigBlogIndexHTMLWindowNamespace {
+namespace CoolMythsIndexHTMLWindowNamespace {
 std::shared_ptr<Text> text_3 = std::make_shared<Text>(
-	"Hi! I'm Brian.",
+	"HOME",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
@@ -16,7 +16,7 @@ std::shared_ptr<P> p_3 = std::make_shared<P>(
 	}
 );
 std::shared_ptr<Text> text_5 = std::make_shared<Text>(
-	"I've been playing with this stuff for a long while now (just turned 60. Boy am I old :). I started on punchcards, I'm now on database management for the Bureau of Sabotage. I'm running this server on my home BSD distribution right now.",
+	"Welcome to my home. I'm mostly figuring out how these servers work, but I've put up some cool stuff in the meantime.",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
@@ -30,34 +30,37 @@ std::shared_ptr<P> p_5 = std::make_shared<P>(
 	std::unordered_map<std::string, std::string>{
 	}
 );
-std::shared_ptr<Text> text_7 = std::make_shared<Text>(
-	"Currently developing the Bureau of Sabotage Network Navigator as a spare time project.",
+std::shared_ptr<Text> text_8 = std::make_shared<Text>(
+	"Story 1",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
+		{"href", "cool_myths/scream"},
+	}
+);
+std::shared_ptr<A> a_8 = std::make_shared<A>(
+	"",
+	std::vector<std::shared_ptr<HTMLNode>>{
+		text_8,
+	},
+	std::unordered_map<std::string, std::string>{
+		{"href", "cool_myths/scream"},
 	}
 );
 std::shared_ptr<P> p_7 = std::make_shared<P>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
-		text_7,
-	},
-	std::unordered_map<std::string, std::string>{
-	}
-);
-std::shared_ptr<Text> text_9 = std::make_shared<Text>(
-	"My apologies to everyone currently using NavSab. You can see NavSab's development here: ",
-	std::vector<std::shared_ptr<HTMLNode>>{
+		a_8,
 	},
 	std::unordered_map<std::string, std::string>{
 	}
 );
 std::shared_ptr<Text> text_11 = std::make_shared<Text>(
-	"NavSab Development",
+	"Story 2",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
-		{"href", "gertwig_blog/navsab"},
+		{"href", "cool_myths/theend"},
 	}
 );
 std::shared_ptr<A> a_11 = std::make_shared<A>(
@@ -66,29 +69,13 @@ std::shared_ptr<A> a_11 = std::make_shared<A>(
 		text_11,
 	},
 	std::unordered_map<std::string, std::string>{
-		{"href", "gertwig_blog/navsab"},
+		{"href", "cool_myths/theend"},
 	}
 );
-std::shared_ptr<P> p_9 = std::make_shared<P>(
+std::shared_ptr<P> p_10 = std::make_shared<P>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
 		a_11,
-		text_9,
-	},
-	std::unordered_map<std::string, std::string>{
-	}
-);
-std::shared_ptr<Text> text_13 = std::make_shared<Text>(
-	"I'm tired. I don't know if I can do this anymore. I'm leaving the links up here, but... yeah. I've got no money and no friends. If you find me impaled on some spike somewhere, don't be surprised by the result.",
-	std::vector<std::shared_ptr<HTMLNode>>{
-	},
-	std::unordered_map<std::string, std::string>{
-	}
-);
-std::shared_ptr<P> p_13 = std::make_shared<P>(
-	"",
-	std::vector<std::shared_ptr<HTMLNode>>{
-		text_13,
 	},
 	std::unordered_map<std::string, std::string>{
 	}
@@ -96,8 +83,7 @@ std::shared_ptr<P> p_13 = std::make_shared<P>(
 std::shared_ptr<HTMLNode> body_2 = std::make_shared<HTMLNode>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
-		p_13,
-		p_9,
+		p_10,
 		p_7,
 		p_5,
 		p_3,
@@ -111,11 +97,12 @@ std::shared_ptr<HTMLNode> html_1 = std::make_shared<HTMLNode>(
 		body_2,
 	},
 	std::unordered_map<std::string, std::string>{
-		{"title", "Brian Gertwig's Homepage"},
+		{"title", "Cool Myths"},
 	}
 );
 }
-GertwigBlogIndexHTMLWindow::GertwigBlogIndexHTMLWindow(int x, int y, int w, int h) : HTMLWindow(GertwigBlogIndexHTMLWindowNamespace::html_1, x, y, w, h) {
-	linked_windows.insert({"gertwig_blog/navsab", GertwigBlogNavsabHTMLWindow::createWindow});
+CoolMythsIndexHTMLWindow::CoolMythsIndexHTMLWindow(int x, int y, int w, int h) : HTMLWindow(CoolMythsIndexHTMLWindowNamespace::html_1, x, y, w, h) {
+	linked_windows.insert({"cool_myths/scream", CoolMythsScreamHTMLWindow::createWindow});
+	linked_windows.insert({"cool_myths/theend", CoolMythsTheendHTMLWindow::createWindow});
 
 }

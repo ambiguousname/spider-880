@@ -1,8 +1,9 @@
 #pragma once
-#include <spider/policies.h>
-#include <cool_myths/theend.h>
 #include <engounge/index.h>
 #include "spider_navigator/page.h"
+#include <murder_blog/index.h>
+#include <spider/policies.h>
+#include <cool_myths/theend.h>
 class MurderBlogMurderHTMLWindow : public HTMLWindow {
 	public:
 	MurderBlogMurderHTMLWindow(int x, int y, int w, int h);

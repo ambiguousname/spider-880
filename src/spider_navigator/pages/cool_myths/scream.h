@@ -1,4 +1,5 @@
 #pragma once
+#include <cool_myths/index.h>
 #include "spider_navigator/page.h"
 class CoolMythsScreamHTMLWindow : public HTMLWindow {
 	public:

@@ -1,4 +1,5 @@
 #pragma once
+#include <history/index.h>
 #include "spider_navigator/page.h"
 class HistoryRoriksendHTMLWindow : public HTMLWindow {
 	public:

@@ -131,7 +131,7 @@ std::shared_ptr<P> p_18 = std::make_shared<P>(
 	}
 );
 std::shared_ptr<Text> text_20 = std::make_shared<Text>(
-	"Typing \"DEADBEEF\" into NavSab window causes a crash.",
+	"Typing \"DEADBEEF\" into a NavSab window causes a crash.",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
@@ -161,7 +161,7 @@ std::shared_ptr<P> p_22 = std::make_shared<P>(
 	}
 );
 std::shared_ptr<Text> text_24 = std::make_shared<Text>(
-	"Proper text wrapping.",
+	"Maximize button that doesn't screw up sizing.",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
@@ -176,7 +176,7 @@ std::shared_ptr<P> p_24 = std::make_shared<P>(
 	}
 );
 std::shared_ptr<Text> text_26 = std::make_shared<Text>(
-	"Fully centered text.",
+	"Proper text wrapping.",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
@@ -191,7 +191,7 @@ std::shared_ptr<P> p_26 = std::make_shared<P>(
 	}
 );
 std::shared_ptr<Text> text_28 = std::make_shared<Text>(
-	"Not all HTML tags are supported (lists, plaintext, headers, etc.)",
+	"Fully centered text.",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
@@ -206,7 +206,7 @@ std::shared_ptr<P> p_28 = std::make_shared<P>(
 	}
 );
 std::shared_ptr<Text> text_30 = std::make_shared<Text>(
-	"Things I can't fix:",
+	"Not all HTML tags are supported (lists, plaintext, headers, etc.)",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
@@ -221,31 +221,7 @@ std::shared_ptr<P> p_30 = std::make_shared<P>(
 	}
 );
 std::shared_ptr<Text> text_32 = std::make_shared<Text>(
-	"Swearing is blocked as per ",
-	std::vector<std::shared_ptr<HTMLNode>>{
-	},
-	std::unordered_map<std::string, std::string>{
-	}
-);
-std::shared_ptr<Text> text_34 = std::make_shared<Text>(
-	"SPNPOLICY200",
-	std::vector<std::shared_ptr<HTMLNode>>{
-	},
-	std::unordered_map<std::string, std::string>{
-		{"href", "spider/policies"},
-	}
-);
-std::shared_ptr<A> a_34 = std::make_shared<A>(
-	"",
-	std::vector<std::shared_ptr<HTMLNode>>{
-		text_34,
-	},
-	std::unordered_map<std::string, std::string>{
-		{"href", "spider/policies"},
-	}
-);
-std::shared_ptr<Text> text_35 = std::make_shared<Text>(
-	".",
+	"Things I can't fix:",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
@@ -254,9 +230,48 @@ std::shared_ptr<Text> text_35 = std::make_shared<Text>(
 std::shared_ptr<P> p_32 = std::make_shared<P>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
-		text_35,
-		a_34,
 		text_32,
+	},
+	std::unordered_map<std::string, std::string>{
+	}
+);
+std::shared_ptr<Text> text_34 = std::make_shared<Text>(
+	"Swearing is blocked as per ",
+	std::vector<std::shared_ptr<HTMLNode>>{
+	},
+	std::unordered_map<std::string, std::string>{
+	}
+);
+std::shared_ptr<Text> text_36 = std::make_shared<Text>(
+	"SPNPOLICY200",
+	std::vector<std::shared_ptr<HTMLNode>>{
+	},
+	std::unordered_map<std::string, std::string>{
+		{"href", "spider/policies"},
+	}
+);
+std::shared_ptr<A> a_36 = std::make_shared<A>(
+	"",
+	std::vector<std::shared_ptr<HTMLNode>>{
+		text_36,
+	},
+	std::unordered_map<std::string, std::string>{
+		{"href", "spider/policies"},
+	}
+);
+std::shared_ptr<Text> text_37 = std::make_shared<Text>(
+	".",
+	std::vector<std::shared_ptr<HTMLNode>>{
+	},
+	std::unordered_map<std::string, std::string>{
+	}
+);
+std::shared_ptr<P> p_34 = std::make_shared<P>(
+	"",
+	std::vector<std::shared_ptr<HTMLNode>>{
+		text_37,
+		a_36,
+		text_34,
 	},
 	std::unordered_map<std::string, std::string>{
 	}
@@ -264,6 +279,7 @@ std::shared_ptr<P> p_32 = std::make_shared<P>(
 std::shared_ptr<HTMLNode> body_2 = std::make_shared<HTMLNode>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
+		p_34,
 		p_32,
 		p_30,
 		p_28,

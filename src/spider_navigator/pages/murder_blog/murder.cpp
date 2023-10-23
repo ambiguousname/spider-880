@@ -57,7 +57,7 @@ std::shared_ptr<P> p_7 = std::make_shared<P>(
 	}
 );
 std::shared_ptr<Text> text_12 = std::make_shared<Text>(
-	"The adage holds true. I've been getting too many \"customer complaints\" in my spam box to say it again, but just imagine my words now.",
+	"The adage holds true. I've been getting too many \"customer complaints\" in my spam box to say it again, but just imagine my words now. News flash: the slasher has struck again.",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
@@ -239,9 +239,43 @@ std::shared_ptr<P> p_30 = std::make_shared<P>(
 	std::unordered_map<std::string, std::string>{
 	}
 );
+std::shared_ptr<Text> text_36 = std::make_shared<Text>(
+	"Kurt Hawkins",
+	std::vector<std::shared_ptr<HTMLNode>>{
+	},
+	std::unordered_map<std::string, std::string>{
+		{"href", "murder_blog/index"},
+	}
+);
+std::shared_ptr<A> a_36 = std::make_shared<A>(
+	"",
+	std::vector<std::shared_ptr<HTMLNode>>{
+		text_36,
+	},
+	std::unordered_map<std::string, std::string>{
+		{"href", "murder_blog/index"},
+	}
+);
+std::shared_ptr<Text> text_37 = std::make_shared<Text>(
+	", Site Admin.",
+	std::vector<std::shared_ptr<HTMLNode>>{
+	},
+	std::unordered_map<std::string, std::string>{
+	}
+);
+std::shared_ptr<P> p_35 = std::make_shared<P>(
+	"",
+	std::vector<std::shared_ptr<HTMLNode>>{
+		text_37,
+		a_36,
+	},
+	std::unordered_map<std::string, std::string>{
+	}
+);
 std::shared_ptr<HTMLNode> body_5 = std::make_shared<HTMLNode>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
+		p_35,
 		p_30,
 		p_28,
 		p_26,
@@ -262,7 +296,7 @@ std::shared_ptr<HTMLNode> html_1 = std::make_shared<HTMLNode>(
 		header_3,
 	},
 	std::unordered_map<std::string, std::string>{
-		{"title", "My Blog (GEANE: CHANGE TITLE TEXT)"},
+		{"title", "Endemic Thunderspasm - Murder in Rorik's End Pt. 2"},
 	}
 );
 }
@@ -271,5 +305,6 @@ MurderBlogMurderHTMLWindow::MurderBlogMurderHTMLWindow(int x, int y, int w, int 
 	linked_windows.insert({"cool_myths/theend", CoolMythsTheendHTMLWindow::createWindow});
 	linked_windows.insert({"spider/policies", SpiderPoliciesHTMLWindow::createWindow});
 	linked_windows.insert({"spider/policies", SpiderPoliciesHTMLWindow::createWindow});
+	linked_windows.insert({"murder_blog/index", MurderBlogIndexHTMLWindow::createWindow});
 
 }
