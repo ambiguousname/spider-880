@@ -1,28 +1,35 @@
 #include "messages.h"
 namespace SpiderBbsMessagesHTMLWindowNamespace {
-std::shared_ptr<Text> text_3 = std::make_shared<Text>(
-	"TODO",
-	std::vector<std::shared_ptr<HTMLNode>>{
-	},
-	std::unordered_map<std::string, std::string>{
-	}
-);
 std::shared_ptr<P> p_3 = std::make_shared<P>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
-		text_3,
 	},
 	std::unordered_map<std::string, std::string>{
 	}
 );
-std::shared_ptr<Text> text_5 = std::make_shared<Text>(
+std::shared_ptr<Text> text_4 = std::make_shared<Text>(
+	"DRYDOCK_ ",
+	std::vector<std::shared_ptr<HTMLNode>>{
+	},
+	std::unordered_map<std::string, std::string>{
+	}
+);
+std::shared_ptr<P> p_4 = std::make_shared<P>(
+	"",
+	std::vector<std::shared_ptr<HTMLNode>>{
+		text_4,
+	},
+	std::unordered_map<std::string, std::string>{
+	}
+);
+std::shared_ptr<Text> text_6 = std::make_shared<Text>(
 	"Powered by ",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
 	}
 );
-std::shared_ptr<Text> text_7 = std::make_shared<Text>(
+std::shared_ptr<Text> text_8 = std::make_shared<Text>(
 	"Mirror",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
@@ -30,28 +37,28 @@ std::shared_ptr<Text> text_7 = std::make_shared<Text>(
 		{"href", "mirror/index"},
 	}
 );
-std::shared_ptr<A> a_7 = std::make_shared<A>(
+std::shared_ptr<A> a_8 = std::make_shared<A>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
-		text_7,
+		text_8,
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "mirror/index"},
 	}
 );
-std::shared_ptr<Text> text_8 = std::make_shared<Text>(
+std::shared_ptr<Text> text_9 = std::make_shared<Text>(
 	".",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
 	}
 );
-std::shared_ptr<P> p_5 = std::make_shared<P>(
+std::shared_ptr<P> p_6 = std::make_shared<P>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
-		text_8,
-		a_7,
-		text_5,
+		text_9,
+		a_8,
+		text_6,
 	},
 	std::unordered_map<std::string, std::string>{
 	}
@@ -59,7 +66,8 @@ std::shared_ptr<P> p_5 = std::make_shared<P>(
 std::shared_ptr<HTMLNode> body_2 = std::make_shared<HTMLNode>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
-		p_5,
+		p_6,
+		p_4,
 		p_3,
 	},
 	std::unordered_map<std::string, std::string>{

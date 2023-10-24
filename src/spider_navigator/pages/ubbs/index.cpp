@@ -1,7 +1,7 @@
 #include "index.h"
 namespace UbbsIndexHTMLWindowNamespace {
 std::shared_ptr<Text> text_3 = std::make_shared<Text>(
-	"____ ___ __________ __________   _________ |    |   \\______   \\______   \ /   _____/ |    |   / |    |  _/ |    |  _/ \_____  \  |    |  /  |    |   \ |    |   \ /        \ |______/   |______  / |______  //_______  /   \/         \/         \/  Universal Bulletin Board Systemfor Rorik's End",
+	"____ ___ __________ __________   _________ |    |   \\\\______   \\\\______   \\ /   _____/ |    |   / |    |  _/ |    |  _/ \\_____  \\  |    |  /  |    |   \\ |    |   \\ /        \\ |______/   |______  / |______  //_______  /   \\/         \\/         \\/  Universal Bulletin Board Systemfor Rorik's End",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{

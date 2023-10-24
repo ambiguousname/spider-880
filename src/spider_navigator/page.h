@@ -75,7 +75,10 @@ class HTMLPage : public Fl_Group {
 	void setHeightBuffer(int height) { height_buffer = height; }
 	
 	int x() { return padding; }
-	int w() { return Fl_Group::w() - padding; }
+	int w() { 
+		int par_width = ((Fl_Window*)(parent_window.get()))->w();
+		return (par_width - (padding * 3)); 
+	}
 };
 
 // Mostly for storing an HTML page. Might put some browser looking things (search bar?) on the top.

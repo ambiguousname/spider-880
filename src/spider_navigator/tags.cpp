@@ -18,7 +18,7 @@ void HTMLNode::close(HTMLPage*, int&, int&, int&, int&) {
 	return;
 }
 
-void HTMLNode::child_closed(HTMLPage* current_page, const int child_x, const int child_y, const int child_w, const int child_h, int& start_x, int& start_y, int& out_w, int& out_h) {
+void HTMLNode::child_closed(HTMLPage*, const int, const int, const int, const int, int&, int&, int&, int&) {
 	return;
 }
 
@@ -80,7 +80,7 @@ void A::init() {
 	}
 }
 
-void A::child_closed(HTMLPage* current_page, const int child_x, const int child_y, const int child_w, const int child_h, int& start_x, int& start_y, int& out_w, int& out_h) {
+void A::child_closed(HTMLPage*, const int child_x, const int child_y, const int child_w, const int child_h, int& start_x, int& start_y, int& out_w, int& out_h) {
 	if (child_x < start_x) {
 		start_x = child_x;
 	}
@@ -98,7 +98,7 @@ void A::child_closed(HTMLPage* current_page, const int child_x, const int child_
 	}
 }
 
-void P::child_closed(HTMLPage* current_page, const int child_x, const int child_y, const int child_w, const int child_h, int& start_x, int& start_y, int& out_w, int& out_h) {
+void P::child_closed(HTMLPage*, const int child_x, const int child_y, const int child_w, const int child_h, int& start_x, int& start_y, int& out_w, int& out_h) {
 	int localized_w = (child_x + child_w) - start_x;
 	if (localized_w > out_w) {
 		out_w = localized_w;

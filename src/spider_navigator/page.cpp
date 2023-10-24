@@ -48,7 +48,7 @@ int HTMLWindow::handle(int event) {
 			std::vector<Password> matches = {};
 
 			for (auto p: passwords) {
-				int size = sizeof(p.password)/sizeof(*p.password);
+				int size = strlen(p.password);
 				if (p.password[size - 1] == typing_buffer.back()) {
 					Password match = Password(p);
 					match.curr_index = size - 1;
@@ -58,7 +58,7 @@ int HTMLWindow::handle(int event) {
 
 			// Avoid integer underflow: https://stackoverflow.com/questions/4205720/iterating-over-a-vector-in-reverse-direction
 			if (typing_buffer.size() > 1 && matches.size() > 0) {
-				for (unsigned i = typing_buffer.size() - 1; i-- >= 0; ) {
+				for (int i = typing_buffer.size() - 1; i-- >= 0; ) {
 					bool pwd_found = false;
 					for (auto m = matches.begin(); m != matches.end();) {
 						m->curr_index -= 1;
@@ -95,7 +95,7 @@ HTMLWindow::HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int 
 		label(title.c_str());
 	}
 	scrollbar = new Fl_Scroll(0, 25, w, h - 25);
-	page = new HTMLPage(root, std::shared_ptr<HTMLWindow>(this), 0, 25, w, h - 25, 20);
+	page = new HTMLPage(root, std::shared_ptr<HTMLWindow>(this), 0, 25, w, h - 25, 10);
 	scrollbar->end();
 	scrollbar->type(Fl_Scroll::VERTICAL);
 
@@ -112,7 +112,7 @@ bool HTMLWindow::getLinkedWindow(std::string name, windowCreation& out) {
 	return false;
 }
 
-HTMLPage::HTMLPage(std::shared_ptr<HTMLNode> r, std::shared_ptr<HTMLWindow> parent, int x, int y, int w, int h, int horizontal_padding) : Fl_Group(x, y, w, h), interactive_nodes(), parent_window(parent), padding(horizontal_padding) {
+HTMLPage::HTMLPage(std::shared_ptr<HTMLNode> r, std::shared_ptr<HTMLWindow> parent, int x, int y, int w, int h, int horizontal_padding) : Fl_Group(x, y, w, h), padding(horizontal_padding), interactive_nodes(), parent_window(parent) {
 	root.swap(r);
 	r.reset();
 	initNode(root);
@@ -128,7 +128,6 @@ void HTMLPage::initNode(HTMLNodePtr node) {
 }
 
 void HTMLPage::drawChildren() {
-	// TODO: Fix whatever's wrong with the renderer on first go.
 	std::unique_ptr<NodeQueueInfo> _root = std::make_unique<NodeQueueInfo>(root, OPEN_NODE, nullptr);
 	std::vector<std::unique_ptr<NodeQueueInfo>> queue = {};
 	queue.emplace_back(std::move(_root));
@@ -186,7 +185,7 @@ void HTMLPage::drawChildren() {
 			}
 		}
 	}
-	resize(x(), y(), this->parent()->w() - 20, cursor_y - y());
+	resize(x(), y(), w(), cursor_y - y());
 }
 
 void HTMLPage::draw() {
