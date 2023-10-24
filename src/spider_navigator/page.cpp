@@ -191,6 +191,18 @@ void HTMLPage::drawChildren() {
 void HTMLPage::draw() {
 	Fl_Group::draw();
 	// TODO: Use damage mask.
+	// This somehow leads to a background?
+	// What you'd probably want to do is EITHER:
+	// Render EVERYTHING in OpenGL.
+	// Render OpenGL, convert to an image with an alpha map. Render by pixel???????
+	// Something to be done for the non-prototype stage. 
+	// Fl::gl_visual(FL_RGB|FL_ALPHA|FL_DEPTH);
+	// gl_start();
+	// glClearColor(0.0f, 1.0f, 1.0f, 0.0f);
+	// glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	// gl_color(FL_RED);
+	// gl_rect(0, 0, 100, 100);
+	// gl_finish();
 	if (root == nullptr) {
 		throw std::logic_error("HTMLPage root not defined.");
 	} else {

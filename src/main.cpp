@@ -2,9 +2,14 @@
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Box.H>
+#include <iostream>
+
 #include "database/database_window.h"
 #include "util/window_management.h"
 #include <murder_blog/murder.h>
+
+#define MINIAUDIO_IMPLEMENTATION
+#include "miniaudio.h"
 
 #ifdef __WIN32
 #include <FL/x.H>
@@ -25,7 +30,7 @@ int main(int argc, char **argv) {
 	Fl_Box* title = new Fl_Box(20, 20, 260, 100, "Spider-880");
 	title->box(FL_DOWN_BOX);
 	title->labelsize(36);
-	Fl_Box* credits = new Fl_Box(20, 120, 260, 100, "By ambiguousname and stargyaru\nMade with:\nFLTK 1.3.8 (w/ LibPNG support)\nSQLite\nMeson\nPython Faker");
+	Fl_Box* credits = new Fl_Box(20, 120, 260, 100, "By ambiguousname and stargyaru\nMade with:\nFLTK 1.3.8 (w/ LibPNG support)\nminiaudio\nSQLite\nMeson\nPython Faker");
 	credits->box(FL_UP_BOX);
 	Fl_Button* browser = new Fl_Button(100, 240, 100, 50, "Launch Browser");
 	browser->box(FL_UP_BOX);
@@ -48,7 +53,19 @@ int main(int argc, char **argv) {
 	db->show();
 	createBlog(nullptr);
 
+	// ma_result result;
+	// ma_engine engine;
+	
+	// result = ma_engine_init(NULL, &engine);
+	// if (result != MA_SUCCESS) {
+	// 	std::cout << "Could not initialize audio engine." << std::endl;
+	// 	return result;
+	// }
+
+	// ma_engine_play_sound(&engine, "./assets/zombiegenericshort11.wav", NULL);
+
 	Fl::run();
 	
+    // ma_engine_uninit(&engine);
 	return 0;
 }
