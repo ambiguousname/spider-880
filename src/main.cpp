@@ -53,6 +53,8 @@ int main(int argc, char **argv) {
 	db->show();
 	createBlog(nullptr);
 
+	// TODO: Audio playback for a few sounds (looping backgrounds too)
+	// TODO: OpenGL scares
 	// ma_result result;
 	// ma_engine engine;
 	
