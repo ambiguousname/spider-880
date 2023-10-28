@@ -21,17 +21,7 @@ void showHTMLPage(Fl_Widget* widget, void* pg) {
 	page->show();
 }
 
-struct Password {
-	const char* password;
-	Fl_Callback* callback;
-	void* data = 0;
-	int curr_index=0;
-	bool operator==(const Password& other) {
-		return strcmp(password, other.password) == 0;
-	}
-};
-
-const Password passwords[] = {
+const Password const_passwords[] = {
 	{"deadbeef", showHTMLPage, (void*)DeadbeefDeadbeefHTMLWindow::createWindow},
 	{"feebdaed", showHTMLPage, (void*)DeadbeefFeebdaedHTMLWindow::createWindow},
 };
@@ -94,6 +84,33 @@ HTMLWindow::HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int 
 		title = find_title->second;
 		label(title.c_str());
 	}
+
+	auto pwds = attributes.find("passwords");
+	if (pwds != attributes.end()) {
+		for (auto p : const_passwords) {
+			passwords.push_back(p);
+		}
+
+		std::string buf = "";
+		char passwordName[20];
+		Fl_Callback* cb;
+		for (auto c : pwds->second) {
+			if (c == '=') {
+				strcpy(passwordName, buf.c_str());
+				buf = "";
+			} else if (c == ',' || c == '\0') {
+				windowCreation out;
+				// Convert std::function to function pointer? Hopefully this is doable.
+				getLinkedWindow(buf, out);
+				cb = out.target<Fl_Callback>();
+				
+				buf = "";
+			} else {
+				buf += c;
+			}
+		}
+	}
+
 	scrollbar = new Fl_Scroll(0, 25, w, h - 25);
 	page = new HTMLPage(root, std::shared_ptr<HTMLWindow>(this), 0, 25, w, h - 25, 10);
 	scrollbar->end();

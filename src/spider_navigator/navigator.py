@@ -24,14 +24,16 @@ def get_camel_case(string):
 class HtmlStackNode():
 	
 	def __init__(self, id : str, tag : str, attrs: list[tuple[str, str | None]], parent = None, reader=None) -> None:
+		# What .h files to include
 		self.includes = set()
 
+		# The string output from this element (structure information).
 		self.element_stream = io.StringIO()
 
-		self.tag = None
 		self.parent = None
 		self.children = []
 		self.attrs = {}
+		# Internal content (like text)
 		self.dat = ""
 
 		self.tag = tag
@@ -43,6 +45,7 @@ class HtmlStackNode():
 		if "id" in self.attrs:
 			self.id = self.attrs["id"]
 
+		# Current HTML reader
 		self.reader = reader
 		self.parent = parent
 	
@@ -63,6 +66,8 @@ class HtmlStackNode():
 			self.dat += data
 		return
 
+	# Do we write this as a struct?
+	# data() will be called on this if true. Otherwise a child TextNode will be created.
 	invisible = False
 	def close(self):
 		if not self.invisible:
@@ -113,8 +118,15 @@ class Script(HtmlStackNode):
 			if len(line) > 0 and not str.isspace(line):
 				self.writeln(line.replace('\t' * num_tabs, ""))
 	
-	def close(self):
-		return
+class Links(HtmlStackNode):
+	invisible = True
+	def data(self, data):
+		lines = data.split("\n")
+		for l in lines:
+			if self.reader is not None:
+				l = line.lstrip()
+				abs_path = path.abspath(path.join(root, line))
+				self.reader.linked_pages.append((line, abs_path))
 
 class Includes(HtmlStackNode):
 	invisible = True
@@ -123,7 +135,6 @@ class Includes(HtmlStackNode):
 		for line in lines:
 			if len(line) > 0 and not str.isspace(line):
 				self.includes.add(line.lstrip())
-		return super().data(data)
 
 class Header(HtmlStackNode):
 	pass
@@ -194,7 +205,8 @@ class HTMLCPPParser(HTMLParser):
 			"script": Script,
 			"includes": Includes,
 			"a": ANode,
-			"img": ImageNode
+			"img": ImageNode,
+			"links": Links,
 		}
 
 	def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
@@ -221,10 +233,7 @@ class HTMLCPPParser(HTMLParser):
 			self.includes.update(closing.includes)
 			closing.close()
 			closing.element_stream.seek(0)
-			if closing is Script:
-				self.custom_script_dat.write(closing.element_stream.read())
-			else:
-				self.struct_stream.write(closing.element_stream.read())
+			self.struct_stream.write(closing.element_stream.read())
 			closing.element_stream.close()
 		return super().handle_endtag(tag)
 	
@@ -232,9 +241,9 @@ class HTMLCPPParser(HTMLParser):
 		if len(self.stack) > 0 and not str.isspace(data):
 			prev = self.stack[-1]
 
-			if prev is Script:
+			if prev.invisible:
 				prev.data(data)
-			elif not prev.invisible:
+			else:
 				attr_list = []
 				for key, attr in prev.attrs.items():
 					attr_list.append((key, attr))

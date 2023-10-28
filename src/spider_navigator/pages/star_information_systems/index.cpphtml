@@ -1,4 +1,7 @@
-<html title="Star Information Systems">
+<html title="Star Information Systems" passwords="sis=star_information_systems/sis">
+	<links> <!-- For adding links that aren't in <a> tags (like our password attribute): -->
+		star_information_systems/sis
+	</links>
 	<body>
 		<img src="./assets/sis_logo.png"/>
 		<p>
@@ -8,7 +11,7 @@
 			Our revolutionary Ouranos system has 1000% more capacity than any compact disc, reads faster, and is compatible with any existing computational system.
 		</p>
 		<p>
-			Call today for a demonstration: 555-135-7918.
+			Call today for a demonstration: 555-7918.
 		</p>
 		<p>
 			Or stop by our offices:
@@ -18,6 +21,9 @@
 		</p>
 		<p>
 			Rorik's End, Zipcode 532
+		</p>
+		<p>
+			Wanna see something cool? Type "sis" with this window selected.
 		</p>
 		<p>
 			Founded by <a href="fivecoolbeans/index">Jessica Reyes</a> and <a href="lschiff/index">Luke Schiff</a>.
