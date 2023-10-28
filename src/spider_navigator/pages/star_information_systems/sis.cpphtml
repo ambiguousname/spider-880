@@ -4,7 +4,28 @@
 			Congratulations to our BuSab patriots!
 		</p>
 		<p>
-			I managed to find a way to 
+			The current NavSab version has a memory bug where it doesn't know how to precisely handle input, meaning that for some select phrases, it overflows into the page rendering and makes a new window.
+		</p>
+		<p>
+			Usually it's complete gibberish, but I found a way to rig the network info for Star Information Systems' site to show this content. Minus potential memory leakage, I'm having fun!
+		</p>
+		<p col="4">
+			It's cool stuff!
+		</p>
+		<p>
+			I actually used to work for BuSab back when it was the posterboy for "Safe Computing for Everyone" (this was right after Wargames released). So I feel some kinship with you all. Shame it's all gone to crap.
+		</p>
+		<p>
+			You used to be able to dial into any number for any amount of time, no charge. For the purposes of security. In Rorik's End's Bureau of Sabotage. To be young and made of money; the Standard Combustion backing had its enormous uses. And I'm doing pretty well for myself after I left.
+		</p>
+		<p>
+			I left for a variety of reasons, and the harassment certainly didn't help. My mentor, Brian Gertwig (who I know is struggling with this NavSab bug, thank you!), made it all better though. I got a pretty sick pick for rock climbing. I'll have to digitize it sometime. 
+		</p>
+		<p>
+			Brian engraved a ram or some such on the hilt. For headbutting the competition away. Thanks Brian! I appreciate you so much.
+		</p>
+		<p>
+			And for everyone else: if you're struggling to figure out what to do, you could always apply for a career with SIS. We're growing fast.
 		</p>
 	</body>
 </html>

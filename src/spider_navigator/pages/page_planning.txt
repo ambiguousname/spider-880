@@ -6,7 +6,6 @@ Alright, let's try to find a semblance of order so we know what needs to get fin
 4. UBBS (done)
 5. Spider BBS (done)
 6. Endemic Thunderspasm (done)
-7. SIS
- a. Some detail from 5coolbeans that would be able to positively identify their body (iron stake with a goat carved into it).
+7. SIS (done)
 
 Change ZIP codes to actual names
