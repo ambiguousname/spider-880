@@ -298,11 +298,11 @@ if __name__ == "__main__":
 		[
 			(32, "Jessica", "Reyes", 4223, "NULL")
 		]),
-		((FamilyTypes.MARRIED_FAMILY), 439),
+		((FamilyTypes.MARRIED_FAMILY, 439),
 		[
 			(60, "Brian", "Gertwig", 2342, "NEXT"),
 			(59, "Yvonne", "Gertwig", 6428, "PREV")
-		],
+		]),
 		((FamilyTypes.NOT_LIVING_ALONE, 531),
    		[
 			(30, "Lucas", "Friedrich", 6105, "NULL"),
