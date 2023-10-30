@@ -1,6 +1,7 @@
-<html title="Star Information Systems" passwords="sis=star_information_systems/sis">
+<html title="Star Information Systems" passwords="system=star_information_systems/system,metsys=star_information_systems/lastresort">
 	<links> <!-- For adding links that aren't in <a> tags (like our password attribute): -->
-		star_information_systems/sis
+		star_information_systems/system
+		star_information_systems/lastresort
 	</links>
 	<body>
 		<img src="./assets/sis_logo.png"/>
@@ -23,7 +24,7 @@
 			Rorik's End, Zipcode 532
 		</p>
 		<p>
-			Wanna see something cool? Type "sis" with this window selected.
+			Wanna see something cool? Type "system" with this window selected.
 		</p>
 		<p>
 			Founded by <a href="fivecoolbeans/index">Jessica Reyes</a> and <a href="lschiff/index">Luke Schiff</a>.

@@ -1,7 +1,7 @@
 Alright, let's try to find a semblance of order so we know what needs to get finished.
 
-1. 5coolbeans site (info on SIS, maybe info on earnings or living status? At least that they're in the same Area/Subarea that SIS is in.)
-2. Lschiff site (info on SIS, structured more like a resume)
+1. 5coolbeans site (done)
+2. Lschiff site (done)
 3. Gertwig site (map of Rorik's End?, pretty much done)
 4. UBBS (done)
 5. Spider BBS (done)

@@ -61,7 +61,7 @@ class HTMLPage : public Fl_Group {
 
 	std::vector<InteractiveNode> interactive_nodes;
 	
-	virtual void draw();
+	void draw();
 
 	int handle(int event);
 	public:
@@ -105,6 +105,7 @@ class HTMLWindow : public Fl_Window {
 	Fl_Scroll* scrollbar;
 
 	protected:
+
 	// Other HTML pages (or just FL_Windows) linked by <a> tags.
 	std::unordered_map<std::string, std::function<HTMLWindow*(int, int, int, int)>> linked_windows;
 	std::string title;
