@@ -1,6 +1,7 @@
 # Should be run as part of the build step.
 # Create .cpp for each detected file in the /pages/ directory to be bundled with the .exe.
 # Requires Python >=3.11.4
+# TODO: Namespace to class
 
 from html.parser import HTMLParser
 from os import PathLike, path, sep, scandir
@@ -116,7 +117,7 @@ class Script(HtmlStackNode):
 		num_tabs = lines[1].count('\t')
 		for line in lines:
 			if len(line) > 0 and not str.isspace(line):
-				self.writeln(line.replace('\t' * num_tabs, ""))
+				self.reader.custom_script_dat.write(line.replace('\t' * num_tabs, "").replace("$CLASS$", self.reader.namespace) + "\n")
 	
 class Links(HtmlStackNode):
 	invisible = True
@@ -124,9 +125,11 @@ class Links(HtmlStackNode):
 		lines = data.split("\n")
 		for l in lines:
 			if self.reader is not None:
-				l = line.lstrip()
-				abs_path = path.abspath(path.join(root, line))
-				self.reader.linked_pages.append((line, abs_path))
+				line = l.lstrip()
+				if len(line) > 0 and not str.isspace(line):
+					abs_path = path.abspath(path.join(root, line))
+					self.includes.add(f"<{line}.h>")
+					self.reader.linked_pages.append((line, get_namespace_from_path(abs_path)))
 
 class Includes(HtmlStackNode):
 	invisible = True
@@ -137,7 +140,13 @@ class Includes(HtmlStackNode):
 				self.includes.add(line.lstrip())
 
 class Header(HtmlStackNode):
-	pass
+	invisible=True
+	def data(self, data):
+		lines = data.split("\n")
+		num_tabs = lines[1].count('\t')
+		for line in lines:
+			if len(line) > 0 and not str.isspace(line):
+				self.reader.header_dat.write("\t" + line.replace('\t' * num_tabs, "").replace("$CLASS$", self.reader.namespace) + "\n")
 
 def get_namespace_from_path(p):
 	rel = path.relpath(p, root)
@@ -150,8 +159,10 @@ class HTMLCPPParser(HTMLParser):
 		self.path = p
 
 		self.cpp_stream = stream
+		# TODO: Three different streams? This suuuucks.
 		self.struct_stream = io.StringIO()
 		self.custom_script_dat = io.StringIO()
+		self.header_dat = io.StringIO()
 		self.linked_pages = []
 
 		self.id = 0
@@ -167,11 +178,11 @@ class HTMLCPPParser(HTMLParser):
 	def close(self):
 		header_name = path.split(self.path)[1].replace(".cpp", ".h")
 		self.cpp_stream.write(f"#include \"{header_name}\"\n")
-		
-		self.cpp_stream.write(f"namespace {self.namespace}Namespace {{\n")
 
 		self.custom_script_dat.seek(0)
 		self.cpp_stream.write(self.custom_script_dat.read())
+		
+		self.cpp_stream.write(f"namespace {self.namespace}Namespace {{\n")
 
 		self.struct_stream.seek(0)
 		self.cpp_stream.write(self.struct_stream.read())
@@ -191,12 +202,17 @@ class HTMLCPPParser(HTMLParser):
 		for include in self.includes:
 			header.write(f"#include {include}\n")
 
-		header.write(f"class {self.namespace} : public HTMLWindow {{\n\tpublic:\n\t{self.namespace}(int x, int y, int w, int h);\n\tstatic HTMLWindow* createWindow(int x, int y, int w, int h) {{\n\t\treturn new {self.namespace}(x, y, w, h);\n\t}}\n}};\n")
+		self.header_dat.seek(0)
+
+		header.write(f"class {self.namespace} : public HTMLWindow {{\n")
+		header.write(self.header_dat.read())
+		header.write(f"\tpublic:\n\t{self.namespace}(int x, int y, int w, int h);\n\tstatic HTMLWindow* createWindow(int x, int y, int w, int h) {{\n\t\treturn new {self.namespace}(x, y, w, h);\n\t}}\n}};\n")
 		header.close()
 
-		self.custom_script_dat.close()
 		self.struct_stream.close()
+		self.custom_script_dat.close()
 		self.cpp_stream.close()
+		self.header_dat.close()
 		if len(self.stack) > 0:
 			sys.stderr.write(self.path, "Unclosed tags: " + str(self.stack))
 
@@ -207,6 +223,7 @@ class HTMLCPPParser(HTMLParser):
 			"a": ANode,
 			"img": ImageNode,
 			"links": Links,
+			"header": Header,
 		}
 
 	def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
@@ -296,7 +313,12 @@ if __name__ == "__main__":
 	global hashes
 	hashes = {}
 
-	f = open(path.join(root, "../list.txt"), "r+")
+	list_path = path.join(root, "../list.txt")
+
+	if not path.exists(list_path):
+		open(list_path, "w").close()
+
+	f = open(list_path, "r+")
 
 	hash_list_pth = path.join(root, "../hash.txt")
 	if not path.exists(hash_list_pth):

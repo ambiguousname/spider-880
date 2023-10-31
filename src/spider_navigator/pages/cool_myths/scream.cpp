@@ -30,7 +30,7 @@ std::shared_ptr<Text> text_6 = std::make_shared<Text>(
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
-		{"col", "1"},
+		{"color", "1"},
 	}
 );
 std::shared_ptr<P> p_6 = std::make_shared<P>(
@@ -39,7 +39,7 @@ std::shared_ptr<P> p_6 = std::make_shared<P>(
 		text_6,
 	},
 	std::unordered_map<std::string, std::string>{
-		{"col", "1"},
+		{"color", "1"},
 	}
 );
 std::shared_ptr<HTMLNode> body_2 = std::make_shared<HTMLNode>(

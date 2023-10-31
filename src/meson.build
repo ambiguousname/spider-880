@@ -19,7 +19,6 @@ fltk = meson.get_compiler('cpp').find_library('fltk', required: true)
 src = ['main.cpp']
 windows = import('windows')
 if build_machine.system() == 'windows'
-	message('ATEOFSDOIJSDF-----------------------------------')
 	src += windows.compile_resources('./icon.rc')
 endif
 

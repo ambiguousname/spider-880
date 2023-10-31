@@ -1,15 +1,15 @@
 <html title="Endemic Thunderspasm - Murder in Rorik's End Pt. 2"> <!-- Represents the Window object. -->
-	<includes>
+	<!-- <includes>
 		&lt;iostream&gt;
-	</includes>
-	<header>
+	</includes> -->
+	<!-- <header>
 
-	</header>
-	<script type="text/cpp"> <!-- Functionally useless right now. -->
+	</header> -->
+	<!-- <script type="text/cpp"> //Functionally useless right now.
 		void onStart() {
 			std::cout << "Hello world!";
 		}
-	</script>
+	</script> -->
 	<body> <!-- Represents the Fl_Group object. -->
 		<img src="./assets/victim.png" />
 		<p>

@@ -1,6 +1,6 @@
 #pragma once
-#include <cool_myths/index.h>
 #include "spider_navigator/page.h"
+#include <cool_myths/index.h>
 class CoolMythsScreamHTMLWindow : public HTMLWindow {
 	public:
 	CoolMythsScreamHTMLWindow(int x, int y, int w, int h);

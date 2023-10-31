@@ -1,6 +1,6 @@
 #include "index.h"
 namespace StarInformationSystemsIndexHTMLWindowNamespace {
-std::shared_ptr<Img> img_3 = std::make_shared<Img>(
+std::shared_ptr<Img> img_4 = std::make_shared<Img>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
@@ -8,133 +8,124 @@ std::shared_ptr<Img> img_3 = std::make_shared<Img>(
 		{"src", "./assets/sis_logo.png"},
 	}
 );
-std::shared_ptr<Text> text_4 = std::make_shared<Text>(
+std::shared_ptr<Text> text_5 = std::make_shared<Text>(
 	"Star Information Systems - Cutting-edge hardware for today's information age.",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
 	}
 );
-std::shared_ptr<P> p_4 = std::make_shared<P>(
+std::shared_ptr<P> p_5 = std::make_shared<P>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
-		text_4,
+		text_5,
 	},
 	std::unordered_map<std::string, std::string>{
 	}
 );
-std::shared_ptr<Text> text_6 = std::make_shared<Text>(
+std::shared_ptr<Text> text_7 = std::make_shared<Text>(
 	"Our revolutionary Ouranos system has 1000% more capacity than any compact disc, reads faster, and is compatible with any existing computational system.",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
 	}
 );
-std::shared_ptr<P> p_6 = std::make_shared<P>(
+std::shared_ptr<P> p_7 = std::make_shared<P>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
-		text_6,
+		text_7,
 	},
 	std::unordered_map<std::string, std::string>{
 	}
 );
-std::shared_ptr<Text> text_8 = std::make_shared<Text>(
-	"Call today for a demonstration: 555-135-7918.",
+std::shared_ptr<Text> text_9 = std::make_shared<Text>(
+	"Call today for a demonstration: 555-7918.",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
 	}
 );
-std::shared_ptr<P> p_8 = std::make_shared<P>(
+std::shared_ptr<P> p_9 = std::make_shared<P>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
-		text_8,
+		text_9,
 	},
 	std::unordered_map<std::string, std::string>{
 	}
 );
-std::shared_ptr<Text> text_10 = std::make_shared<Text>(
+std::shared_ptr<Text> text_11 = std::make_shared<Text>(
 	"Or stop by our offices:",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
 	}
 );
-std::shared_ptr<P> p_10 = std::make_shared<P>(
+std::shared_ptr<P> p_11 = std::make_shared<P>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
-		text_10,
+		text_11,
 	},
 	std::unordered_map<std::string, std::string>{
 	}
 );
-std::shared_ptr<Text> text_12 = std::make_shared<Text>(
+std::shared_ptr<Text> text_13 = std::make_shared<Text>(
 	"242 Sycamore Lane",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
 	}
 );
-std::shared_ptr<P> p_12 = std::make_shared<P>(
+std::shared_ptr<P> p_13 = std::make_shared<P>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
-		text_12,
+		text_13,
 	},
 	std::unordered_map<std::string, std::string>{
 	}
 );
-std::shared_ptr<Text> text_14 = std::make_shared<Text>(
+std::shared_ptr<Text> text_15 = std::make_shared<Text>(
 	"Rorik's End, Zipcode 532",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
 	}
 );
-std::shared_ptr<P> p_14 = std::make_shared<P>(
+std::shared_ptr<P> p_15 = std::make_shared<P>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
-		text_14,
+		text_15,
 	},
 	std::unordered_map<std::string, std::string>{
 	}
 );
-std::shared_ptr<Text> text_16 = std::make_shared<Text>(
+std::shared_ptr<Text> text_17 = std::make_shared<Text>(
+	"Wanna see something cool? Type \"system\" with this window selected.",
+	std::vector<std::shared_ptr<HTMLNode>>{
+	},
+	std::unordered_map<std::string, std::string>{
+	}
+);
+std::shared_ptr<P> p_17 = std::make_shared<P>(
+	"",
+	std::vector<std::shared_ptr<HTMLNode>>{
+		text_17,
+	},
+	std::unordered_map<std::string, std::string>{
+	}
+);
+std::shared_ptr<Text> text_19 = std::make_shared<Text>(
 	"Founded by ",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
 	}
 );
-std::shared_ptr<Text> text_18 = std::make_shared<Text>(
+std::shared_ptr<Text> text_21 = std::make_shared<Text>(
 	"Jessica Reyes",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "fivecoolbeans/index"},
-	}
-);
-std::shared_ptr<A> a_18 = std::make_shared<A>(
-	"",
-	std::vector<std::shared_ptr<HTMLNode>>{
-		text_18,
-	},
-	std::unordered_map<std::string, std::string>{
-		{"href", "fivecoolbeans/index"},
-	}
-);
-std::shared_ptr<Text> text_19 = std::make_shared<Text>(
-	" and ",
-	std::vector<std::shared_ptr<HTMLNode>>{
-	},
-	std::unordered_map<std::string, std::string>{
-	}
-);
-std::shared_ptr<Text> text_21 = std::make_shared<Text>(
-	"Luke Schiff",
-	std::vector<std::shared_ptr<HTMLNode>>{
-	},
-	std::unordered_map<std::string, std::string>{
-		{"href", "lschiff/index"},
 	}
 );
 std::shared_ptr<A> a_21 = std::make_shared<A>(
@@ -143,39 +134,64 @@ std::shared_ptr<A> a_21 = std::make_shared<A>(
 		text_21,
 	},
 	std::unordered_map<std::string, std::string>{
-		{"href", "lschiff/index"},
+		{"href", "fivecoolbeans/index"},
 	}
 );
 std::shared_ptr<Text> text_22 = std::make_shared<Text>(
+	" and ",
+	std::vector<std::shared_ptr<HTMLNode>>{
+	},
+	std::unordered_map<std::string, std::string>{
+	}
+);
+std::shared_ptr<Text> text_24 = std::make_shared<Text>(
+	"Luke Schiff",
+	std::vector<std::shared_ptr<HTMLNode>>{
+	},
+	std::unordered_map<std::string, std::string>{
+		{"href", "lschiff/index"},
+	}
+);
+std::shared_ptr<A> a_24 = std::make_shared<A>(
+	"",
+	std::vector<std::shared_ptr<HTMLNode>>{
+		text_24,
+	},
+	std::unordered_map<std::string, std::string>{
+		{"href", "lschiff/index"},
+	}
+);
+std::shared_ptr<Text> text_25 = std::make_shared<Text>(
 	".",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
 	}
 );
-std::shared_ptr<P> p_16 = std::make_shared<P>(
+std::shared_ptr<P> p_19 = std::make_shared<P>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
+		text_25,
+		a_24,
 		text_22,
 		a_21,
 		text_19,
-		a_18,
-		text_16,
 	},
 	std::unordered_map<std::string, std::string>{
 	}
 );
-std::shared_ptr<HTMLNode> body_2 = std::make_shared<HTMLNode>(
+std::shared_ptr<HTMLNode> body_3 = std::make_shared<HTMLNode>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
-		p_16,
-		p_14,
-		p_12,
-		p_10,
-		p_8,
-		p_6,
-		p_4,
-		img_3,
+		p_19,
+		p_17,
+		p_15,
+		p_13,
+		p_11,
+		p_9,
+		p_7,
+		p_5,
+		img_4,
 	},
 	std::unordered_map<std::string, std::string>{
 	}
@@ -183,14 +199,17 @@ std::shared_ptr<HTMLNode> body_2 = std::make_shared<HTMLNode>(
 std::shared_ptr<HTMLNode> html_1 = std::make_shared<HTMLNode>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
-		body_2,
+		body_3,
 	},
 	std::unordered_map<std::string, std::string>{
 		{"title", "Star Information Systems"},
+		{"passwords", "system=star_information_systems/system,metsys=star_information_systems/lastresort"},
 	}
 );
 }
 StarInformationSystemsIndexHTMLWindow::StarInformationSystemsIndexHTMLWindow(int x, int y, int w, int h) : HTMLWindow(StarInformationSystemsIndexHTMLWindowNamespace::html_1, x, y, w, h) {
+	linked_windows.insert({"star_information_systems/system", StarInformationSystemsSystemHTMLWindow::createWindow});
+	linked_windows.insert({"star_information_systems/lastresort", StarInformationSystemsLastresortHTMLWindow::createWindow});
 	linked_windows.insert({"fivecoolbeans/index", FivecoolbeansIndexHTMLWindow::createWindow});
 	linked_windows.insert({"lschiff/index", LschiffIndexHTMLWindow::createWindow});
 
