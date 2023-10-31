@@ -1,7 +1,7 @@
 #pragma once
-#include <star_information_systems/index.h>
-#include "spider_navigator/page.h"
 #include <spider/policies.h>
+#include "spider_navigator/page.h"
+#include <star_information_systems/index.h>
 class FivecoolbeansIndexHTMLWindow : public HTMLWindow {
 	public:
 	FivecoolbeansIndexHTMLWindow(int x, int y, int w, int h);

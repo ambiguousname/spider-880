@@ -85,11 +85,11 @@ HTMLWindow::HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int 
 		label(title.c_str());
 	}
 
+	for (auto p : const_passwords) {
+		passwords.push_back(p);
+	}
 	auto pwds = attributes.find("passwords");
 	if (pwds != attributes.end()) {
-		for (auto p : const_passwords) {
-			passwords.push_back(p);
-		}
 
 		std::string buf = "";
 		char passwordName[20];
@@ -109,6 +109,7 @@ HTMLWindow::HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int 
 				buf += c;
 			}
 		}
+		passwords.push_back(Password{passwordName, showHTMLPage, (void*)cb});
 	}
 
 	scrollbar = new Fl_Scroll(0, 25, w, h - 25);
