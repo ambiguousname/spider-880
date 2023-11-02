@@ -148,6 +148,15 @@ class Header(HtmlStackNode):
 			if len(line) > 0 and not str.isspace(line):
 				self.reader.header_dat.write("\t" + line.replace('\t' * num_tabs, "").replace("$CLASS$", self.reader.namespace) + "\n")
 
+class Constructor(HtmlStackNode):
+	invisible=True
+	def data(self, data):
+		lines = data.split("\n")
+		num_tabs = lines[1].count('\t')
+		for line in lines:
+			if len(line) > 0 and not str.isspace(line):
+				self.reader.constructor_dat.write("\t" + line.replace('\t' * num_tabs, "").replace("$CLASS$", self.reader.namespace) + "\n")
+
 def get_namespace_from_path(p):
 	rel = path.relpath(p, root)
 	return get_camel_case(rel.replace(".cpp", "")) + "HTMLWindow"
@@ -159,10 +168,11 @@ class HTMLCPPParser(HTMLParser):
 		self.path = p
 
 		self.cpp_stream = stream
-		# TODO: Three different streams? This suuuucks.
+		# TODO: Four different streams? This suuuucks.
 		self.struct_stream = io.StringIO()
 		self.custom_script_dat = io.StringIO()
 		self.header_dat = io.StringIO()
+		self.constructor_dat = io.StringIO()
 		self.linked_pages = []
 
 		self.id = 0
@@ -194,7 +204,12 @@ class HTMLCPPParser(HTMLParser):
 			href, page = self.linked_pages[i]
 			linked_page_str += f"\tlinked_windows.insert({{\"{href}\", {page}::createWindow}});\n"
 
-		self.cpp_stream.write(f"{self.namespace}::{self.namespace}(int x, int y, int w, int h) : HTMLWindow({self.namespace}Namespace::html_1, x, y, w, h) {{\n{linked_page_str}\n}}\n")
+		self.cpp_stream.write(f"{self.namespace}::{self.namespace}(int x, int y, int w, int h) : HTMLWindow({self.namespace}Namespace::html_1, x, y, w, h) {{\n{linked_page_str}\n")
+
+		self.constructor_dat.seek(0)
+		self.cpp_stream.write(self.constructor_dat.read())
+
+		self.cpp_stream.write("\nend();\n}\n")
 
 		header = open(path.join(self.path, f"../{header_name}"), "w")
 		header.write("#pragma once\n")
@@ -211,6 +226,7 @@ class HTMLCPPParser(HTMLParser):
 
 		self.struct_stream.close()
 		self.custom_script_dat.close()
+		self.constructor_dat.close()
 		self.cpp_stream.close()
 		self.header_dat.close()
 		if len(self.stack) > 0:

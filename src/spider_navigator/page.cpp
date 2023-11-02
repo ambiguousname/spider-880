@@ -118,7 +118,6 @@ HTMLWindow::HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int 
 	scrollbar->type(Fl_Scroll::VERTICAL);
 
 	resizable(this);
-	end();
 }
 
 bool HTMLWindow::getLinkedWindow(std::string name, windowCreation& out) {

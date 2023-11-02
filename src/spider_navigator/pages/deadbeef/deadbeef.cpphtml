@@ -1,23 +1,21 @@
 <html title="DEADBEEF">
-	<includes>
-		&lt;FL/gl.h&gt;
+	<!-- <includes>
+		&lt;deadbeef/deadbeefgl.h&gt;
 	</includes>
 	<header>
-		private:
-		void draw();
+		protected:
+		DeadbeefGL* gl_renderer;
+		int handle();
 	</header>
 	<script type="text/cpp">
-		void $CLASS$::draw() {
-			HTMLWindow::draw();
-			gl_start();
-			glClearColor(0.0f, 1.0f, 1.0f, 0.0f);
-			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-			gl_color(FL_RED);
-			gl_rect(0, 0, 100, 100);
-
-			gl_finish();
+		int $CLASS$::handle() {
+			gl_renderer->redraw();
+			return 0;
 		}
 	</script>
+	<constructor>
+		gl_renderer = new DeadbeefGL(x(), y(), w(), h(), label());
+	</constructor> -->
 	<body>
 		<p>
 			?esle erehwemos decalp dna dnim ruoy morf deppir eb oT ?eromyna kniht ton ot ekil s'ti tahw derednow reve uoy evaH
