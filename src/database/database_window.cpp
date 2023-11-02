@@ -1,5 +1,7 @@
 #include "database_window.h"
 #include "util/window_management.h"
+#include <FL/Fl_Box.H>
+#include <FL/fl_message.H>
 
 DatabaseChoice::DatabaseChoice(int x, int y, int w, int h, database_selector selector_func, ChoiceCategory choice_categories[3]) : Fl_Choice(x, y, w, h), selector(selector_func) {
 
@@ -193,6 +195,7 @@ ChoiceCategory family_arr[3] = {family_married, family_spouse, family_count};
 
 const int database_widths[] = {40, 150, 0};
 DatabaseWindow::DatabaseWindow(int x, int y, int w, int h) : Fl_Window(x, y, w, h, "Citizen Database"), citizen_db(new CitizenDatabase("citizens.db")), choices{new DatabaseChoice(100, 0, w - 100, 20, selectArea, area_arr), new DatabaseChoice(100, 20, w - 100, 20, selectIncome, income_arr), new DatabaseChoice(100, 40, w - 100, 20, selectFamily, family_arr)}, search_button(0, 60, w, 20, "Search"), database_display(0, 80, w, h - 80) {
+	Fl_Box* b = new Fl_Box(0, 0, w, 20, "Who died?");
 	database_display.column_widths(database_widths);
 	database_display.type(FL_HOLD_BROWSER);
 
@@ -265,6 +268,22 @@ void DatabaseWindow::search(Fl_Widget*, void* s) {
 	}
 }
 
+void citizenMurdered(Fl_Widget*, void* browser) {
+	Fl_Browser* self = static_cast<Fl_Browser*>(browser);
+	void* c = self->data(self->value());
+	Citizen* citizen = static_cast<Citizen*>(c);
+	int choice = fl_ask("Was %s %s murdered?", citizen->first_name->c_str(), citizen->last_name->c_str());
+	if (choice >= 1) {
+		// Assuming database hasn't changed.
+		// TODO: Update based on how python generates the IDs.
+		if (std::stoi(*citizen->id) == 70) {
+			fl_alert("Correct!");
+		}
+	} else {
+		fl_alert("Wrong.");
+	}
+}
+
 const int citizen_widths[] = {40, 40, 70, 70, 70, 50, 0};
 void DatabaseWindow::selected(Fl_Widget* widget, void* parent) {
 	DatabaseWindow* self = static_cast<DatabaseWindow*>(parent);
@@ -277,6 +296,7 @@ void DatabaseWindow::selected(Fl_Widget* widget, void* parent) {
 		std::vector<std::shared_ptr<Citizen>> citizens = self->citizen_db->Query<Citizen>(buf);
 		Fl_Window* household_window = new Fl_Window(self->w(), self->h(), buf);
 		Fl_Browser* citizen_browser = new Fl_Browser(0, 0, household_window->w(), household_window->h());
+		citizen_browser->callback(citizenMurdered);
 
 		citizen_browser->column_widths(citizen_widths);
 		citizen_browser->type(FL_HOLD_BROWSER);
@@ -285,7 +305,7 @@ void DatabaseWindow::selected(Fl_Widget* widget, void* parent) {
 			char citizen_text[200];
 			sprintf(citizen_text, "%s\t%s\t%s\t%s\t%s\t%s\t%s", citizen->id->c_str(), citizen->age->c_str(), citizen->first_name->c_str(), citizen->last_name->c_str(), citizen->income->c_str(), citizen->household_id->c_str(), citizen->spouse_id->c_str());
 			
-			citizen_browser->add(citizen_text);
+			citizen_browser->add(citizen_text, (void*)citizen.get());
 		}
 		household_window->resizable(citizen_browser);
 
