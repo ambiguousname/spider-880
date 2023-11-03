@@ -1,6 +1,7 @@
 #include "database.h"
 #include <stdio.h>
 #include <string>
+#include <cstring>
 #include <utility>
 
 column_key* SQLColumns::getValuePtr(std::string key) {
@@ -83,6 +84,42 @@ std::vector<std::shared_ptr<T>> CitizenDatabase::Query(const char *query_text) {
 template std::vector<std::shared_ptr<Household>> CitizenDatabase::Query<Household>(const char*);
 template std::vector<std::shared_ptr<Citizen>> CitizenDatabase::Query<Citizen>(const char*);
 template std::vector<std::shared_ptr<SQLColumns>> CitizenDatabase::Query<SQLColumns>(const char*);
+
+void CitizenDatabase::DeleteCitizen(const char* citizen_id, const char* household_id) {
+	sqlite3_stmt* delete_citizen;
+	sqlite3_prepare_v2(database, "DELETE FROM citizens WHERE id=?", 32, &delete_citizen, nullptr);
+
+	sqlite3_stmt* delete_household;
+	sqlite3_prepare_v2(database, "DELETE FROM households INNER JOIN citizens ON citizens.household_id=households.id WHERE household_id=? GROUP BY household_id HAVING COUNT(household_id)=0", 156, &delete_household, nullptr);
+	
+	sqlite3_bind_text(delete_citizen, 1, citizen_id, strlen(citizen_id), SQLITE_STATIC);
+
+	int out;
+	while ((out = sqlite3_step(delete_citizen)) == SQLITE_BUSY) {
+		printf("Cannot get a lock on citizens.db");
+	}
+
+	if (out != SQLITE_DONE) {
+		printf("Encountered unexpected SQL Error trying to delete citizen %i: %i", citizen_id, out);
+		return;
+	}
+
+	sqlite3_finalize(delete_citizen);
+	delete_citizen = nullptr;
+
+	// TODO: Does this delete after deleting the citizen?
+	sqlite3_bind_text(delete_household, 1, household_id, strlen(household_id), SQLITE_STATIC);
+
+	while((out = sqlite3_step(delete_household)) == SQLITE_BUSY) {
+		printf("Cannot get a lock on citizens.db");
+	}
+
+	if (out != SQLITE_DONE) {
+		printf("Encountered unexpected SQL Error in checking for household %i deletion: %i", out, household_id);
+	}
+	sqlite3_finalize(delete_household);
+	delete_household = nullptr;
+}
 
 CitizenDatabase::~CitizenDatabase() {
 	sqlite3_close(database);

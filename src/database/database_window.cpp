@@ -268,7 +268,7 @@ void DatabaseWindow::search(Fl_Widget*, void* s) {
 	}
 }
 
-void citizenMurdered(Fl_Widget*, void* browser) {
+void DatabaseWindow::citizenMurdered(Fl_Widget* browser, void* db_window) {
 	Fl_Browser* self = static_cast<Fl_Browser*>(browser);
 	void* c = self->data(self->value());
 	Citizen* citizen = static_cast<Citizen*>(c);
@@ -280,7 +280,9 @@ void citizenMurdered(Fl_Widget*, void* browser) {
 			fl_alert("Correct!");
 		}
 	} else {
-		fl_alert("Wrong.");
+		// TODO: Actually delete.
+		static_cast<DatabaseWindow*>(db_window)->citizen_db->DeleteCitizen(citizen->id->c_str(), citizen->household_id->c_str());
+		fl_alert("Soul no longer found. Your guess must have been incorrect.");
 	}
 }
 
@@ -296,7 +298,7 @@ void DatabaseWindow::selected(Fl_Widget* widget, void* parent) {
 		std::vector<std::shared_ptr<Citizen>> citizens = self->citizen_db->Query<Citizen>(buf);
 		Fl_Window* household_window = new Fl_Window(self->w(), self->h(), buf);
 		Fl_Browser* citizen_browser = new Fl_Browser(0, 0, household_window->w(), household_window->h());
-		citizen_browser->callback(citizenMurdered);
+		citizen_browser->callback(citizenMurdered, self);
 
 		citizen_browser->column_widths(citizen_widths);
 		citizen_browser->type(FL_HOLD_BROWSER);

@@ -60,6 +60,7 @@ class DatabaseWindow : public Fl_Window {
 	static void search(Fl_Widget* button, void* self);
 
 	static void selected(Fl_Widget* browser, void* self);
+	static void citizenMurdered(Fl_Widget* browser, void* db_window);
 	public:
 	void updateCategories(int tier);
 	int getCategoryTier() const { return category_tier; }

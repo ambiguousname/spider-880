@@ -45,5 +45,6 @@ class CitizenDatabase {
 	CitizenDatabase(const char* filename);
 	template<class T> requires std::derived_from<T, SQLColumns>
 	std::vector<std::shared_ptr<T>> Query(const char* query);
+	void DeleteCitizen(const char* citizen_id, const char* household_id);
 	~CitizenDatabase();
 };
