@@ -90,7 +90,7 @@ void CitizenDatabase::DeleteCitizen(int citizen_id, int household_id) {
 	sqlite3_prepare_v2(database, "DELETE FROM citizens WHERE id=?", 32, &delete_citizen, nullptr);
 
 	sqlite3_stmt* delete_household;
-	sqlite3_prepare_v2(database, "DELETE FROM households INNER JOIN citizens ON citizens.household_id=households.id WHERE household_id=? GROUP BY household_id HAVING COUNT(household_id)=0", 156, &delete_household, nullptr);
+	sqlite3_prepare_v2(database, "DELETE FROM households INNER JOIN citizens ON citizens.household_id=households.id WHERE household_id=? GROUP BY household_id HAVING COUNT(household_id)=0", 154, &delete_household, nullptr);
 	
 	sqlite3_bind_int(delete_citizen, 1, citizen_id);
 
@@ -115,7 +115,7 @@ void CitizenDatabase::DeleteCitizen(int citizen_id, int household_id) {
 	}
 
 	if (out != SQLITE_DONE) {
-		printf("Encountered unexpected SQL Error in checking for household %i deletion: %i", out, household_id);
+		printf("Encountered unexpected SQL Error in checking for household %i deletion: %i", household_id, out);
 	}
 	sqlite3_finalize(delete_household);
 	delete_household = nullptr;

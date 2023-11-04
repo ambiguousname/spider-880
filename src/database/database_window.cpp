@@ -270,10 +270,13 @@ void DatabaseWindow::search(Fl_Widget*, void* s) {
 
 void DatabaseWindow::citizenMurdered(Fl_Widget* browser, void* db_window) {
 	Fl_Browser* self = static_cast<Fl_Browser*>(browser);
+	if (self->value() == 0) {
+		return;
+	}
 
 	Citizen citizen = Citizen(self->text(self->value()));
-	int choice = fl_ask("Was %s %s murdered?", citizen.first_name->c_str(), citizen.last_name->c_str());
-	if (choice >= 1) {
+	int choice = fl_choice("Was %s %s murdered?", "No", "Yes", nullptr, citizen.first_name->c_str(), citizen.last_name->c_str());
+	if (choice == 0) {
 		// Assuming database hasn't changed.
 		// TODO: Update based on how python generates the IDs.
 		if (std::stoi(citizen.id->c_str()) == 70) {
