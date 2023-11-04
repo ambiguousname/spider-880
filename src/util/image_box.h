@@ -3,7 +3,6 @@
 #include <FL/Fl_Image.H>
 #include <FL/Fl_Widget.H>
 #include <memory>
-
 class PaletteImage {
 	protected:
 	uchar* img_dat;

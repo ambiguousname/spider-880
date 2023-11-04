@@ -1,3 +1,7 @@
 build
+
 /src/spider_navigator/list.txt
 /src/spider_navigator/hash.txt
+
+subprojects/*
+!subprojects/*.wrap

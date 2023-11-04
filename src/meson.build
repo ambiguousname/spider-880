@@ -16,7 +16,7 @@ incdir = include_directories(['./spider_navigator/pages'])
 # https://mesonbuild.com/Installing.html
 fltk = meson.get_compiler('cpp').find_library('fltk', required: true)
 
-src = ['main.cpp']
+src = ['main.cpp', 'win_screen.cpp']
 windows = import('windows')
 if build_machine.system() == 'windows'
 	src += windows.compile_resources('./icon.rc')

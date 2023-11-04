@@ -1,1 +1,1 @@
-utillib = static_library('util', ['color.cpp', 'image_box.cpp', 'window_management.cpp'])
+utillib = static_library('util', ['color.cpp', 'image_box.cpp', 'window_management.cpp', 'opengl_obj.cpp'], dependencies: [glm])
