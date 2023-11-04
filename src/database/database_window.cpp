@@ -194,8 +194,8 @@ ChoiceCategory family_arr[3] = {family_married, family_spouse, family_count};
 #pragma endregion SQL_Definitions
 
 const int database_widths[] = {40, 150, 0};
-DatabaseWindow::DatabaseWindow(int x, int y, int w, int h) : Fl_Window(x, y, w, h, "Citizen Database"), citizen_db(new CitizenDatabase("citizens.db")), choices{new DatabaseChoice(100, 20, w - 100, 20, selectArea, area_arr), new DatabaseChoice(100, 40, w - 100, 20, selectIncome, income_arr), new DatabaseChoice(100, 60, w - 100, 20, selectFamily, family_arr)}, search_button(0, 80, w, 20, "Search"), database_display(0, 100, w, h - 100) {
-	Fl_Box* b = new Fl_Box(0, 0, w, 20, "Who died?");
+DatabaseWindow::DatabaseWindow(int x, int y, int w, int h) : Fl_Window(x, y, w, h, "Citizen Database"), citizen_db(new CitizenDatabase("citizens.db")), choices{new DatabaseChoice(120, 20, w - 120, 20, selectArea, area_arr), new DatabaseChoice(120, 40, w - 120, 20, selectIncome, income_arr), new DatabaseChoice(120, 60, w - 120, 20, selectFamily, family_arr)}, search_button(0, 80, w, 20, "Search"), database_display(0, 100, w, h - 100) {
+	Fl_Box* b = new Fl_Box(0, 0, w, 20, "Who was murdered? Select them here.");
 	database_display.column_widths(database_widths);
 	database_display.type(FL_HOLD_BROWSER);
 
@@ -218,6 +218,7 @@ void DatabaseWindow::updateCategories(int tier) {
 	for (DatabaseChoice* i : choices) {
 		i->selectCategory(category_tier);
 	}
+	redraw();
 }
 
 void DatabaseWindow::search(Fl_Widget*, void* s) {
@@ -270,7 +271,7 @@ void DatabaseWindow::search(Fl_Widget*, void* s) {
 
 void DatabaseWindow::citizenMurdered(Fl_Widget* browser, void* db_window) {
 	Fl_Browser* self = static_cast<Fl_Browser*>(browser);
-	if (self->value() == 0) {
+	if (self->value() == 1) {
 		return;
 	}
 
@@ -285,6 +286,9 @@ void DatabaseWindow::citizenMurdered(Fl_Widget* browser, void* db_window) {
 	} else {
 		static_cast<DatabaseWindow*>(db_window)->citizen_db->DeleteCitizen(std::stoi(citizen.id->c_str()), std::stoi(citizen.household_id->c_str()));
 		fl_alert("Soul no longer found. Your guess must have been incorrect.");
+
+		self->remove(self->value());
+		self->redraw();
 	}
 }
 

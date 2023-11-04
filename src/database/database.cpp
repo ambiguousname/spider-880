@@ -108,16 +108,17 @@ void CitizenDatabase::DeleteCitizen(int citizen_id, int household_id) {
 	delete_citizen = nullptr;
 
 	// TODO: Does this delete after deleting the citizen?
-	sqlite3_bind_int(delete_household, 1, household_id);
+	// It doesn't (returns SQLITE_MISUSE), BUT it's cooler if the household remains empty anyways.
+	// sqlite3_bind_int(delete_household, 1, household_id);
 
-	while((out = sqlite3_step(delete_household)) == SQLITE_BUSY) {
-		printf("Cannot get a lock on citizens.db");
-	}
+	// while((out = sqlite3_step(delete_household)) == SQLITE_BUSY) {
+	// 	printf("Cannot get a lock on citizens.db");
+	// }
 
-	if (out != SQLITE_DONE) {
-		printf("Encountered unexpected SQL Error in checking for household %i deletion: %i", household_id, out);
-	}
-	sqlite3_finalize(delete_household);
+	// if (out != SQLITE_DONE) {
+	// 	printf("Encountered unexpected SQL Error in checking for household %i deletion: %i", household_id, out);
+	// }
+	// sqlite3_finalize(delete_household);
 	delete_household = nullptr;
 }
 
