@@ -194,7 +194,7 @@ ChoiceCategory family_arr[3] = {family_married, family_spouse, family_count};
 #pragma endregion SQL_Definitions
 
 const int database_widths[] = {40, 150, 0};
-DatabaseWindow::DatabaseWindow(int x, int y, int w, int h) : Fl_Window(x, y, w, h, "Citizen Database"), citizen_db(new CitizenDatabase("citizens.db")), choices{new DatabaseChoice(100, 0, w - 100, 20, selectArea, area_arr), new DatabaseChoice(100, 20, w - 100, 20, selectIncome, income_arr), new DatabaseChoice(100, 40, w - 100, 20, selectFamily, family_arr)}, search_button(0, 60, w, 20, "Search"), database_display(0, 80, w, h - 80) {
+DatabaseWindow::DatabaseWindow(int x, int y, int w, int h) : Fl_Window(x, y, w, h, "Citizen Database"), citizen_db(new CitizenDatabase("citizens.db")), choices{new DatabaseChoice(100, 20, w - 100, 20, selectArea, area_arr), new DatabaseChoice(100, 40, w - 100, 20, selectIncome, income_arr), new DatabaseChoice(100, 60, w - 100, 20, selectFamily, family_arr)}, search_button(0, 80, w, 20, "Search"), database_display(0, 100, w, h - 100) {
 	Fl_Box* b = new Fl_Box(0, 0, w, 20, "Who died?");
 	database_display.column_widths(database_widths);
 	database_display.type(FL_HOLD_BROWSER);
@@ -270,18 +270,17 @@ void DatabaseWindow::search(Fl_Widget*, void* s) {
 
 void DatabaseWindow::citizenMurdered(Fl_Widget* browser, void* db_window) {
 	Fl_Browser* self = static_cast<Fl_Browser*>(browser);
-	void* c = self->data(self->value());
-	Citizen* citizen = static_cast<Citizen*>(c);
-	int choice = fl_ask("Was %s %s murdered?", citizen->first_name->c_str(), citizen->last_name->c_str());
+
+	Citizen citizen = Citizen(self->text(self->value()));
+	int choice = fl_ask("Was %s %s murdered?", citizen.first_name->c_str(), citizen.last_name->c_str());
 	if (choice >= 1) {
 		// Assuming database hasn't changed.
 		// TODO: Update based on how python generates the IDs.
-		if (std::stoi(*citizen->id) == 70) {
+		if (std::stoi(citizen.id->c_str()) == 70) {
 			fl_alert("Correct!");
 		}
 	} else {
-		// TODO: Actually delete.
-		static_cast<DatabaseWindow*>(db_window)->citizen_db->DeleteCitizen(citizen->id->c_str(), citizen->household_id->c_str());
+		static_cast<DatabaseWindow*>(db_window)->citizen_db->DeleteCitizen(std::stoi(citizen.id->c_str()), std::stoi(citizen.household_id->c_str()));
 		fl_alert("Soul no longer found. Your guess must have been incorrect.");
 	}
 }
@@ -305,9 +304,9 @@ void DatabaseWindow::selected(Fl_Widget* widget, void* parent) {
 		citizen_browser->add("ID\tAGE\tF.NAME\tL.NAME\tINCOME\tHOUSE\tSPOUSE");
 		for (auto citizen: citizens) {
 			char citizen_text[200];
-			sprintf(citizen_text, "%s\t%s\t%s\t%s\t%s\t%s\t%s", citizen->id->c_str(), citizen->age->c_str(), citizen->first_name->c_str(), citizen->last_name->c_str(), citizen->income->c_str(), citizen->household_id->c_str(), citizen->spouse_id->c_str());
+			citizen->toString(citizen_text);
 			
-			citizen_browser->add(citizen_text, (void*)citizen.get());
+			citizen_browser->add(citizen_text);
 		}
 		household_window->resizable(citizen_browser);
 

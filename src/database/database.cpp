@@ -85,14 +85,14 @@ template std::vector<std::shared_ptr<Household>> CitizenDatabase::Query<Househol
 template std::vector<std::shared_ptr<Citizen>> CitizenDatabase::Query<Citizen>(const char*);
 template std::vector<std::shared_ptr<SQLColumns>> CitizenDatabase::Query<SQLColumns>(const char*);
 
-void CitizenDatabase::DeleteCitizen(const char* citizen_id, const char* household_id) {
+void CitizenDatabase::DeleteCitizen(int citizen_id, int household_id) {
 	sqlite3_stmt* delete_citizen;
 	sqlite3_prepare_v2(database, "DELETE FROM citizens WHERE id=?", 32, &delete_citizen, nullptr);
 
 	sqlite3_stmt* delete_household;
 	sqlite3_prepare_v2(database, "DELETE FROM households INNER JOIN citizens ON citizens.household_id=households.id WHERE household_id=? GROUP BY household_id HAVING COUNT(household_id)=0", 156, &delete_household, nullptr);
 	
-	sqlite3_bind_text(delete_citizen, 1, citizen_id, strlen(citizen_id), SQLITE_STATIC);
+	sqlite3_bind_int(delete_citizen, 1, citizen_id);
 
 	int out;
 	while ((out = sqlite3_step(delete_citizen)) == SQLITE_BUSY) {
@@ -108,7 +108,7 @@ void CitizenDatabase::DeleteCitizen(const char* citizen_id, const char* househol
 	delete_citizen = nullptr;
 
 	// TODO: Does this delete after deleting the citizen?
-	sqlite3_bind_text(delete_household, 1, household_id, strlen(household_id), SQLITE_STATIC);
+	sqlite3_bind_int(delete_household, 1, household_id);
 
 	while((out = sqlite3_step(delete_household)) == SQLITE_BUSY) {
 		printf("Cannot get a lock on citizens.db");

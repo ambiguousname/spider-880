@@ -17,6 +17,10 @@ class SQLColumns {
 	public:
 	void update(char* key, char* value);
 	column_key id;
+
+	~SQLColumns() {
+		id.release();
+	}
 };
 
 class Citizen : public SQLColumns {
@@ -29,6 +33,59 @@ class Citizen : public SQLColumns {
 	column_key income;
 	column_key household_id;
 	column_key spouse_id;
+
+	Citizen() {}
+	
+	Citizen(std::string s) {
+		std::string buf = "";
+		int idx = 0;
+		for (auto c: s) {
+			if (c == '\t' || c == '\0') {
+				column_key* to_set;
+				switch (idx) {
+					case 0:
+						to_set = &id;
+						break;
+					case 1:
+						to_set = &age;
+						break;
+					case 2:
+						to_set = &first_name;
+						break;
+					case 3:
+						to_set = &last_name;
+						break;
+					case 4:
+						to_set = &income;
+						break;
+					case 5:
+						to_set = &household_id;
+						break;
+					case 6:
+						to_set = &spouse_id;
+						break;
+				}
+				*to_set = column_key(std::make_unique<std::string>(buf));
+				buf = "";
+				idx++;
+			} else {
+				buf += c;
+			}
+		}
+	}
+	
+	void toString(char out[]) const {
+		sprintf(out, "%s\t%s\t%s\t%s\t%s\t%s\t%s", id->c_str(), age->c_str(), first_name->c_str(), last_name->c_str(), income->c_str(), household_id->c_str(), spouse_id->c_str());
+	}
+
+	~Citizen() {
+		age.release();
+		first_name.release();
+		last_name.release();
+		income.release();
+		household_id.release();
+		spouse_id.release();
+	}
 };
 
 class Household : public SQLColumns {
@@ -45,6 +102,6 @@ class CitizenDatabase {
 	CitizenDatabase(const char* filename);
 	template<class T> requires std::derived_from<T, SQLColumns>
 	std::vector<std::shared_ptr<T>> Query(const char* query);
-	void DeleteCitizen(const char* citizen_id, const char* household_id);
+	void DeleteCitizen(int citizen_id, int household_id);
 	~CitizenDatabase();
 };
