@@ -2,6 +2,7 @@
 #include "util/window_management.h"
 #include <FL/Fl_Box.H>
 #include <FL/fl_message.H>
+#include "../win_screen.h"
 
 DatabaseChoice::DatabaseChoice(int x, int y, int w, int h, database_selector selector_func, ChoiceCategory choice_categories[3]) : Fl_Choice(x, y, w, h), selector(selector_func) {
 
@@ -281,7 +282,7 @@ void DatabaseWindow::citizenMurdered(Fl_Widget* browser, void* db_window) {
 		// Assuming database hasn't changed.
 		// TODO: Update based on how python generates the IDs.
 		if (std::stoi(citizen.id->c_str()) == 70) {
-			fl_alert("Correct!");
+			new WinScreen();
 		}
 	} else {
 		static_cast<DatabaseWindow*>(db_window)->citizen_db->DeleteCitizen(std::stoi(citizen.id->c_str()), std::stoi(citizen.household_id->c_str()));

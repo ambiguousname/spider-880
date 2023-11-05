@@ -8,6 +8,7 @@ flags = run_command('fltk-config', '--ldflags', '--use-gl')
 links = flags.stdout().strip().split(' ')
 links += '-lfltk_images'
 links += '-lsqlite3'
+links += '-lglew32'
 
 
 incdir = include_directories(['./spider_navigator/pages'])
@@ -22,6 +23,6 @@ if build_machine.system() == 'windows'
 	src += windows.compile_resources('./icon.rc')
 endif
 
-exe = executable('spider-880', src, link_args : links, include_directories:incdir, dependencies: [fltk], link_with: [utillib, pageslib, databaselib], cpp_args: '')
+exe = executable('spider-880', src, link_args : links, include_directories:incdir, dependencies: [fltk, dependency('glm')], link_with: [utillib, pageslib, databaselib])
 
 test('basic', exe)

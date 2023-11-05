@@ -1,5 +1,10 @@
 #include "win_screen.h"
-WinScreen::WinScreen() : Fl_Gl_Window(300, 300, "You Win :)"), test("test.obj") {
+#include "win_obj.h"
+#include <sstream>
+
+WinScreen::WinScreen() : Fl_Gl_Window(300, 300, "You Win :)") {
+	std::istringstream in(win_obj);
+	test = Object(in);
 	mode(FL_RGB | FL_OPENGL3);
 	end();
 	show();

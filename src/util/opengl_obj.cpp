@@ -1,16 +1,9 @@
 #include "opengl_obj.h"
 #include <fstream>
-#include <iostream>
 #include <sstream>
 
 // Modified from https://en.wikibooks.org/wiki/OpenGL_Programming/Modern_OpenGL_Tutorial_Load_OBJ
-Object::Object(const char* filename) {
-	std::ifstream in(filename, std::ios::in);
-	if (!in) {
-		std::cerr << "Could not load " << filename << std::endl;
-		return;
-	}
-
+void Object::loadFromStream(std::istream &in) {
 	std::string line;
 	while (getline(in, line)) {
 		if (line.substr(0, 2) == "v ") {
@@ -47,6 +40,20 @@ Object::Object(const char* filename) {
 	glGenBuffers(1, &vertices_vbo);
 	glGenBuffers(1, &elements_ibo);
 	update_buffers();
+	enabled = true;
+}
+
+Object::Object(const char* filename) {
+	std::ifstream in(filename, std::ios::in);
+	if (!in) {
+		std::cerr << "Could not load " << filename << std::endl;
+		return;
+	}
+	loadFromStream(in);
+}
+
+Object::Object(std::istream &in) {
+	loadFromStream(in);
 }
 
 Object::~Object() {
@@ -63,9 +70,11 @@ void Object::update_buffers() {
 }
 
 void Object::draw() {
-	// Load vertices and index of vertices:
-	glBindBuffer(GL_ARRAY_BUFFER, vertices_vbo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elements_ibo);
+	if (enabled) {
+		// Load vertices and index of vertices:
+		glBindBuffer(GL_ARRAY_BUFFER, vertices_vbo);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elements_ibo);
 
-	glDrawElements(GL_TRIANGLES, vertices.size(), GL_UNSIGNED_INT, NULL);
+		glDrawElements(GL_TRIANGLES, vertices.size(), GL_UNSIGNED_INT, NULL);
+	}
 }

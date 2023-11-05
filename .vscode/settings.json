@@ -92,6 +92,7 @@
         "regex": "cpp",
         "ranges": "cpp",
         "*.cpphtml": "html",
+        "fstream": "cpp"
     },
     "cmake.configureOnOpen": false,
     "C_Cpp.default.compilerPath": "C:\\msys64\\ucrt64\\bin\\gcc.exe",

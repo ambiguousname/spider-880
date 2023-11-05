@@ -2,6 +2,7 @@
 #include "gl.h"
 
 #include <glm/glm.hpp>
+#include <iostream>
 #include <vector>
 
 using namespace glm;
@@ -20,9 +21,13 @@ class Object {
 
 	void update_buffers();
 
+	void loadFromStream(std::istream &in);
+
+	bool enabled = false;
 	public:
-	
 	Object(const char* filename);
+	Object(std::istream &in);
+	Object() {}
 	~Object();
 	void draw();
 };
