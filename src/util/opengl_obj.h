@@ -23,11 +23,12 @@ class Object {
 
 	void loadFromStream(std::istream &in);
 
-	bool enabled = false;
 	public:
 	Object(const char* filename);
 	Object(std::istream &in);
 	Object() {}
 	~Object();
+
+	void initialize();
 	void draw();
 };

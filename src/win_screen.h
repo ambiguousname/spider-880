@@ -5,9 +5,13 @@
 
 class WinScreen : public Fl_Gl_Window {
 	protected:
-	Object test;
+	Object* test;
 	
 	public:
 	WinScreen();
+	~WinScreen() {
+		delete test;
+	}
 	void draw();
+	int handle(int event);
 };

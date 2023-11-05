@@ -1,1 +1,2 @@
 utillib = static_library('util', ['color.cpp', 'image_box.cpp', 'window_management.cpp', 'opengl_obj.cpp'], dependencies: [dependency('glm')])
+# TODO: This multi-library dependency on GLM is probably making things more complicated.

@@ -35,12 +35,6 @@ void Object::loadFromStream(std::istream &in) {
         glm::vec3 normal = glm::normalize(glm::cross(glm::vec3(vertices[ib]) - glm::vec3(vertices[ia]), glm::vec3(vertices[ic]) - glm::vec3(vertices[ia])));
         normals[ia] = normals[ib] = normals[ic] = normal;
 	}
-
-
-	glGenBuffers(1, &vertices_vbo);
-	glGenBuffers(1, &elements_ibo);
-	update_buffers();
-	enabled = true;
 }
 
 Object::Object(const char* filename) {
@@ -60,6 +54,12 @@ Object::~Object() {
 	glDeleteBuffers(1, &vertices_vbo);
 }
 
+void Object::initialize() {
+	glGenBuffers(1, &vertices_vbo);
+	glGenBuffers(1, &elements_ibo);
+	update_buffers();
+}
+
 void Object::update_buffers() {
 	glBindBuffer(GL_ARRAY_BUFFER, vertices_vbo);
 	// Set to DYNAMIC_DRAW in case we want to update our vertices:
@@ -70,11 +70,9 @@ void Object::update_buffers() {
 }
 
 void Object::draw() {
-	if (enabled) {
-		// Load vertices and index of vertices:
-		glBindBuffer(GL_ARRAY_BUFFER, vertices_vbo);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elements_ibo);
+	// Load vertices and index of vertices:
+	glBindBuffer(GL_ARRAY_BUFFER, vertices_vbo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elements_ibo);
 
-		glDrawElements(GL_TRIANGLES, vertices.size(), GL_UNSIGNED_INT, NULL);
-	}
+	glDrawElements(GL_TRIANGLES, vertices.size(), GL_UNSIGNED_INT, NULL);
 }
