@@ -194,7 +194,7 @@ void HTMLPage::drawChildren() {
 			start_y = node_info->y;
 			node->close(this, start_x, start_y, out_w, out_h);
 			if (node->interactive()) {
-				interactive_nodes.insert(interactive_nodes.begin(), {node, start_x, start_y, out_w, out_h});y
+				interactive_nodes.insert(interactive_nodes.begin(), {node, start_x, start_y, out_w, out_h});
 			}
 			
 			int parent_w, parent_h, parent_x, parent_y;
