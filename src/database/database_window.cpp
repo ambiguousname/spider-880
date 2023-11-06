@@ -278,18 +278,18 @@ void DatabaseWindow::citizenMurdered(Fl_Widget* browser, void* db_window) {
 
 	Citizen citizen = Citizen(self->text(self->value()));
 	int choice = fl_choice("Was %s %s murdered?", "No", "Yes", nullptr, citizen.first_name->c_str(), citizen.last_name->c_str());
-	if (choice == 0) {
+	if (choice == 1) {
 		// Assuming database hasn't changed.
 		// TODO: Update based on how python generates the IDs.
 		if (std::stoi(citizen.id->c_str()) == 70) {
 			new WinScreen();
-		}
-	} else {
-		static_cast<DatabaseWindow*>(db_window)->citizen_db->DeleteCitizen(std::stoi(citizen.id->c_str()), std::stoi(citizen.household_id->c_str()));
-		fl_alert("Soul no longer found. Your guess must have been incorrect.");
+		} else {
+			static_cast<DatabaseWindow*>(db_window)->citizen_db->DeleteCitizen(std::stoi(citizen.id->c_str()), std::stoi(citizen.household_id->c_str()));
+			fl_alert("Soul no longer found. Your guess must have been incorrect.");
 
-		self->remove(self->value());
-		self->redraw();
+			self->remove(self->value());
+			self->redraw();
+		}
 	}
 }
 

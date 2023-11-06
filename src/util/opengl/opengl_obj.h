@@ -46,7 +46,7 @@ class Object {
 	}
 
 	void initialize();
-	void draw(const mat4& view, const mat4& projection);
+	void draw(const mat4& projection, const mat4& view);
 
 	void scale(vec3 amount) {
 		model = glm::scale(model, amount);

@@ -82,7 +82,7 @@ void Object::update_buffers() {
 
 
 
-void Object::draw(const mat4& view, const mat4& projection) {
+void Object::draw(const mat4& projection, const mat4& view) {
 	glUseProgram(shader->getProgram());
 	// Enable drawing position:
 	glEnableVertexAttribArray(position_idx);

@@ -1,2 +1,1 @@
-utillib = static_library('util', ['color.cpp', 'image_box.cpp', 'window_management.cpp', 'opengl/opengl_obj.cpp', 'opengl/opengl_shader.cpp'], dependencies: [dependency('glm')])
-# TODO: This multi-library dependency on GLM is probably making things more complicated.
+utillib = static_library('util', ['color.cpp', 'image_box.cpp', 'window_management.cpp', 'opengl/opengl_obj.cpp', 'opengl/opengl_shader.cpp', 'opengl/opengl_window.cpp'])
