@@ -24,7 +24,7 @@ void WinScreen::initialize() {
 
 void WinScreen::glDraw(const mat4& projection, const mat4& view, float time) {
 	tick++;
-	// test->rotate(radians(1.0f), vec3(0.0f, 1.0f, 0.0f));
+	test->rotate(radians(0.1f), vec3(1.0f, 1.0f, 1.0f));
 	test->draw(projection, view, time);
 	// camera.translate(vec3(0.0f, 0.0f, -0.1f));
 	if (tick > 600) {
