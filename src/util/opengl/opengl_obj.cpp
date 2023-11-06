@@ -13,8 +13,8 @@ void Object::loadFromStream(std::istream &in) {
 			s >> v.x;
 			s >> v.y;
 			s >> v.z;
-			v.x *= 100;
-			v.y *= 100;
+			// v.x *= 100;
+			// v.y *= 100;
 
 			v.w = 1.0f;
 			vertices.push_back(v);
@@ -67,9 +67,7 @@ void Object::initialize() {
 
 	shader->initialize();
 	GLuint program = shader->getProgram();
-	// TODO: Fix this to work with vertex shaders.
-	// position_idx = glGetAttribLocation(program, "position");
-	// transform_idx = glGetUniformLocation(program, "transform");
+	transform_idx = glGetUniformLocation(program, "transform");
 }
 
 void Object::update_buffers() {
@@ -79,12 +77,6 @@ void Object::update_buffers() {
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elements_ibo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * elements.size(), &elements[0], GL_STATIC_DRAW);
-
-	// Set position:
-	
-	// glBindVertexArray(attributes_vao);
-	// glVertexAttribPointer(, 4, GL_FLOAT, GL_FALSE, sizeof(vec4), (void*)0);
-	// glBindVertexArray(0);
 }
 
 

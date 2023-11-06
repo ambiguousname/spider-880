@@ -3,6 +3,7 @@
 #include "opengl_shader.h"
 
 #include <glm/glm.hpp>
+#include <glm/ext/matrix_transform.hpp>
 #include <iostream>
 #include <vector>
 #include <memory>
@@ -23,6 +24,7 @@ class Object {
 	// Attributes:
 	GLuint attributes_vao;
 
+	// These should be set in a shader:
 	GLuint position_idx = 0;
 	GLuint transform_idx = 1;
 
@@ -44,4 +46,14 @@ class Object {
 
 	void initialize();
 	void draw();
+
+	void scale(vec3 amount) {
+		transform = glm::scale(transform, amount);
+	}
+	void translate(vec3 amount) {
+		transform = glm::translate(transform, amount);
+	}
+	void rotate(float angle, vec3 axis) {
+		transform = glm::rotate(transform, angle, axis);
+	}
 };

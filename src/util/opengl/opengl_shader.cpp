@@ -43,7 +43,7 @@ void Shader::loadFromString(const char* vertex, const char* frag) {
 	
 	int vertex_shader = -1;
 	if (vertex_source != nullptr) {
-		int vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+		vertex_shader = glCreateShader(GL_VERTEX_SHADER);
 		glShaderSource(vertex_shader, 1, vertex_source, NULL);
 		glCompileShader(vertex_shader);
 
@@ -71,8 +71,12 @@ void Shader::loadFromString(const char* vertex, const char* frag) {
 	}
 
 	program_idx = glCreateProgram();
-	glAttachShader(program_idx, frag_shader);
-	glAttachShader(program_idx, vertex_shader);
+	if (frag_shader >= 0) {
+		glAttachShader(program_idx, frag_shader);
+	}
+	if (vertex_shader >= 0) {
+		glAttachShader(program_idx, vertex_shader);
+	}
 	glLinkProgram(program_idx);
 
 	glGetProgramiv(program_idx, GL_LINK_STATUS, &success);
