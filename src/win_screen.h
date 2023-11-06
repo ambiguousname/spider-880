@@ -1,7 +1,7 @@
 #pragma once
 #include <FL/Fl_Gl_Window.H>
-#include <util/gl.h>
-#include <util/opengl_obj.h>
+#include <util/opengl/gl.h>
+#include <util/opengl/opengl_obj.h>
 
 class WinScreen : public Fl_Gl_Window {
 	protected:

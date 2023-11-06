@@ -12,6 +12,9 @@ void Object::loadFromStream(std::istream &in) {
 			s >> v.x;
 			s >> v.y;
 			s >> v.z;
+			v.x *= 100;
+			v.y *= 100;
+
 			v.w = 1.0f;
 			vertices.push_back(v);
 		} else if (line.substr(0, 2) == "f ") {
@@ -32,7 +35,7 @@ void Object::loadFromStream(std::istream &in) {
 		GLushort ia = elements[i];
         GLushort ib = elements[i+1];
         GLushort ic = elements[i+2];
-        glm::vec3 normal = glm::normalize(glm::cross(glm::vec3(vertices[ib]) - glm::vec3(vertices[ia]), glm::vec3(vertices[ic]) - glm::vec3(vertices[ia])));
+        vec3 normal = normalize(cross(vec3(vertices[ib]) - vec3(vertices[ia]), vec3(vertices[ic]) - vec3(vertices[ia])));
         normals[ia] = normals[ib] = normals[ic] = normal;
 	}
 }
@@ -55,24 +58,45 @@ Object::~Object() {
 }
 
 void Object::initialize() {
+	glGenVertexArrays(1, &attributes_vao);
 	glGenBuffers(1, &vertices_vbo);
 	glGenBuffers(1, &elements_ibo);
 	update_buffers();
+
+	// position_idx = glGetAttribLocation();
 }
 
 void Object::update_buffers() {
 	glBindBuffer(GL_ARRAY_BUFFER, vertices_vbo);
-	// Set to DYNAMIC_DRAW in case we want to update our vertices:
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vec4) * vertices.size(), &vertices[0], GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vec4) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
+
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elements_ibo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size(), &elements[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * elements.size(), &elements[0], GL_STATIC_DRAW);
+
+	// Set position:
+	
+	// glBindVertexArray(attributes_vao);
+	// glVertexAttribPointer(, 4, GL_FLOAT, GL_FALSE, sizeof(vec4), (void*)0);
+	// glBindVertexArray(0);
 }
 
-void Object::draw() {
-	// Load vertices and index of vertices:
-	glBindBuffer(GL_ARRAY_BUFFER, vertices_vbo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elements_ibo);
 
-	glDrawElements(GL_TRIANGLES, vertices.size(), GL_UNSIGNED_INT, NULL);
+
+void Object::draw() {
+	// Enable drawing position:
+	glEnableVertexAttribArray(position_idx);
+	glBindBuffer(GL_ARRAY_BUFFER, vertices_vbo);
+
+	// Connect the current array buffer to the attribute array:
+	glVertexAttribPointer(position_idx, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+	glUniformMatrix4fv(transform_idx, 1, GL_FALSE, glm::value_ptr(transform));
+
+	// Prepare to draw elements:
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elements_ibo);
+	glDrawElements(GL_TRIANGLES, elements.size(), GL_UNSIGNED_SHORT, (void*)0);
+
+	
+	glDisableVertexAttribArray(position_idx);
 }

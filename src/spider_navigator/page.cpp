@@ -38,7 +38,7 @@ int HTMLWindow::handle(int event) {
 			std::vector<Password> matches = {};
 
 			for (auto p: passwords) {
-				int size = strlen(p.password);
+				int size = strnlen(p.password, 100);
 				if (p.password[size - 1] == typing_buffer.back()) {
 					Password match = Password(p);
 					match.curr_index = size - 1;
