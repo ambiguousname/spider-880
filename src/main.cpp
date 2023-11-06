@@ -23,7 +23,6 @@ void createBlog(Fl_Widget*) {
 	page->show();
 }
 
-#include "win_screen.h"
 int main(int argc, char **argv) {
 	int x, y, w, h;
 	Fl::screen_work_area(x, y, w, h);
@@ -53,9 +52,6 @@ int main(int argc, char **argv) {
 	DatabaseWindow* db = new DatabaseWindow(x + 3 * w/4, y + h/4, 400, 300);
 	db->show();
 	createBlog(nullptr);
-
-	
-	new WinScreen();
 
 	// TODO: Audio playback for a few sounds (looping backgrounds too)
 	// TODO: OpenGL scares

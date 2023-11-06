@@ -1,6 +1,12 @@
 #include "win_screen.h"
 #include "win_obj.h"
 #include <sstream>
+#include <FL/Fl.H>
+
+void Timer_CB(void* screen) {
+	((WinScreen*)screen)->redraw();
+	Fl::repeat_timeout(1.0/60.0, Timer_CB, screen);
+}
 
 WinScreen::WinScreen() : Fl_Gl_Window(300, 300, "You Win :)") {
 	std::istringstream in(win_obj);
@@ -8,6 +14,7 @@ WinScreen::WinScreen() : Fl_Gl_Window(300, 300, "You Win :)") {
 	test->translate(vec3(0, 0, 0.5));
 	std::shared_ptr<Shader> base(std::make_shared<Shader>("assets/shaders/vertex/base.glsl", "assets/shaders/frag/base.glsl"));
 	test->setShader(base);
+	Fl::add_timeout(1.0/60.0, Timer_CB, (void*) this);
 	mode(FL_RGB | FL_DEPTH | FL_OPENGL3);
 	end();
 	show();
@@ -24,7 +31,6 @@ int WinScreen::handle(int event) {
 		test->initialize();
 	}
 	#endif
-	redraw();
 	return Fl_Gl_Window::handle(event);
 }
 

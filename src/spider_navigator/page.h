@@ -86,13 +86,15 @@ class HTMLPage : public Fl_Group {
 // May not pose a problem right now, but what if we need to make multiple windows of the same page that show different information?
 // Mayhaps some copying is in order in the future.
 
+typedef void (*password_callback)(Fl_Widget*, std::string);
+
 struct Password {
-	const char* password;
+	std::string password;
 	Fl_Callback* callback;
 	void* data = 0;
 	int curr_index=0;
 	bool operator==(const Password& other) {
-		return strcmp(password, other.password) == 0;
+		return (password == other.password);
 	}
 };
 

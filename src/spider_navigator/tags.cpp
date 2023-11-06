@@ -66,7 +66,7 @@ void A::click(int, int, HTMLPage* current_page) {
 		windowCreation constructor;
 		if (current_page->parent_window->getLinkedWindow(search->second, constructor)) {
 			// TODO: Shouldn't be current page, should be the topmost window x and y.
-			auto window = constructor(current_page->x(), current_page->y(), current_page->parent_window->w(), current_page->parent_window->h());
+			auto window = constructor(current_page->parent_window->x() + 10, current_page->parent_window->y() + 10, current_page->parent_window->w(), current_page->parent_window->h());
 			window->show();
 		}
 	}

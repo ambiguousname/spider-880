@@ -14,9 +14,22 @@ void aboutCallback(Fl_Widget*, void*) {
 
 typedef HTMLWindow* (*page_create)(int, int, int, int);
 
+
+void showHTMLPageFromString(Fl_Widget* widget, void* str) {
+	HTMLWindow* window = dynamic_cast<HTMLWindow*>(widget);
+
+	std::string* string = (std::string*)str;
+	windowCreation out;
+	window->getLinkedWindow(*string, out);
+	delete string;
+
+	HTMLWindow* page = out(window->x() + 10, window->y() + 10, window->w(), window->h());
+	page->show();
+}
+
 void showHTMLPage(Fl_Widget* widget, void* pg) {
 	page_create creator = (page_create)(pg);
-	Fl_Window* window = widget->top_window();
+	HTMLWindow* window = dynamic_cast<HTMLWindow*>(widget);
 	HTMLWindow* page = creator(window->x() + 10, window->y() + 10, window->w(), window->h());
 	page->show();
 }
@@ -38,7 +51,7 @@ int HTMLWindow::handle(int event) {
 			std::vector<Password> matches = {};
 
 			for (auto p: passwords) {
-				int size = strnlen(p.password, 100);
+				int size = p.password.size();
 				if (p.password[size - 1] == typing_buffer.back()) {
 					Password match = Password(p);
 					match.curr_index = size - 1;
@@ -75,7 +88,7 @@ int HTMLWindow::handle(int event) {
 HTMLWindow::HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int h) : Fl_Window(x, y, w, h), menu_bar(0, 0, w, 20) {
 	menu_bar.add("NavSab", 0, 0, 0, FL_MENU_INACTIVE);
 	menu_bar.add("Help/About", FL_CTRL+'a', aboutCallback);
-	menu_bar.add("Help/Website", FL_CTRL+'w', showHTMLPage, (void*)GertwigBlogNavsabHTMLWindow::createWindow);
+	menu_bar.add("Help/Website", FL_CTRL+'w', showHTMLPage, (void*)&GertwigBlogNavsabHTMLWindow::createWindow);
 
 	auto attributes = root->attributes();
 	auto find_title = attributes.find("title");
@@ -92,24 +105,24 @@ HTMLWindow::HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int 
 	if (pwds != attributes.end()) {
 
 		std::string buf = "";
-		char passwordName[20];
-		Fl_Callback* cb;
+		std::string passwordName;
+
 		for (auto c : pwds->second) {
 			if (c == '=') {
-				strcpy(passwordName, buf.c_str());
+				passwordName = buf;
 				buf = "";
 			} else if (c == ',' || c == '\0') {
-				windowCreation out;
 				// Convert std::function to function pointer? Hopefully this is doable.
-				getLinkedWindow(buf, out);
-				cb = out.target<Fl_Callback>();
-				
+
+				passwords.push_back({passwordName, showHTMLPageFromString, (void*)(new std::string(buf))});
 				buf = "";
 			} else {
 				buf += c;
 			}
 		}
-		passwords.push_back(Password{passwordName, showHTMLPage, (void*)cb});
+		if (buf.size() > 0) {
+			passwords.push_back({passwordName, showHTMLPageFromString, (void*)(new std::string(buf))});
+		}
 	}
 
 	scrollbar = new Fl_Scroll(0, 25, w, h - 25);
