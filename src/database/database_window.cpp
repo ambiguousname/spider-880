@@ -272,7 +272,7 @@ void DatabaseWindow::search(Fl_Widget*, void* s) {
 
 void DatabaseWindow::citizenMurdered(Fl_Widget* browser, void* db_window) {
 	Fl_Browser* self = static_cast<Fl_Browser*>(browser);
-	if (self->value() == 1) {
+	if (self->value() <= 1) {
 		return;
 	}
 

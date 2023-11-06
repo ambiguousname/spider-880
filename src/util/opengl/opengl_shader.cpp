@@ -5,9 +5,8 @@
 #include <stdexcept>
 
 Shader::Shader(const char* vertex_file, const char* frag_file) {
-	std::ifstream vs;
 	if (vertex_file != nullptr) {
-		vs.open(vertex_file);
+		std::ifstream vs(vertex_file, std::ios::in);
 		if (!vs.is_open()) {
 			std::cerr << "Could not open vertex shader " << vertex_file << ": " << strerror(errno) << std::endl;
 			return;
@@ -16,9 +15,8 @@ Shader::Shader(const char* vertex_file, const char* frag_file) {
 		vs.close();
 	}
 
-	std::ifstream fs(frag_file);
 	if (frag_file != nullptr) {
-		fs.open(frag_file);
+		std::ifstream fs(frag_file, std::ios::in);
 		if (!fs.is_open()) {
 			std::cerr << "Could not open frag shader " << frag_file << ": " << strerror(errno) << std::endl;
 			return;
