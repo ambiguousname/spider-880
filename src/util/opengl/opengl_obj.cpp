@@ -65,10 +65,6 @@ void Object::initialize() {
 	update_buffers();
 
 	shader->initialize();
-	GLuint program = shader->getProgram();
-	model_idx = glGetUniformLocation(program, "model");
-	view_idx = glGetUniformLocation(program, "view");
-	projection_idx = glGetUniformLocation(program, "projection");
 }
 
 void Object::update_buffers() {
@@ -82,23 +78,23 @@ void Object::update_buffers() {
 
 
 
-void Object::draw(const mat4& projection, const mat4& view) {
-	glUseProgram(shader->getProgram());
+void Object::draw(const mat4& projection, const mat4& view, float time) {
+	if (shader != nullptr){
+		shader->useProgram();
+	}
 	// Enable drawing position:
 	glEnableVertexAttribArray(position_idx);
 	glBindBuffer(GL_ARRAY_BUFFER, vertices_vbo);
 
 	// Connect the current array buffer to the attribute array:
 	glVertexAttribPointer(position_idx, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-	glUniformMatrix4fv(model_idx, 1, GL_FALSE, glm::value_ptr(model));
-	glUniformMatrix4fv(view_idx, 1, GL_FALSE, glm::value_ptr(view));
-	glUniformMatrix4fv(projection_idx, 1, GL_FALSE, glm::value_ptr(projection));
+	if (shader != nullptr) {
+		shader->setAttrs(glm::value_ptr(model), glm::value_ptr(projection), glm::value_ptr(view), time);
+	}
 
 	// Prepare to draw elements:
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elements_ibo);
 	glDrawElements(GL_TRIANGLES, elements.size(), GL_UNSIGNED_SHORT, (void*)0);
 
-	
 	glDisableVertexAttribArray(position_idx);
 }

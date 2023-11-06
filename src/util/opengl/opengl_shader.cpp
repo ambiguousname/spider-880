@@ -88,6 +88,22 @@ void Shader::loadFromString(const char* vertex, const char* frag) {
 
 	glDeleteShader(vertex_shader);
 	glDeleteShader(frag_shader);
+	
+	model_idx = glGetUniformLocation(program_idx, "model");
+	projection_idx = glGetUniformLocation(program_idx, "projection");
+	view_idx = glGetUniformLocation(program_idx, "view");
+	time_idx = glGetUniformLocation(program_idx, "time");
+}
+
+void Shader::useProgram() {
+	glUseProgram(program_idx);
+}
+
+void Shader::setAttrs(f32* model_ptr, const f32* projection_ptr, const f32* view_ptr, float time) {
+	glUniformMatrix4fv(model_idx, 1, GL_FALSE, model_ptr);
+	glUniformMatrix4fv(projection_idx, 1, GL_FALSE, projection_ptr);
+	glUniformMatrix4fv(view_idx, 1, GL_FALSE, view_ptr);
+	glUniform1f(time_idx, time);
 }
 
 const int Shader::getProgram() const {

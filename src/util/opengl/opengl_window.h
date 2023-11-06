@@ -49,14 +49,18 @@ class Camera {
 
 	void translate(vec3 add) {
 		position += add;
+		update();
 	}
 };
 
 class GlWindow : public Fl_Gl_Window {
+	private:
+	static void Timer_CB(void* self);
+
 	protected:
 	Camera camera;
 
-	static void Timer_CB(void* self);
+	int ticks = 0;
 
 	public:
 	GlWindow(int x, int y, int w, int h, const char* l=0);
@@ -71,5 +75,5 @@ class GlWindow : public Fl_Gl_Window {
 	}
 
 	virtual void initialize() = 0;
-	virtual void glDraw(const mat4& projection, const mat4& view) = 0;
+	virtual void glDraw(const mat4& projection, const mat4& view, float time) = 0;
 };

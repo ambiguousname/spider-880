@@ -18,13 +18,16 @@ WinScreen::WinScreen() : GlWindow(0, 0, 300, 300, "You Win :)") {
 
 void WinScreen::initialize() {
 	test->initialize();
+	// test->scale(vec3(0.5f));
+	// test->translate(vec3(0.0f, 0.0f, 2.0f));
 }
 
-void WinScreen::glDraw(const mat4& projection, const mat4& view) {
+void WinScreen::glDraw(const mat4& projection, const mat4& view, float time) {
 	tick++;
-	test->rotate(radians(1.0f), vec3(0.0f, 1.0f, 0.0f));
-	test->draw(projection, view);
-	if (tick > 100) {
+	// test->rotate(radians(1.0f), vec3(0.0f, 1.0f, 0.0f));
+	test->draw(projection, view, time);
+	// camera.translate(vec3(0.0f, 0.0f, -0.1f));
+	if (tick > 600) {
 		fullscreen();
 		// Adding this to the main thread makes it memory safe to close:
 		Fl::add_timeout(1.0, WindowManagement::hide_all_windows);

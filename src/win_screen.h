@@ -14,5 +14,5 @@ class WinScreen : public GlWindow {
 	}
 
 	void initialize() override;
-	void glDraw(const mat4& projection, const mat4& view) override;
+	void glDraw(const mat4& projection, const mat4& view, float time) override;
 };

@@ -44,5 +44,6 @@ void GlWindow::draw() {
 
 	mat4 projection, view;
 	camera.getCameraMatrices(projection, view);
-	glDraw(projection, view);
+	ticks++;
+	glDraw(projection, view, ticks);
 }

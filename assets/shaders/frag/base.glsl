@@ -2,8 +2,10 @@
 
 out vec4 FragColor;
 
-in vec4 vertColor;
+in vec4 vertPos;
+
+uniform float time;
 
 void main() {
-	FragColor = vec4(vertColor.x, vertColor.y, 1.0f, 1.0f);
+	FragColor = vec4(distance(vertPos.xyz, vec3(0)) * (cos(time/1000) + 0.1f), 0, 0, 1.0f);
 }

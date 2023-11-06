@@ -22,12 +22,9 @@ class Object {
 	// Indices:
 	GLuint elements_ibo;
 
-	// These should be set in a shader:
+	// These should be set in a shader GLSL:
 	GLuint position_idx = 0;
 	GLuint normal_idx = 1;
-	GLuint model_idx;
-	GLuint view_idx;
-	GLuint projection_idx;
 
 	std::shared_ptr<Shader> shader;
 
@@ -46,7 +43,7 @@ class Object {
 	}
 
 	void initialize();
-	void draw(const mat4& projection, const mat4& view);
+	void draw(const mat4& projection, const mat4& view, float time=0);
 
 	void scale(vec3 amount) {
 		model = glm::scale(model, amount);
