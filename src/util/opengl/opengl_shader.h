@@ -1,5 +1,6 @@
 #pragma once
 #include "gl.h"
+#include <sstream>
 
 class Shader {
 	protected:
@@ -7,9 +8,15 @@ class Shader {
 
 	void loadFromString(const char* vertex, const char* frag);
 
+	std::stringstream frag_string;
+	std::stringstream vertex_string;
+
+	bool initialized = false;
+
 	public:
 	Shader(const char* vertex_file=nullptr, const char* frag_file=nullptr);
 	~Shader();
 
-	int getProgram() { return program_idx; }
+	const int getProgram() const;
+	void initialize();
 };

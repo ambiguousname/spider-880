@@ -65,6 +65,10 @@ void Object::initialize() {
 	glGenBuffers(1, &elements_ibo);
 	update_buffers();
 
+	shader->initialize();
+	GLuint program = shader->getProgram();
+	// position_idx = glGetAttribLocation(program, "position");
+	// transform_idx = glGetUniformLocation(program, "transform");
 	// position_idx = glGetAttribLocation();
 }
 
@@ -86,6 +90,7 @@ void Object::update_buffers() {
 
 
 void Object::draw() {
+	// glUseProgram(shader->getProgram());
 	// Enable drawing position:
 	glEnableVertexAttribArray(position_idx);
 	glBindBuffer(GL_ARRAY_BUFFER, vertices_vbo);

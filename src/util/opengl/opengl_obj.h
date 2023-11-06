@@ -38,11 +38,8 @@ class Object {
 	Object() {}
 	~Object();
 
-	void updateShader(std::shared_ptr<Shader> s) {
+	void setShader(std::shared_ptr<Shader> s) {
 		shader = s;
-		GLuint program = shader->getProgram();
-		position_idx = glGetAttribLocation(program, "position");
-		transform_idx = glGetUniformLocation(program, "transform");
 	}
 
 	void initialize();

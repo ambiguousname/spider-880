@@ -2,34 +2,37 @@
 #include <iostream>
 #include <string.h>
 #include <fstream>
-#include <sstream>
+#include <stdexcept>
 
 Shader::Shader(const char* vertex_file, const char* frag_file) {
 	std::ifstream vs;
-	std::stringstream vertex;
 	if (vertex_file != nullptr) {
 		vs.open(vertex_file);
-		if (!vs) {
-			std::cerr << "Could not open vertex shader " << vertex_file << std::endl;
+		if (!vs.is_open()) {
+			std::cerr << "Could not open vertex shader " << vertex_file << ": " << strerror(errno) << std::endl;
 			return;
 		}
-		vertex << vs.rdbuf();
+		vertex_string << vs.rdbuf();
 		vs.close();
 	}
 
 	std::ifstream fs(frag_file);
-	std::stringstream frag;
 	if (frag_file != nullptr) {
 		fs.open(frag_file);
-		if (!fs) {
-			std::cerr << "Could not open frag shader " << frag_file << std::endl;
+		if (!fs.is_open()) {
+			std::cerr << "Could not open frag shader " << frag_file << ": " << strerror(errno) << std::endl;
+			return;
 		}
-		frag << fs.rdbuf();
+		frag_string << fs.rdbuf();
 		fs.close();
 	}
+}
 
-	std::stringstream frag;
-	loadFromString(vertex.str().c_str(), frag.str().c_str());
+void Shader::initialize() {
+	if (!initialized) {
+		loadFromString(vertex_string.str().c_str(), frag_string.str().c_str());
+		initialized = true;
+	}
 }
 
 void Shader::loadFromString(const char* vertex, const char* frag) {
@@ -81,6 +84,13 @@ void Shader::loadFromString(const char* vertex, const char* frag) {
 
 	glDeleteShader(vertex_shader);
 	glDeleteShader(frag_shader);
+}
+
+const int Shader::getProgram() const {
+	if (!initialized) {
+		throw std::logic_error("Shader initialize() not called.");
+	}
+	return program_idx;
 }
 
 Shader::~Shader() {
