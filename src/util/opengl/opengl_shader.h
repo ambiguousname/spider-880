@@ -4,9 +4,6 @@
 class Shader {
 	int program_idx;
 
-	char* vertex_program;	
-	char* frag_program;
-
 	public:
 	Shader(const char* vertex=nullptr, const char* frag=nullptr);
 

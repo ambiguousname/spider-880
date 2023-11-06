@@ -1,6 +1,7 @@
 #include "opengl_obj.h"
 #include <fstream>
 #include <sstream>
+#include <glm/gtc/type_ptr.hpp>
 
 // Modified from https://en.wikibooks.org/wiki/OpenGL_Programming/Modern_OpenGL_Tutorial_Load_OBJ
 void Object::loadFromStream(std::istream &in) {

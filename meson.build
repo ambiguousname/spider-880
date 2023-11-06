@@ -8,5 +8,4 @@ if build_machine.system() == 'windows'
   add_global_arguments('-DWIN32', language : 'cpp')
 endif
 
-glm = subproject('glm')
 subdir('src')

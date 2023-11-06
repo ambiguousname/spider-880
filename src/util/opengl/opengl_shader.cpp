@@ -2,14 +2,11 @@
 #include <iostream>
 #include <string.h>
 
-Shader::Shader(const char* vertex=nullptr, const char* frag=nullptr) {
+Shader::Shader(const char* vertex, const char* frag) {
 	int success;
 	char infoLog[512];
 
-	strcpy(vertex_program, vertex);
-	strcpy(frag_program, frag);
-
-	const char** vertex_source = &vertex_program;
+	const char** vertex_source = &vertex;
 	
 	int vertex_shader = -1;
 	if (vertex_source != nullptr) {
@@ -25,7 +22,7 @@ Shader::Shader(const char* vertex=nullptr, const char* frag=nullptr) {
 		}
 	}
 
-	const char** frag_source = &frag_program;
+	const char** frag_source = &frag;
 
 	int frag_shader = -1;
 	if (frag_source != nullptr) {
