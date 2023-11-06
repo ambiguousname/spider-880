@@ -81,10 +81,12 @@ void A::init() {
 }
 
 void A::child_closed(HTMLPage*, const int child_x, const int child_y, const int child_w, const int child_h, int& start_x, int& start_y, int& out_w, int& out_h) {
+	bool resetY = false;
 	if (child_x < start_x) {
 		start_x = child_x;
+		resetY = true;
 	}
-	if (child_y < start_y) {
+	if (child_y < start_y || resetY) {
 		start_y = child_y;
 	}
 	int localized_w = (child_x + child_w) - start_x;

@@ -111,16 +111,15 @@ HTMLWindow::HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int 
 				passwordName = buf;
 				buf = "";
 			} else if (c == ',' || c == '\0') {
-				// Convert std::function to function pointer? Hopefully this is doable.
-
 				Password& a = passwords.emplace_back(Password {passwordName, showHTMLPageFromString, 0, buf});
 				a.data = &a.str_data;
 				buf = "";
+				passwordName = "";
 			} else {
 				buf += c;
 			}
 		}
-		if (buf.size() > 0) {
+		if (buf.size() > 0 && passwordName.size() > 0) {
 			Password& a = passwords.emplace_back(Password {passwordName, showHTMLPageFromString, 0, buf});
 			a.data = &a.str_data;
 		}
@@ -195,9 +194,7 @@ void HTMLPage::drawChildren() {
 			start_y = node_info->y;
 			node->close(this, start_x, start_y, out_w, out_h);
 			if (node->interactive()) {
-				if (node->getCursor() != FL_CURSOR_INSERT) {
-					interactive_nodes.insert(interactive_nodes.begin(), {node, start_x, start_y, out_w, out_h});
-				}
+				interactive_nodes.insert(interactive_nodes.begin(), {node, start_x, start_y, out_w, out_h});y
 			}
 			
 			int parent_w, parent_h, parent_x, parent_y;
@@ -207,6 +204,9 @@ void HTMLPage::drawChildren() {
 				parent_h = parent_info->h;
 				parent_x = parent_info->x;
 				parent_y = parent_info->y;
+				// if (parent_info->node->interactive() && parent_info->node->getCursor() != FL_CURSOR_INSERT) {
+				// 	std::cout << parent_info->node << std::endl;
+				// }
 
 				parent_info->node->child_closed(this, start_x, start_y, out_w, out_h, parent_x, parent_y, parent_w, parent_h);
 				parent_info->w = parent_w;
