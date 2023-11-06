@@ -10,7 +10,7 @@
 using namespace glm;
 class Object {
 	protected:
-	mat4 transform;
+	mat4 transform = mat4(1.0f);
 
 	// We use vec4 for easy matrix math:
 	std::vector<vec4> vertices;

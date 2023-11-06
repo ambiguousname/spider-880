@@ -67,9 +67,9 @@ void Object::initialize() {
 
 	shader->initialize();
 	GLuint program = shader->getProgram();
+	// TODO: Fix this to work with vertex shaders.
 	// position_idx = glGetAttribLocation(program, "position");
 	// transform_idx = glGetUniformLocation(program, "transform");
-	// position_idx = glGetAttribLocation();
 }
 
 void Object::update_buffers() {
@@ -90,7 +90,7 @@ void Object::update_buffers() {
 
 
 void Object::draw() {
-	// glUseProgram(shader->getProgram());
+	glUseProgram(shader->getProgram());
 	// Enable drawing position:
 	glEnableVertexAttribArray(position_idx);
 	glBindBuffer(GL_ARRAY_BUFFER, vertices_vbo);

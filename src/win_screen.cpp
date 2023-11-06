@@ -5,7 +5,7 @@
 WinScreen::WinScreen() : Fl_Gl_Window(300, 300, "You Win :)") {
 	std::istringstream in(win_obj);
 	test = new Object(in);
-	std::shared_ptr<Shader> base(std::make_shared<Shader>("assets/shaders/vertex/base.glsl", "assets/shaders/frag/base.glsl"));
+	std::shared_ptr<Shader> base(std::make_shared<Shader>(nullptr, "assets/shaders/frag/base.glsl"));
 	test->setShader(base);
 	mode(FL_RGB | FL_DEPTH | FL_OPENGL3);
 	end();
