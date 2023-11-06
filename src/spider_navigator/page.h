@@ -92,6 +92,7 @@ struct Password {
 	std::string password;
 	Fl_Callback* callback;
 	void* data = 0;
+	std::string str_data;
 	int curr_index=0;
 	bool operator==(const Password& other) {
 		return (password == other.password);

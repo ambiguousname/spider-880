@@ -21,7 +21,6 @@ void showHTMLPageFromString(Fl_Widget* widget, void* str) {
 	std::string* string = (std::string*)str;
 	windowCreation out;
 	window->getLinkedWindow(*string, out);
-	delete string;
 
 	HTMLWindow* page = out(window->x() + 10, window->y() + 10, window->w(), window->h());
 	page->show();
@@ -114,14 +113,16 @@ HTMLWindow::HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int 
 			} else if (c == ',' || c == '\0') {
 				// Convert std::function to function pointer? Hopefully this is doable.
 
-				passwords.push_back({passwordName, showHTMLPageFromString, (void*)(new std::string(buf))});
+				Password& a = passwords.emplace_back(Password {passwordName, showHTMLPageFromString, 0, buf});
+				a.data = &a.str_data;
 				buf = "";
 			} else {
 				buf += c;
 			}
 		}
 		if (buf.size() > 0) {
-			passwords.push_back({passwordName, showHTMLPageFromString, (void*)(new std::string(buf))});
+			Password& a = passwords.emplace_back(Password {passwordName, showHTMLPageFromString, 0, buf});
+			a.data = &a.str_data;
 		}
 	}
 
