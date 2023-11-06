@@ -11,7 +11,7 @@
 using namespace glm;
 class Object {
 	protected:
-	mat4 transform = mat4(1.0f);
+	mat4 model = mat4(1.0f);
 
 	// We use vec4 for easy matrix math:
 	std::vector<vec4> vertices;
@@ -21,12 +21,13 @@ class Object {
 	GLuint vertices_vbo;
 	// Indices:
 	GLuint elements_ibo;
-	// Attributes:
-	GLuint attributes_vao;
 
 	// These should be set in a shader:
 	GLuint position_idx = 0;
-	GLuint transform_idx = 1;
+	GLuint normal_idx = 1;
+	GLuint model_idx;
+	GLuint view_idx;
+	GLuint projection_idx;
 
 	std::shared_ptr<Shader> shader;
 
@@ -45,15 +46,15 @@ class Object {
 	}
 
 	void initialize();
-	void draw();
+	void draw(const mat4& view, const mat4& projection);
 
 	void scale(vec3 amount) {
-		transform = glm::scale(transform, amount);
+		model = glm::scale(model, amount);
 	}
 	void translate(vec3 amount) {
-		transform = glm::translate(transform, amount);
+		model = glm::translate(model, amount);
 	}
 	void rotate(float angle, vec3 axis) {
-		transform = glm::rotate(transform, angle, axis);
+		model = glm::rotate(model, angle, axis);
 	}
 };

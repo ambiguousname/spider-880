@@ -5,13 +5,13 @@
 WinScreen::WinScreen() : Fl_Gl_Window(300, 300, "You Win :)") {
 	std::istringstream in(win_obj);
 	test = new Object(in);
-	// test->scale(vec3(10.0f));
+	test->translate(vec3(0, 0, 0.5));
 	std::shared_ptr<Shader> base(std::make_shared<Shader>("assets/shaders/vertex/base.glsl", "assets/shaders/frag/base.glsl"));
 	test->setShader(base);
 	mode(FL_RGB | FL_DEPTH | FL_OPENGL3);
 	end();
 	show();
-	// fullscreen();
+	fullscreen();
 }
 
 int WinScreen::handle(int event) {
@@ -32,14 +32,15 @@ void WinScreen::draw() {
 	if (!valid()) {
 		glLoadIdentity();
 		glViewport(0,0,w(),h());
-		glOrtho(-w(),w(),-h(),h(),-1,100);
+		proj = glm::perspective(radians(45.0f), (float)w()/(float)h(), 0.1f, 100.0f);
+		view = translate(view, vec3(0.0f, 0.0f, -3.0f));
 
 		// GLfloat mat_ambient[]    = { 1.0, 1.0, 1.0, 1.0 };  // RGBA
 		// GLfloat mat_diffuse[]    = { 1.0, 1.0, 1.0, 1.0 };  // RGBA
 		// GLfloat mat_specular[]   = { 1.0, 1.0, 1.0, 1.0 };  // RGBA
 		// GLfloat light_position[] = { 5.0, 5.0, 0.0, 0.0 };  // XYZ
 		// glClearColor(0.0, 0.0, 0.4, 0.0);                   // bg color
-		// glShadeModel(GL_SMOOTH);
+		// glShadeModel(GL_FLAT);
 		
 		// glMaterialfv(GL_FRONT, GL_AMBIENT,   mat_ambient);
 		// glMaterialfv(GL_FRONT, GL_DIFFUSE,   mat_diffuse);
@@ -57,5 +58,5 @@ void WinScreen::draw() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	test->rotate(radians(1.0f), vec3(0.0f, 1.0f, 0.0f));
     
-	test->draw();
+	test->draw(view, proj);
 }
