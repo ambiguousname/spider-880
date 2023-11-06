@@ -1,8 +1,38 @@
 #include "opengl_shader.h"
 #include <iostream>
 #include <string.h>
+#include <fstream>
+#include <sstream>
 
-Shader::Shader(const char* vertex, const char* frag) {
+Shader::Shader(const char* vertex_file, const char* frag_file) {
+	std::ifstream vs;
+	std::stringstream vertex;
+	if (vertex_file != nullptr) {
+		vs.open(vertex_file);
+		if (!vs) {
+			std::cerr << "Could not open vertex shader " << vertex_file << std::endl;
+			return;
+		}
+		vertex << vs.rdbuf();
+		vs.close();
+	}
+
+	std::ifstream fs(frag_file);
+	std::stringstream frag;
+	if (frag_file != nullptr) {
+		fs.open(frag_file);
+		if (!fs) {
+			std::cerr << "Could not open frag shader " << frag_file << std::endl;
+		}
+		frag << fs.rdbuf();
+		fs.close();
+	}
+
+	std::stringstream frag;
+	loadFromString(vertex.str().c_str(), frag.str().c_str());
+}
+
+void Shader::loadFromString(const char* vertex, const char* frag) {
 	int success;
 	char infoLog[512];
 
@@ -51,4 +81,8 @@ Shader::Shader(const char* vertex, const char* frag) {
 
 	glDeleteShader(vertex_shader);
 	glDeleteShader(frag_shader);
+}
+
+Shader::~Shader() {
+	glDeleteProgram(program_idx);
 }

@@ -48,6 +48,7 @@ Object::Object(const char* filename) {
 		return;
 	}
 	loadFromStream(in);
+	in.close();
 }
 
 Object::Object(std::istream &in) {

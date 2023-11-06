@@ -5,6 +5,8 @@
 WinScreen::WinScreen() : Fl_Gl_Window(300, 300, "You Win :)") {
 	std::istringstream in(win_obj);
 	test = new Object(in);
+	std::shared_ptr<Shader> base(std::make_shared<Shader>("assets/shaders/vertex/base.glsl", "assets/shaders/frag/base.glsl"));
+	test->updateShader(base);
 	mode(FL_RGB | FL_DEPTH | FL_OPENGL3);
 	end();
 	show();
@@ -51,7 +53,5 @@ void WinScreen::draw() {
 	//clear color and depth buffer 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-	glColor3f(1.0f, 0.0f, 0.0f);
-
 	test->draw();
 }
