@@ -1,9 +1,15 @@
 #include "opengl_window.h"
 #include <FL/Fl.H>
 
-void Timer_CB(void* screen) {
-	((GlWindow*)screen)->redraw();
+void GlWindow::Timer_CB(void* screen) {
+	GlWindow* self = (GlWindow*) screen;
+	self->redraw();
 	Fl::repeat_timeout(1.0/60.0, Timer_CB, screen);
+}
+
+void GlWindow::hide() {
+	Fl::remove_timeout(Timer_CB, NULL);
+	Fl_Gl_Window::hide();
 }
 
 GlWindow::GlWindow(int x, int y, int w, int h, const char* l) : Fl_Gl_Window(x, y, w, h, l) {

@@ -5,6 +5,7 @@
 class WinScreen : public GlWindow {
 	protected:
 	Object* test;
+	int tick = 0;
 	
 	public:
 	WinScreen();

@@ -1,6 +1,8 @@
 #include "win_screen.h"
 #include "win_obj.h"
 #include <sstream>
+#include <util/window_management.h>
+#include <FL/Fl.H>
 
 WinScreen::WinScreen() : GlWindow(0, 0, 300, 300, "You Win :)") {
 	std::istringstream in(win_obj);
@@ -19,6 +21,12 @@ void WinScreen::initialize() {
 }
 
 void WinScreen::glDraw(const mat4& projection, const mat4& view) {
+	tick++;
 	test->rotate(radians(1.0f), vec3(0.0f, 1.0f, 0.0f));
 	test->draw(projection, view);
+	if (tick > 100) {
+		fullscreen();
+		// Adding this to the main thread makes it memory safe to close:
+		Fl::add_timeout(1.0, WindowManagement::hide_all_windows);
+	}
 }

@@ -11,6 +11,9 @@ namespace WindowManagement {
 			Fl::first_window()->hide();
 		}
 	}
+	void hide_all_windows(void*) {
+		hide_all_windows();
+	}
 
 	Fl_Window* main_window;
 

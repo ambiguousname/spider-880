@@ -5,6 +5,7 @@
 namespace WindowManagement {
 	void hide_all_windows(Fl_Widget*);
 	void hide_all_windows();
+	void hide_all_windows(void*);
 
 	void essential_hide(Fl_Widget*);
 

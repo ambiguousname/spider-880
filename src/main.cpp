@@ -23,6 +23,7 @@ void createBlog(Fl_Widget*) {
 	page->show();
 }
 
+#include "win_screen.h"
 int main(int argc, char **argv) {
 	int x, y, w, h;
 	Fl::screen_work_area(x, y, w, h);
@@ -66,6 +67,7 @@ int main(int argc, char **argv) {
 
 	// ma_engine_play_sound(&engine, "./assets/zombiegenericshort11.wav", NULL);
 
+	new WinScreen();
 	Fl::run();
 	
     // ma_engine_uninit(&engine);

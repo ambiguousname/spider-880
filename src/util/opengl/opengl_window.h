@@ -12,10 +12,9 @@ class Camera {
 	mat4 projection;
 	mat4 view;
 
-	vec3 position = vec3(0.0f, 0.0f, 0.0f);
-	vec3 forward = vec3(0.0f, 0.0f, -1.0f);
+	vec3 position = vec3(0.0f, 0.0f, -3.0f);
+	vec3 forward = vec3(0.0f, 0.0f, 1.0f);
 	vec3 up = vec3(0.0f, 1.0f, 0.0f);
-	vec3 target = vec3(0.0f, 0.0f, 3.0f);
 
 	float fov;
 	float nearZ;
@@ -43,7 +42,7 @@ class Camera {
 		view = glm::lookAt(position, position + forward, up);
 	}
 
-	void getCameraMatrices(mat4 out_projection, mat4 out_view) const {
+	void getCameraMatrices(mat4& out_projection, mat4& out_view) const {
 		out_projection = projection;
 		out_view = view;
 	}
@@ -57,11 +56,15 @@ class GlWindow : public Fl_Gl_Window {
 	protected:
 	Camera camera;
 
+	static void Timer_CB(void* self);
+
 	public:
 	GlWindow(int x, int y, int w, int h, const char* l=0);
 
 	void draw() override;
 	int handle(int event) override;
+
+	void hide() override;
 
 	const Camera getCamera() const {
 		return camera;
