@@ -1,5 +1,5 @@
-- Income % selection is broken for Citizen Database
- - Maybe revise to (%s first, least specific; $10k increments second; $5k increments third)
+- Income is set to 0 first at age of 0, and then they're aged up.
+  - Add a constraint for some amount of income for age > 18?
 - Image scrolling is broken in release
 - OpenGL Deadbeef pages
 - Sound Effects
