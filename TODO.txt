@@ -1,0 +1,6 @@
+- Income % selection is broken for Citizen Database
+- Image scrolling is broken in release
+- OpenGL Deadbeef pages
+- Sound Effects
+- Mac Build
+- Windows Build
