@@ -1,4 +1,5 @@
 - Income % selection is broken for Citizen Database
+ - Maybe revise to (%s first, least specific; $10k increments second; $5k increments third)
 - Image scrolling is broken in release
 - OpenGL Deadbeef pages
 - Sound Effects
