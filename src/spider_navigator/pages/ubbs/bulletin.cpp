@@ -5,7 +5,7 @@ std::shared_ptr<Text> text_3 = std::make_shared<Text>(
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
-		{"color", "3"},
+		{"color", "2"},
 	}
 );
 std::shared_ptr<P> p_3 = std::make_shared<P>(
@@ -14,7 +14,7 @@ std::shared_ptr<P> p_3 = std::make_shared<P>(
 		text_3,
 	},
 	std::unordered_map<std::string, std::string>{
-		{"color", "3"},
+		{"color", "2"},
 	}
 );
 std::shared_ptr<Text> text_5 = std::make_shared<Text>(
@@ -37,7 +37,7 @@ std::shared_ptr<Text> text_7 = std::make_shared<Text>(
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
-		{"color", "3"},
+		{"color", "2"},
 	}
 );
 std::shared_ptr<P> p_7 = std::make_shared<P>(
@@ -46,7 +46,7 @@ std::shared_ptr<P> p_7 = std::make_shared<P>(
 		text_7,
 	},
 	std::unordered_map<std::string, std::string>{
-		{"color", "3"},
+		{"color", "2"},
 	}
 );
 std::shared_ptr<Text> text_9 = std::make_shared<Text>(
@@ -69,7 +69,7 @@ std::shared_ptr<Text> text_11 = std::make_shared<Text>(
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
-		{"color", "3"},
+		{"color", "2"},
 	}
 );
 std::shared_ptr<P> p_11 = std::make_shared<P>(
@@ -78,7 +78,7 @@ std::shared_ptr<P> p_11 = std::make_shared<P>(
 		text_11,
 	},
 	std::unordered_map<std::string, std::string>{
-		{"color", "3"},
+		{"color", "2"},
 	}
 );
 std::shared_ptr<Text> text_13 = std::make_shared<Text>(
@@ -164,4 +164,6 @@ std::shared_ptr<HTMLNode> html_1 = std::make_shared<HTMLNode>(
 UbbsBulletinHTMLWindow::UbbsBulletinHTMLWindow(int x, int y, int w, int h) : HTMLWindow(UbbsBulletinHTMLWindowNamespace::html_1, x, y, w, h) {
 	linked_windows.insert({"mirror/index", MirrorIndexHTMLWindow::createWindow});
 
+
+end();
 }

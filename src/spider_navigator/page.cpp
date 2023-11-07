@@ -29,6 +29,11 @@ void showHTMLPageFromString(Fl_Widget* widget, void* str) {
 void showHTMLPage(Fl_Widget* widget, void* pg) {
 	page_create creator = (page_create)(pg);
 	HTMLWindow* window = dynamic_cast<HTMLWindow*>(widget);
+	if (window == nullptr) {
+		HTMLWindow* page = creator(10, 10, 300, 300);
+		page->show();
+		return;
+	}
 	HTMLWindow* page = creator(window->x() + 10, window->y() + 10, window->w(), window->h());
 	page->show();
 }
