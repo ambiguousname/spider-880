@@ -284,6 +284,13 @@ void DatabaseWindow::citizenMurdered(Fl_Widget* browser, void* db_window) {
 	}
 }
 
+void DatabaseWindow::citizenOverride(Fl_Widget* widget, void* parent) {
+	DatabaseWindow* self = static_cast<DatabaseWindow*>(parent);
+	self->citizen_selected_override(widget);
+	self->citizen_selected_override = nullptr;
+	widget->top_window()->hide();
+}
+
 const int citizen_widths[] = {40, 40, 70, 70, 70, 50, 0};
 void DatabaseWindow::selected(Fl_Widget* widget, void* parent) {
 	DatabaseWindow* self = static_cast<DatabaseWindow*>(parent);
@@ -294,9 +301,13 @@ void DatabaseWindow::selected(Fl_Widget* widget, void* parent) {
 		char buf[50];
 		sprintf(buf, "SELECT * FROM citizens WHERE household_id=%i", household_id);
 		std::vector<std::shared_ptr<Citizen>> citizens = self->citizen_db->Query<Citizen>(buf);
-		Fl_Window* household_window = new Fl_Window(self->w(), self->h(), buf);
+		Fl_Window* household_window = new Fl_Window(self->x() + 10, self->y() + 10, self->w(), self->h(), buf);
 		Fl_Browser* citizen_browser = new Fl_Browser(0, 0, household_window->w(), household_window->h());
-		citizen_browser->callback(citizenMurdered, self);
+		if (self->citizen_selected_override != nullptr) {
+			citizen_browser->callback(citizenOverride, self);
+		} else {
+			citizen_browser->callback(citizenMurdered, self);
+		}
 
 		citizen_browser->column_widths(citizen_widths);
 		citizen_browser->type(FL_HOLD_BROWSER);

@@ -56,12 +56,20 @@ class DatabaseWindow : public Fl_Window {
 	Fl_Button search_button;
 	Fl_Browser database_display;
 
+	Fl_Callback0* citizen_selected_override = nullptr;
+
 	std::vector<int> household_ids;
 	static void search(Fl_Widget* button, void* self);
 
 	static void selected(Fl_Widget* browser, void* self);
+
+	static void citizenOverride(Fl_Widget* widget, void* self);
 	static void citizenMurdered(Fl_Widget* browser, void* db_window);
 	public:
+	void citizenSelectedOverride(Fl_Callback0* cb) {
+		citizen_selected_override = cb;
+	}
+
 	void updateCategories(int tier);
 	int getCategoryTier() const { return category_tier; }
 	DatabaseWindow(int x, int y, int w, int h);

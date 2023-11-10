@@ -2,7 +2,7 @@
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Box.H>
-#include <iostream>
+#include <FL/fl_message.H>
 
 #include "database/database_window.h"
 #include "util/window_management.h"
@@ -16,11 +16,28 @@
 #include <windows.h>
 #endif
 
+#include <fstream>
+
+bool pagesEnabled = false;
+
 void createBlog(Fl_Widget*) {
-	int x, y, w, h;
-	Fl::screen_work_area(x, y, w, h);
-	MurderBlogMurderHTMLWindow* page = new MurderBlogMurderHTMLWindow(x + w/4, y + h/4, 300, 300);
-	page->show();
+	if (pagesEnabled) {
+		int x, y, w, h;
+		Fl::screen_work_area(x, y, w, h);
+		MurderBlogMurderHTMLWindow* page = new MurderBlogMurderHTMLWindow(x + w/4, y + h/4, 300, 300);
+		page->show();
+	} else {
+		fl_alert("Browsing is not yet enabled.\nYou must select a name.");
+	}
+}
+
+void overrideCitizenSelection(Fl_Widget*) {
+	fl_alert("Guessing won't get you anywhere.\nLucky you have a connection.");
+	pagesEnabled = true;
+	createBlog(nullptr);
+	FILE* f = fopen("savefile.txt", "w");
+	fputs("I'll give you one more password: abababab.", f);
+	fclose(f);
 }
 
 int main(int argc, char **argv) {
@@ -51,7 +68,17 @@ int main(int argc, char **argv) {
 
 	DatabaseWindow* db = new DatabaseWindow(x + 3 * w/4, y + h/4, 400, 300);
 	db->show();
-	createBlog(nullptr);
+
+	if (FILE* file = fopen("savefile.txt", "r")) {
+		fclose(file);
+		pagesEnabled = true;
+	}
+
+	if (pagesEnabled){
+		createBlog(nullptr);
+	} else {
+		db->citizenSelectedOverride(overrideCitizenSelection);
+	}
 
 	// TODO: Audio playback for a few sounds (looping backgrounds too)
 	// TODO: OpenGL scares

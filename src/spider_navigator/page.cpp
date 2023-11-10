@@ -4,6 +4,8 @@
 #include "pages/gertwig_blog/navsab.h"
 #include "pages/deadbeef/deadbeef.h"
 #include "pages/deadbeef/feebdaed.h"
+#include "pages/deadbeef/abababab.h"
+#include "pages/deadbeef/babababa.h"
 #include <stdexcept>
 #include <variant>
 
@@ -41,13 +43,34 @@ void showHTMLPage(Fl_Widget* widget, void* pg) {
 const Password const_passwords[] = {
 	{"deadbeef", showHTMLPage, (void*)DeadbeefDeadbeefHTMLWindow::createWindow},
 	{"feebdaed", showHTMLPage, (void*)DeadbeefFeebdaedHTMLWindow::createWindow},
+	{"abababab", showHTMLPage, (void*)DeadbeefAbabababHTMLWindow::createWindow},
+	{"babababa", showHTMLPage, (void*)DeadbeefBabababaHTMLWindow::createWindow},
 };
+
+void clearDraw(void* window) {
+	static_cast<HTMLWindow*>(window)->redraw();
+}
 
 int HTMLWindow::handle(int event) {
 	if (event == FL_KEYDOWN) {
 		const char* key =  Fl::event_text();
+		
 		if (key[0] != '\0'){
-			typing_buffer.push_back(tolower(key[0]));
+			char key_l = tolower(key[0]);
+
+			make_current();
+			Fl_Fontsize old_size = fl_size();
+			Fl_Color old_color = fl_color();
+			fl_color(FL_RED);
+			fl_font(fl_font(), 50);
+			fl_draw(std::string(1, key_l).c_str(), 0, 0, w(), h(), FL_ALIGN_CENTER);
+			fl_font(fl_font(), old_size);
+			fl_color(old_color);
+			if (!Fl::has_timeout(clearDraw, this)) {
+				Fl::add_timeout(0.1, clearDraw, this);
+			}
+
+			typing_buffer.push_back(key_l);
 			if (typing_buffer.size() > 20) {
 				typing_buffer.erase(typing_buffer.begin());
 			}
