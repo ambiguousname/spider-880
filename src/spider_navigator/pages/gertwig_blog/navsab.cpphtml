@@ -19,7 +19,7 @@
 			Urgent Bugs:
 		</p>
 		<p>
-			Multiple rendering issues - Image coloring and text positioning don't work on the first pass.
+			Loading &lt;a&gt; tags from Mirror's output are not consistent with real links, reducing them to plaintext for now.
 		</p>
 		<p>
 			Major memory leakage for Spider-760s.

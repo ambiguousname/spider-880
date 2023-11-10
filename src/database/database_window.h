@@ -41,7 +41,7 @@ class DatabaseChoice : public Fl_Choice {
 	public:
 	int getCategory() const {return current_category; }
 	void selectCategory(int index);
-	std::string getSQLString() { if (current_option_value == -1) { return ""; } else { return selector(current_category, current_option_value); } }
+	std::string getSQLString() { if (current_option_value == -1) { return "SELECT * FROM households"; } else { return selector(current_category, current_option_value); } }
 	DatabaseChoice(int x, int y, int w, int h, database_selector selector_func, ChoiceCategory choice_categories[3]);
 	~DatabaseChoice();
 };

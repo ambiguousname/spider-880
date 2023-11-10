@@ -128,7 +128,6 @@ void Img::init() {
 	auto src = _attributes.find("src");
 	
 	if (src != _attributes.end()) {
-		// TODO: Fix.
 		box = std::make_unique<ImageBox>(src->second.c_str());
 	}
 }
@@ -141,7 +140,7 @@ void Img::open(HTMLPage* current_page, int&, int&, int&, int&) {
 	current_page->getCursor(cursor_x, cursor_y);
 	int img_w = current_page->w() * 3/4;
 
-	int img_x = 4 * (img_w - cursor_x)/16; 
+	int img_x = current_page->x() + (current_page->w() - current_page->x())/2 - img_w/2;
 
 	int full_w, full_h;
 	box->getFullDimensions(full_w, full_h);

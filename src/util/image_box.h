@@ -6,18 +6,28 @@
 class PaletteImage {
 	protected:
 	uchar* img_dat;
-	Fl_RGB_Image* cached_img;
+
+	uchar* img_resized = nullptr;
+
+	int resized_w;
+	int resized_h;
 
 	int _w;
 	int _h;
 	int _d;
-	int _ld;
 	bool cached = false;
 	public:
-	PaletteImage(int w, int h, int d, int ld);
+	uchar* getImageDat() const { return img_dat; }
+	int w() const { return _w; }
+	int h() const { return _h; }
+	int d() const { return _d; }
+
+	void prepareDraw(int w, int h);
+	void draw(int x, int y);
+
+	PaletteImage(int w, int h, int d);
 	Fl_Color drawPixel(int x, int y, uchar r, uchar g, uchar b);
 	void finishDraw();
-	Fl_Image* copy(int w, int h);
 	bool isCached() { return cached; }
 	~PaletteImage();
 };
@@ -34,8 +44,7 @@ class ImageBox {
 
 	// Full image, without scaling down to width and height.
 	std::unique_ptr<Fl_Image> full_image;
-	// Image scaled down to width and height.
-	std::unique_ptr<Fl_Image> image;
+	std::unique_ptr<Fl_Image> downsized;
 	const char* image_buffer;
 
 	std::unique_ptr<PaletteImage> saved_img;

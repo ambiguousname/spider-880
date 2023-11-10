@@ -101,7 +101,7 @@ std::shared_ptr<P> p_14 = std::make_shared<P>(
 	}
 );
 std::shared_ptr<Text> text_16 = std::make_shared<Text>(
-	"Multiple rendering issues - Image coloring and text positioning don't work on the first pass.",
+	"Loading <a> tags from Mirror's output are not consistent with real links, reducing them to plaintext for now.",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
@@ -313,4 +313,6 @@ GertwigBlogNavsabHTMLWindow::GertwigBlogNavsabHTMLWindow(int x, int y, int w, in
 	linked_windows.insert({"gertwig_blog/index", GertwigBlogIndexHTMLWindow::createWindow});
 	linked_windows.insert({"spider/policies", SpiderPoliciesHTMLWindow::createWindow});
 
+
+end();
 }

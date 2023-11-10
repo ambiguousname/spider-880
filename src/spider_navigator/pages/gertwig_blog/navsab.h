@@ -1,7 +1,7 @@
 #pragma once
-#include <gertwig_blog/index.h>
-#include <spider/policies.h>
 #include "spider_navigator/page.h"
+#include <spider/policies.h>
+#include <gertwig_blog/index.h>
 class GertwigBlogNavsabHTMLWindow : public HTMLWindow {
 	public:
 	GertwigBlogNavsabHTMLWindow(int x, int y, int w, int h);

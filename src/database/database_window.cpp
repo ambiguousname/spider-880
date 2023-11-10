@@ -126,6 +126,7 @@ std::string selectIncome(int tier, int value) {
 	if (high >= 255) {
 		high = 999;
 	}
+	// TODO: This doesn't work for the 100% highest earner.
 	return "SELECT households.* FROM (SELECT household_id, PERCENT_RANK() OVER(ORDER BY income) AS percent FROM citizens JOIN households ON households.id = citizens.household_id) rankings JOIN households ON households.id = rankings.household_id WHERE rankings.percent >= 0." + std::to_string(low) + " AND rankings.percent <= 0." + std::to_string(high) + " GROUP BY household_id";
 }
 
