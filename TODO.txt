@@ -1,6 +1,5 @@
 - Spawn database first and require selection of a name before the browser opens
-- Allow searching of all households if no parameters are selected.
-  - Ensure you get names for all possible combinations
+- Ensure you get names for all possible database combinations
 - Income is set to 0 first at age of 0, and then they're aged up.
   - Add a constraint for some amount of income for age > 18?
 - Image scrolling is broken in release
