@@ -9,7 +9,7 @@ fake = Faker()
 
 class HouseholdConstraint():
 	@staticmethod
-	def is_constrainted(citizens, other_citizens=None):
+	def is_constrained(citizens, other_citizens=None):
 		pass
 	@staticmethod
 	def constrain(citizens, other_citizens=None):
@@ -17,7 +17,7 @@ class HouseholdConstraint():
 
 class OlderThanZero(HouseholdConstraint):
 	@staticmethod
-	def is_constrainted(citizens, other_citizens=None):
+	def is_constrained(citizens, other_citizens=None):
 		for citizen in citizens:
 			if citizen.age < 0:
 				return False
@@ -30,7 +30,7 @@ class OlderThanZero(HouseholdConstraint):
 
 class YoungerThan(HouseholdConstraint):
 	@staticmethod
-	def is_constrainted(citizens, other_citizens=None):
+	def is_constrained(citizens, other_citizens=None):
 		for citizen in citizens:
 			if citizen.age > other_citizens[0].age:
 				return False
@@ -39,15 +39,16 @@ class YoungerThan(HouseholdConstraint):
 	def constrain(citizens, other_citizens=None):
 		for citizen in citizens:
 			citizen.age = round(other_citizens[0].age - random.normal(20))
-		if not OlderThanZero.is_constrainted(citizens):
+		if not OlderThanZero.is_constrained(citizens):
 			OlderThanZero.constrain(citizens)
 
 class ChildrenMakeNoMoney(HouseholdConstraint):
 	@staticmethod
-	def is_constrainted(citizens, other_citizens=None):
+	def is_constrained(citizens, other_citizens=None):
 		for citizen in citizens:
 			if citizen.age < 18 and citizen.income > 0:
 				return False
+		return True
 	
 	@staticmethod
 	def constrain(citizens, other_citizens=None):
@@ -57,25 +58,25 @@ class ChildrenMakeNoMoney(HouseholdConstraint):
 
 class Family(HouseholdConstraint):
 	@staticmethod
-	def is_constrainted(citizens, other_citizens=None):
+	def is_constrained(citizens, other_citizens=None):
 		for citizen in citizens:
 			if other_citizens[0].last_name != citizen.last_name:
 				return False
-		return YoungerThan.is_constrainted(citizens, other_citizens) and ChildrenMakeNoMoney.is_constrainted(citizens + other_citizens)
+		return YoungerThan.is_constrained(citizens, other_citizens) and ChildrenMakeNoMoney.is_constrained(citizens + other_citizens)
 	
 	@staticmethod
 	def constrain(citizens, other_citizens=None):
 		last_name = other_citizens[0].last_name
 		for citizen in citizens:
 			citizen.last_name = last_name
-		if not YoungerThan.is_constrainted(citizens, other_citizens):
+		if not YoungerThan.is_constrained(citizens, other_citizens):
 			YoungerThan.constrain(citizens, other_citizens)
-		if not ChildrenMakeNoMoney.is_constrainted(citizens + other_citizens):
+		if not ChildrenMakeNoMoney.is_constrained(citizens + other_citizens):
 			ChildrenMakeNoMoney.constrain(citizens + other_citizens)
 
 class OverEighteen(HouseholdConstraint):
 	@staticmethod
-	def is_constrainted(citizens):
+	def is_constrained(citizens):
 		for citizen in citizens:
 			if citizen.age < 18:
 				return False
@@ -89,9 +90,9 @@ class OverEighteen(HouseholdConstraint):
 
 class AtLeastOne(HouseholdConstraint):
 	@staticmethod
-	def is_constrainted(citizens, constraint):
+	def is_constrained(citizens, constraint):
 		for citizen in citizens:
-			if constraint.is_constrainted(citizen):
+			if constraint.is_constrained(citizen):
 				return True
 		return False
 
@@ -101,7 +102,7 @@ class AtLeastOne(HouseholdConstraint):
 
 class SimilarAges(HouseholdConstraint):
 	@staticmethod
-	def is_constrainted(citizens, other_citizens):
+	def is_constrained(citizens, other_citizens):
 		return sqrt(pow(citizens[0].age - other_citizens[0].age, 2)) <= sqrt(pow(citizens[0].age - ((citizens[0].age/2) + 7), 2))
 
 	def constrain(citizens, other_citizens):
@@ -109,32 +110,32 @@ class SimilarAges(HouseholdConstraint):
 
 class Married(HouseholdConstraint):
 	@staticmethod
-	def is_constrainted(citizens, other_citizens):
+	def is_constrained(citizens, other_citizens):
 		for citizen in citizens + other_citizens:
 			if not hasattr(citizen, "spouse"):
 				return False
-		return Family.is_constrained(citizens, other_citizens) and SimilarAges.is_constrainted(citizens, other_citizens) and OverEighteen.is_constrainted(citizens + other_citizens)
+		return Family.is_constrained(citizens, other_citizens) and SimilarAges.is_constrained(citizens, other_citizens) and OverEighteen.is_constrained(citizens + other_citizens)
 
 	@staticmethod
 	def constrain(citizens, other_citizens=None):
-		if not Family.is_constrainted(citizens, other_citizens):
-			Family.constrain(citizens, other_citizens)
-		if not SimilarAges.is_constrainted(citizens, other_citizens):
-			SimilarAges.constrain(citizens, other_citizens)
-		if not OverEighteen.is_constrainted(citizens + other_citizens):
+		if not OverEighteen.is_constrained(citizens + other_citizens):
 			OverEighteen.constrain(citizens + other_citizens)
+		if not Family.is_constrained(citizens, other_citizens):
+			Family.constrain(citizens, other_citizens)
+		if not SimilarAges.is_constrained(citizens, other_citizens):
+			SimilarAges.constrain(citizens, other_citizens)
 		
 		citizens[0].spouse = other_citizens[0].id
 		other_citizens[0].spouse = citizens[0].id
 
 class MarriedHousehold(HouseholdConstraint):
 	@staticmethod
-	def is_constrainted(citizens, other_citizens=None):
+	def is_constrained(citizens, other_citizens=None):
 		spouses = []
 		for citizen in citizens:
 			if hasattr(citizen, "spouse"):
 				spouses.append(citizen)
-		return len(spouses) == 2 and Married.is_constrainted(spouses[0], spouses[1]) and Family.is_constrainted(citizens)
+		return len(spouses) == 2 and Married.is_constrained(spouses[0], spouses[1]) and Family.is_constrained(citizens)
 	@staticmethod
 	def constrain(citizens, other_citizens=None):
 		to_marry = random.choice(citizens, 2, replace=False)
@@ -146,17 +147,17 @@ class MarriedHousehold(HouseholdConstraint):
 
 class NonMarriedFamily(HouseholdConstraint):
 	@staticmethod
-	def is_constrainted(citizens, other_citizens=None):
+	def is_constrained(citizens, other_citizens=None):
 		copy = list(citizens)
 		del copy[0]
-		return Family.is_constrainted(copy, [citizens[0]]) and AtLeastOne.is_constrainted(citizens, OverEighteen)
+		return Family.is_constrained(copy, [citizens[0]]) and AtLeastOne.is_constrained(citizens, OverEighteen)
 	
 	@staticmethod
 	def constrain(citizens, other_citizens=None):
 		copy = list(citizens)
 		del copy[0]
-		Family.constrain(copy, [citizens[0]])
 		AtLeastOne.constrain(citizens, OverEighteen)
+		Family.constrain(copy, [citizens[0]])
 
 citizen_id = 0
 class Citizen():

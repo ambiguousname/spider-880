@@ -46,7 +46,7 @@ std::shared_ptr<P> p_7 = std::make_shared<P>(
 	}
 );
 std::shared_ptr<Text> text_9 = std::make_shared<Text>(
-	"\"The Cost of Business\"",
+	"Subject: \"The Cost of Business\"",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
@@ -61,7 +61,7 @@ std::shared_ptr<P> p_9 = std::make_shared<P>(
 	}
 );
 std::shared_ptr<Text> text_11 = std::make_shared<Text>(
-	"I'd like to take this moment to welcome all hands onto deck. ",
+	"I'd like to take this moment to welcome, officially, all hands onto deck. The Bureau of Sabotage will be an experiment replicated nationwide, provided we all commit ourselves to the course.",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
@@ -75,9 +75,41 @@ std::shared_ptr<P> p_11 = std::make_shared<P>(
 	std::unordered_map<std::string, std::string>{
 	}
 );
+std::shared_ptr<Text> text_13 = std::make_shared<Text>(
+	"In the spirit of such things, I want to acknowledge the hard work being done by our colleagues at Spider Computing.",
+	std::vector<std::shared_ptr<HTMLNode>>{
+	},
+	std::unordered_map<std::string, std::string>{
+	}
+);
+std::shared_ptr<P> p_13 = std::make_shared<P>(
+	"",
+	std::vector<std::shared_ptr<HTMLNode>>{
+		text_13,
+	},
+	std::unordered_map<std::string, std::string>{
+	}
+);
+std::shared_ptr<Text> text_15 = std::make_shared<Text>(
+	"TODO: Reverse",
+	std::vector<std::shared_ptr<HTMLNode>>{
+	},
+	std::unordered_map<std::string, std::string>{
+	}
+);
+std::shared_ptr<P> p_15 = std::make_shared<P>(
+	"",
+	std::vector<std::shared_ptr<HTMLNode>>{
+		text_15,
+	},
+	std::unordered_map<std::string, std::string>{
+	}
+);
 std::shared_ptr<HTMLNode> body_2 = std::make_shared<HTMLNode>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
+		p_15,
+		p_13,
 		p_11,
 		p_9,
 		p_7,

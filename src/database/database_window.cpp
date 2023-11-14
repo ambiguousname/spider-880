@@ -127,7 +127,7 @@ std::string selectIncome(int tier, int value) {
 		high = 999;
 	}
 	// TODO: This doesn't work for the 100% highest earner.
-	return "SELECT households.* FROM (SELECT household_id, PERCENT_RANK() OVER(ORDER BY income) AS percent FROM citizens JOIN households ON households.id = citizens.household_id) rankings JOIN households ON households.id = rankings.household_id WHERE rankings.percent >= 0." + std::to_string(low) + " AND rankings.percent <= 0." + std::to_string(high) + " GROUP BY household_id";
+	return "SELECT households.* FROM (SELECT household_id, PERCENT_RANK() OVER(ORDER BY income) AS percent FROM citizens WHERE income > 0 UNION SELECT household_id, 0.0 AS percent FROM citizens WHERE income <= 0) rankings JOIN households ON households.id = rankings.household_id WHERE rankings.percent >= 0." + std::to_string(low) + " AND rankings.percent <= 0." + std::to_string(high) + " GROUP BY household_id";
 }
 
 ChoiceCategory family_married {
@@ -270,9 +270,7 @@ void DatabaseWindow::citizenMurdered(Fl_Widget* browser, void* db_window) {
 	Citizen citizen = Citizen(self->text(self->value()));
 	int choice = fl_choice("Was %s %s murdered?", "No", "Yes", nullptr, citizen.first_name->c_str(), citizen.last_name->c_str());
 	if (choice == 1) {
-		// Assuming database hasn't changed.
-		// TODO: Update based on how python generates the IDs.
-		if (std::stoi(citizen.id->c_str()) == 70) {
+		if (strcmp(citizen.first_name->c_str(), "Jessica") == 0 && strcmp(citizen.last_name->c_str(), "Reyes") == 0) {
 			new WinScreen();
 		} else {
 			static_cast<DatabaseWindow*>(db_window)->citizen_db->DeleteCitizen(std::stoi(citizen.id->c_str()), std::stoi(citizen.household_id->c_str()));

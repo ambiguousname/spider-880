@@ -1,8 +1,16 @@
 #include "babababa.h"
 namespace DeadbeefBabababaHTMLWindowNamespace {
+std::shared_ptr<Text> text_3 = std::make_shared<Text>(
+	"TODO",
+	std::vector<std::shared_ptr<HTMLNode>>{
+	},
+	std::unordered_map<std::string, std::string>{
+	}
+);
 std::shared_ptr<P> p_3 = std::make_shared<P>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
+		text_3,
 	},
 	std::unordered_map<std::string, std::string>{
 	}
