@@ -3,7 +3,7 @@
 		star_information_systems/system
 		star_information_systems/lastresort
 	</links>
-	<body>
+	<body background-color="8" color="1">
 		<img src="./assets/sis_logo.png"/>
 		<p>
 			Star Information Systems - Cutting-edge hardware for today's information age.

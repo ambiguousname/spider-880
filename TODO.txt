@@ -2,7 +2,7 @@
 - Ensure you get names for all possible database combinations (pretty much done)
   - Can get into weird choice locking (two tier 2s if you deselect tier 0 or tier 1 from a fully selected list). Low priority.
 
-
+- Text selection/copying (high priority now that themes are deliberately hard to read)
 - Give each website a "theme" to make them more fun to read (just change up the text colors). And easy to identify.
 - Last Deadbeef page (no OpenGL)
 - OpenGL Deadbeef pages
