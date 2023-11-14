@@ -1,6 +1,6 @@
 #pragma once
-#include <deadbeef/deadbeefgl.h>
 #include "spider_navigator/page.h"
+#include <deadbeef/deadbeefgl.h>
 class DeadbeefDeadbeefHTMLWindow : public HTMLWindow {
 	protected:
 	DeadbeefGL* gl_window;

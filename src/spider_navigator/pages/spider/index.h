@@ -1,7 +1,7 @@
 #pragma once
-#include <spider/bbs/index.h>
 #include "spider_navigator/page.h"
 #include <spider/policies.h>
+#include <spider/bbs/index.h>
 #include <spider/about_us.h>
 class SpiderIndexHTMLWindow : public HTMLWindow {
 	public:

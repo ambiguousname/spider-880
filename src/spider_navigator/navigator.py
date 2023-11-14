@@ -85,7 +85,7 @@ class HtmlStackNode():
 			if camel_case in supported_nodes:
 				struct_type = camel_case
 			self.writeln(f"std::shared_ptr<{struct_type}> {self} = std::make_shared<{struct_type}>(")
-
+			self.writeln(f"\t{self.id},")
 			self.writeln(f"\t\"{self.dat}\",")
 			self.writeln("\tstd::vector<std::shared_ptr<HTMLNode>>{")
 			self.children.reverse()

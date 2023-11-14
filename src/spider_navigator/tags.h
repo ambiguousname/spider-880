@@ -10,7 +10,7 @@
 
 class HTMLPage;
 
-#define NODE_CONSTRUCTOR const char* dat, std::vector<std::shared_ptr<HTMLNode>> c, std::unordered_map<std::string, std::string> attr
+#define NODE_CONSTRUCTOR const int id, const char* dat, std::vector<std::shared_ptr<HTMLNode>> c, std::unordered_map<std::string, std::string> attr
 
 #define NODE_OPENER HTMLPage* current_page, int& start_x, int& start_y, int& out_w, int& out_h
 
@@ -20,6 +20,8 @@ class HTMLPage;
 
 class HTMLNode {
 	protected:
+	const int _id = -1;
+
 	Fl_Cursor cursor = FL_CURSOR_DEFAULT;
 	Fl_Color color = FL_FOREGROUND_COLOR;
 	Fl_Color background_color = FL_BACKGROUND_COLOR;
@@ -53,7 +55,7 @@ class HTMLNode {
 	virtual void child_closed(NODE_CHILD_CLOSER);
 
 	// Actual function for drawing things like shapes and colors.
-	virtual void draw(const int x, const int y, const int w, const int h);
+	virtual void draw(const int x, const int y, const int w, const int h, HTMLPage* current_page);
 
 	// Does this node need to have stuff like onHover, onClick, etc.
 	virtual bool interactive() { return false; }
@@ -63,7 +65,7 @@ class HTMLNode {
 	virtual void hover(int x, int y, HTMLPage* current_page);
 
  
-	HTMLNode(NODE_CONSTRUCTOR) : _data(dat), _children(c), _attributes(attr) {
+	HTMLNode(NODE_CONSTRUCTOR) : _id(id), _data(dat), _children(c), _attributes(attr) {
 		
 	}
 	~HTMLNode() { _parent.reset(); for (auto c: _children) { c.reset(); } }
@@ -77,13 +79,14 @@ class Body : public HTMLNode {
 };
 
 class Text : public HTMLNode {
+
 	public:
-	Text(NODE_CONSTRUCTOR) : HTMLNode(dat, c, attr) {
+	Text(NODE_CONSTRUCTOR) : HTMLNode(id, dat, c, attr) {
 		cursor = FL_CURSOR_INSERT;
 	}
 	virtual bool interactive() { return true; }
 	void open(NODE_OPENER) override;
-	void draw(const int x, const int y, const int w, const int h) override;
+	void draw(const int x, const int y, const int w, const int h, HTMLPage* current_page) override;
 };
 
 class A : public HTMLNode {
@@ -91,7 +94,7 @@ class A : public HTMLNode {
 	bool interactive() { return true; }
 	void click(int x, int y, HTMLPage* current_page);
 	void init();
-	A(NODE_CONSTRUCTOR) : HTMLNode(dat, c, attr) {
+	A(NODE_CONSTRUCTOR) : HTMLNode(id, dat, c, attr) {
 		cursor = FL_CURSOR_HAND;
 		// TODO: Use some sort of palette constants.
 		color = 4;
@@ -113,7 +116,7 @@ class Img : public HTMLNode {
 	void init();
 	void open(NODE_OPENER);
 
-	void draw(const int, const int, const int, const int) override { 
+	void draw(const int, const int, const int, const int, HTMLPage*) override { 
 		box->draw();
 	}
 };

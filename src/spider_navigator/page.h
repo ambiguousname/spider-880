@@ -59,6 +59,8 @@ class HTMLPage : public Fl_Group {
 
 	// Store the previous children's height.
 	int height_buffer = 0;
+	
+	int current_hovered = -1;
 
 
 	std::shared_ptr<HTMLNode> root = nullptr;
@@ -69,11 +71,15 @@ class HTMLPage : public Fl_Group {
 
 	int handle(int event);
 	public:
+
 	const std::shared_ptr<HTMLWindow> parent_window;
 	HTMLPage(std::shared_ptr<HTMLNode> root, std::shared_ptr<HTMLWindow> parent, int x, int y, int w, int h, int horizontal_padding);
 	
 	void getCursor(int& outX, int& outY) { outX = cursor_x; outY = cursor_y; }
 	void setCursor(int inX, int inY) { cursor_x = inX; cursor_y = inY; }
+
+	void setHovered(int hover_id) { current_hovered = hover_id; }
+	int getHovered() const { return current_hovered; }
 
 	int getHeightBuffer() const { return height_buffer; }
 	void setHeightBuffer(int height) { height_buffer = height; }

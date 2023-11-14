@@ -46,11 +46,21 @@ void HTMLNode::click(int, int, HTMLPage*) {
 	return;
 }
 
-void HTMLNode::draw(const int x, const int y, const int w, const int h) {
-	fl_draw_box(FL_FLAT_BOX, x, y, w, h, background_color);
+void HTMLNode::draw(const int x, const int y, const int w, const int h, HTMLPage* current_page) {
+	if (current_page->getHovered() == _id) {
+		fl_draw_box(FL_FLAT_BOX, x, y, w, h, FL_BLUE);
+		fl_color(FL_WHITE);
+	} else {
+		fl_draw_box(FL_FLAT_BOX, x, y, w, h, background_color);
+		fl_color(color);
+	}
 }
 
 void HTMLNode::hover(int, int, HTMLPage* current_page) {
+	if (current_page->getHovered() != _id) {
+		current_page->setHovered(_id);
+		current_page->redraw();
+	}
 	current_page->parent_window->cursor(cursor);
 }
 
@@ -81,9 +91,8 @@ void Text::open(HTMLPage* current_page, int& start_x, int& start_y, int& out_w, 
 	current_page->setHeightBuffer(height_buffer);
 }
 
-void Text::draw(const int x, const int y, const int w, const int h) {
-	HTMLNode::draw(x, y, w, h);
-	fl_color(color);
+void Text::draw(const int x, const int y, const int w, const int h, HTMLPage* current_page) {
+	HTMLNode::draw(x, y, w, h, current_page);
 	fl_font(FL_HELVETICA, 14);
 	fl_draw(_data.c_str(), x, y, w, h, FL_ALIGN_WRAP | FL_ALIGN_CENTER);
 }

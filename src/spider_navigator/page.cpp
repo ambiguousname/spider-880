@@ -186,7 +186,7 @@ void HTMLPage::drawChildren(std::vector<std::unique_ptr<NodeStackInfo>>& drawSta
 		std::unique_ptr<NodeStackInfo> node_info = move(drawStack.front());
 		drawStack.erase(drawStack.begin());
 
-		node_info->node->draw(node_info->x, node_info->y, node_info->w, node_info->h);
+		node_info->node->draw(node_info->x, node_info->y, node_info->w, node_info->h, this);
 	}
 }
 
@@ -257,11 +257,13 @@ int HTMLPage::handle(int event) {
 			return 1;
 		}
 	}
+
 	if (event == FL_PUSH) {
 		if (clickRendered()) {
 			return 1;
 		}
 	}
+	
 	if (Fl_Group::handle(event)) {
 		return 1;
 	}

@@ -1,6 +1,7 @@
 #include "index.h"
 namespace StarInformationSystemsIndexHTMLWindowNamespace {
 std::shared_ptr<Img> img_4 = std::make_shared<Img>(
+	4,
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
@@ -12,6 +13,7 @@ std::shared_ptr<Img> img_4 = std::make_shared<Img>(
 	}
 );
 std::shared_ptr<Text> text_5 = std::make_shared<Text>(
+	5,
 	"Star Information Systems - Cutting-edge hardware for today's information age.",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
@@ -22,6 +24,7 @@ std::shared_ptr<Text> text_5 = std::make_shared<Text>(
 	}
 );
 std::shared_ptr<P> p_5 = std::make_shared<P>(
+	5,
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
 		text_5,
@@ -33,6 +36,7 @@ std::shared_ptr<P> p_5 = std::make_shared<P>(
 	}
 );
 std::shared_ptr<Text> text_7 = std::make_shared<Text>(
+	7,
 	"Our revolutionary Ouranos system has 1000% more capacity than any compact disc, reads faster, and is compatible with any existing computational system.",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
@@ -43,6 +47,7 @@ std::shared_ptr<Text> text_7 = std::make_shared<Text>(
 	}
 );
 std::shared_ptr<P> p_7 = std::make_shared<P>(
+	7,
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
 		text_7,
@@ -54,6 +59,7 @@ std::shared_ptr<P> p_7 = std::make_shared<P>(
 	}
 );
 std::shared_ptr<Text> text_9 = std::make_shared<Text>(
+	9,
 	"Call today for a demonstration: 555-7918.",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
@@ -64,6 +70,7 @@ std::shared_ptr<Text> text_9 = std::make_shared<Text>(
 	}
 );
 std::shared_ptr<P> p_9 = std::make_shared<P>(
+	9,
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
 		text_9,
@@ -75,6 +82,7 @@ std::shared_ptr<P> p_9 = std::make_shared<P>(
 	}
 );
 std::shared_ptr<Text> text_11 = std::make_shared<Text>(
+	11,
 	"Or stop by our offices:",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
@@ -85,6 +93,7 @@ std::shared_ptr<Text> text_11 = std::make_shared<Text>(
 	}
 );
 std::shared_ptr<P> p_11 = std::make_shared<P>(
+	11,
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
 		text_11,
@@ -96,6 +105,7 @@ std::shared_ptr<P> p_11 = std::make_shared<P>(
 	}
 );
 std::shared_ptr<Text> text_13 = std::make_shared<Text>(
+	13,
 	"242 Sycamore Lane",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
@@ -106,6 +116,7 @@ std::shared_ptr<Text> text_13 = std::make_shared<Text>(
 	}
 );
 std::shared_ptr<P> p_13 = std::make_shared<P>(
+	13,
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
 		text_13,
@@ -117,6 +128,7 @@ std::shared_ptr<P> p_13 = std::make_shared<P>(
 	}
 );
 std::shared_ptr<Text> text_15 = std::make_shared<Text>(
+	15,
 	"Rorik's End, Zipcode 532",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
@@ -127,6 +139,7 @@ std::shared_ptr<Text> text_15 = std::make_shared<Text>(
 	}
 );
 std::shared_ptr<P> p_15 = std::make_shared<P>(
+	15,
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
 		text_15,
@@ -138,6 +151,7 @@ std::shared_ptr<P> p_15 = std::make_shared<P>(
 	}
 );
 std::shared_ptr<Text> text_17 = std::make_shared<Text>(
+	17,
 	"Wanna see something cool? Type \"system\" with this window selected.",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
@@ -148,6 +162,7 @@ std::shared_ptr<Text> text_17 = std::make_shared<Text>(
 	}
 );
 std::shared_ptr<P> p_17 = std::make_shared<P>(
+	17,
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
 		text_17,
@@ -159,6 +174,7 @@ std::shared_ptr<P> p_17 = std::make_shared<P>(
 	}
 );
 std::shared_ptr<Text> text_19 = std::make_shared<Text>(
+	19,
 	"Founded by ",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
@@ -169,6 +185,7 @@ std::shared_ptr<Text> text_19 = std::make_shared<Text>(
 	}
 );
 std::shared_ptr<Text> text_21 = std::make_shared<Text>(
+	21,
 	"Jessica Reyes",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
@@ -180,6 +197,7 @@ std::shared_ptr<Text> text_21 = std::make_shared<Text>(
 	}
 );
 std::shared_ptr<A> a_21 = std::make_shared<A>(
+	21,
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
 		text_21,
@@ -192,6 +210,7 @@ std::shared_ptr<A> a_21 = std::make_shared<A>(
 	}
 );
 std::shared_ptr<Text> text_22 = std::make_shared<Text>(
+	22,
 	" and ",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
@@ -202,6 +221,7 @@ std::shared_ptr<Text> text_22 = std::make_shared<Text>(
 	}
 );
 std::shared_ptr<Text> text_24 = std::make_shared<Text>(
+	24,
 	"Luke Schiff",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
@@ -213,6 +233,7 @@ std::shared_ptr<Text> text_24 = std::make_shared<Text>(
 	}
 );
 std::shared_ptr<A> a_24 = std::make_shared<A>(
+	24,
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
 		text_24,
@@ -225,6 +246,7 @@ std::shared_ptr<A> a_24 = std::make_shared<A>(
 	}
 );
 std::shared_ptr<Text> text_25 = std::make_shared<Text>(
+	25,
 	".",
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
@@ -235,6 +257,7 @@ std::shared_ptr<Text> text_25 = std::make_shared<Text>(
 	}
 );
 std::shared_ptr<P> p_19 = std::make_shared<P>(
+	19,
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
 		text_25,
@@ -250,6 +273,7 @@ std::shared_ptr<P> p_19 = std::make_shared<P>(
 	}
 );
 std::shared_ptr<Body> body_3 = std::make_shared<Body>(
+	3,
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
 		p_19,
@@ -269,6 +293,7 @@ std::shared_ptr<Body> body_3 = std::make_shared<Body>(
 	}
 );
 std::shared_ptr<HTMLNode> html_1 = std::make_shared<HTMLNode>(
+	1,
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
 		body_3,
