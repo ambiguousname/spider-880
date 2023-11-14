@@ -15,15 +15,15 @@ class HTMLPage;
 class HTMLWindow;
 class HTMLNode;
 
-enum NodeQueueInfoEnum {
+enum NodeStackInfoEnum {
 	OPEN_NODE,
 	CLOSE_NODE
 };
 
-struct NodeQueueInfo {
+struct NodeStackInfo {
 	std::shared_ptr<HTMLNode> node;
-	NodeQueueInfoEnum type;
-	NodeQueueInfo* parent_closer;
+	NodeStackInfoEnum type;
+	NodeStackInfo* parent_closer = nullptr;
 	int x = 0;
 	int y = 0;
 	int w = 0;
@@ -41,7 +41,11 @@ struct InteractiveNode {
 
 class HTMLPage : public Fl_Group {
 	void initNode(std::shared_ptr<HTMLNode> node);
-	void drawChildren();
+	
+	void measureAndDraw();
+
+	void measureChildren(std::vector<std::unique_ptr<NodeStackInfo>>& queue, std::vector<std::unique_ptr<NodeStackInfo>>& drawStack);
+	void drawChildren(std::vector<std::unique_ptr<NodeStackInfo>>& drawStack);
 
 	bool getInteractiveFromPos(int x, int y, std::shared_ptr<HTMLNode>& out);
 

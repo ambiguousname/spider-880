@@ -28,6 +28,6 @@ class Shader {
 	void useProgram();
 	void setAttrs(f32* model_ptr, const f32* projection_ptr, const f32* view_ptr, float time=0);
 
-	const int getProgram() const;
+	int getProgram() const;
 	void initialize();
 };

@@ -177,7 +177,7 @@ std::shared_ptr<P> p_22 = std::make_shared<P>(
 	std::unordered_map<std::string, std::string>{
 	}
 );
-std::shared_ptr<HTMLNode> body_2 = std::make_shared<HTMLNode>(
+std::shared_ptr<Body> body_2 = std::make_shared<Body>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
 		p_22,
@@ -207,4 +207,6 @@ MurderBlogIndexHTMLWindow::MurderBlogIndexHTMLWindow(int x, int y, int w, int h)
 	linked_windows.insert({"murder_blog/murder", MurderBlogMurderHTMLWindow::createWindow});
 	linked_windows.insert({"murder_blog/part1", MurderBlogPart1HTMLWindow::createWindow});
 
+
+end();
 }

@@ -1,8 +1,8 @@
 #pragma once
-#include <mirror/index.h>
-#include <spider/bbs/announcements.h>
 #include "spider_navigator/page.h"
+#include <mirror/index.h>
 #include <spider/bbs/messages.h>
+#include <spider/bbs/announcements.h>
 class SpiderBbsIndexHTMLWindow : public HTMLWindow {
 	public:
 	SpiderBbsIndexHTMLWindow(int x, int y, int w, int h);

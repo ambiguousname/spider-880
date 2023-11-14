@@ -1,6 +1,6 @@
 #pragma once
-#include <spider/policies.h>
 #include "spider_navigator/page.h"
+#include <spider/policies.h>
 class MurderBlogPart1HTMLWindow : public HTMLWindow {
 	public:
 	MurderBlogPart1HTMLWindow(int x, int y, int w, int h);

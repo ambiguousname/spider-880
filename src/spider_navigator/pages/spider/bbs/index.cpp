@@ -106,7 +106,7 @@ std::shared_ptr<P> p_11 = std::make_shared<P>(
 	std::unordered_map<std::string, std::string>{
 	}
 );
-std::shared_ptr<HTMLNode> body_2 = std::make_shared<HTMLNode>(
+std::shared_ptr<Body> body_2 = std::make_shared<Body>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
 		p_11,
@@ -132,4 +132,6 @@ SpiderBbsIndexHTMLWindow::SpiderBbsIndexHTMLWindow(int x, int y, int w, int h) :
 	linked_windows.insert({"spider/bbs/messages", SpiderBbsMessagesHTMLWindow::createWindow});
 	linked_windows.insert({"mirror/index", MirrorIndexHTMLWindow::createWindow});
 
+
+end();
 }

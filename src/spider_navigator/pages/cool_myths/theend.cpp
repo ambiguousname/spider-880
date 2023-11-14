@@ -235,7 +235,7 @@ std::shared_ptr<P> p_32 = std::make_shared<P>(
 	std::unordered_map<std::string, std::string>{
 	}
 );
-std::shared_ptr<HTMLNode> body_2 = std::make_shared<HTMLNode>(
+std::shared_ptr<Body> body_2 = std::make_shared<Body>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
 		p_32,
@@ -270,4 +270,6 @@ std::shared_ptr<HTMLNode> html_1 = std::make_shared<HTMLNode>(
 CoolMythsTheendHTMLWindow::CoolMythsTheendHTMLWindow(int x, int y, int w, int h) : HTMLWindow(CoolMythsTheendHTMLWindowNamespace::html_1, x, y, w, h) {
 	linked_windows.insert({"cool_myths/index", CoolMythsIndexHTMLWindow::createWindow});
 
+
+end();
 }

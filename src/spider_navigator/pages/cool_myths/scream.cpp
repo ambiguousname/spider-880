@@ -42,7 +42,7 @@ std::shared_ptr<P> p_6 = std::make_shared<P>(
 		{"color", "1"},
 	}
 );
-std::shared_ptr<HTMLNode> body_2 = std::make_shared<HTMLNode>(
+std::shared_ptr<Body> body_2 = std::make_shared<Body>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
 		p_6,
@@ -64,4 +64,6 @@ std::shared_ptr<HTMLNode> html_1 = std::make_shared<HTMLNode>(
 CoolMythsScreamHTMLWindow::CoolMythsScreamHTMLWindow(int x, int y, int w, int h) : HTMLWindow(CoolMythsScreamHTMLWindowNamespace::html_1, x, y, w, h) {
 	linked_windows.insert({"cool_myths/index", CoolMythsIndexHTMLWindow::createWindow});
 
+
+end();
 }

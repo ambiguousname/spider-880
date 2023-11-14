@@ -1,6 +1,6 @@
 #pragma once
-#include <history/index.h>
 #include "spider_navigator/page.h"
+#include <history/index.h>
 class HistoryPunicwarsHTMLWindow : public HTMLWindow {
 	public:
 	HistoryPunicwarsHTMLWindow(int x, int y, int w, int h);

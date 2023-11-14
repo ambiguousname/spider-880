@@ -12,10 +12,17 @@ class HTMLPage;
 
 #define NODE_CONSTRUCTOR const char* dat, std::vector<std::shared_ptr<HTMLNode>> c, std::unordered_map<std::string, std::string> attr
 
+#define NODE_OPENER HTMLPage* current_page, int& start_x, int& start_y, int& out_w, int& out_h
+
+#define NODE_CHILD_CLOSER HTMLPage* current_page, const int child_x, const int child_y, const int child_w, const int child_h, int& start_x, int& start_y, int& out_w, int& out_h
+
+#define NODE_CLOSER HTMLPage* current_page, int& start_x, int& start_y, int& out_w, int& out_h
+
 class HTMLNode {
 	protected:
 	Fl_Cursor cursor = FL_CURSOR_DEFAULT;
 	Fl_Color color = FL_FOREGROUND_COLOR;
+	Fl_Color background_color = FL_BACKGROUND_COLOR;
 
 	
 	std::string _data;
@@ -39,9 +46,15 @@ class HTMLNode {
 	Fl_Cursor getCursor() const { return cursor; }
 
 	virtual void init();
-	virtual void open(HTMLPage* current_page, int& start_x, int& start_y, int& out_w, int& out_h);
-	virtual void close(HTMLPage* current_page, int& start_x, int& start_y, int& out_w, int& out_h);
-	virtual void child_closed(HTMLPage* current_page, const int child_x, const int child_y, const int child_w, const int child_h, int& start_x, int& start_y, int& out_w, int& out_h);
+	
+	// Measuring functions (for x, y, w, h):
+	virtual void open(NODE_OPENER);
+	virtual void close(NODE_CLOSER);
+	virtual void child_closed(NODE_CHILD_CLOSER);
+
+	// Actual function for drawing things like shapes and colors.
+	virtual void draw(const int x, const int y, const int w, const int h);
+
 	// Does this node need to have stuff like onHover, onClick, etc.
 	virtual bool interactive() { return false; }
 	// Draw using the current x and y provided. Passed as reference so they're modifiable.
@@ -58,13 +71,19 @@ class HTMLNode {
 
 typedef std::shared_ptr<HTMLNode> HTMLNodePtr;
 
+class Body : public HTMLNode {
+	public:
+	using HTMLNode::HTMLNode;
+};
+
 class Text : public HTMLNode {
 	public:
 	Text(NODE_CONSTRUCTOR) : HTMLNode(dat, c, attr) {
 		cursor = FL_CURSOR_INSERT;
 	}
 	virtual bool interactive() { return true; }
-	void open(HTMLPage* current_page, int& start_x, int& start_y, int& out_w, int& out_h);
+	void open(NODE_OPENER) override;
+	void draw(const int x, const int y, const int w, const int h) override;
 };
 
 class A : public HTMLNode {
@@ -77,14 +96,13 @@ class A : public HTMLNode {
 		// TODO: Use some sort of palette constants.
 		color = 4;
 	}
-	void child_closed(HTMLPage* current_page, const int child_x, const int child_y, const int child_w, const int child_h, int& start_x, int& start_y, int& out_w, int& out_h);
 };
 
 class P : public HTMLNode {
 	public:
 	using HTMLNode::HTMLNode;
-	void close(HTMLPage* current_page, int& start_x, int& start_y, int& out_w, int& out_h);
-	void child_closed(HTMLPage* current_page, const int child_x, const int child_y, const int child_w, const int child_h, int& start_x, int& start_y, int& out_w, int& out_h);
+	void close(NODE_CLOSER);
+	void child_closed(NODE_CHILD_CLOSER);
 };
 
 class Img : public HTMLNode {
@@ -93,5 +111,9 @@ class Img : public HTMLNode {
 	using HTMLNode::HTMLNode;
 	~Img() { box.release(); }
 	void init();
-	void open(HTMLPage* current_page, int& start_x, int& start_y, int& out_w, int& out_h);
+	void open(NODE_OPENER);
+
+	void draw(const int, const int, const int, const int) override { 
+		box->draw();
+	}
 };

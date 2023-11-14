@@ -1,7 +1,7 @@
 #pragma once
-#include <spider/policies.h>
-#include <mirror/index.h>
 #include "spider_navigator/page.h"
+#include <mirror/index.h>
+#include <spider/policies.h>
 class SpiderBbsMessagesHTMLWindow : public HTMLWindow {
 	public:
 	SpiderBbsMessagesHTMLWindow(int x, int y, int w, int h);

@@ -16,7 +16,6 @@ void aboutCallback(Fl_Widget*, void*) {
 
 typedef HTMLWindow* (*page_create)(int, int, int, int);
 
-
 void showHTMLPageFromString(Fl_Widget* widget, void* str) {
 	HTMLWindow* window = dynamic_cast<HTMLWindow*>(widget);
 
@@ -46,71 +45,6 @@ const Password const_passwords[] = {
 	{"abababab", showHTMLPage, (void*)DeadbeefAbabababHTMLWindow::createWindow},
 	{"babababa", showHTMLPage, (void*)DeadbeefBabababaHTMLWindow::createWindow},
 };
-
-void clearDraw(void* window) {
-	static_cast<HTMLWindow*>(window)->redraw();
-}
-
-int HTMLWindow::handle(int event) {
-	if (event == FL_KEYDOWN) {
-		const char* key =  Fl::event_text();
-		
-		if (key[0] != '\0'){
-			char key_l = tolower(key[0]);
-
-			make_current();
-			Fl_Fontsize old_size = fl_size();
-			Fl_Color old_color = fl_color();
-			fl_color(FL_RED);
-			fl_font(fl_font(), 50);
-			fl_draw(std::string(1, key_l).c_str(), 0, 0, w(), h(), FL_ALIGN_CENTER);
-			fl_font(fl_font(), old_size);
-			fl_color(old_color);
-			if (!Fl::has_timeout(clearDraw, this)) {
-				Fl::add_timeout(0.1, clearDraw, this);
-			}
-
-			typing_buffer.push_back(key_l);
-			if (typing_buffer.size() > 20) {
-				typing_buffer.erase(typing_buffer.begin());
-			}
-			
-			std::vector<Password> matches = {};
-
-			for (auto p: passwords) {
-				int size = p.password.size();
-				if (p.password[size - 1] == typing_buffer.back()) {
-					Password match = Password(p);
-					match.curr_index = size - 1;
-					matches.push_back(match);
-				}
-			}
-
-			// Avoid integer underflow: https://stackoverflow.com/questions/4205720/iterating-over-a-vector-in-reverse-direction
-			if (typing_buffer.size() > 1 && matches.size() > 0) {
-				for (int i = typing_buffer.size() - 1; i-- >= 0; ) {
-					bool pwd_found = false;
-					for (auto m = matches.begin(); m != matches.end();) {
-						m->curr_index -= 1;
-						if (m->curr_index < 0) {
-							pwd_found = true;
-							m->callback(this, m->data);
-							break;
-						} else if (m->password[m->curr_index] != typing_buffer[i]) {
-							matches.erase(m);
-						} else {
-							m++;
-						}
-					}
-					if (pwd_found || matches.size() == 0) {
-						break;
-					}
-				}
-			}
-		}
-	}
-	return Fl_Window::handle(event);
-}
 
 HTMLWindow::HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int h) : Fl_Window(x, y, w, h), menu_bar(0, 0, w, 20) {
 	menu_bar.add("NavSab", 0, 0, 0, FL_MENU_INACTIVE);
@@ -185,17 +119,16 @@ void HTMLPage::initNode(HTMLNodePtr node) {
 	}
 }
 
-void HTMLPage::drawChildren() {
-	std::unique_ptr<NodeQueueInfo> _root = std::make_unique<NodeQueueInfo>(root, OPEN_NODE, nullptr);
-	std::vector<std::unique_ptr<NodeQueueInfo>> queue = {};
-	queue.emplace_back(std::move(_root));
+#pragma region drawHTML
+
+void HTMLPage::measureChildren(std::vector<std::unique_ptr<NodeStackInfo>>& stack, std::vector<std::unique_ptr<NodeStackInfo>>& drawStack) {
 	interactive_nodes.clear();
 
 	cursor_x = x();
 	cursor_y = y();
-	while (queue.size() > 0) {
-		std::unique_ptr<NodeQueueInfo> node_info = move(queue.front());
-		queue.erase(queue.begin());
+	while (stack.size() > 0) {
+		std::unique_ptr<NodeStackInfo> node_info = move(stack.front());
+		stack.erase(stack.begin());
 
 		std::shared_ptr<HTMLNode> node = node_info->node;
 		if (node_info->type == OPEN_NODE) {
@@ -207,12 +140,12 @@ void HTMLPage::drawChildren() {
 			start_y = cursor_y;
 			node->open(this, start_x, start_y, out_w, out_h);
 
-			std::unique_ptr<NodeQueueInfo> closer = std::make_unique<NodeQueueInfo>(node, CLOSE_NODE, node_info->parent_closer, start_x, start_y, out_w, out_h);
-			NodeQueueInfo* ptr = closer.get();
-			queue.insert(queue.begin(), move(closer));
+			std::unique_ptr<NodeStackInfo> closer = std::make_unique<NodeStackInfo>(node, CLOSE_NODE, node_info->parent_closer, start_x, start_y, out_w, out_h);
+			NodeStackInfo* ptr = closer.get();
+			stack.insert(stack.begin(), move(closer));
 
 			for (auto c : node->children()) {
-				queue.insert(queue.begin(), std::make_unique<NodeQueueInfo>(c, OPEN_NODE, ptr));
+				stack.insert(stack.begin(), std::make_unique<NodeStackInfo>(c, OPEN_NODE, ptr));
 			}
 		} else if (node_info->type == CLOSE_NODE) {
 			int out_w, out_h, start_x, start_y;
@@ -220,21 +153,21 @@ void HTMLPage::drawChildren() {
 			out_h = node_info->h;
 			start_x = node_info->x;
 			start_y = node_info->y;
+
 			node->close(this, start_x, start_y, out_w, out_h);
 			if (node->interactive()) {
 				interactive_nodes.insert(interactive_nodes.begin(), {node, start_x, start_y, out_w, out_h});
 			}
+
+			drawStack.insert(drawStack.begin(), std::make_unique<NodeStackInfo>(node, CLOSE_NODE, nullptr, start_x, start_y, out_w, out_h));
 			
 			int parent_w, parent_h, parent_x, parent_y;
-			NodeQueueInfo* parent_info = node_info->parent_closer;
+			NodeStackInfo* parent_info = node_info->parent_closer;
 			if (parent_info != nullptr) {
 				parent_w = parent_info->w;
 				parent_h = parent_info->h;
 				parent_x = parent_info->x;
 				parent_y = parent_info->y;
-				// if (parent_info->node->interactive() && parent_info->node->getCursor() != FL_CURSOR_INSERT) {
-				// 	std::cout << parent_info->node << std::endl;
-				// }
 
 				parent_info->node->child_closed(this, start_x, start_y, out_w, out_h, parent_x, parent_y, parent_w, parent_h);
 				parent_info->w = parent_w;
@@ -247,27 +180,40 @@ void HTMLPage::drawChildren() {
 	resize(x(), y(), w(), cursor_y - y());
 }
 
+void HTMLPage::drawChildren(std::vector<std::unique_ptr<NodeStackInfo>>& drawStack) {
+	while (drawStack.size() > 0) {
+		// A backwards order (we start from the closing of <html> and move up from there), but this works for drawing.
+		std::unique_ptr<NodeStackInfo> node_info = move(drawStack.front());
+		drawStack.erase(drawStack.begin());
+
+		node_info->node->draw(node_info->x, node_info->y, node_info->w, node_info->h);
+	}
+}
+
+void HTMLPage::measureAndDraw() {
+	std::unique_ptr<NodeStackInfo> _root = std::make_unique<NodeStackInfo>(root, OPEN_NODE, nullptr);
+	std::vector<std::unique_ptr<NodeStackInfo>> stack = {};
+	stack.emplace_back(std::move(_root));
+
+	std::vector<std::unique_ptr<NodeStackInfo>> drawStack = {};
+
+	measureChildren(stack, drawStack);
+	drawChildren(drawStack);
+}
+
 void HTMLPage::draw() {
 	Fl_Group::draw();
 	// TODO: Use damage mask.
-	// This somehow leads to a background?
-	// What you'd probably want to do is EITHER:
-	// Render EVERYTHING in OpenGL.
-	// Render OpenGL, convert to an image with an alpha map. Render by pixel???????
-	// Something to be done for the non-prototype stage. 
-	// Fl::gl_visual(FL_RGB|FL_ALPHA|FL_DEPTH);
-	// gl_start();
-	// glClearColor(0.0f, 1.0f, 1.0f, 0.0f);
-	// glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-	// gl_color(FL_RED);
-	// gl_rect(0, 0, 100, 100);
-	// gl_finish();
 	if (root == nullptr) {
 		throw std::logic_error("HTMLPage root not defined.");
 	} else {
-		drawChildren();
+		measureAndDraw();
 	}
 }
+
+#pragma endregion drawHTML
+
+#pragma region interaction
 
 bool HTMLPage::getInteractiveFromPos(int x, int y, HTMLNodePtr& out) {
 	for (auto c : interactive_nodes) {
@@ -322,3 +268,70 @@ int HTMLPage::handle(int event) {
 
 	return 0;
 }
+
+void clearDraw(void* window) {
+	static_cast<HTMLWindow*>(window)->redraw();
+}
+
+int HTMLWindow::handle(int event) {
+	if (event == FL_KEYDOWN) {
+		const char* key =  Fl::event_text();
+		
+		if (key[0] != '\0'){
+			char key_l = tolower(key[0]);
+
+			make_current();
+			Fl_Fontsize old_size = fl_size();
+			Fl_Color old_color = fl_color();
+			fl_color(FL_RED);
+			fl_font(fl_font(), 50);
+			fl_draw(std::string(1, key_l).c_str(), 0, 0, w(), h(), FL_ALIGN_CENTER);
+			fl_font(fl_font(), old_size);
+			fl_color(old_color);
+			if (!Fl::has_timeout(clearDraw, this)) {
+				Fl::add_timeout(0.1, clearDraw, this);
+			}
+
+			typing_buffer.push_back(key_l);
+			if (typing_buffer.size() > 20) {
+				typing_buffer.erase(typing_buffer.begin());
+			}
+			
+			std::vector<Password> matches = {};
+
+			for (auto p: passwords) {
+				int size = p.password.size();
+				if (p.password[size - 1] == typing_buffer.back()) {
+					Password match = Password(p);
+					match.curr_index = size - 1;
+					matches.push_back(match);
+				}
+			}
+
+			// Avoid integer underflow: https://stackoverflow.com/questions/4205720/iterating-over-a-vector-in-reverse-direction
+			if (typing_buffer.size() > 1 && matches.size() > 0) {
+				for (int i = typing_buffer.size() - 1; i-- >= 0; ) {
+					bool pwd_found = false;
+					for (auto m = matches.begin(); m != matches.end();) {
+						m->curr_index -= 1;
+						if (m->curr_index < 0) {
+							pwd_found = true;
+							m->callback(this, m->data);
+							break;
+						} else if (m->password[m->curr_index] != typing_buffer[i]) {
+							matches.erase(m);
+						} else {
+							m++;
+						}
+					}
+					if (pwd_found || matches.size() == 0) {
+						break;
+					}
+				}
+			}
+		}
+	}
+	return Fl_Window::handle(event);
+}
+
+#pragma endregion interaction

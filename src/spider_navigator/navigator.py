@@ -31,7 +31,7 @@ class HtmlStackNode():
 		# The string output from this element (structure information).
 		self.element_stream = io.StringIO()
 
-		self.parent = None
+		self.parent = parent
 		self.children = []
 		self.attrs = {}
 		# Internal content (like text)
@@ -39,6 +39,15 @@ class HtmlStackNode():
 
 		self.tag = tag
 		self.id = id
+
+		# Inheritance:
+		if self.parent is not None:
+			for attr in self.parent.attrs.items():
+				# Avoid inheriting unnecessary attributes:
+				# TODO: This should be done with a <style> tag instead.
+				if attr[0] == 'title':
+					continue
+				self.attrs[attr[0]] = attr[1]
 
 		for attr in attrs:
 			self.attrs[attr[0]] = attr[1]
@@ -48,7 +57,6 @@ class HtmlStackNode():
 
 		# Current HTML reader
 		self.reader = reader
-		self.parent = parent
 	
 	def append(self, child):
 		self.children.append(child)

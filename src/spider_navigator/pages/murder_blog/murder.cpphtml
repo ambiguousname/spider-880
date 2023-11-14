@@ -10,7 +10,7 @@
 			std::cout << "Hello world!";
 		}
 	</script> -->
-	<body> <!-- Represents the Fl_Group object. -->
+	<body background-color="1"> <!-- Represents the Fl_Group object. -->
 		<img src="./assets/victim.png" />
 		<p>
 			Image courtesy of <a href="engounge/index">engounge</a>.

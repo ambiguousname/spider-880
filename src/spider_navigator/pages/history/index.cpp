@@ -65,7 +65,7 @@ std::shared_ptr<P> p_8 = std::make_shared<P>(
 	std::unordered_map<std::string, std::string>{
 	}
 );
-std::shared_ptr<HTMLNode> body_2 = std::make_shared<HTMLNode>(
+std::shared_ptr<Body> body_2 = std::make_shared<Body>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
 		p_8,
@@ -89,4 +89,6 @@ HistoryIndexHTMLWindow::HistoryIndexHTMLWindow(int x, int y, int w, int h) : HTM
 	linked_windows.insert({"history/roriksend", HistoryRoriksendHTMLWindow::createWindow});
 	linked_windows.insert({"history/punicwars", HistoryPunicwarsHTMLWindow::createWindow});
 
+
+end();
 }

@@ -7,6 +7,10 @@ void HTMLNode::init() {
 	if (color_prop != _attributes.end()) {
 		color = std::stoi(color_prop->second);
 	}
+	auto background_color_prop = _attributes.find("background-color");
+	if (background_color_prop != _attributes.end()) {
+		background_color = std::stoi(background_color_prop->second);
+	}
 	return;
 }
 
@@ -18,12 +22,32 @@ void HTMLNode::close(HTMLPage*, int&, int&, int&, int&) {
 	return;
 }
 
-void HTMLNode::child_closed(HTMLPage*, const int, const int, const int, const int, int&, int&, int&, int&) {
-	return;
+void HTMLNode::child_closed(HTMLPage*, const int child_x, const int child_y, const int child_w, const int child_h, int& start_x, int& start_y, int& out_w, int& out_h) {
+	bool resetY = false;
+	if (child_x < start_x) {
+		start_x = child_x;
+		resetY = true;
+	}
+	if (child_y < start_y || resetY) {
+		start_y = child_y;
+	}
+	int localized_w = (child_x + child_w) - start_x;
+	if (localized_w > out_w) {
+		out_w = localized_w;
+	}
+
+	int localized_h = (child_y + child_h) - start_y;
+	if (localized_h > out_h) {
+		out_h = localized_h;
+	}
 }
 
 void HTMLNode::click(int, int, HTMLPage*) {
 	return;
+}
+
+void HTMLNode::draw(const int x, const int y, const int w, const int h) {
+	fl_draw_box(FL_FLAT_BOX, x, y, w, h, background_color);
 }
 
 void HTMLNode::hover(int, int, HTMLPage* current_page) {
@@ -36,7 +60,6 @@ void Text::open(HTMLPage* current_page, int& start_x, int& start_y, int& out_w, 
 
 	fl_font(FL_HELVETICA, 14);
 	fl_measure(_data.c_str(), out_w, out_h);
-	fl_color(color);
 
 	int height_buffer = current_page->getHeightBuffer();
 
@@ -46,7 +69,7 @@ void Text::open(HTMLPage* current_page, int& start_x, int& start_y, int& out_w, 
 		start_y += height_buffer;
 		height_buffer = 0;
 	}
-	fl_draw(_data.c_str(), start_x, start_y, out_w, out_h, FL_ALIGN_WRAP | FL_ALIGN_CENTER);
+	
 	int cursor_x = start_x;
 	int cursor_y = start_y;
 	cursor_x += out_w;
@@ -56,6 +79,13 @@ void Text::open(HTMLPage* current_page, int& start_x, int& start_y, int& out_w, 
 	// TODO: Is this hack okay? Does it not work with other displays?
 	current_page->setCursor(cursor_x, cursor_y);
 	current_page->setHeightBuffer(height_buffer);
+}
+
+void Text::draw(const int x, const int y, const int w, const int h) {
+	HTMLNode::draw(x, y, w, h);
+	fl_color(color);
+	fl_font(FL_HELVETICA, 14);
+	fl_draw(_data.c_str(), x, y, w, h, FL_ALIGN_WRAP | FL_ALIGN_CENTER);
 }
 
 void A::click(int, int, HTMLPage* current_page) {
@@ -77,26 +107,6 @@ void A::init() {
 		if (typeid(*c).hash_code() == typeid(Text).hash_code()) {
 			c->setColor(color);
 		}
-	}
-}
-
-void A::child_closed(HTMLPage*, const int child_x, const int child_y, const int child_w, const int child_h, int& start_x, int& start_y, int& out_w, int& out_h) {
-	bool resetY = false;
-	if (child_x < start_x) {
-		start_x = child_x;
-		resetY = true;
-	}
-	if (child_y < start_y || resetY) {
-		start_y = child_y;
-	}
-	int localized_w = (child_x + child_w) - start_x;
-	if (localized_w > out_w) {
-		out_w = localized_w;
-	}
-
-	int localized_h = (child_y + child_h) - start_y;
-	if (localized_h > out_h) {
-		out_h = localized_h;
 	}
 }
 
@@ -148,7 +158,6 @@ void Img::open(HTMLPage* current_page, int&, int&, int&, int&) {
 	int img_h = ratio * img_w;
 
 	box->prepareDraw(img_x, cursor_y, img_w, img_h);
-	box->draw();
 
 	cursor_y += img_h + 20;
 

@@ -1,7 +1,7 @@
 #pragma once
+#include "spider_navigator/page.h"
 #include <spider/bbs/index.h>
 #include <ubbs/index.h>
-#include "spider_navigator/page.h"
 class MirrorIndexHTMLWindow : public HTMLWindow {
 	public:
 	MirrorIndexHTMLWindow(int x, int y, int w, int h);

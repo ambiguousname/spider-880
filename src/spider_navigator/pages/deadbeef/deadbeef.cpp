@@ -242,7 +242,7 @@ std::shared_ptr<P> p_35 = std::make_shared<P>(
 		{"color", "1"},
 	}
 );
-std::shared_ptr<HTMLNode> body_6 = std::make_shared<HTMLNode>(
+std::shared_ptr<Body> body_6 = std::make_shared<Body>(
 	"",
 	std::vector<std::shared_ptr<HTMLNode>>{
 		p_35,

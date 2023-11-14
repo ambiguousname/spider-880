@@ -104,7 +104,7 @@ void Shader::setAttrs(f32* model_ptr, const f32* projection_ptr, const f32* view
 	glUniform1f(time_idx, time);
 }
 
-const int Shader::getProgram() const {
+int Shader::getProgram() const {
 	if (!initialized) {
 		throw std::logic_error("Shader initialize() not called.");
 	}

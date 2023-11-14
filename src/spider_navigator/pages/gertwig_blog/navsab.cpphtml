@@ -31,13 +31,16 @@
 			Would be nice to have:
 		</p>
 		<p>
+			In-built padding that doesn't leave awkward whitespace from &lt;style&gt; tags.
+		</p>
+		<p>
 			Maximize button that doesn't screw up sizing.
 		</p>
 		<p>
 			Proper text wrapping.
 		</p>
 		<p>
-			Fully centered text.
+			Fully centered (and resizing) text.
 		</p>
 		<p>
 			Not all HTML tags are supported (lists, plaintext, headers, etc.)
