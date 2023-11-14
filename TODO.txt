@@ -3,10 +3,9 @@
   - Can get into weird choice locking (two tier 2s if you deselect tier 0 or tier 1 from a fully selected list). Low priority.
 
 
-- Income is set to 0 first at age of 0, and then they're aged up.
-  - Add a constraint for some amount of income for age > 18?
-- Image scrolling is broken in release
+- Give each website a "theme" to make them more fun to read (just change up the text colors). And easy to identify.
+- Last Deadbeef page (no OpenGL)
 - OpenGL Deadbeef pages
-- Sound Effects
+- Sound Effects (maybe some ambience type music to make browsing fun)
 - Mac Build
 - Windows Build
