@@ -1,21 +1,14 @@
 <html title="DEADBEEF">
-	<!-- <includes>
+	<includes>
 		&lt;deadbeef/deadbeefgl.h&gt;
 	</includes>
 	<header>
 		protected:
-		DeadbeefGL* gl_renderer;
-		int handle();
+		DeadbeefGL* gl_window;
 	</header>
-	<script type="text/cpp">
-		int $CLASS$::handle() {
-			gl_renderer->redraw();
-			return 0;
-		}
-	</script>
 	<constructor>
-		gl_renderer = new DeadbeefGL(x(), y(), w(), h(), label());
-	</constructor> -->
+		gl_window = new DeadbeefGL(x(), y(), w(), h(), label());
+	</constructor>
 	<body>
 		<p>
 			?esle erehwemos decalp dna dnim ruoy morf deppir eb oT ?eromyna kniht ton ot ekil s'ti tahw derednow reve uoy evaH
