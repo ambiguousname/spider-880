@@ -1,3 +1,4 @@
+- Make areas clearer with places (100s, 10s, 1s)
 - Ensure you get names for all possible database combinations
 - Income is set to 0 first at age of 0, and then they're aged up.
   - Add a constraint for some amount of income for age > 18?
