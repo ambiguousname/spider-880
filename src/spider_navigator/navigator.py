@@ -109,6 +109,10 @@ class ImageNode(HtmlStackNode):
 	includes = ["<util/image_box.h>"]
 
 class ANode(HtmlStackNode):
+	def __init__(self, id : str, tag : str, attrs: list[tuple[str, str | None]], parent = None, reader=None):
+		super().__init__(id, tag, attrs, parent, reader)
+		self.attrs["color"] = "4"
+
 	def open(self):
 		if "href" in self.attrs:
 			pages_link = (self.attrs["href"] + ".h").replace("\\", "/")

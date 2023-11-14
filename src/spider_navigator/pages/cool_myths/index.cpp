@@ -36,6 +36,7 @@ std::shared_ptr<Text> text_8 = std::make_shared<Text>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "cool_myths/scream"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<A> a_8 = std::make_shared<A>(
@@ -45,6 +46,7 @@ std::shared_ptr<A> a_8 = std::make_shared<A>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "cool_myths/scream"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<P> p_7 = std::make_shared<P>(
@@ -61,6 +63,7 @@ std::shared_ptr<Text> text_11 = std::make_shared<Text>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "cool_myths/theend"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<A> a_11 = std::make_shared<A>(
@@ -70,6 +73,7 @@ std::shared_ptr<A> a_11 = std::make_shared<A>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "cool_myths/theend"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<P> p_10 = std::make_shared<P>(

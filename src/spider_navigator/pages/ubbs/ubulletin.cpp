@@ -28,6 +28,7 @@ std::shared_ptr<Text> text_7 = std::make_shared<Text>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<A> a_7 = std::make_shared<A>(
@@ -37,6 +38,7 @@ std::shared_ptr<A> a_7 = std::make_shared<A>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<P> p_5 = std::make_shared<P>(
@@ -61,6 +63,7 @@ std::shared_ptr<Text> text_11 = std::make_shared<Text>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<A> a_11 = std::make_shared<A>(
@@ -70,6 +73,7 @@ std::shared_ptr<A> a_11 = std::make_shared<A>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<Text> text_12 = std::make_shared<Text>(
@@ -162,6 +166,7 @@ std::shared_ptr<Text> text_24 = std::make_shared<Text>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<A> a_24 = std::make_shared<A>(
@@ -171,6 +176,7 @@ std::shared_ptr<A> a_24 = std::make_shared<A>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<Text> text_25 = std::make_shared<Text>(
@@ -203,6 +209,7 @@ std::shared_ptr<Text> text_29 = std::make_shared<Text>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<A> a_29 = std::make_shared<A>(
@@ -212,6 +219,7 @@ std::shared_ptr<A> a_29 = std::make_shared<A>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<Text> text_30 = std::make_shared<Text>(
@@ -439,6 +447,7 @@ std::shared_ptr<Text> text_60 = std::make_shared<Text>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<A> a_60 = std::make_shared<A>(
@@ -448,6 +457,7 @@ std::shared_ptr<A> a_60 = std::make_shared<A>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<Text> text_61 = std::make_shared<Text>(
@@ -463,6 +473,7 @@ std::shared_ptr<Text> text_63 = std::make_shared<Text>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<A> a_63 = std::make_shared<A>(
@@ -472,6 +483,7 @@ std::shared_ptr<A> a_63 = std::make_shared<A>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<Text> text_64 = std::make_shared<Text>(
@@ -487,6 +499,7 @@ std::shared_ptr<Text> text_66 = std::make_shared<Text>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<A> a_66 = std::make_shared<A>(
@@ -496,6 +509,7 @@ std::shared_ptr<A> a_66 = std::make_shared<A>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<Text> text_67 = std::make_shared<Text>(
@@ -511,6 +525,7 @@ std::shared_ptr<Text> text_69 = std::make_shared<Text>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<A> a_69 = std::make_shared<A>(
@@ -520,6 +535,7 @@ std::shared_ptr<A> a_69 = std::make_shared<A>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<Text> text_70 = std::make_shared<Text>(
@@ -588,6 +604,7 @@ std::shared_ptr<Text> text_78 = std::make_shared<Text>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<A> a_78 = std::make_shared<A>(
@@ -597,6 +614,7 @@ std::shared_ptr<A> a_78 = std::make_shared<A>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<P> p_76 = std::make_shared<P>(
@@ -621,6 +639,7 @@ std::shared_ptr<Text> text_82 = std::make_shared<Text>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<A> a_82 = std::make_shared<A>(
@@ -630,6 +649,7 @@ std::shared_ptr<A> a_82 = std::make_shared<A>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<Text> text_83 = std::make_shared<Text>(
@@ -797,6 +817,7 @@ std::shared_ptr<Text> text_105 = std::make_shared<Text>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<A> a_105 = std::make_shared<A>(
@@ -806,6 +827,7 @@ std::shared_ptr<A> a_105 = std::make_shared<A>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<Text> text_106 = std::make_shared<Text>(
@@ -838,6 +860,7 @@ std::shared_ptr<Text> text_110 = std::make_shared<Text>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<A> a_110 = std::make_shared<A>(
@@ -847,6 +870,7 @@ std::shared_ptr<A> a_110 = std::make_shared<A>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<Text> text_111 = std::make_shared<Text>(
@@ -954,6 +978,7 @@ std::shared_ptr<Text> text_125 = std::make_shared<Text>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<A> a_125 = std::make_shared<A>(
@@ -963,6 +988,7 @@ std::shared_ptr<A> a_125 = std::make_shared<A>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<Text> text_126 = std::make_shared<Text>(
@@ -1040,6 +1066,7 @@ std::shared_ptr<Text> text_136 = std::make_shared<Text>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<A> a_136 = std::make_shared<A>(
@@ -1049,6 +1076,7 @@ std::shared_ptr<A> a_136 = std::make_shared<A>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<Text> text_137 = std::make_shared<Text>(
@@ -1156,6 +1184,7 @@ std::shared_ptr<Text> text_151 = std::make_shared<Text>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<A> a_151 = std::make_shared<A>(
@@ -1165,6 +1194,7 @@ std::shared_ptr<A> a_151 = std::make_shared<A>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<Text> text_152 = std::make_shared<Text>(
@@ -1452,6 +1482,7 @@ std::shared_ptr<Text> text_190 = std::make_shared<Text>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<A> a_190 = std::make_shared<A>(
@@ -1461,6 +1492,7 @@ std::shared_ptr<A> a_190 = std::make_shared<A>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<Text> text_191 = std::make_shared<Text>(
@@ -1628,6 +1660,7 @@ std::shared_ptr<Text> text_213 = std::make_shared<Text>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<A> a_213 = std::make_shared<A>(
@@ -1637,6 +1670,7 @@ std::shared_ptr<A> a_213 = std::make_shared<A>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "spider/policies"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<Text> text_214 = std::make_shared<Text>(
@@ -1819,6 +1853,7 @@ std::shared_ptr<Text> text_238 = std::make_shared<Text>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "mirror/index"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<A> a_238 = std::make_shared<A>(
@@ -1828,6 +1863,7 @@ std::shared_ptr<A> a_238 = std::make_shared<A>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "mirror/index"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<Text> text_239 = std::make_shared<Text>(

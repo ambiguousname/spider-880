@@ -6,6 +6,7 @@ std::shared_ptr<Text> text_5 = std::make_shared<Text>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "history/index"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<A> a_5 = std::make_shared<A>(
@@ -15,6 +16,7 @@ std::shared_ptr<A> a_5 = std::make_shared<A>(
 	},
 	std::unordered_map<std::string, std::string>{
 		{"href", "history/index"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<P> p_4 = std::make_shared<P>(

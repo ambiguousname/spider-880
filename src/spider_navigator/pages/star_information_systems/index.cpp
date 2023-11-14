@@ -143,6 +143,7 @@ std::shared_ptr<Text> text_21 = std::make_shared<Text>(
 	std::unordered_map<std::string, std::string>{
 		{"passwords", "system=star_information_systems/system,metsys=star_information_systems/lastresort"},
 		{"href", "fivecoolbeans/index"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<A> a_21 = std::make_shared<A>(
@@ -153,6 +154,7 @@ std::shared_ptr<A> a_21 = std::make_shared<A>(
 	std::unordered_map<std::string, std::string>{
 		{"passwords", "system=star_information_systems/system,metsys=star_information_systems/lastresort"},
 		{"href", "fivecoolbeans/index"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<Text> text_22 = std::make_shared<Text>(
@@ -170,6 +172,7 @@ std::shared_ptr<Text> text_24 = std::make_shared<Text>(
 	std::unordered_map<std::string, std::string>{
 		{"passwords", "system=star_information_systems/system,metsys=star_information_systems/lastresort"},
 		{"href", "lschiff/index"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<A> a_24 = std::make_shared<A>(
@@ -180,6 +183,7 @@ std::shared_ptr<A> a_24 = std::make_shared<A>(
 	std::unordered_map<std::string, std::string>{
 		{"passwords", "system=star_information_systems/system,metsys=star_information_systems/lastresort"},
 		{"href", "lschiff/index"},
+		{"color", "4"},
 	}
 );
 std::shared_ptr<Text> text_25 = std::make_shared<Text>(
