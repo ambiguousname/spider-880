@@ -3,6 +3,7 @@
 #include <sstream>
 #include <util/window_management.h>
 #include <FL/Fl.H>
+#include <FL/fl_message.H>
 
 WinScreen::WinScreen() : GlWindow(0, 0, 300, 300, "You Win :)") {
 	std::istringstream in(win_obj);
@@ -22,14 +23,22 @@ void WinScreen::initialize() {
 	// test->translate(vec3(0.0f, 0.0f, 2.0f));
 }
 
+void winScreen(void*) {
+	WindowManagement::hide_all_windows();
+	fl_alert("Well, you win. Congrats.");
+}
+
+bool isClosing = false;
+
 void WinScreen::glDraw(const mat4& projection, const mat4& view, float time) {
 	tick++;
 	test->rotate(radians(0.1f), vec3(1.0f, 1.0f, 1.0f));
 	test->draw(projection, view, time);
 	// camera.translate(vec3(0.0f, 0.0f, -0.1f));
-	if (tick > 600) {
+	if (!isClosing && tick > 600) {
+		isClosing = true;
 		fullscreen();
 		// Adding this to the main thread makes it memory safe to close:
-		Fl::add_timeout(1.0, WindowManagement::hide_all_windows);
+		Fl::add_timeout(1.0, winScreen);
 	}
 }
