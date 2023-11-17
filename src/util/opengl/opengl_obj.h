@@ -12,13 +12,13 @@ using namespace glm;
 
 class Material {
 	protected:
-
-	public:
 	std::shared_ptr<Shader> shader;
 	GLuint elements_ibo;
 
 	std::vector<GLushort> elements;
 	std::vector<vec3> normals;
+
+	public:
 	~Material() {
 		shader.reset();
 	}
