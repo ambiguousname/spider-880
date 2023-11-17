@@ -71,12 +71,12 @@ void Object::load_from_stream(std::istream &in) {
 			v.w = 1.0f;
 			vertices.push_back(v);
 		} else if (line.substr(0, 7) == "usemtl ") {
-			materials.push_back(std::make_shared<Material>());
+			materials.insert(materials.begin(), std::make_shared<Material>());
 		} else if (line.substr(0, 2) == "f ") {
 			if (materials.size() <= 0) {
-				materials.push_back(std::make_shared<Material>());
+				materials.insert(materials.begin(), std::make_shared<Material>());
 			}
-			materials.back()->update_from_obj_line(line);
+			materials.front()->update_from_obj_line(line);
 		}
 	}
 	for (auto m : materials) {
