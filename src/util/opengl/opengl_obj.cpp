@@ -70,7 +70,7 @@ void Object::load_from_stream(std::istream &in) {
 
 			v.w = 1.0f;
 			vertices.push_back(v);
-		} else if (line.substr(0, 6) == "usemtl") {
+		} else if (line.substr(0, 7) == "usemtl ") {
 			materials.push_back(std::make_shared<Material>());
 		} else if (line.substr(0, 2) == "f ") {
 			if (materials.size() <= 0) {
