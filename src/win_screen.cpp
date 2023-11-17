@@ -10,7 +10,7 @@ WinScreen::WinScreen() : GlWindow(0, 0, 300, 300, "You Win :)") {
 	test = new Object(in);
 	test->translate(vec3(0, 0, 0.5));
 	std::shared_ptr<Shader> base(std::make_shared<Shader>("assets/shaders/vertex/base.glsl", "assets/shaders/frag/base.glsl"));
-	test->setShader(base);
+	test->setShader(0, base);
 	mode(FL_RGB | FL_DEPTH | FL_OPENGL3);
 	end();
 	show();

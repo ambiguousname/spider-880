@@ -40,7 +40,9 @@ void overrideCitizenSelection(Fl_Widget*) {
 	fclose(f);
 }
 
+#include "win_screen.h"
 int main(int argc, char **argv) {
+	new WinScreen();
 	int x, y, w, h;
 	Fl::screen_work_area(x, y, w, h);
 	Fl_Window* main_window = new Fl_Window(x + w/2, y + h/4, 300, 350, "Spider-880");

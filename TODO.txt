@@ -8,3 +8,4 @@
 - Sound Effects (maybe some ambience type music to make browsing fun)
 - Mac Build
 - Windows Build
+- Linux Build

@@ -5,7 +5,7 @@ DeadbeefGL::DeadbeefGL(int x, int y, int w, int h, const char* l) : GlWindow(x, 
 	std::istringstream in(ship_obj);
 	ship = new Object(in);
 	std::shared_ptr<Shader> base(std::make_shared<Shader>(nullptr, nullptr));
-	ship->setShader(base);
+	ship->setShader(0, base);
 }
 
 void DeadbeefGL::initialize() {

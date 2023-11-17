@@ -97,7 +97,7 @@ void Shader::useProgram() {
 	glUseProgram(program_idx);
 }
 
-void Shader::setAttrs(f32* model_ptr, const f32* projection_ptr, const f32* view_ptr, float time) {
+void Shader::setAttrs(const f32* model_ptr, const f32* projection_ptr, const f32* view_ptr, float time) {
 	glUniformMatrix4fv(model_idx, 1, GL_FALSE, model_ptr);
 	glUniformMatrix4fv(projection_idx, 1, GL_FALSE, projection_ptr);
 	glUniformMatrix4fv(view_idx, 1, GL_FALSE, view_ptr);
