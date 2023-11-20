@@ -8,20 +8,46 @@
 void Material::update_from_obj_line(std::string line) {
 	if (line.substr(0, 2) == "f ") {
 		std::istringstream s(line.substr(2));
-		GLushort a,b,c;
-		s >> a;
-		s >> b;
-		s >> c;
-		a--; b--; c--;
-		elements.push_back(a);
-		elements.push_back(b);
-		elements.push_back(c);
+
+		std::string token;
+
+		const std::string delim = "/";
+		
+		// For .OBJ files, we have one space for each 
+		for (int i = 0; i < 3; i++) {
+			s >> token;
+
+			size_t pos = 0;
+			std::string subtoken;
+			for (int j = 0; pos != std::string::npos; pos = token.find(delim), j++) {
+				subtoken = token.substr(0, pos);
+				token.erase(0, pos + delim.length());
+
+				GLushort item = std::stoi(subtoken);
+				switch(j) {
+					case 0:
+						elements.push_back(item--);
+					break;
+					case 1:
+					break;
+					case 2:
+					break;
+					default:
+						std::cerr << "Unexpected subtoken at index " << j << " with token " << token << " at line " << line << std::endl;
+					break;
+				}
+			}
+
+			GLushort element = std::stoi(token);
+			element--;
+			elements.push_back(element);
+		}
 	}
 }
 
 void Material::finalize_creation() {
 	// normals.resize(vertices.size(), vec3(0, 0, 0));
-	// for (int i = 0; i < elements.size(); i+= 3) {
+	// for (size_t i = 0; i < elements.size(); i+= 3) {
 	// 	GLushort ia = elements[i];
     //     GLushort ib = elements[i+1];
     //     GLushort ic = elements[i+2];

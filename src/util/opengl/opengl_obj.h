@@ -59,7 +59,7 @@ class Object {
 	Object() {}
 	~Object();
 
-	void setShader(int index, std::shared_ptr<Shader> s) {
+	void setShader(size_t index, std::shared_ptr<Shader> s) {
 		if (index >= 0 && index < materials.size()) {
 			materials[index]->setShader(s);
 		} else {

@@ -225,7 +225,7 @@ void DatabaseWindow::search(Fl_Widget*, void* s) {
 	}
 
 	std::string full_search_text = "";
-	for (long long unsigned int i = 0; i < search_text.size(); i++) {
+	for (size_t i = 0; i < search_text.size(); i++) {
 		full_search_text += search_text[i];
 		if (i < search_text.size() - 1) {
 			full_search_text += " INTERSECT ";

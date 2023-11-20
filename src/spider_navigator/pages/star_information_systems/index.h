@@ -1,6 +1,6 @@
 #pragma once
-#include <lschiff/index.h>
 #include "spider_navigator/page.h"
+#include <lschiff/index.h>
 #include <fivecoolbeans/index.h>
 #include <star_information_systems/lastresort.h>
 #include <star_information_systems/system.h>

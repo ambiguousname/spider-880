@@ -1,6 +1,6 @@
 #pragma once
-#include <gertwig_blog/navsab.h>
 #include "spider_navigator/page.h"
+#include <gertwig_blog/navsab.h>
 class GertwigBlogIndexHTMLWindow : public HTMLWindow {
 	public:
 	GertwigBlogIndexHTMLWindow(int x, int y, int w, int h);

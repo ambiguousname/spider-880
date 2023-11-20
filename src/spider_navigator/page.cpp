@@ -302,7 +302,7 @@ int HTMLWindow::handle(int event) {
 			std::vector<Password> matches = {};
 
 			for (auto p: passwords) {
-				int size = p.password.size();
+				size_t size = p.password.size();
 				if (p.password[size - 1] == typing_buffer.back()) {
 					Password match = Password(p);
 					match.curr_index = size - 1;
@@ -312,7 +312,7 @@ int HTMLWindow::handle(int event) {
 
 			// Avoid integer underflow: https://stackoverflow.com/questions/4205720/iterating-over-a-vector-in-reverse-direction
 			if (typing_buffer.size() > 1 && matches.size() > 0) {
-				for (int i = typing_buffer.size() - 1; i-- >= 0; ) {
+				for (size_t i = typing_buffer.size() - 1; i-- >= 0; ) {
 					bool pwd_found = false;
 					for (auto m = matches.begin(); m != matches.end();) {
 						m->curr_index -= 1;
