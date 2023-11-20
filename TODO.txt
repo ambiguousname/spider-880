@@ -9,3 +9,5 @@
 - Mac Build
 - Windows Build
 - Linux Build
+
+- Switch to CMAKE/Autoconf?

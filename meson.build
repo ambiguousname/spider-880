@@ -9,3 +9,4 @@ if build_machine.system() == 'windows'
 endif
 
 subdir('src')
+subdir('assets')

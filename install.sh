@@ -11,6 +11,12 @@ if ! command -v gcc > /dev/null; then
 	fi
 fi
 
+if ! command -v m4 > /dev/null; then
+	if  command -v pacman > /dev/null ; then
+		pacman -S m4
+	fi
+fi
+
 if ! command -v pip > /dev/null; then
 	if  command -v pacman > /dev/null ; then
 		pacman -S mingw-w64-ucrt-x86_64-python mingw-w64-ucrt-x86_64-python-pip
