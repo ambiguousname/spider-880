@@ -38,11 +38,11 @@ void Material::update_from_element_line(std::string line, std::vector<Vertex>& v
 					break;
 					case 1:
 						// Should duplicate vertices if you want flat shading to avoid sharing normals (and arbitrary selection of normals)
-						// vertices[elements.back()].normal = normals[item];
+						vertices[elements.back()].normal = normals[item];
 					break;
 					case 2:
 						// Same with UVs.
-						// vertices[elements.back()].uv = uvs[item];
+						vertices[elements.back()].uv = uvs[item];
 					break;
 					default:
 						std::cerr << "Unexpected subtoken at index " << j << " with token " << token << " at line " << line << std::endl;
@@ -167,16 +167,20 @@ void Object::draw(const mat4& projection, const mat4& view, float time) {
 	
 	// Enable drawing position:
 	glEnableVertexAttribArray(position_idx);
+	glEnableVertexAttribArray(normal_idx);
+	glEnableVertexAttribArray(uv_idx);
 	glBindBuffer(GL_ARRAY_BUFFER, vertices_vbo);
 
 	// Connect the current array buffer to the attribute array:
 	glVertexAttribPointer(position_idx, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-	// glVertexAttribPointer(normal_idx, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(vec4));
-	// glVertexAttribPointer(uv_idx, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(vec4) + sizeof(vec3)));
+	glVertexAttribPointer(normal_idx, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(vec4));
+	glVertexAttribPointer(uv_idx, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(vec4) + sizeof(vec3)));
 
 	for (auto m: materials) {
 		m->draw(model, projection, view, time);
 	}
 
 	glDisableVertexAttribArray(position_idx);
+	glDisableVertexAttribArray(normal_idx);
+	glDisableVertexAttribArray(uv_idx);
 }
