@@ -16,15 +16,11 @@ class Material {
 	GLuint elements_ibo;
 
 	std::vector<GLushort> elements;
-	std::vector<vec3> normals;
 
 	public:
-	~Material() {
-		shader.reset();
-	}
+	~Material();
 
-	void update_from_obj_line(std::string line);
-	void finalize_creation();
+	void update_from_element_line(std::string line, std::vector<Vertex>& vertices, const std::vector<vec3>& normals, const std::vector<vec2>& uvs);
 
 	void initialize();
 	void update_buffers();
@@ -35,19 +31,30 @@ class Material {
 	}
 };
 
+
+struct Vertex {
+	vec4 position;
+	vec3 normal;
+	vec2 uv;
+};
+
 class Object {
 	protected:
 	mat4 model = mat4(1.0f);
 
 	std::vector<std::shared_ptr<Material>> materials;
 	// We use vec4 for easy matrix math:
-	std::vector<vec4> vertices;
+	std::vector<vec3> normals;
+	std::vector<vec2> uv;
+
+	std::vector<Vertex> vertices;
 	
 	GLuint vertices_vbo;
 
 	// These should be set in a shader GLSL:
 	GLuint position_idx = 0;
 	GLuint normal_idx = 1;
+	GLuint uv_idx = 2;
 
 	void update_buffers();
 
