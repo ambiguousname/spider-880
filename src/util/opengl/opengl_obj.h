@@ -13,7 +13,7 @@ using namespace glm;
 struct Vertex {
 	vec4 position;
 	vec3 normal;
-	vec2 uv;
+	vec2 texcoord;
 };
 
 class Material {
@@ -26,7 +26,7 @@ class Material {
 	public:
 	~Material();
 
-	void update_from_element_line(std::string line, std::vector<Vertex>& vertices, const std::vector<vec3>& normals, const std::vector<vec2>& uvs);
+	void update_from_element_line(std::string line, std::vector<Vertex>& vertices, const std::vector<vec3>& normals, const std::vector<vec2>& texcoords);
 
 	void initialize();
 	void update_buffers();
@@ -44,7 +44,7 @@ class Object {
 	std::vector<std::shared_ptr<Material>> materials;
 	// We use vec4 for easy matrix math:
 	std::vector<vec3> normals;
-	std::vector<vec2> uv;
+	std::vector<vec2> texcoords;
 
 	std::vector<Vertex> vertices;
 	
@@ -53,7 +53,7 @@ class Object {
 	// These should be set in a shader GLSL:
 	GLuint position_idx = 0;
 	GLuint normal_idx = 1;
-	GLuint uv_idx = 2;
+	GLuint texcoord_idx = 2;
 
 	void update_buffers();
 

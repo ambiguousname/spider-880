@@ -10,14 +10,14 @@ Material::~Material() {
 }
 
 // Modified from https://en.wikibooks.org/wiki/OpenGL_Programming/Modern_OpenGL_Tutorial_Load_OBJ
-void Material::update_from_element_line(std::string line, std::vector<Vertex>& vertices, const std::vector<vec3>& normals, const std::vector<vec2>& uvs) {
+void Material::update_from_element_line(std::string line, std::vector<Vertex>& vertices, const std::vector<vec3>& normals, const std::vector<vec2>& texcoords) {
 	if (line.substr(0, 2) == "f ") {
 		std::istringstream s(line.substr(2));
 
 		std::string token;
 		const std::string delim = "/";
 		
-		// For .OBJ files, we have one space for each 
+		// For .OBJ files, we have one space for each vertex.
 		for (int i = 0; i < 3; i++) {
 			s >> token;
 
@@ -37,14 +37,14 @@ void Material::update_from_element_line(std::string line, std::vector<Vertex>& v
 						elements.push_back(item);
 					break;
 					case 1:
-						if (item < uvs.size()) {
-							// Same with UVs.
-							vertices[elements.back()].uv = uvs[item];
+						if (item < texcoords.size()) {
+							vertices[elements.back()].texcoord = texcoords[item];
 						}
 					break;
 					case 2:
 						if (item < normals.size()) {
 							// Should duplicate vertices if you want flat shading to avoid sharing normals (and arbitrary selection of normals)
+							// Same with tex coords.
 							vertices[elements.back()].normal = normals[item];
 						}
 					break;
@@ -111,7 +111,7 @@ void Object::load_from_stream(std::istream &in) {
 			s >> texture.x;
 			s >> texture.y;
 
-			uv.push_back(texture);
+			texcoords.push_back(texture);
 		} else if (line.substr(0, 7) == "usemtl ") {
 			materials.insert(materials.begin(), std::make_shared<Material>());
 		} else if (line.substr(0, 2) == "f ") {
@@ -119,7 +119,7 @@ void Object::load_from_stream(std::istream &in) {
 				materials.insert(materials.begin(), std::make_shared<Material>());
 			}
 
-			materials.front()->update_from_element_line(line, vertices, normals, uv);
+			materials.front()->update_from_element_line(line, vertices, normals, texcoords);
 		}
 	}
 }
@@ -161,7 +161,7 @@ void Object::update_buffers() {
 	// We can delete data after use:
 	// TODO: Probably shouldn't use this if we want to dynamically update the buffers.
 	normals.clear();
-	uv.clear();
+	texcoords.clear();
 	vertices.clear();
 }
 
@@ -172,13 +172,13 @@ void Object::draw(const mat4& projection, const mat4& view, float time) {
 	// Enable drawing position:
 	glEnableVertexAttribArray(position_idx);
 	glEnableVertexAttribArray(normal_idx);
-	glEnableVertexAttribArray(uv_idx);
+	glEnableVertexAttribArray(texcoord_idx);
 	glBindBuffer(GL_ARRAY_BUFFER, vertices_vbo);
 
 	// Connect the current array buffer to the attribute array:
 	glVertexAttribPointer(position_idx, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
 	glVertexAttribPointer(normal_idx, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(vec4));
-	glVertexAttribPointer(uv_idx, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(vec4) + sizeof(vec3)));
+	glVertexAttribPointer(texcoord_idx, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(vec4) + sizeof(vec3)));
 
 	for (auto m: materials) {
 		m->draw(model, projection, view, time);
@@ -186,5 +186,5 @@ void Object::draw(const mat4& projection, const mat4& view, float time) {
 
 	glDisableVertexAttribArray(position_idx);
 	glDisableVertexAttribArray(normal_idx);
-	glDisableVertexAttribArray(uv_idx);
+	glDisableVertexAttribArray(texcoord_idx);
 }
