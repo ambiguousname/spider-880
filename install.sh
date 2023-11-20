@@ -22,7 +22,7 @@ fi
 
 if ! command -v meson > /dev/null; then
 	if  command -v pacman > /dev/null ; then
-		pacman -S mingw-w64-ucrt-x86_64-ninja
+		pacman -S mingw-w64-x86_64-meson
 	elif command -v brew > /dev/null ; then
 		brew install meson-python
 		pip3 install meson
