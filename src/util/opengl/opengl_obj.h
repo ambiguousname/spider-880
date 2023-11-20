@@ -10,6 +10,12 @@
 
 using namespace glm;
 
+struct Vertex {
+	vec4 position;
+	vec3 normal;
+	vec2 uv;
+};
+
 class Material {
 	protected:
 	std::shared_ptr<Shader> shader;
@@ -29,13 +35,6 @@ class Material {
 	void setShader(std::shared_ptr<Shader> s) {
 		shader = s;
 	}
-};
-
-
-struct Vertex {
-	vec4 position;
-	vec3 normal;
-	vec2 uv;
 };
 
 class Object {
@@ -67,7 +66,7 @@ class Object {
 	~Object();
 
 	void setShader(size_t index, std::shared_ptr<Shader> s) {
-		if (index >= 0 && index < materials.size()) {
+		if (index < materials.size()) {
 			materials[index]->setShader(s);
 		} else {
 			std::cerr << "Invalid shader index " << index << std::endl;

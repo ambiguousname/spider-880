@@ -13,42 +13,53 @@ Material::~Material() {
 void Material::update_from_element_line(std::string line, std::vector<Vertex>& vertices, const std::vector<vec3>& normals, const std::vector<vec2>& uvs) {
 	if (line.substr(0, 2) == "f ") {
 		std::istringstream s(line.substr(2));
+		GLushort a,b,c;
+		s >> a;
+		s >> b;
+		s >> c;
+		a--; b--; c--;
+		elements.push_back(a);
+		elements.push_back(b);
+		elements.push_back(c);
 
-		std::string token;
+		// std::string token;
 
-		const std::string delim = "/";
+		// const std::string delim = "/";
 		
-		// For .OBJ files, we have one space for each 
-		for (int i = 0; i < 3; i++) {
-			s >> token;
+		// // For .OBJ files, we have one space for each 
+		// for (int i = 0; i < 3; i++) {
+		// 	s >> token;
 
-			size_t pos = 0;
-			std::string subtoken;
+		// 	size_t pos = 0;
+		// 	std::string subtoken;
 
-			for (int j = 0; pos != std::string::npos; pos = token.find(delim), j++) {
-				subtoken = token.substr(0, pos);
-				token.erase(0, pos + delim.length());
+		// 	for (int j = 0; pos != std::string::npos; pos = token.find(delim), j++) {
+		// 		if (pos == 0) {
+		// 			pos++;
+		// 		}
+		// 		subtoken = token.substr(0, pos);
+		// 		token.erase(0, pos + delim.length());
 
-				GLushort item = std::stoi(subtoken);
-				item--;
-				switch(j) {
-					case 0:
-						elements.push_back(item);
-					break;
-					case 1:
-						// Should duplicate vertices if you want flat shading to avoid sharing normals (and arbitrary selection of normals)
-						vertices[elements.back()].normal = normals[item];
-					break;
-					case 2:
-						// Same with UVs.
-						vertices[elements.back()].uv = uvs[item];
-					break;
-					default:
-						std::cerr << "Unexpected subtoken at index " << j << " with token " << token << " at line " << line << std::endl;
-					break;
-				}
-			}
-		}
+		// 		GLushort item = std::stoi(subtoken);
+		// 		item--;
+		// 		switch(j) {
+		// 			case 0:
+		// 				elements.push_back(item);
+		// 			break;
+		// 			case 1:
+		// 				// Should duplicate vertices if you want flat shading to avoid sharing normals (and arbitrary selection of normals)
+		// 				// vertices[elements.back()].normal = normals[item];
+		// 			break;
+		// 			case 2:
+		// 				// Same with UVs.
+		// 				// vertices[elements.back()].uv = uvs[item];
+		// 			break;
+		// 			default:
+		// 				std::cerr << "Unexpected subtoken at index " << j << " with token " << token << " at line " << line << std::endl;
+		// 			break;
+		// 		}
+		// 	}
+		// }
 	}
 }
 
@@ -153,6 +164,8 @@ void Object::update_buffers() {
 	glBindBuffer(GL_ARRAY_BUFFER, vertices_vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
 
+	// We can delete data after use:
+	// TODO: Probably shouldn't use this if we want to dynamically update the buffers.
 	normals.clear();
 	uv.clear();
 	vertices.clear();
@@ -168,8 +181,8 @@ void Object::draw(const mat4& projection, const mat4& view, float time) {
 
 	// Connect the current array buffer to the attribute array:
 	glVertexAttribPointer(position_idx, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-	glVertexAttribPointer(normal_idx, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(vec4));
-	glVertexAttribPointer(uv_idx, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(vec4) + sizeof(vec3)));
+	// glVertexAttribPointer(normal_idx, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(vec4));
+	// glVertexAttribPointer(uv_idx, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(sizeof(vec4) + sizeof(vec3)));
 
 	for (auto m: materials) {
 		m->draw(model, projection, view, time);

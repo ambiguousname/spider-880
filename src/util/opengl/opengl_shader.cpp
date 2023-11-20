@@ -45,10 +45,10 @@ void Shader::loadFromString(const char* vertex, const char* frag) {
 		glShaderSource(vertex_shader, 1, vertex_source, NULL);
 		glCompileShader(vertex_shader);
 
-		glGetProgramiv(program_idx, GL_COMPILE_STATUS, &success);
+		glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
 
 		if(!success) {
-			glGetProgramInfoLog(program_idx, 512, NULL, infoLog);
+			glGetShaderInfoLog(vertex_shader, 512, NULL, infoLog);
 			std::cerr << "Vertex Shader Program Compiling Failed\n" << infoLog << std::endl;
 		}
 	}
@@ -61,9 +61,9 @@ void Shader::loadFromString(const char* vertex, const char* frag) {
 		glShaderSource(frag_shader, 1, frag_source, NULL);
 		glCompileShader(frag_shader);
 		
-		glGetProgramiv(program_idx, GL_COMPILE_STATUS, &success);
+		glGetShaderiv(frag_shader, GL_COMPILE_STATUS, &success);
 		if (!success) {
-			glGetProgramInfoLog(program_idx, 512, NULL, infoLog);
+			glGetShaderInfoLog(frag_shader, 512, NULL, infoLog);
 			std::cerr << "Frag Shader Program Compiling Failed\n" << infoLog << std::endl;
 		}
 	}
