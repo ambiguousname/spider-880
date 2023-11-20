@@ -13,53 +13,43 @@ Material::~Material() {
 void Material::update_from_element_line(std::string line, std::vector<Vertex>& vertices, const std::vector<vec3>& normals, const std::vector<vec2>& uvs) {
 	if (line.substr(0, 2) == "f ") {
 		std::istringstream s(line.substr(2));
-		GLushort a,b,c;
-		s >> a;
-		s >> b;
-		s >> c;
-		a--; b--; c--;
-		elements.push_back(a);
-		elements.push_back(b);
-		elements.push_back(c);
 
-		// std::string token;
-
-		// const std::string delim = "/";
+		std::string token;
+		const std::string delim = "/";
 		
-		// // For .OBJ files, we have one space for each 
-		// for (int i = 0; i < 3; i++) {
-		// 	s >> token;
+		// For .OBJ files, we have one space for each 
+		for (int i = 0; i < 3; i++) {
+			s >> token;
 
-		// 	size_t pos = 0;
-		// 	std::string subtoken;
+			std::size_t pos = 0;
+			int j = 0;
 
-		// 	for (int j = 0; pos != std::string::npos; pos = token.find(delim), j++) {
-		// 		if (pos == 0) {
-		// 			pos++;
-		// 		}
-		// 		subtoken = token.substr(0, pos);
-		// 		token.erase(0, pos + delim.length());
+			do {
+				pos = token.find(delim);
 
-		// 		GLushort item = std::stoi(subtoken);
-		// 		item--;
-		// 		switch(j) {
-		// 			case 0:
-		// 				elements.push_back(item);
-		// 			break;
-		// 			case 1:
-		// 				// Should duplicate vertices if you want flat shading to avoid sharing normals (and arbitrary selection of normals)
-		// 				// vertices[elements.back()].normal = normals[item];
-		// 			break;
-		// 			case 2:
-		// 				// Same with UVs.
-		// 				// vertices[elements.back()].uv = uvs[item];
-		// 			break;
-		// 			default:
-		// 				std::cerr << "Unexpected subtoken at index " << j << " with token " << token << " at line " << line << std::endl;
-		// 			break;
-		// 		}
-		// 	}
-		// }
+				std::string subtoken = token.substr(0, pos);
+				token.erase(0, pos + delim.length());
+
+				GLushort item = std::stoi(subtoken);
+				item--;
+				switch(j) {
+					case 0:
+						elements.push_back(item);
+					break;
+					case 1:
+						// Should duplicate vertices if you want flat shading to avoid sharing normals (and arbitrary selection of normals)
+						// vertices[elements.back()].normal = normals[item];
+					break;
+					case 2:
+						// Same with UVs.
+						// vertices[elements.back()].uv = uvs[item];
+					break;
+					default:
+						std::cerr << "Unexpected subtoken at index " << j << " with token " << token << " at line " << line << std::endl;
+					break;
+				}
+			} while(pos != std::string::npos, j++);
+		}
 	}
 }
 
