@@ -37,12 +37,16 @@ void Material::update_from_element_line(std::string line, std::vector<Vertex>& v
 						elements.push_back(item);
 					break;
 					case 1:
-						// Should duplicate vertices if you want flat shading to avoid sharing normals (and arbitrary selection of normals)
-						vertices[elements.back()].normal = normals[item];
+						if (item < uvs.size()) {
+							// Same with UVs.
+							vertices[elements.back()].uv = uvs[item];
+						}
 					break;
 					case 2:
-						// Same with UVs.
-						vertices[elements.back()].uv = uvs[item];
+						if (item < normals.size()) {
+							// Should duplicate vertices if you want flat shading to avoid sharing normals (and arbitrary selection of normals)
+							vertices[elements.back()].normal = normals[item];
+						}
 					break;
 					default:
 						std::cerr << "Unexpected subtoken at index " << j << " with token " << token << " at line " << line << std::endl;
