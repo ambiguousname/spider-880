@@ -5,6 +5,12 @@ if [[ "$OSTYPE" == "darwin*" ]] && ! command -v bash > /dev/null; then
 	exit 1
 fi
 
+if ! command -v gcc > /dev/null; then
+	if  command -v pacman > /dev/null ; then
+		pacman -S mingw-w64-x86_64-toolchain
+	fi
+fi
+
 if ! command -v pip > /dev/null; then
 	if  command -v pacman > /dev/null ; then
 		pacman -S mingw-w64-ucrt-x86_64-python mingw-w64-ucrt-x86_64-python-pip
@@ -19,9 +25,10 @@ if ! command -v meson > /dev/null; then
 		pacman -S mingw-w64-ucrt-x86_64-ninja
 	elif command -v brew > /dev/null ; then
 		brew install meson-python
+		pip3 install meson
 	else
 		sudo apt-get install ninja-build
-	pip3 install meson
+		pip3 install meson
 	fi
 fi
 
