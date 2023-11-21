@@ -8,6 +8,7 @@ define(`import', `dnl
 divert(-1)
 
 // PI Definition.
+// You'll notice we "undefine" on declaration to avoid causing a loop of dependencies.
 define(`pi', `undefine(`pi')dnl
 #define M_PI 3.14159265358979323846')
 
