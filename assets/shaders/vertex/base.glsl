@@ -1,5 +1,7 @@
 #version 330 core
 
+import(noise)
+
 layout (location=0) in vec4 position;
 
 out vec4 vertPos;
@@ -8,11 +10,6 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 uniform float time;
-
-// Pseudo-random:
-float rand(vec2 co){
-    return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
-}
 
 void main() {
 	float timeOffset = 10 * rand(position.xz);
