@@ -1,12 +1,18 @@
-define(`struct ', `
-`struct' ')dnl
-dnl
+divert(-1)
+changecom(`//') 
+
+// Matching comments to GLSL comments.
+
+
+// Import system by just defining a bunch of macros to "import".
 define(`import', `dnl
-dnl
-define(`pi', `dnl
-undefine(`pi')dnl
-#define M_PI 3.14159265358979323846')dnl
-dnl
+divert(-1)
+
+// PI Definition.
+define(`pi', `undefine(`pi')dnl
+#define M_PI 3.14159265358979323846')
+
+// Perlin noise.
 define(`noise', `dnl
 undefine(`noise')dnl
 pi()
@@ -50,6 +56,11 @@ float pNoise(vec2 p, int res){
 	float nf = n/normK;
 	return nf*nf*nf*nf;
 }dnl
-')dnl
-$*
-dnl')
+')
+
+// And then copy our import list, to import what we want:
+divert
+$* dnl
+')
+
+divert
