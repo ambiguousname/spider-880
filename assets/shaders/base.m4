@@ -1,7 +1,6 @@
 divert(-1)
+// Matching comments to GLSL comments:
 changecom(`//') 
-
-// Matching comments to GLSL comments.
 
 
 // Import system by just defining a bunch of macros to "import".

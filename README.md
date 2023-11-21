@@ -5,4 +5,6 @@
 - [miniaudio](https://miniaud.io/)
 - [SQLite >=3.43.1](https://www.sqlite.org/index.html)
 - [Meson](https://mesonbuild.com/)
+- [M4](https://www.gnu.org/software/m4/)
+- [Python](https://www.python.org/)
 - [Faker](https://faker.readthedocs.io/en/master/)
