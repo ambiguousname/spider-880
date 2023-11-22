@@ -1,9 +1,6 @@
 #version 330 core
 
-import(rand)
-
-layout (location=0) in vec4 position;
-
+import(inVertex, rand)
 out vec4 vertPos;
 
 uniform mat4 model;

@@ -1,25 +1,35 @@
-divert(-1)
+include(`foreach.m4')dnl
+divert(`-1')
 // Matching comments to GLSL comments:
 changecom(`//') 
 
+// You'll notice we "undefine" on declaration to avoid causing a loop of dependencies.
+define(`importItem', `define(`$1', `dnl
+undefine(`$1')dnl
+$2
+')')
 
 // Import system by just defining a bunch of macros to "import".
 define(`import', `dnl
 divert(-1)
 
-// PI Definition.
-// You'll notice we "undefine" on declaration to avoid causing a loop of dependencies.
-define(`pi', `undefine(`pi')dnl
-#define M_PI 3.14159265358979323846')
+importItem(`inVertex', `dnl
+layout (location=0) in vec4 position;
+layout (location=1) in vec3 normal;
+layout (location=2) in vec2 texcoord;')
 
-define(`rand', `undefine(`rand')dnl
+importItem(`inFrag', `in vec4 vertPos;')
+
+// PI Definition.
+importItem(`pi', `#define M_PI 3.14159265358979323846')
+
+importItem(`rand', `dnl
 float rand(vec2 co){
 	return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
 }')
 
 // Perlin noise.
-define(`noise', `dnl
-undefine(`noise')dnl
+importItem(`noise', `dnl
 pi()
 
 // From https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
@@ -58,12 +68,45 @@ float pNoise(vec2 p, int res){
 	}
 	float nf = n/normK;
 	return nf*nf*nf*nf;
-}dnl
-')
+}')
+
+// From https://learnopengl.com/Lighting/Multiple-lights
+importItem(`pointLight', `dnl
+struct PointLight {
+	vec3 position;
+
+	float constant;
+	float linear;
+	float quadratic;
+
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+};
+
+vec3 CalculatePointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
+	vec3 lightDir = normalize(light.position - fragPos);
+    // diffuse shading
+    float diff = max(dot(normal, lightDir), 0.0);
+    // specular shading
+    vec3 reflectDir = reflect(-lightDir, normal);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+    // attenuation
+    float distance    = length(light.position - fragPos);
+    float attenuation = 1.0 / (light.constant + light.linear * distance + 
+  			     light.quadratic * (distance * distance));    
+    // combine results
+    vec3 ambient  = light.ambient  * vec3(texture(material.diffuse, TexCoords));
+    vec3 diffuse  = light.diffuse  * diff * vec3(texture(material.diffuse, TexCoords));
+    vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
+    ambient  *= attenuation;
+    diffuse  *= attenuation;
+    specular *= attenuation;
+    return (ambient + diffuse + specular);
+}')
 
 // And then copy our import list, to import what we want:
-divert
-$* dnl
-')
-
+divert(0)dnl
+foreach(`x', ($*), `x
+')')
 divert

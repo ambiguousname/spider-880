@@ -12,6 +12,11 @@ while [[ $# -gt 0 ]]; do
 			shift
 			shift
 			;;
+		-I)
+			INCLUDE="$2"
+			shift
+			shift
+			;;
 		*)
 			ARGS+=("$1")
 			shift
@@ -23,5 +28,5 @@ for item in "${ARGS[@]}"
 do
 	DIR=$(dirname $TARGET/$item)
 	mkdir -p $DIR
-	m4 $BASE/base.m4 $BASE/$item > $TARGET/$item
+	m4 --include=$INCLUDE $BASE/base.m4 $BASE/$item > $TARGET/$item
 done

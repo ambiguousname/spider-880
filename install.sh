@@ -11,6 +11,7 @@ if ! command -v gcc > /dev/null; then
 	fi
 fi
 
+# For m4
 if ! command -v m4 > /dev/null; then
 	if  command -v pacman > /dev/null ; then
 		pacman -S m4
