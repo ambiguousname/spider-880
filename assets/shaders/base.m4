@@ -119,5 +119,6 @@ vec3 CalculatePointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewD
 // And then copy our import list, to import what we want:
 divert(0)dnl
 foreach(`x', ($*), `x
-')')
+')dnl
+')
 divert
