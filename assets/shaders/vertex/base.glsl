@@ -1,12 +1,6 @@
 #version 330 core
 
-import(inVertex, rand)
-out vec4 vertPos;
-
-uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
-uniform float time;
+import(rand, inVertex, outVertex, uniforms)
 
 void main() {
 	float timeOffset = 10 * rand(position.xz);
