@@ -12,6 +12,11 @@ divert(-1)
 define(`pi', `undefine(`pi')dnl
 #define M_PI 3.14159265358979323846')
 
+define(`rand', `undefine(`rand')dnl
+float rand(vec2 co){
+	return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
+}')
+
 // Perlin noise.
 define(`noise', `dnl
 undefine(`noise')dnl
@@ -19,9 +24,7 @@ pi()
 
 // From https://gist.github.com/patriciogonzalezvivo/670c22f3966e662d2f83
 
-float rand(vec2 co){
-	return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
-}
+rand()
 
 float noise(vec2 p, float freq ){
 	float unit = 100.0/freq;

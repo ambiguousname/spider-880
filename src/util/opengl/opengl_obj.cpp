@@ -30,6 +30,10 @@ void Material::update_from_element_line(std::string line, std::vector<Vertex>& v
 				std::string subtoken = token.substr(0, pos);
 				token.erase(0, pos + delim.length());
 
+				if (subtoken.size() <= 0) {
+					continue;
+				}
+
 				GLushort item = std::stoi(subtoken);
 				item--;
 				switch(j) {

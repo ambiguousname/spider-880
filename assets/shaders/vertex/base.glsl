@@ -1,6 +1,6 @@
 #version 330 core
 
-import(noise)
+import(rand)
 
 layout (location=0) in vec4 position;
 
