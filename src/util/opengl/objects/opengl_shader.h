@@ -1,5 +1,5 @@
 #pragma once
-#include "gl.h"
+#include "../gl.h"
 #include <sstream>
 #include <glm/glm.hpp>
 

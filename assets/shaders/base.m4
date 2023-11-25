@@ -27,6 +27,16 @@ uniform mat4 view;
 uniform mat4 projection;
 uniform float time;')
 
+importItem(`materials', `dnl
+struct Material {
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+	float shininess;
+};
+
+uniform Material material;')
+
 importItem(`inFrag', `in vec4 vertPos;')
 
 importItem(`outFrag', `out vec4 FragColor;')
@@ -83,6 +93,8 @@ float pNoise(vec2 p, int res){
 
 // From https://learnopengl.com/Lighting/Multiple-lights
 importItem(`pointLight', `dnl
+materials()
+
 struct PointLight {
 	vec3 position;
 
