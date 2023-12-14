@@ -1,1 +1,1 @@
-utillib = static_library('util', ['color.cpp', 'image_box.cpp', 'window_management.cpp', 'opengl/objects/opengl_obj_geometry.cpp', 'opengl/objects/opengl_obj.cpp', 'opengl/objects/opengl_shader.cpp', 'opengl/opengl_window.cpp'])
+utillib = static_library('util', ['color.cpp', 'image_box.cpp', 'sound.cpp', 'window_management.cpp', 'opengl/objects/opengl_obj_geometry.cpp', 'opengl/objects/opengl_obj.cpp', 'opengl/objects/opengl_shader.cpp', 'opengl/opengl_window.cpp'])

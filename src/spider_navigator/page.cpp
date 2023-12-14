@@ -7,7 +7,8 @@
 #include "pages/deadbeef/abababab.h"
 #include "pages/deadbeef/babababa.h"
 #include <stdexcept>
-#include <variant>
+
+#include <util/sound.h>
 
 void aboutCallback(Fl_Widget*, void*) {
 	// fl_message_icon();
@@ -332,6 +333,15 @@ int HTMLWindow::handle(int event) {
 				}
 			}
 		}
+	}
+
+	if (event == FL_PUSH) {
+		static SoundManager::Sound click;
+		if (!click.isLoaded()) {
+			SoundManager::Load("./assets/click.wav", click);
+		}
+		click.setPitch(((float)(rand() % 50) + 50)/100);
+		click.play();
 	}
 	return Fl_Window::handle(event);
 }

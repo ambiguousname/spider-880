@@ -8,8 +8,7 @@
 #include "util/window_management.h"
 #include <murder_blog/murder.h>
 
-#define MINIAUDIO_IMPLEMENTATION
-#include "miniaudio.h"
+#include <util/sound.h>
 
 #ifdef __WIN32
 #include <FL/x.H>
@@ -83,19 +82,14 @@ int main(int argc, char **argv) {
 
 	// TODO: Audio playback for a few sounds (looping backgrounds too)
 	// TODO: OpenGL scares
-	// ma_result result;
-	// ma_engine engine;
-	
-	// result = ma_engine_init(NULL, &engine);
-	// if (result != MA_SUCCESS) {
-	// 	std::cout << "Could not initialize audio engine." << std::endl;
-	// 	return result;
-	// }
+	SoundManager::Initialize();
 
-	// ma_engine_play_sound(&engine, "./assets/zombiegenericshort11.wav", NULL);
+	SoundManager::Sound startup;
+	SoundManager::Load("./assets/startup.wav", startup);
+	startup.play();
 
 	Fl::run();
 	
-    // ma_engine_uninit(&engine);
+	SoundManager::Uninitialize();
 	return 0;
 }
