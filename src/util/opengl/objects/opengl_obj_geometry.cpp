@@ -56,7 +56,9 @@ void ObjectGeometry::update_from_element_line(std::string line, std::vector<Vert
 						std::cerr << "Unexpected subtoken at index " << j << " with token " << token << " at line " << line << std::endl;
 					break;
 				}
-			} while(pos != std::string::npos, j++);
+				j++;
+			}
+			while(pos != std::string::npos);
 		}
 	}
 }

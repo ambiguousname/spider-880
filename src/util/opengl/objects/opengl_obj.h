@@ -11,12 +11,6 @@
 
 using namespace glm;
 
-struct Vertex {
-	vec4 position;
-	vec3 normal;
-	vec2 texcoord;
-};
-
 class Object {
 	protected:
 	mat4 model = mat4(1.0f);

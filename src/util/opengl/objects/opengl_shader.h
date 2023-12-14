@@ -5,6 +5,13 @@
 
 using namespace glm;
 
+struct Material {
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+	float shininess;
+};
+
 class Shader {
 	protected:
 	int program_idx;

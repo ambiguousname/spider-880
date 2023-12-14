@@ -1,7 +1,6 @@
 #pragma once
 #include "../gl.h"
 #include "opengl_shader.h"
-#include "opengl_obj.h"
 
 #include <memory>
 #include <vector>
@@ -9,6 +8,12 @@
 #include <glm/glm.hpp>
 
 using namespace glm;
+
+struct Vertex {
+	vec4 position;
+	vec3 normal;
+	vec2 texcoord;
+};
 
 class ObjectGeometry {
 	protected:
