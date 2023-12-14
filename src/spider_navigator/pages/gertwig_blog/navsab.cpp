@@ -6,6 +6,7 @@ std::shared_ptr<Text> text_4 = std::make_shared<Text>(
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 		{"href", "gertwig_blog/index"},
 		{"color", "4"},
 	}
@@ -17,6 +18,7 @@ std::shared_ptr<A> a_4 = std::make_shared<A>(
 		text_4,
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 		{"href", "gertwig_blog/index"},
 		{"color", "4"},
 	}
@@ -28,6 +30,7 @@ std::shared_ptr<P> p_3 = std::make_shared<P>(
 		a_4,
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<Text> text_6 = std::make_shared<Text>(
@@ -36,6 +39,7 @@ std::shared_ptr<Text> text_6 = std::make_shared<Text>(
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<P> p_6 = std::make_shared<P>(
@@ -45,6 +49,7 @@ std::shared_ptr<P> p_6 = std::make_shared<P>(
 		text_6,
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<Text> text_8 = std::make_shared<Text>(
@@ -53,6 +58,7 @@ std::shared_ptr<Text> text_8 = std::make_shared<Text>(
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<P> p_8 = std::make_shared<P>(
@@ -62,6 +68,7 @@ std::shared_ptr<P> p_8 = std::make_shared<P>(
 		text_8,
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<Text> text_10 = std::make_shared<Text>(
@@ -70,6 +77,7 @@ std::shared_ptr<Text> text_10 = std::make_shared<Text>(
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<P> p_10 = std::make_shared<P>(
@@ -79,6 +87,7 @@ std::shared_ptr<P> p_10 = std::make_shared<P>(
 		text_10,
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<Text> text_12 = std::make_shared<Text>(
@@ -87,6 +96,7 @@ std::shared_ptr<Text> text_12 = std::make_shared<Text>(
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<P> p_12 = std::make_shared<P>(
@@ -96,6 +106,7 @@ std::shared_ptr<P> p_12 = std::make_shared<P>(
 		text_12,
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<Text> text_14 = std::make_shared<Text>(
@@ -104,6 +115,7 @@ std::shared_ptr<Text> text_14 = std::make_shared<Text>(
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<P> p_14 = std::make_shared<P>(
@@ -113,6 +125,7 @@ std::shared_ptr<P> p_14 = std::make_shared<P>(
 		text_14,
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<Text> text_16 = std::make_shared<Text>(
@@ -121,6 +134,7 @@ std::shared_ptr<Text> text_16 = std::make_shared<Text>(
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<P> p_16 = std::make_shared<P>(
@@ -130,6 +144,7 @@ std::shared_ptr<P> p_16 = std::make_shared<P>(
 		text_16,
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<Text> text_18 = std::make_shared<Text>(
@@ -138,6 +153,7 @@ std::shared_ptr<Text> text_18 = std::make_shared<Text>(
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<P> p_18 = std::make_shared<P>(
@@ -147,6 +163,7 @@ std::shared_ptr<P> p_18 = std::make_shared<P>(
 		text_18,
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<Text> text_20 = std::make_shared<Text>(
@@ -155,6 +172,7 @@ std::shared_ptr<Text> text_20 = std::make_shared<Text>(
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<P> p_20 = std::make_shared<P>(
@@ -164,6 +182,7 @@ std::shared_ptr<P> p_20 = std::make_shared<P>(
 		text_20,
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<Text> text_22 = std::make_shared<Text>(
@@ -172,6 +191,7 @@ std::shared_ptr<Text> text_22 = std::make_shared<Text>(
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<P> p_22 = std::make_shared<P>(
@@ -181,6 +201,7 @@ std::shared_ptr<P> p_22 = std::make_shared<P>(
 		text_22,
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<Text> text_24 = std::make_shared<Text>(
@@ -189,6 +210,7 @@ std::shared_ptr<Text> text_24 = std::make_shared<Text>(
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<P> p_24 = std::make_shared<P>(
@@ -198,6 +220,7 @@ std::shared_ptr<P> p_24 = std::make_shared<P>(
 		text_24,
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<Text> text_26 = std::make_shared<Text>(
@@ -206,6 +229,7 @@ std::shared_ptr<Text> text_26 = std::make_shared<Text>(
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<P> p_26 = std::make_shared<P>(
@@ -215,6 +239,7 @@ std::shared_ptr<P> p_26 = std::make_shared<P>(
 		text_26,
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<Text> text_28 = std::make_shared<Text>(
@@ -223,6 +248,7 @@ std::shared_ptr<Text> text_28 = std::make_shared<Text>(
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<P> p_28 = std::make_shared<P>(
@@ -232,6 +258,7 @@ std::shared_ptr<P> p_28 = std::make_shared<P>(
 		text_28,
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<Text> text_30 = std::make_shared<Text>(
@@ -240,6 +267,7 @@ std::shared_ptr<Text> text_30 = std::make_shared<Text>(
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<P> p_30 = std::make_shared<P>(
@@ -249,6 +277,7 @@ std::shared_ptr<P> p_30 = std::make_shared<P>(
 		text_30,
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<Text> text_32 = std::make_shared<Text>(
@@ -257,6 +286,7 @@ std::shared_ptr<Text> text_32 = std::make_shared<Text>(
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<P> p_32 = std::make_shared<P>(
@@ -266,6 +296,7 @@ std::shared_ptr<P> p_32 = std::make_shared<P>(
 		text_32,
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<Text> text_34 = std::make_shared<Text>(
@@ -274,6 +305,7 @@ std::shared_ptr<Text> text_34 = std::make_shared<Text>(
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<P> p_34 = std::make_shared<P>(
@@ -283,6 +315,7 @@ std::shared_ptr<P> p_34 = std::make_shared<P>(
 		text_34,
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<Text> text_36 = std::make_shared<Text>(
@@ -291,6 +324,7 @@ std::shared_ptr<Text> text_36 = std::make_shared<Text>(
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<P> p_36 = std::make_shared<P>(
@@ -300,6 +334,7 @@ std::shared_ptr<P> p_36 = std::make_shared<P>(
 		text_36,
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<Text> text_38 = std::make_shared<Text>(
@@ -308,6 +343,7 @@ std::shared_ptr<Text> text_38 = std::make_shared<Text>(
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<Text> text_40 = std::make_shared<Text>(
@@ -316,6 +352,7 @@ std::shared_ptr<Text> text_40 = std::make_shared<Text>(
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 		{"href", "spider/policies"},
 		{"color", "4"},
 	}
@@ -327,6 +364,7 @@ std::shared_ptr<A> a_40 = std::make_shared<A>(
 		text_40,
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 		{"href", "spider/policies"},
 		{"color", "4"},
 	}
@@ -337,6 +375,7 @@ std::shared_ptr<Text> text_41 = std::make_shared<Text>(
 	std::vector<std::shared_ptr<HTMLNode>>{
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<P> p_38 = std::make_shared<P>(
@@ -348,6 +387,7 @@ std::shared_ptr<P> p_38 = std::make_shared<P>(
 		text_38,
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<Body> body_2 = std::make_shared<Body>(
@@ -374,6 +414,7 @@ std::shared_ptr<Body> body_2 = std::make_shared<Body>(
 		p_3,
 	},
 	std::unordered_map<std::string, std::string>{
+		{"background-color", "11"},
 	}
 );
 std::shared_ptr<HTMLNode> html_1 = std::make_shared<HTMLNode>(
@@ -383,7 +424,7 @@ std::shared_ptr<HTMLNode> html_1 = std::make_shared<HTMLNode>(
 		body_2,
 	},
 	std::unordered_map<std::string, std::string>{
-		{"title", "Brian Gertwig - NavSab Tracker TEST"},
+		{"title", "Brian Gertwig - NavSab Tracker"},
 	}
 );
 }

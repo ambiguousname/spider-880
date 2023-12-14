@@ -1,7 +1,7 @@
 #pragma once
-#include <mirror/index.h>
-#include "spider_navigator/page.h"
 #include <spider/policies.h>
+#include "spider_navigator/page.h"
+#include <mirror/index.h>
 class UbbsUbulletinHTMLWindow : public HTMLWindow {
 	public:
 	UbbsUbulletinHTMLWindow(int x, int y, int w, int h);
