@@ -14,9 +14,12 @@ namespace SoundManager {
 
 		void play();
 		void setPitch(float pitch);
+		void setLoop(bool shouldLoop);
 		bool isLoaded() {
 			return loaded;
 		}
+
+		void awaitPlay();
 	};
 
 	void Initialize();

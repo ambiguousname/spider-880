@@ -40,3 +40,13 @@ void Sound::play() {
 void Sound::setPitch(float pitch) {
 	ma_sound_set_pitch(&sound, pitch);
 }
+
+void Sound::setLoop(bool shouldLoop) {
+	ma_sound_set_looping(&sound, shouldLoop);
+}
+
+void Sound::awaitPlay() {
+	while (ma_sound_is_playing(&sound)) {
+		continue;
+	}
+}

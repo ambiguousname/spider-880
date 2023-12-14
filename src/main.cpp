@@ -9,6 +9,7 @@
 #include <murder_blog/murder.h>
 
 #include <util/sound.h>
+#include <util/base_sounds.h>
 
 #ifdef __WIN32
 #include <FL/x.H>
@@ -21,17 +22,19 @@ bool pagesEnabled = false;
 
 void createBlog(Fl_Widget*) {
 	if (pagesEnabled) {
+		clickSound();
 		int x, y, w, h;
 		Fl::screen_work_area(x, y, w, h);
 		MurderBlogMurderHTMLWindow* page = new MurderBlogMurderHTMLWindow(x + w/4, y + h/4, 300, 300);
 		page->show();
 	} else {
+		errorSound();
 		fl_alert("Browsing is not yet enabled.\nYou must select a name.");
 	}
 }
 
 void overrideCitizenSelection(Fl_Widget*) {
-	fl_alert("Guessing won't get you anywhere.\nLucky you have a connection.");
+	fl_alert("Guessing won't get you anywhere.\nLucky you have an internet connection.");
 	pagesEnabled = true;
 	createBlog(nullptr);
 	FILE* f = fopen("savefile.txt", "w");
@@ -75,7 +78,11 @@ int main(int argc, char **argv) {
 	}
 
 	if (pagesEnabled){
-		createBlog(nullptr);
+		// To avoid playing the sound.
+		int x, y, w, h;
+		Fl::screen_work_area(x, y, w, h);
+		MurderBlogMurderHTMLWindow* page = new MurderBlogMurderHTMLWindow(x + w/4, y + h/4, 300, 300);
+		page->show();
 	} else {
 		db->citizenSelectedOverride(overrideCitizenSelection);
 	}
@@ -89,6 +96,11 @@ int main(int argc, char **argv) {
 	startup.play();
 
 	Fl::run();
+
+	SoundManager::Sound close;
+	SoundManager::Load("./assets/close.wav", close);
+	close.play();
+	close.awaitPlay();
 	
 	SoundManager::Uninitialize();
 	return 0;

@@ -1,6 +1,7 @@
 #include "tags.h"
 #include <FL/fl_draw.H>
 #include <typeinfo>
+#include <util/base_sounds.h>
 
 void HTMLNode::init() {
 	auto color_prop = _attributes.find("color");
@@ -104,7 +105,7 @@ void A::click(int, int, HTMLPage* current_page) {
 		
 		windowCreation constructor;
 		if (current_page->parent_window->getLinkedWindow(search->second, constructor)) {
-			// TODO: Shouldn't be current page, should be the topmost window x and y.
+			clickSound();
 			auto window = constructor(current_page->parent_window->x() + 10, current_page->parent_window->y() + 10, current_page->parent_window->w(), current_page->parent_window->h());
 			window->show();
 		}

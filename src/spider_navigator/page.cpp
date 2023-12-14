@@ -7,11 +7,11 @@
 #include "pages/deadbeef/abababab.h"
 #include "pages/deadbeef/babababa.h"
 #include <stdexcept>
-
-#include <util/sound.h>
+#include <util/base_sounds.h>
 
 void aboutCallback(Fl_Widget*, void*) {
 	// fl_message_icon();
+	errorSound();
 	fl_alert("Bureau of Sabotage Network Navigator\nBy Brian Gertwig");
 }
 
@@ -333,15 +333,6 @@ int HTMLWindow::handle(int event) {
 				}
 			}
 		}
-	}
-
-	if (event == FL_PUSH) {
-		static SoundManager::Sound click;
-		if (!click.isLoaded()) {
-			SoundManager::Load("./assets/click.wav", click);
-		}
-		click.setPitch(((float)(rand() % 50) + 50)/100);
-		click.play();
 	}
 	return Fl_Window::handle(event);
 }

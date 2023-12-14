@@ -4,6 +4,8 @@
 #include <FL/fl_message.H>
 #include "../win_screen.h"
 
+#include <util/base_sounds.h>
+
 DatabaseChoice::DatabaseChoice(int x, int y, int w, int h, database_selector selector_func, ChoiceCategory choice_categories[3]) : Fl_Choice(x, y, w, h), selector(selector_func) {
 
 	for (int i = 0; i < 3; i++) {
@@ -274,6 +276,8 @@ void DatabaseWindow::citizenMurdered(Fl_Widget* browser, void* db_window) {
 			new WinScreen();
 		} else {
 			static_cast<DatabaseWindow*>(db_window)->citizen_db->DeleteCitizen(std::stoi(citizen.id->c_str()), std::stoi(citizen.household_id->c_str()));
+			
+			errorSound();
 			fl_alert("Soul no longer found. Your guess must have been incorrect.");
 
 			self->remove(self->value());
