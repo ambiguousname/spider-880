@@ -20,7 +20,7 @@ fltk = meson.get_compiler('cpp').find_library('fltk', required: true)
 src = ['main.cpp', 'win_screen.cpp']
 windows = import('windows')
 if build_machine.system() == 'windows'
-	src += windows.compile_resources('./icon.rc')
+	src += windows.compile_resources('./icon.rc', './main.rc')
 endif
 
 exe = executable('spider-880', src, link_args : links, include_directories:incdir, dependencies: [fltk, dependency('glm')], link_with: [utillib, pageslib, databaselib])
