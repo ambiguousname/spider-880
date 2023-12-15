@@ -48,6 +48,8 @@ void DatabaseChoice::selectCategory(int index) {
 void DatabaseChoice::update(Fl_Widget* s, void* option) {
 	int value = (*static_cast<int*>(option));
 	
+	clickSound();
+	
 	DatabaseChoice* self = static_cast<DatabaseChoice*>(s);
 	if (value != self->current_option_value){
 		self->current_option_value = value;
@@ -210,7 +212,6 @@ DatabaseWindow::~DatabaseWindow() {
 void DatabaseWindow::updateCategories(int tier) {
 	category_tier = tier;
 
-	clickSound();
 	for (DatabaseChoice* i : choices) {
 		i->selectCategory(category_tier);
 	}

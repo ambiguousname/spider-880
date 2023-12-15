@@ -52,10 +52,10 @@ int main(int argc, char **argv) {
 	title->labelsize(36);
 	Fl_Box* credits = new Fl_Box(20, 120, 260, 120, "By ambiguousname and stargyaru\nMade with:\nFLTK 1.3.8 (w/ LibPNG support)\nminiaudio\nSQLite\nMeson\nPython Faker");
 	credits->box(FL_UP_BOX);
-	Fl_Button* browser = new Fl_Button(100, 240, 100, 50, "Launch Browser");
+	Fl_Button* browser = new Fl_Button(80, 240, 120, 50, "Launch Browser");
 	browser->box(FL_UP_BOX);
 	browser->callback(createBlog);
-	Fl_Button* button = new Fl_Button(100, 290, 100, 50, "Quit");
+	Fl_Button* button = new Fl_Button(80, 290, 120, 50, "Quit");
 	button->box(FL_UP_BOX);
 	button->callback(WindowManagement::hide_all_windows);
 

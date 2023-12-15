@@ -320,6 +320,7 @@ int HTMLWindow::handle(int event) {
 						m->curr_index -= 1;
 						if (m->curr_index < 0) {
 							pwd_found = true;
+							checkSound();
 							m->callback(this, m->data);
 							break;
 						} else if (m->password[m->curr_index] != typing_buffer[i]) {
