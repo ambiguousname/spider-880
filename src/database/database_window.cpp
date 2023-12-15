@@ -209,6 +209,8 @@ DatabaseWindow::~DatabaseWindow() {
 
 void DatabaseWindow::updateCategories(int tier) {
 	category_tier = tier;
+
+	clickSound();
 	for (DatabaseChoice* i : choices) {
 		i->selectCategory(category_tier);
 	}
@@ -216,6 +218,7 @@ void DatabaseWindow::updateCategories(int tier) {
 }
 
 void DatabaseWindow::search(Fl_Widget*, void* s) {
+	checkSound();
 	DatabaseWindow* self = static_cast<DatabaseWindow*>(s);
 	std::vector<std::string> search_text;
 
@@ -270,9 +273,11 @@ void DatabaseWindow::citizenMurdered(Fl_Widget* browser, void* db_window) {
 	}
 
 	Citizen citizen = Citizen(self->text(self->value()));
+	errorSound();
 	int choice = fl_choice("Was %s %s murdered?", "No", "Yes", nullptr, citizen.first_name->c_str(), citizen.last_name->c_str());
 	if (choice == 1) {
 		if (strcmp(citizen.first_name->c_str(), "Jessica") == 0 && strcmp(citizen.last_name->c_str(), "Reyes") == 0) {
+			checkSound();
 			new WinScreen();
 		} else {
 			static_cast<DatabaseWindow*>(db_window)->citizen_db->DeleteCitizen(std::stoi(citizen.id->c_str()), std::stoi(citizen.household_id->c_str()));
@@ -298,6 +303,7 @@ void DatabaseWindow::selected(Fl_Widget* widget, void* parent) {
 	DatabaseWindow* self = static_cast<DatabaseWindow*>(parent);
 	Fl_Browser* browser = static_cast<Fl_Browser*>(widget);
 	int index = browser->value() - 2;
+	clickSound();
 	if (index >= 0) {
 		int household_id = self->household_ids[index];
 		char buf[50];

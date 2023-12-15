@@ -5,6 +5,8 @@
 #include <FL/Fl.H>
 #include <FL/fl_message.H>
 
+#include <util/base_sounds.h>
+
 WinScreen::WinScreen() : GlWindow(0, 0, 300, 300, "You Win :)") {
 	std::istringstream in(win_obj);
 	test = new Object(in);
@@ -15,6 +17,11 @@ WinScreen::WinScreen() : GlWindow(0, 0, 300, 300, "You Win :)") {
 	end();
 	show();
 	fullscreen();
+
+	SoundManager::Load("./assets/startup.wav", endSound);
+	endSound.setLoop(true);
+	endSound.setPitch(0.1f);
+	endSound.play();
 }
 
 void WinScreen::initialize() {
@@ -25,6 +32,7 @@ void WinScreen::initialize() {
 
 void winScreen(void*) {
 	WindowManagement::hide_all_windows();
+	errorSound();
 	fl_alert("Well, you win. Congrats.");
 }
 
@@ -37,6 +45,7 @@ void WinScreen::glDraw(const mat4& projection, const mat4& view, float time) {
 	// camera.translate(vec3(0.0f, 0.0f, -0.1f));
 	if (!isClosing && tick > 600) {
 		isClosing = true;
+		endSound.stop();
 		fullscreen();
 		// Adding this to the main thread makes it memory safe to close:
 		Fl::add_timeout(1.0, winScreen);

@@ -13,6 +13,7 @@ namespace SoundManager {
 		friend bool Load(const char* path, Sound& out);
 
 		void play();
+		void stop();
 		void setPitch(float pitch);
 		void setLoop(bool shouldLoop);
 		bool isLoaded() {

@@ -281,6 +281,7 @@ int HTMLWindow::handle(int event) {
 		const char* key =  Fl::event_text();
 		
 		if (key[0] != '\0'){
+			typeSound(0.5f + ((float)key[0])/CHAR_MAX);
 			char key_l = tolower(key[0]);
 
 			make_current();

@@ -37,6 +37,10 @@ void Sound::play() {
 	ma_sound_start(&sound);
 }
 
+void Sound::stop() {
+	ma_sound_stop(&sound);
+}
+
 void Sound::setPitch(float pitch) {
 	ma_sound_set_pitch(&sound, pitch);
 }
