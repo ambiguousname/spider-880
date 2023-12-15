@@ -50,7 +50,7 @@ int main(int argc, char **argv) {
 	Fl_Box* title = new Fl_Box(20, 20, 260, 100, "Spider-880");
 	title->box(FL_DOWN_BOX);
 	title->labelsize(36);
-	Fl_Box* credits = new Fl_Box(20, 120, 260, 120, "By ambiguousname and stargyaru\nMade with:\nFLTK 1.3.8 (w/ LibPNG support)\nminiaudio\nSQLite\nMeson\nPython Faker");
+	Fl_Box* credits = new Fl_Box(20, 120, 260, 120, "By ambiguousname\n(with thanks to stargyaru)\nMade with:\nFLTK 1.3.8 (w/ LibPNG support),\nminiaudio, SQLite,\nMeson, Python Faker");
 	credits->box(FL_UP_BOX);
 	Fl_Button* browser = new Fl_Button(80, 240, 120, 50, "Launch Browser");
 	browser->box(FL_UP_BOX);

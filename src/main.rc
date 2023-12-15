@@ -17,6 +17,7 @@ BEGIN
     BEGIN
         BLOCK "040904E4"
         BEGIN
+            VALUE "CompanyName", "Ambiguousname\0"
             VALUE "FileDescription",  "Spider-880 Executable\0"
             VALUE "FileVersion",  VER_FILEVERSION_STR
             VALUE "InternalName", "spider-880.exe\0"
