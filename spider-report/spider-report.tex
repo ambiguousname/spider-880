@@ -2,6 +2,7 @@
 \usepackage[a4paper, total={8.5in, 11in}, margin=0.5in]{geometry}
 \usepackage{multicol}
 \usepackage{parskip}
+\usepackage{graphicx}
 
 \title{
 Spider 880 \\
@@ -35,7 +36,7 @@ REBS Management highlighted this as a priority issue: it is severely impacting e
 \subsubsection{Security Vulnerabilities}
 Worse among these errors is that any user in the system is granted level 2 permissions, which allows them access to the entirety of the REBS link to the Rorik's End Citizen Database. Seeing as how REBS is already under suit pertaining to HIPAA violations, a fix has been recommended to their technical support team. We have yet to hear back. 
 
-IMAGE HERE
+\includegraphics[scale=0.4]{database.png}
 
 \subsubsection{Memory Leaks}
 As documented by some REBS employees, 760s experience a huge amount of memory leaks during usage. The problem is reduced among REBS 880s, but they still experience the problem. The issue has currently been narrowed to some sort of interference from the 880 keyboard interrupt event spilling over into windows that have been marked by SC Secure-Lock(tm) as input friendly.
