@@ -1,4 +1,5 @@
 #include <openssl/evp.h>
+#include <openssl/kdf.h>
 #include <openssl/err.h>
 #include <stdio.h>
 
@@ -7,6 +8,10 @@
 int free_ctx(EVP_CIPHER_CTX* ctx) {
 	EVP_CIPHER_CTX_free(ctx);
 }
+// TODO: It'd be nice to get some legacy encryption. I think for some sense of story as to when these files were encrypted.
+// RC2 for cipher would be cool. 
+// There is no 80s key derivation function that OpenSSL supports. I'm thinking a custom, super wonky setup using MD2. The more security flaws, the better.
+// Maybe the algorithm could just be hashing the name of the website.
 
 int start_aes_cipher(EVP_CIPHER_CTX** ctx) {
 	*ctx = NULL;
@@ -28,6 +33,7 @@ int start_aes_cipher(EVP_CIPHER_CTX** ctx) {
 	int result = EVP_CipherInit_ex2(*ctx, cipher, NULL, NULL, 0, NULL);
 	if (result <= 0) {
 		ERROR("Could not set cipher to Cipher context.\n");
+		EVP_CIPHER_free(cipher);
 		free_ctx(*ctx);
 		return -1;
 	}
@@ -73,6 +79,26 @@ int crypt_file(int do_crypt, unsigned char key[32], unsigned char iv[16], FILE* 
 	return 1;
 }
 
+// Each password *should* be unique when we generate, so I'm not gonna bother with a salt or anything like that.
+int derive_key_pbkdf2(const char* password, unsigned char* key[32]) {
+	EVP_KDF* kdf = EVP_KDF_fetch(NULL, "ARGON2", NULL);
+	if (kdf == NULL) {
+		ERROR("Could not find given algorithm.");
+		return -1;
+	}
+
+	EVP_KDF_CTX* ctx = EVP_KDF_CTX_new(kdf);
+	EVP_KDF_free(kdf);
+	if (ctx == NULL) {
+		ERROR("Could not generate EVP PKEY ctx.");
+		return -1;
+	}
+
+	OSSL_PARAM params[5];
+
+	params[0] = OSSL_PARAM_construct_octet_string("pass", )
+}
+
 int main() {
 	EVP_CIPHER_CTX* ctx = NULL;
 	if (start_aes_cipher(&ctx) <= 0) {
@@ -82,7 +108,15 @@ int main() {
 	FILE* in = fopen("tags.h", "rb");
 	FILE* out = fopen("tags.crypt.txt", "wb");
 
-	crypt_file(1, "0123456789abcdeF0123456789abcdeF", "1234567887654321", in, out, ctx);
+	unsigned char key[32] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
+	0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x20, 0x21,
+	0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x30, 0x31}; 
+
+	unsigned char iv[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
+	0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15};
+
+
+	crypt_file(1, key, iv, in, out, ctx);
 	
 	fclose(in);
 	fclose(out);
@@ -90,7 +124,7 @@ int main() {
 	FILE* i = fopen("tags.crypt.txt", "rb");
 	FILE* o = fopen("tags.decrypt.txt", "wb");
 
-	if (crypt_file(0, "0123456789abcdeF0123456789abcdeF", "1234567887654321", in, out, ctx) > 0) {
+	if (crypt_file(0, key, iv, in, out, ctx) > 0) {
 		free_ctx(ctx);
 	}
 
