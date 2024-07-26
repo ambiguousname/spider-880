@@ -79,16 +79,16 @@ int main() {
 		return -1;
 	}
 
-	FILE* in = fopen("tags.h", "r");
-	FILE* out = fopen("tags.crypt.txt", "w");
+	FILE* in = fopen("tags.h", "rb");
+	FILE* out = fopen("tags.crypt.txt", "wb");
 
 	crypt_file(1, "0123456789abcdeF0123456789abcdeF", "1234567887654321", in, out, ctx);
 	
 	fclose(in);
 	fclose(out);
 
-	FILE* i = fopen("tags.crypt.txt", "r");
-	FILE* o = fopen("tags.decrypt.txt", "w");
+	FILE* i = fopen("tags.crypt.txt", "rb");
+	FILE* o = fopen("tags.decrypt.txt", "wb");
 
 	if (crypt_file(0, "0123456789abcdeF0123456789abcdeF", "1234567887654321", in, out, ctx) > 0) {
 		free_ctx(ctx);
