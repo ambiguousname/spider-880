@@ -38,21 +38,20 @@ int start_aes_cipher(EVP_CIPHER_CTX** ctx) {
 }
 
 // Adapted from https://docs.openssl.org/master/man3/EVP_EncryptInit/#examples
-int crypt_file(int do_crypt, unsigned char key[32], unsigned char iv[16], FILE* in, FILE* out, EVP_CIPHER_CTX* ctx) {
+int crypt_file(int do_crypt, unsigned char key[33], unsigned char iv[17], FILE* in, FILE* out, EVP_CIPHER_CTX* ctx) {
 	int result = EVP_CipherInit_ex2(ctx, NULL, key, iv, do_crypt, NULL);
 	if (result <= 0) {
 		ERROR("Could not set encryption/decryption mode to Cipher context.\n");
+		free_ctx(ctx);
 		return -1;
 	}
 	
-	unsigned char inbuf[1024], outbuf[1024 + EVP_MAX_BLOCK_LENGTH] = "";
+	unsigned char inbuf[1024], outbuf[1024 + EVP_MAX_BLOCK_LENGTH];
 	int inlen, outlen;
 	for (;;) {
 		inlen = fread(inbuf, 1, 1024, in);
-		if (feof(in) != 0) {
+		if (inlen <= 0) {
 			break;
-		} else if (ferror(in) != 0) {
-			return -1;
 		}
 
 		int update_result = EVP_CipherUpdate(ctx, outbuf, &outlen, inbuf, inlen);
