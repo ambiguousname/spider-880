@@ -2,6 +2,7 @@
 #include <openssl/kdf.h>
 #include <openssl/err.h>
 #include <stdio.h>
+#include <string.h>
 
 #define ERROR(e) fprintf(stderr, e); ERR_print_errors_fp(stderr);
 
@@ -44,7 +45,7 @@ int start_aes_cipher(EVP_CIPHER_CTX** ctx) {
 }
 
 // Adapted from https://docs.openssl.org/master/man3/EVP_EncryptInit/#examples
-int crypt_file(int do_crypt, unsigned char key[32], unsigned char iv[16], FILE* in, FILE* out, EVP_CIPHER_CTX* ctx) {
+int crypt_file(int do_crypt, unsigned char key[], unsigned char iv[], FILE* in, FILE* out, EVP_CIPHER_CTX* ctx) {
 	int result = EVP_CipherInit_ex2(ctx, NULL, key, iv, do_crypt, NULL);
 	if (result <= 0) {
 		ERROR("Could not set encryption/decryption mode to Cipher context.\n");
@@ -80,10 +81,10 @@ int crypt_file(int do_crypt, unsigned char key[32], unsigned char iv[16], FILE* 
 }
 
 // Each password *should* be unique when we generate, so I'm not gonna bother with a salt or anything like that.
-int derive_key_pbkdf2(const char* password, unsigned char* key[32]) {
-	EVP_KDF* kdf = EVP_KDF_fetch(NULL, "ARGON2", NULL);
+int derive_key_scrypt(char password[], unsigned char key[32], unsigned char iv[16]) {
+	EVP_KDF* kdf = EVP_KDF_fetch(NULL, "SCRYPT", NULL);
 	if (kdf == NULL) {
-		ERROR("Could not find given algorithm.");
+		ERROR("Could not find scrypt KDF.");
 		return -1;
 	}
 
@@ -94,9 +95,38 @@ int derive_key_pbkdf2(const char* password, unsigned char* key[32]) {
 		return -1;
 	}
 
-	OSSL_PARAM params[5];
+	OSSL_PARAM params[6];
 
-	params[0] = OSSL_PARAM_construct_octet_string("pass", )
+	uint64_t n = 1024;
+	uint32_t r = 8;
+	uint32_t p = 16;
+
+	params[0] = OSSL_PARAM_construct_octet_string("pass", password, strlen(password)); 
+	params[1] = OSSL_PARAM_construct_octet_string("salt", "", 0);
+	params[2] = OSSL_PARAM_construct_uint64("n", &n);
+	params[3] = OSSL_PARAM_construct_uint32("r", &r);
+	params[4] = OSSL_PARAM_construct_uint32("p", &p);
+	params[5] = OSSL_PARAM_construct_end();
+
+	unsigned char out[48];
+	int derive_result = EVP_KDF_derive(ctx, out, 48, params);
+
+	EVP_KDF_CTX_free(ctx);
+	
+	if (derive_result <= 0) {
+		ERROR("Could not derive.");
+		return -1;
+	}
+
+	for (int i = 0; i < sizeof(out); i++) {
+		if (i >= 32) {
+			iv[i] = out[i];
+		} else {
+			key[i] = out[i];
+		}
+	}
+	
+	return 1;
 }
 
 int main() {
@@ -108,12 +138,9 @@ int main() {
 	FILE* in = fopen("tags.h", "rb");
 	FILE* out = fopen("tags.crypt.txt", "wb");
 
-	unsigned char key[32] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
-	0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x20, 0x21,
-	0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x30, 0x31}; 
-
-	unsigned char iv[16] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
-	0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15};
+	unsigned char key[32], iv[16]; 
+	
+	derive_key_scrypt("TEST", key, iv);
 
 
 	crypt_file(1, key, iv, in, out, ctx);
