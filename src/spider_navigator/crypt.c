@@ -32,15 +32,43 @@ int start_aes_cipher(EVP_CIPHER_CTX** ctx) {
 	}
 
 	int result = EVP_CipherInit_ex2(*ctx, cipher, NULL, NULL, 0, NULL);
+	EVP_CIPHER_free(cipher);
 	if (result <= 0) {
 		ERROR("Could not set cipher to Cipher context.\n");
-		EVP_CIPHER_free(cipher);
 		free_ctx(*ctx);
 		return -1;
 	}
 	OPENSSL_assert(EVP_CIPHER_CTX_get_key_length(*ctx) == 32);
 	OPENSSL_assert(EVP_CIPHER_CTX_get_iv_length(*ctx) == 16);
 
+	return 1;
+}
+
+int start_rc2_cipher(EVP_CIPHER_CTX** ctx) {
+	*ctx = NULL;
+	*ctx = EVP_CIPHER_CTX_new();
+
+	if (ctx == NULL) {
+		ERROR("Could not create Cipher Context.\n");
+		return -1;
+	}
+
+	EVP_CIPHER* cipher = NULL;
+	cipher = EVP_CIPHER_fetch(NULL, "RC2", "provider=legacy");
+	if (cipher == NULL) {
+		ERROR("Could not fetch RC2 cipher.\n");
+		return -1;
+	}
+
+	int result = EVP_CipherInit_ex2(*ctx, cipher, NULL, NULL, 0, NULL);
+	EVP_CIPHER_free(cipher);
+	if (result <= 0) {
+		ERROR("Could not cipher to Cipher context.\n");
+		free_ctx(*ctx);
+	}
+	OPENSSL_assert(EVP_CIPHER_CTX_get_key_length(*ctx) == 16);
+	OPENSSL_assert(EVP_CIPHER_CTX_get_iv_length(*ctx) == 16);
+	
 	return 1;
 }
 
