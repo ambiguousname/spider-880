@@ -130,10 +130,6 @@ int derive_key_md4(unsigned char password[], unsigned char key[], size_t key_len
 	return 1;
 }
 
-int free_ctx(EVP_CIPHER_CTX* ctx) {
-	EVP_CIPHER_CTX_free(ctx);
-}
-
 int start_aes_cipher(EVP_CIPHER_CTX** ctx) {
 	*ctx = NULL;
 	*ctx = EVP_CIPHER_CTX_new();
@@ -147,7 +143,7 @@ int start_aes_cipher(EVP_CIPHER_CTX** ctx) {
 	cipher = EVP_CIPHER_fetch(NULL, "AES-256-CBC", NULL);
 	if (cipher == NULL) {
 		ERROR("Could not fetch AES-256-CBC Cipher.\n");
-		free_ctx(*ctx);
+		EVP_CIPHER_CTX_free(*ctx);
 		return -1;
 	}
 
@@ -155,7 +151,7 @@ int start_aes_cipher(EVP_CIPHER_CTX** ctx) {
 	EVP_CIPHER_free(cipher);
 	if (result <= 0) {
 		ERROR("Could not set cipher to Cipher context.\n");
-		free_ctx(*ctx);
+		EVP_CIPHER_CTX_free(*ctx);
 		return -1;
 	}
 	OPENSSL_assert(EVP_CIPHER_CTX_get_key_length(*ctx) == 32);
@@ -184,7 +180,7 @@ int start_rc2_cipher(EVP_CIPHER_CTX** ctx) {
 	EVP_CIPHER_free(cipher);
 	if (result <= 0) {
 		ERROR("Could not cipher to Cipher context.\n");
-		free_ctx(*ctx);
+		EVP_CIPHER_CTX_free(*ctx);
 	}
 	OPENSSL_assert(EVP_CIPHER_CTX_get_key_length(*ctx) == 16);
 	OPENSSL_assert(EVP_CIPHER_CTX_get_iv_length(*ctx) == 16);
@@ -212,7 +208,7 @@ int start_des_cipher(EVP_CIPHER_CTX** ctx) {
 	EVP_CIPHER_free(cipher);
 	if (result <= 0) {
 		ERROR("Could not cipher to Cipher context.\n");
-		free_ctx(*ctx);
+		EVP_CIPHER_CTX_free(*ctx);
 	}
 	OPENSSL_assert(EVP_CIPHER_CTX_get_key_length(*ctx) == 8);
 	OPENSSL_assert(EVP_CIPHER_CTX_get_iv_length(*ctx) == 8);
@@ -225,7 +221,7 @@ int crypt_file(int do_crypt, unsigned char key[], unsigned char iv[], FILE* in, 
 	int result = EVP_CipherInit_ex2(ctx, NULL, key, iv, do_crypt, NULL);
 	if (result <= 0) {
 		ERROR("Could not set encryption/decryption mode to Cipher context.\n");
-		free_ctx(ctx);
+		EVP_CIPHER_CTX_free(ctx);
 		return -1;
 	}
 	
@@ -240,7 +236,7 @@ int crypt_file(int do_crypt, unsigned char key[], unsigned char iv[], FILE* in, 
 		int update_result = EVP_CipherUpdate(ctx, outbuf, &outlen, inbuf, inlen);
 		if (update_result <= 0) {
 			ERROR("Could not crypt infile.\n");
-			free_ctx(ctx);
+			EVP_CIPHER_CTX_free(ctx);
 			return -1;
 		}
 		fwrite(outbuf, 1, outlen, out);
@@ -248,7 +244,7 @@ int crypt_file(int do_crypt, unsigned char key[], unsigned char iv[], FILE* in, 
 	int final_result = EVP_CipherFinal_ex(ctx, outbuf, &outlen);
 	if (final_result <= 0) {
 		ERROR("Could not crypt last bytes of infile.\n");
-		free_ctx(ctx);
+		EVP_CIPHER_CTX_free(ctx);
 		return -1;
 	}
 	fwrite(outbuf, 1, outlen, out);
@@ -297,7 +293,7 @@ int main() {
 	FILE* o = fopen("tags.decrypt.txt", "wb");
 
 	if (crypt_file(0, key, iv, in, out, ctx) > 0) {
-		free_ctx(ctx);
+		EVP_CIPHER_CTX_free(ctx);
 	}
 
 	fclose(i);
