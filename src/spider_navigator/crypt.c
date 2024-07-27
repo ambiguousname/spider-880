@@ -81,7 +81,7 @@ int crypt_file(int do_crypt, unsigned char key[], unsigned char iv[], FILE* in, 
 }
 
 // Each password *should* be unique when we generate, so I'm not gonna bother with a salt or anything like that.
-int derive_key_scrypt(char password[], unsigned char key[32], unsigned char iv[16]) {
+int derive_key_scrypt(unsigned char password[], unsigned char key[32], unsigned char iv[16]) {
 	EVP_KDF* kdf = EVP_KDF_fetch(NULL, "SCRYPT", NULL);
 	if (kdf == NULL) {
 		ERROR("Could not find scrypt KDF.");
