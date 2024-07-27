@@ -109,7 +109,7 @@ int crypt_file(int do_crypt, unsigned char key[], unsigned char iv[], FILE* in, 
 }
 
 // Each password *should* be unique when we generate, so I'm not gonna bother with a salt or anything like that.
-int derive_key_scrypt(unsigned char password[], unsigned char key[32], unsigned char iv[16]) {
+int derive_key_scrypt(unsigned char password[], unsigned char* key, size_t key_len, unsigned char* iv, size_t iv_len) {
 	EVP_KDF* kdf = EVP_KDF_fetch(NULL, "SCRYPT", NULL);
 	if (kdf == NULL) {
 		ERROR("Could not find scrypt KDF.");
@@ -136,8 +136,8 @@ int derive_key_scrypt(unsigned char password[], unsigned char key[32], unsigned 
 	params[4] = OSSL_PARAM_construct_uint32("p", &p);
 	params[5] = OSSL_PARAM_construct_end();
 
-	unsigned char out[48];
-	int derive_result = EVP_KDF_derive(ctx, out, 48, params);
+	unsigned char out[key_len + iv_len];
+	int derive_result = EVP_KDF_derive(ctx, out, key_len + iv_len, params);
 
 	EVP_KDF_CTX_free(ctx);
 	
@@ -147,7 +147,7 @@ int derive_key_scrypt(unsigned char password[], unsigned char key[32], unsigned 
 	}
 
 	for (int i = 0; i < sizeof(out); i++) {
-		if (i >= 32) {
+		if (i >= key_len) {
 			iv[i] = out[i];
 		} else {
 			key[i] = out[i];
@@ -168,7 +168,7 @@ int main() {
 
 	unsigned char key[32], iv[16]; 
 	
-	derive_key_scrypt("TEST", key, iv);
+	derive_key_scrypt("TEST", key, 32, iv, 16);
 
 
 	crypt_file(1, key, iv, in, out, ctx);
