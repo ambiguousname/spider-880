@@ -7,10 +7,16 @@
 
 #define ERROR(e) fprintf(stderr, e); ERR_print_errors_fp(stderr);
 
-
-
 // Each password *should* be unique when we generate, so I'm not gonna bother with a salt or anything like that.
-int derive_key_scrypt(unsigned char password[], unsigned char* key, size_t key_len, unsigned char* iv, size_t iv_len) {
+
+/// @brief Derive a key using script. Equivalent on cmd is `openssl kdf -keylen LENGTH_HERE -kdfopt pass:PASSWORD -kdfopt n:1024 -kdfopt r:8 -kdfopt:16 scrypt`, of which the first X bytes should go to the key, and the remaining should go to the IV.
+/// @param password Password to derive a key from.
+/// @param key Output of the key.
+/// @param key_len How long the key is.
+/// @param iv Output for iv.
+/// @param iv_len Length of the IV.
+/// @return Success. < 0 for failure, 1 for success.
+int derive_key_scrypt(unsigned char password[], unsigned char key[], size_t key_len, unsigned char iv[], size_t iv_len) {
 	EVP_KDF* kdf = EVP_KDF_fetch(NULL, "SCRYPT", NULL);
 	if (kdf == NULL) {
 		ERROR("Could not find scrypt KDF.\n");
@@ -48,6 +54,72 @@ int derive_key_scrypt(unsigned char password[], unsigned char* key, size_t key_l
 	}
 
 	for (int i = 0; i < sizeof(out); i++) {
+		if (i >= key_len) {
+			iv[i] = out[i];
+		} else {
+			key[i] = out[i];
+		}
+	}
+	
+	return 1;
+}
+
+/// @brief Derive a key from a password using MD4 (would use MD2, but it's not built in with OpenSSL by default, BOOOO). Will only output 8 bit keys.
+/// Is this secure? No. Don't use it. BuSab was just sort of doing their own thing in the 80s.
+/// @param password The password.
+/// @param key The key output.
+/// @return 1 on success, any number < 0 on fail.
+int derive_key_md4(unsigned char password[], unsigned char key[], size_t key_len, unsigned char iv[], size_t iv_len) {
+	EVP_MD_CTX* ctx = EVP_MD_CTX_new();
+
+	if (ctx == NULL) {
+		ERROR("Could not find MD ctx.\n");
+		return -1;
+	}
+
+	EVP_MD* md = EVP_MD_fetch(NULL, "MD4", "provider=legacy");
+
+	if (md == NULL) {
+		ERROR("Could not get MD4.\n");
+		EVP_MD_CTX_free(ctx);
+		return -1;
+	}
+
+	OSSL_PARAM params[2];
+
+	unsigned int len = key_len + iv_len;
+
+	params[0] = OSSL_PARAM_construct_uint("size", &len);
+	params[1] = OSSL_PARAM_construct_end();
+
+	int init_result = EVP_DigestInit_ex2(ctx, md, params);
+	EVP_MD_free(md);
+	if (init_result <= 0) {
+		ERROR("Could not initialize MD4.");
+		EVP_MD_CTX_free(ctx);
+		return -1;
+	}
+
+	int update = EVP_DigestUpdate(ctx, password, strlen(password));
+	if (update <= 0) {
+		ERROR("Could not update digest.");
+		EVP_MD_CTX_free(ctx);
+		return -1;
+	}
+
+	
+	unsigned char out[len];
+
+	unsigned int outlen;
+	int final = EVP_DigestFinal(ctx, out, &outlen);
+	EVP_MD_CTX_free(ctx);
+	if (final <= 0) {
+		ERROR("Could not process final digest.");
+		return -1;
+	}
+	OPENSSL_assert(outlen == len);
+
+	for (int i = 0; i < outlen; i++) {
 		if (i >= key_len) {
 			iv[i] = out[i];
 		} else {
@@ -185,7 +257,7 @@ int crypt_file(int do_crypt, unsigned char key[], unsigned char iv[], FILE* in, 
 }
 
 int main() {
-	OSSL_PROVIDER*  deflt;
+	OSSL_PROVIDER* deflt;
 	deflt = OSSL_PROVIDER_load(NULL, "default");
 
 	if (deflt == NULL) {
@@ -214,8 +286,7 @@ int main() {
 
 	unsigned char key[8], iv[8];
 	
-	derive_key_scrypt("TEST", key, 8, iv, 8);
-
+	derive_key_md4("TEST", key, 8, iv, 8);
 
 	crypt_file(1, key, iv, in, out, ctx);
 	
