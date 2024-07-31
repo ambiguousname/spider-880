@@ -150,7 +150,7 @@ int start_aes_cipher(EVP_CIPHER_CTX** ctx) {
 	int result = EVP_CipherInit_ex2(*ctx, cipher, NULL, NULL, 0, NULL);
 	EVP_CIPHER_free(cipher);
 	if (result <= 0) {
-		ERROR("Could not set cipher to Cipher context.\n");
+		ERROR("Could not add cipher to Cipher context.\n");
 		EVP_CIPHER_CTX_free(*ctx);
 		return -1;
 	}
@@ -179,7 +179,7 @@ int start_rc2_cipher(EVP_CIPHER_CTX** ctx) {
 	int result = EVP_CipherInit_ex2(*ctx, cipher, NULL, NULL, 0, NULL);
 	EVP_CIPHER_free(cipher);
 	if (result <= 0) {
-		ERROR("Could not cipher to Cipher context.\n");
+		ERROR("Could not add cipher to Cipher context.\n");
 		EVP_CIPHER_CTX_free(*ctx);
 	}
 	OPENSSL_assert(EVP_CIPHER_CTX_get_key_length(*ctx) == 16);
@@ -207,7 +207,7 @@ int start_des_cipher(EVP_CIPHER_CTX** ctx) {
 	int result = EVP_CipherInit_ex2(*ctx, cipher, NULL, NULL, 0, NULL);
 	EVP_CIPHER_free(cipher);
 	if (result <= 0) {
-		ERROR("Could not cipher to Cipher context.\n");
+		ERROR("Could not add cipher to Cipher context.\n");
 		EVP_CIPHER_CTX_free(*ctx);
 	}
 	OPENSSL_assert(EVP_CIPHER_CTX_get_key_length(*ctx) == 8);

@@ -11,3 +11,5 @@ https://ambiguousname.itch.io/spider-880
 - [M4](https://www.gnu.org/software/m4/)
 - [Python](https://www.python.org/)
 - [Faker](https://faker.readthedocs.io/en/master/)
+- [OpenSSL ^3.1.4](https://openssl.org/)
+- [libarchive >= 3.7.2](https://libarchive.org/)

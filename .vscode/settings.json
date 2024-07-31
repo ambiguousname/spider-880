@@ -94,7 +94,12 @@
         "*.cpphtml": "html",
         "fstream": "cpp",
         "evp.h": "c",
-        "err.h": "c"
+        "err.h": "c",
+        "zlib.h": "c",
+        "stdio.h": "c",
+        "archive.h": "c",
+        "stdarg.h": "c",
+        "archive_entry.h": "c"
     },
     "cmake.configureOnOpen": false,
     "C_Cpp.default.compilerPath": "C:\\msys64\\ucrt64\\bin\\gcc.exe",
