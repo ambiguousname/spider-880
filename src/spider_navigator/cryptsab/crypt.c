@@ -17,7 +17,7 @@
 /// @param iv Output for iv.
 /// @param iv_len Length of the IV.
 /// @return Success. < 0 for failure, 1 for success.
-int derive_key_scrypt(unsigned char password[], unsigned char key[], size_t key_len, unsigned char iv[], size_t iv_len) {
+int derive_key_scrypt(char password[], unsigned char key[], size_t key_len, unsigned char iv[], size_t iv_len) {
 	EVP_KDF* kdf = EVP_KDF_fetch(NULL, "SCRYPT", NULL);
 	if (kdf == NULL) {
 		ERROR("Could not find scrypt KDF.\n");
@@ -70,7 +70,7 @@ int derive_key_scrypt(unsigned char password[], unsigned char key[], size_t key_
 /// @param password The password.
 /// @param key The key output.
 /// @return 1 on success, any number < 0 on fail.
-int derive_key_md4(unsigned char password[], unsigned char key[], size_t key_len, unsigned char iv[], size_t iv_len) {
+int derive_key_md4(char password[], unsigned char key[], size_t key_len, unsigned char iv[], size_t iv_len) {
 	EVP_MD_CTX* ctx = EVP_MD_CTX_new();
 
 	if (ctx == NULL) {
@@ -251,57 +251,4 @@ int crypt_file(int do_crypt, unsigned char key[], unsigned char iv[], FILE* in, 
 	fwrite(outbuf, 1, outlen, out);
 
 	return 1;
-}
-
-int main() {
-	OSSL_PROVIDER* deflt;
-	deflt = OSSL_PROVIDER_load(NULL, "default");
-
-	if (deflt == NULL) {
-		ERROR("Could not load default provider.");
-		return -1;
-	}
-
-	OSSL_PROVIDER* legacy;
-	legacy = OSSL_PROVIDER_load(NULL, "legacy");
-
-	if (legacy == NULL) {
-		ERROR("Could not load legacy provider.");
-		OSSL_PROVIDER_unload(deflt);
-		return -1;
-	}
-
-	EVP_CIPHER_CTX* ctx = NULL;
-	if (start_des_cipher(&ctx) <= 0) {
-		OSSL_PROVIDER_unload(legacy);
-		OSSL_PROVIDER_unload(deflt);
-		return -1;
-	}
-
-	FILE* in = fopen("tags.h", "rb");
-	FILE* out = fopen("tags.crypt.txt", "wb");
-
-	unsigned char key[8], iv[8];
-	
-	derive_key_md4("TEST", key, 8, iv, 8);
-
-	crypt_file(1, key, iv, in, out, ctx);
-	
-	fclose(in);
-	fclose(out);
-
-	FILE* i = fopen("tags.crypt.txt", "rb");
-	FILE* o = fopen("tags.decrypt.txt", "wb");
-
-	if (crypt_file(0, key, iv, in, out, ctx) > 0) {
-		EVP_CIPHER_CTX_free(ctx);
-	}
-
-	fclose(i);
-	fclose(o);
-
-	OSSL_PROVIDER_unload(legacy);
-	OSSL_PROVIDER_unload(deflt);
-
-	return 0;
 }

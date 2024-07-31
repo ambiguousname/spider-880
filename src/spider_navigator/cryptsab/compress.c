@@ -208,15 +208,3 @@ int tar_z_decompress(const char* compressed_path) {
 
 	return ARCHIVE_OK;
 }
-
-
-int main() {
-	if (tar_z_compress("tags.tar.z", 2, "tags.h", "page.h") < ARCHIVE_OK) {
-		return -1;
-	}
-
-	if (tar_z_decompress("tags.tar.z") < ARCHIVE_OK ) {
-		return -1;
-	}
-	return 0;
-}
