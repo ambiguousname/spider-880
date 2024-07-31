@@ -100,7 +100,8 @@
         "archive.h": "c",
         "stdarg.h": "c",
         "archive_entry.h": "c",
-        "cerrno": "c"
+        "cerrno": "c",
+        "provider.h": "c"
     },
     "cmake.configureOnOpen": false,
     "C_Cpp.default.compilerPath": "C:\\msys64\\ucrt64\\bin\\gcc.exe",

@@ -1,8 +1,9 @@
+#include "crypt.h"
+
 #include <openssl/evp.h>
 #include <openssl/kdf.h>
 #include <openssl/err.h>
 #include <openssl/provider.h>
-#include <stdio.h>
 #include <string.h>
 
 #define ERROR(e) fprintf(stderr, e); ERR_print_errors_fp(stderr);
