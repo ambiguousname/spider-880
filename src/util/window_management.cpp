@@ -1,4 +1,4 @@
-#include "window_management.h"
+#include "window_management.hpp"
 #include <FL/Fl.H>
 #include <vector>
 

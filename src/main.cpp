@@ -4,12 +4,12 @@
 #include <FL/Fl_Box.H>
 #include <FL/fl_message.H>
 
-#include "database/database_window.h"
-#include "util/window_management.h"
-#include <murder_blog/murder.h>
+#include "database/database_window.hpp"
+#include "util/window_management.hpp"
+#include <murder_blog/murder.hpp>
 
-#include <util/sound.h>
-#include <util/base_sounds.h>
+#include <util/sound.hpp>
+#include <util/base_sounds.hpp>
 
 #ifdef __WIN32
 #include <FL/x.H>
@@ -42,7 +42,7 @@ void overrideCitizenSelection(Fl_Widget*) {
 	fclose(f);
 }
 
-#include "win_screen.h"
+#include "win_screen.hpp"
 int main(int argc, char **argv) {
 	int x, y, w, h;
 	Fl::screen_work_area(x, y, w, h);

@@ -1,4 +1,4 @@
-#include "database.h"
+#include "database.hpp"
 #include <stdio.h>
 #include <string>
 #include <cstring>

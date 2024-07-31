@@ -1,11 +1,11 @@
-#include "win_screen.h"
-#include "win_obj.h"
+#include "win_screen.hpp"
+#include "win_obj.hpp"
 #include <sstream>
-#include <util/window_management.h>
+#include <util/window_management.hpp>
 #include <FL/Fl.H>
 #include <FL/fl_message.H>
 
-#include <util/base_sounds.h>
+#include <util/base_sounds.hpp>
 
 WinScreen::WinScreen() : GlWindow(0, 0, 300, 300, "You Win :)") {
 	std::istringstream in(win_obj);

@@ -1,4 +1,4 @@
-#include "opengl_obj_geometry.h"
+#include "opengl_obj_geometry.hpp"
 
 #include <iostream>
 

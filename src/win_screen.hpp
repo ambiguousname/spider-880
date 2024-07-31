@@ -1,7 +1,7 @@
 #pragma once
-#include <util/opengl/opengl_window.h>
-#include <util/opengl/objects/opengl_obj.h>
-#include <util/sound.h>
+#include <util/opengl/opengl_window.hpp>
+#include <util/opengl/objects/opengl_obj.hpp>
+#include <util/sound.hpp>
 
 class WinScreen : public GlWindow {
 	protected:

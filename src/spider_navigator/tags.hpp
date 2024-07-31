@@ -5,8 +5,8 @@
 #include <unordered_map>
 #include <string>
 #include <FL/Enumerations.H>
-#include "util/image_box.h"
-#include "page.h"
+#include "util/image_box.hpp"
+#include "page.hpp"
 
 class HTMLPage;
 

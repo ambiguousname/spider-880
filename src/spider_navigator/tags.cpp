@@ -1,7 +1,7 @@
-#include "tags.h"
+#include "tags.hpp"
 #include <FL/fl_draw.H>
 #include <typeinfo>
-#include <util/base_sounds.h>
+#include <util/base_sounds.hpp>
 
 void HTMLNode::init() {
 	auto color_prop = _attributes.find("color");

@@ -1,4 +1,4 @@
-#include "sound.h"
+#include "sound.hpp"
 
 #define MINIAUDIO_IMPLEMENTATION
 #include "miniaudio.h"

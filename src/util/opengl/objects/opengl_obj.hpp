@@ -1,7 +1,7 @@
 #pragma once
-#include "../gl.h"
-#include "opengl_shader.h"
-#include "opengl_obj_geometry.h"
+#include "../gl.hpp"
+#include "opengl_shader.hpp"
+#include "opengl_obj_geometry.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/ext/matrix_transform.hpp>

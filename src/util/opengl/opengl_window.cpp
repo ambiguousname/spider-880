@@ -1,4 +1,4 @@
-#include "opengl_window.h"
+#include "opengl_window.hpp"
 #include <FL/Fl.H>
 
 void GlWindow::Timer_CB(void* screen) {

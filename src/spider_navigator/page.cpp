@@ -1,13 +1,13 @@
-#include "page.h"
+#include "page.hpp"
 #include <FL/Fl.H>
 #include <FL/fl_ask.H>
-#include "pages/gertwig_blog/navsab.h"
-#include "pages/deadbeef/deadbeef.h"
-#include "pages/deadbeef/feebdaed.h"
-#include "pages/deadbeef/abababab.h"
-#include "pages/deadbeef/babababa.h"
+#include "pages/gertwig_blog/navsab.hpp"
+#include "pages/deadbeef/deadbeef.hpp"
+#include "pages/deadbeef/feebdaed.hpp"
+#include "pages/deadbeef/abababab.hpp"
+#include "pages/deadbeef/babababa.hpp"
 #include <stdexcept>
-#include <util/base_sounds.h>
+#include <util/base_sounds.hpp>
 
 void aboutCallback(Fl_Widget*, void*) {
 	// fl_message_icon();

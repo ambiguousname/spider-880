@@ -1,4 +1,4 @@
-#include "color.h"
+#include "color.hpp"
 #include <math.h>
 #include <FL/Fl.H>
 

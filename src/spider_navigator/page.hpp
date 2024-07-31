@@ -9,7 +9,7 @@
 #include <vector>
 #include <unordered_map>
 #include <string>
-#include "tags.h"
+#include "tags.hpp"
 
 class HTMLPage;
 class HTMLWindow;

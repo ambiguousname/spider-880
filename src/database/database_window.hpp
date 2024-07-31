@@ -6,7 +6,7 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include "database.h"
+#include "database.hpp"
 
 typedef std::string (*database_selector)(int tier, int value);
 typedef int (*database_choice)();

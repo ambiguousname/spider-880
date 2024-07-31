@@ -1,4 +1,4 @@
-#include "opengl_obj.h"
+#include "opengl_obj.hpp"
 #include <fstream>
 #include <sstream>
 #include <iostream>

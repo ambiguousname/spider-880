@@ -1,10 +1,10 @@
-#include "database_window.h"
-#include "util/window_management.h"
+#include "database_window.hpp"
+#include "util/window_management.hpp"
 #include <FL/Fl_Box.H>
 #include <FL/fl_message.H>
-#include "../win_screen.h"
+#include "../win_screen.hpp"
 
-#include <util/base_sounds.h>
+#include <util/base_sounds.hpp>
 
 DatabaseChoice::DatabaseChoice(int x, int y, int w, int h, database_selector selector_func, ChoiceCategory choice_categories[3]) : Fl_Choice(x, y, w, h), selector(selector_func) {
 

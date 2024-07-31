@@ -1,5 +1,5 @@
 #pragma once
-#include "gl.h"
+#include "gl.hpp"
 #include <FL/Fl_Gl_Window.H>
 #include <glm/glm.hpp>
 #include <glm/ext/matrix_clip_space.hpp>

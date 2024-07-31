@@ -1,5 +1,5 @@
-#include "image_box.h"
-#include "color.h"
+#include "image_box.hpp"
+#include "color.hpp"
 #include <FL/fl_draw.H>
 #include <FL/Fl_PNG_Image.H>
 #include <FL/Fl.H>

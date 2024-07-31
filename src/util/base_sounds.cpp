@@ -1,5 +1,5 @@
-#include "base_sounds.h"
-#include "sound.h"
+#include "base_sounds.hpp"
+#include "sound.hpp"
 
 void clickSound() {
 	static SoundManager::Sound click;
