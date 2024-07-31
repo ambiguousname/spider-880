@@ -1,3 +1,4 @@
+#include "compress.h"
 #include <archive.h>
 #include <archive_entry.h>
 #include <stdio.h>
