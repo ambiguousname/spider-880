@@ -34,6 +34,7 @@ int tar_z_compress(const char* compressed_path, int num_files, ...) {
 	a = archive_write_new();
 	archive_write_add_filter_compress(a);
 	archive_write_set_format_pax_restricted(a);
+
 	int open_result = archive_write_open_filename(a, compressed_path);
 	if (open_result == ARCHIVE_FATAL) {
 		ERR(a, "Could not open file");
@@ -61,6 +62,9 @@ int tar_z_compress(const char* compressed_path, int num_files, ...) {
 
 		archive_entry_set_pathname(entry, filename);
 		archive_entry_set_size(entry, st.st_size);
+		archive_entry_set_atime(entry, st.st_atime, 0);
+		archive_entry_set_mtime(entry, st.st_mtime, 0);
+		archive_entry_set_ctime(entry, st.st_ctime, 0);
 		archive_entry_set_filetype(entry, AE_IFREG);
 		archive_entry_set_perm(entry, 0644);
 
