@@ -44,8 +44,9 @@ int derive_key_scrypt(char password[], unsigned char key[], size_t key_len, unsi
 	params[4] = OSSL_PARAM_construct_uint32("p", &p);
 	params[5] = OSSL_PARAM_construct_end();
 
-	unsigned char out[key_len + iv_len];
-	int derive_result = EVP_KDF_derive(ctx, out, key_len + iv_len, params);
+	size_t out_len = key_len + iv_len;
+	unsigned char out[out_len];
+	int derive_result = EVP_KDF_derive(ctx, out, out_len, params);
 
 	EVP_KDF_CTX_free(ctx);
 	
@@ -54,9 +55,9 @@ int derive_key_scrypt(char password[], unsigned char key[], size_t key_len, unsi
 		return -1;
 	}
 
-	for (int i = 0; i < sizeof(out); i++) {
+	for (int i = 0; i < out_len; i++) {
 		if (i >= key_len) {
-			iv[i] = out[i];
+			iv[i - key_len] = out[i];
 		} else {
 			key[i] = out[i];
 		}
@@ -122,7 +123,7 @@ int derive_key_md4(char password[], unsigned char key[], size_t key_len, unsigne
 
 	for (int i = 0; i < outlen; i++) {
 		if (i >= key_len) {
-			iv[i] = out[i];
+			iv[i - key_len] = out[i];
 		} else {
 			key[i] = out[i];
 		}
