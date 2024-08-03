@@ -8,5 +8,5 @@ python = find_program('python')
 pages = custom_target('pages', 
 	output: 'pages.tar.z.enc',
 	input: page_list.stdout().strip().split('\n')
-	command: [python, 'pagesbuild.py', '@INPUT@', '@OUTPUT@']
+	command: [python, 'pagesbuild.py', '@OUTPUT@']
 	)
