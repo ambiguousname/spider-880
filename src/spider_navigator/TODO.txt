@@ -1,4 +1,3 @@
 - Encrypt archives
-- Allow setting relative folder with cryptsab (instead of pages/.../index.html, make it /index.html).
 - Allow subdirectories.
 - Make python script compatible with meson build system 

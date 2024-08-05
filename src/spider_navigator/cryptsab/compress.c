@@ -28,8 +28,10 @@ int copy_archive(struct archive* a, struct archive* b) {
 
 #define ARCHIVE_FREE(a, type, errno) if (errno != ARCHIVE_FATAL) { archive_ ##type## _close(a); } archive_ ##type## _free(a);
 
-int tar_z_compress(const char* compressed_path, int num_files, ...) {
+int tar_z_compress(const char* compressed_path, const char* files_location, int num_files, ...) {
 	struct archive* a;
+
+	int files_location_len = strlen(files_location);
 	
 	a = archive_write_new();
 	archive_write_add_filter_compress(a);
@@ -52,7 +54,14 @@ int tar_z_compress(const char* compressed_path, int num_files, ...) {
 	va_start(paths, num_files);
 	for (int i = 0; i < num_files; i++) {
 		const char* filename = va_arg(paths, const char*);
-		int stat_result = stat(filename, &st);
+
+		int file_len = strlen(filename);
+
+		char file_local_location[files_location_len + file_len];
+
+		sprintf(file_local_location, "%s%s", files_location, filename);
+
+		int stat_result = stat(file_local_location, &st);
 		if (stat_result < 0) {
 			fprintf(stderr, "Error, could not get metadata for %s: %i", filename, errno);
 			archive_entry_free(entry);
@@ -78,7 +87,7 @@ int tar_z_compress(const char* compressed_path, int num_files, ...) {
 			return header_write;
 		}
 
-		infile = fopen(filename, "rb");
+		infile = fopen(file_local_location, "rb");
 		if (infile == NULL) {
 			fprintf(stderr, "Could not read %s: %i", filename, errno);
 

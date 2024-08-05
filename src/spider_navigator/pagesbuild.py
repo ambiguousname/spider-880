@@ -12,11 +12,11 @@ def searchDir(dir):
 		filename, extension = path.splitext(entry.name)
 
 		if extension == ".html":
-			files_to_compress.append("pages/{}/{}".format(foldername, entry.name).encode("utf-8"))
+			files_to_compress.append(f"{foldername}/{entry.name}".encode("utf-8"))
 	
-	tarname = "{}.tar.z".format(foldername)
+	tarname = f"{foldername}.tar.z"
 	
-	cryptsab.tar_z_compress(tarname.encode("utf-8"), len(files_to_compress), *files_to_compress)
+	cryptsab.tar_z_compress(tarname.encode("utf-8"), f"pages/".encode("utf-8"), len(files_to_compress), *files_to_compress)
 
 	return tarname.encode('utf-8')
 
@@ -31,7 +31,7 @@ if __name__ == "__main__":
 			continue
 		tar_files.append(searchDir(pagefolder))
 	
-	# cryptsab.tar_z_compress(argv[1].encode("utf-8"), len(tar_files), *tar_files)
+	cryptsab.tar_z_compress(argv[1].encode("utf-8"), "".encode("utf-8"), len(tar_files), *tar_files)
 
-	# for file in tar_files:
-	# 	remove(file)
+	for file in tar_files:
+		remove(file)
