@@ -1,3 +1,2 @@
 - Encrypt archives
-- Allow subdirectories.
 - Make python script compatible with meson build system 

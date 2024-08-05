@@ -4,16 +4,24 @@ from sys import argv
 
 cryptsab = cdll.LoadLibrary("cryptsab/build/libcryptsab.dll")
 
-def searchDir(dir):
+def readFiles(dir, relative_path=""):
 	foldername, ext = path.splitext(dir.name)
 
-	files_to_compress = []
+	files = []
 	for entry in scandir(dir):
+		if entry.is_dir():
+			files = files + readFiles(entry, f"{foldername}/")
+		
 		filename, extension = path.splitext(entry.name)
 
 		if extension == ".html":
-			files_to_compress.append(f"{foldername}/{entry.name}".encode("utf-8"))
-	
+			files.append(f"{relative_path}{foldername}/{entry.name}".encode("utf-8"))
+	return files
+
+def searchDir(dir):
+	files_to_compress = readFiles(dir)
+
+	foldername, ext = path.splitext(dir.name)
 	tarname = f"{foldername}.tar.z"
 	
 	cryptsab.tar_z_compress(tarname.encode("utf-8"), f"pages/".encode("utf-8"), len(files_to_compress), *files_to_compress)
