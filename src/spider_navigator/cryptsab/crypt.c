@@ -1,5 +1,6 @@
 #include "crypt.h"
 
+#include <stdio.h>
 #include <openssl/evp.h>
 #include <openssl/kdf.h>
 #include <openssl/err.h>
@@ -71,7 +72,7 @@ int derive_key_scrypt(char password[], unsigned char key[], size_t key_len, unsi
 /// @param password The password.
 /// @param key The key output.
 /// @return 1 on success, any number < 0 on fail.
-int derive_key_md4(char password[], unsigned char key[], size_t key_len, unsigned char iv[], size_t iv_len) {
+int derive_key_md4(char password[], unsigned char key[16]) {
 	EVP_MD_CTX* ctx = EVP_MD_CTX_new();
 
 	if (ctx == NULL) {
@@ -87,14 +88,7 @@ int derive_key_md4(char password[], unsigned char key[], size_t key_len, unsigne
 		return -1;
 	}
 
-	OSSL_PARAM params[2];
-
-	unsigned int len = key_len + iv_len;
-
-	params[0] = OSSL_PARAM_construct_uint("size", &len);
-	params[1] = OSSL_PARAM_construct_end();
-
-	int init_result = EVP_DigestInit_ex2(ctx, md, params);
+	int init_result = EVP_DigestInit_ex2(ctx, md, NULL);
 	EVP_MD_free(md);
 	if (init_result <= 0) {
 		ERROR("Could not initialize MD4.");
@@ -109,28 +103,20 @@ int derive_key_md4(char password[], unsigned char key[], size_t key_len, unsigne
 		return -1;
 	}
 
-	
-	unsigned char out[len];
-
 	unsigned int outlen;
-	int final = EVP_DigestFinal(ctx, out, &outlen);
+	int final = EVP_DigestFinal(ctx, key, &outlen);
 	EVP_MD_CTX_free(ctx);
 	if (final <= 0) {
 		ERROR("Could not process final digest.");
 		return -1;
 	}
-	OPENSSL_assert(outlen == len);
 
-	for (int i = 0; i < outlen; i++) {
-		if (i >= key_len) {
-			iv[i - key_len] = out[i];
-		} else {
-			key[i] = out[i];
-		}
-	}
+	OPENSSL_assert(outlen == 16);
 	
 	return 1;
 }
+
+EVP_CIPHER_CTX* ctx;
 
 int start_aes_cipher(EVP_CIPHER_CTX** ctx) {
 	*ctx = NULL;
@@ -140,7 +126,6 @@ int start_aes_cipher(EVP_CIPHER_CTX** ctx) {
 		return -1;
 	}
 
-	// TODO: Might be fun to load RC2 with the legacy provider.
 	EVP_CIPHER* cipher = NULL;
 	cipher = EVP_CIPHER_fetch(NULL, "AES-256-CBC", NULL);
 	if (cipher == NULL) {
@@ -218,14 +203,49 @@ int start_des_cipher(EVP_CIPHER_CTX** ctx) {
 	return 1;
 }
 
+void free_cipher(EVP_CIPHER_CTX* ctx) {
+	EVP_CIPHER_CTX_free(ctx);
+}
+
+EVP_CIPHER_CTX* global_ctx = NULL;
+int start_cipher(const char* ciphername) {
+	if (global_ctx != NULL) {
+		return -2;
+	}
+
+	if (strncmp(ciphername, "aes", 3) == 0) {
+		return start_aes_cipher(&global_ctx);
+	} else if (strncmp(ciphername, "rc2", 3) == 0) {
+		return start_rc2_cipher(&global_ctx);
+	} else if (strncmp(ciphername, "des", 3) == 0) {
+		return start_des_cipher(&global_ctx);
+	}
+
+	return -3;
+}
+
+int crypt_file_existing_cipher(int do_crypt, unsigned char key[], unsigned char iv[], const char* inpath, const char* outpath) {
+	return crypt_file(do_crypt, key, iv, inpath, outpath, global_ctx);
+}
+
+void end_cipher() {
+	free_cipher(global_ctx);
+	global_ctx = NULL;
+}
+
 // Adapted from https://docs.openssl.org/master/man3/EVP_EncryptInit/#examples
-int crypt_file(int do_crypt, unsigned char key[], unsigned char iv[], FILE* in, FILE* out, EVP_CIPHER_CTX* ctx) {
+int crypt_file(int do_crypt, unsigned char key[], unsigned char iv[], const char* inpath, const char* outpath, EVP_CIPHER_CTX* ctx) {
+
 	int result = EVP_CipherInit_ex2(ctx, NULL, key, iv, do_crypt, NULL);
 	if (result <= 0) {
 		ERROR("Could not set encryption/decryption mode to Cipher context.\n");
 		EVP_CIPHER_CTX_free(ctx);
 		return -1;
 	}
+
+	
+	FILE* in = fopen(inpath, "rb");
+	FILE* out = fopen(outpath, "wb");
 	
 	unsigned char inbuf[1024], outbuf[1024 + EVP_MAX_BLOCK_LENGTH];
 	int inlen, outlen;
@@ -239,6 +259,8 @@ int crypt_file(int do_crypt, unsigned char key[], unsigned char iv[], FILE* in, 
 		if (update_result <= 0) {
 			ERROR("Could not crypt infile.\n");
 			EVP_CIPHER_CTX_free(ctx);
+			fclose(in);
+			fclose(out);
 			return -1;
 		}
 		fwrite(outbuf, 1, outlen, out);
@@ -247,9 +269,51 @@ int crypt_file(int do_crypt, unsigned char key[], unsigned char iv[], FILE* in, 
 	if (final_result <= 0) {
 		ERROR("Could not crypt last bytes of infile.\n");
 		EVP_CIPHER_CTX_free(ctx);
+		fclose(in);
+		fclose(out);
 		return -1;
 	}
 	fwrite(outbuf, 1, outlen, out);
 
+	fclose(in);
+	fclose(out);
+
 	return 1;
+}
+
+int load_provider(const char* name, OSSL_PROVIDER** pvdr) {
+	*pvdr = OSSL_PROVIDER_load(NULL, name);
+	if (*pvdr == NULL) {
+		ERROR("Could not load provider.");
+		return -1;
+	}
+	return 0;
+}
+
+void unload_provider(OSSL_PROVIDER* pvdr) {
+	OSSL_PROVIDER_unload(pvdr);
+}
+
+OSSL_PROVIDER* legacy = NULL;
+int load_legacy_provider() {
+	if (legacy == NULL) {
+		return load_provider("legacy", &legacy);
+	}
+	return -2;
+}
+
+void unload_legacy_provider() {
+	unload_provider(legacy);
+}
+
+OSSL_PROVIDER* dflt;
+int load_default_provider() {
+	if (dflt == NULL) {
+		return load_provider("default", &dflt);
+	}
+	return -2;
+}
+
+void unload_default_provider() {
+	unload_provider(dflt);
 }
