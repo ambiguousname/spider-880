@@ -43,9 +43,11 @@ def searchDir(dir):
 	
 	cryptsab.tar_z_compress(tarname.encode("utf-8"), f"pages/".encode("utf-8"), len(files_to_compress), *files_to_compress)
 
-	# cryptsab.crypt_file_existing_cipher(1, key, iv, tarname.encode("utf-8"), f"{tarname}.enc".encode("utf-8"))
+	cryptsab.crypt_file_existing_cipher(1, key, iv, tarname.encode("utf-8"), f"{tarname}.enc".encode("utf-8"))
 
-	return tarname.encode('utf-8')
+	remove(tarname)
+
+	return f"{tarname}.enc".encode('utf-8')
 
 if __name__ == "__main__":
 	if len(argv) < 2:
@@ -63,6 +65,17 @@ if __name__ == "__main__":
 		tar_files.append(searchDir(pagefolder))
 	
 	cryptsab.tar_z_compress(argv[1].encode("utf-8"), "".encode("utf-8"), len(tar_files), *tar_files)
+
+
+	key_out = create_string_buffer(16)
+
+	cryptsab.derive_key_md4(b"9973", key_out)
+
+	key, iv = key_out[:8], key_out[8:]
+
+	cryptsab.crypt_file_existing_cipher(1, key, iv, argv[1].encode("utf-8"), f"{argv[1]}.enc".encode("utf-8"))
+
+	remove(argv[1])
 
 	cryptsab.end_cipher()
 	cryptsab.unload_legacy_provider()
