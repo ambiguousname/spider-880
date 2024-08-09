@@ -4,16 +4,14 @@ cryptsab_dep = cryptsab.get_variable('cryptsab_dep')
 incdir = include_directories('../')
 
 # Modify python script to just instead write to here?
-navsab = static_library('navsab', ['browser.cpp', 'page.cpp', 'tags.cpp'], build_by_default: true, include_directories: incdir)
-
-page_list = run_command('grab_pages.sh', check: true)
-pages = page_list.stdout().strip().split('\n')
+navsab = static_library('navsab', ['browser.cpp'], build_by_default: true, include_directories: incdir)
 
 python = find_program('python')
 
 pages = custom_target(
 	'pages', 
 	output: 'pages.tar.z.enc',
-	input: pages,
-	command: [python, 'pagesbuild.py', cryptsab.get_variable('libcrypt').full_path(), '@OUTPUT@']
+	input: 'pagesbuild.py',
+	build_always: true,
+	command: [python, '@INPUT@', cryptsab.get_variable('libcrypt').full_path(), '@OUTPUT@']
 )
