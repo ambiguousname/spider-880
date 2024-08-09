@@ -6,5 +6,6 @@ release
 
 subprojects/*
 !subprojects/*.wrap
+!subprojects/cryptsab
 
 .vscode

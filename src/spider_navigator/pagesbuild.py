@@ -74,7 +74,9 @@ if __name__ == "__main__":
 	
 	out_page = args.outfile
 
-	cryptsab.tar_z_compress(f"{out_page}.tar.z".encode("utf-8"), "".encode("utf-8"), len(tar_files), *tar_files)
+	outname = path.splitext(out_page)
+
+	cryptsab.tar_z_compress(f"{outname}.tar.z".encode("utf-8"), "".encode("utf-8"), len(tar_files), *tar_files)
 
 
 	key_out = create_string_buffer(16)
@@ -83,9 +85,9 @@ if __name__ == "__main__":
 
 	key, iv = key_out[:8], key_out[8:]
 
-	cryptsab.crypt_file_existing_cipher(1, key, iv, f"{out_page}.tar.z".encode("utf-8"), f"{out_page}.tar.z.enc".encode("utf-8"))
+	cryptsab.crypt_file_existing_cipher(1, key, iv, f"{outname}.tar.z".encode("utf-8"), out_page.encode("utf-8"))
 
-	remove(f"{out_page}.tar.z")
+	remove(f"{outname}.tar.z")
 
 	cryptsab.end_cipher()
 	cryptsab.unload_legacy_provider()
