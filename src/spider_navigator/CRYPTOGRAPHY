@@ -1,0 +1,27 @@
+# Valid OpenSSL Commands:
+
+## MD4 key/iv derivation:
+
+`echo -n "PASSWORD" | openssl dgst -md4 -provider legacy password.txt`
+
+## Decryption (des):
+
+`openssl enc -provider legacy --des -d -in FILENAME.tar.z.enc -out FILENAME.tar.z -K HALF_OF_MD4_KEY_HERE -iv OTHER_HALF_HERE`
+
+## Example
+
+So for instance, to decrypt the first pages:
+
+`echo -n "9973" | openssl dgst -md4 -provider legacy`
+
+Gives us
+
+`361289c48e5fb4739875a7452144389b`
+
+We can decrypt the pages with:
+
+`openssl enc -provider legacy --des -d -in pages.tar.z.enc -out pages.tar.z -K 361289c48e5fb473 -iv 9875a7452144389b`
+
+
+## Decrypting HTML Files
+The password for any tar file contained in the archive will be the name of the webpage.
