@@ -1,8 +1,10 @@
 cryptsab = subproject('cryptsab')
 cryptsab_dep = cryptsab.get_variable('cryptsab_dep')
 
+incdir = include_directories('../')
+
 # Modify python script to just instead write to here?
-navsab = static_library('navsab', ['page.cpp', 'tags.cpp'], build_by_default: true)
+navsab = static_library('navsab', ['page.cpp', 'tags.cpp'], build_by_default: true, include_directories: incdir)
 
 page_list = run_command('grab_pages.sh', check: true)
 pages = page_list.stdout().strip().split('\n')
