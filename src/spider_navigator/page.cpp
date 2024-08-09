@@ -1,11 +1,7 @@
 #include "page.hpp"
+#include "browser.hpp"
 #include <FL/Fl.H>
 #include <FL/fl_ask.H>
-#include "pages/gertwig_blog/navsab.hpp"
-#include "pages/deadbeef/deadbeef.hpp"
-#include "pages/deadbeef/feebdaed.hpp"
-#include "pages/deadbeef/abababab.hpp"
-#include "pages/deadbeef/babababa.hpp"
 #include <stdexcept>
 #include <util/base_sounds.hpp>
 
@@ -17,40 +13,14 @@ void aboutCallback(Fl_Widget*, void*) {
 
 typedef HTMLWindow* (*page_create)(int, int, int, int);
 
-void showHTMLPageFromString(Fl_Widget* widget, void* str) {
-	HTMLWindow* window = dynamic_cast<HTMLWindow*>(widget);
-
-	std::string* string = (std::string*)str;
-	windowCreation out;
-	window->getLinkedWindow(*string, out);
-
-	HTMLWindow* page = out(window->x() + 10, window->y() + 10, window->w(), window->h());
-	page->show();
+void showHelp(Fl_Widget*, void*) {
+	newWindow("gertwig_blog", "index.html");
 }
-
-void showHTMLPage(Fl_Widget* widget, void* pg) {
-	page_create creator = (page_create)(pg);
-	HTMLWindow* window = dynamic_cast<HTMLWindow*>(widget);
-	if (window == nullptr) {
-		HTMLWindow* page = creator(10, 10, 300, 300);
-		page->show();
-		return;
-	}
-	HTMLWindow* page = creator(window->x() + 10, window->y() + 10, window->w(), window->h());
-	page->show();
-}
-
-const Password const_passwords[] = {
-	{"deadbeef", showHTMLPage, (void*)DeadbeefDeadbeefHTMLWindow::createWindow},
-	{"feebdaed", showHTMLPage, (void*)DeadbeefFeebdaedHTMLWindow::createWindow},
-	{"abababab", showHTMLPage, (void*)DeadbeefAbabababHTMLWindow::createWindow},
-	{"babababa", showHTMLPage, (void*)DeadbeefBabababaHTMLWindow::createWindow},
-};
 
 HTMLWindow::HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int h) : Fl_Window(x, y, w, h), menu_bar(0, 0, w, 20) {
 	menu_bar.add("NavSab", 0, 0, 0, FL_MENU_INACTIVE);
 	menu_bar.add("Help/About", FL_CTRL+'a', aboutCallback);
-	menu_bar.add("Help/Website", FL_CTRL+'w', showHTMLPage, (void*)&GertwigBlogNavsabHTMLWindow::createWindow);
+	menu_bar.add("Help/Website", FL_CTRL+'w', showHelp);
 
 	auto attributes = root->attributes();
 	auto find_title = attributes.find("title");
@@ -60,49 +30,12 @@ HTMLWindow::HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int 
 		label(title.c_str());
 	}
 
-	for (auto p : const_passwords) {
-		passwords.push_back(p);
-	}
-	auto pwds = attributes.find("passwords");
-	if (pwds != attributes.end()) {
-
-		std::string buf = "";
-		std::string passwordName;
-
-		for (auto c : pwds->second) {
-			if (c == '=') {
-				passwordName = buf;
-				buf = "";
-			} else if (c == ',' || c == '\0') {
-				Password& a = passwords.emplace_back(Password {passwordName, showHTMLPageFromString, 0, buf});
-				a.data = &a.str_data;
-				buf = "";
-				passwordName = "";
-			} else {
-				buf += c;
-			}
-		}
-		if (buf.size() > 0 && passwordName.size() > 0) {
-			Password& a = passwords.emplace_back(Password {passwordName, showHTMLPageFromString, 0, buf});
-			a.data = &a.str_data;
-		}
-	}
-
 	scrollbar = new Fl_Scroll(0, 25, w, h - 25);
 	page = new HTMLPage(root, std::shared_ptr<HTMLWindow>(this), 0, 25, w, h - 25, 10);
 	scrollbar->end();
 	scrollbar->type(Fl_Scroll::VERTICAL);
 
 	resizable(this);
-}
-
-bool HTMLWindow::getLinkedWindow(std::string name, windowCreation& out) {
-	auto search = linked_windows.find(name);
-	if (search != linked_windows.end()) {
-		out = search->second;
-		return true;
-	}
-	return false;
 }
 
 HTMLPage::HTMLPage(std::shared_ptr<HTMLNode> r, std::shared_ptr<HTMLWindow> parent, int x, int y, int w, int h, int horizontal_padding) : Fl_Group(x, y, w, h), padding(horizontal_padding), interactive_nodes(), parent_window(parent) {
@@ -274,69 +207,6 @@ int HTMLPage::handle(int event) {
 
 void clearDraw(void* window) {
 	static_cast<HTMLWindow*>(window)->redraw();
-}
-
-int HTMLWindow::handle(int event) {
-	if (event == FL_KEYDOWN) {
-		const char* key =  Fl::event_text();
-		
-		if (key[0] != '\0'){
-			typeSound(0.5f + ((float)key[0])/CHAR_MAX);
-			char key_l = tolower(key[0]);
-
-			make_current();
-			Fl_Fontsize old_size = fl_size();
-			Fl_Color old_color = fl_color();
-			fl_color(FL_RED);
-			fl_font(fl_font(), 50);
-			fl_draw(std::string(1, key_l).c_str(), 0, 0, w(), h(), FL_ALIGN_CENTER);
-			fl_font(fl_font(), old_size);
-			fl_color(old_color);
-			if (!Fl::has_timeout(clearDraw, this)) {
-				Fl::add_timeout(0.1, clearDraw, this);
-			}
-
-			typing_buffer.push_back(key_l);
-			if (typing_buffer.size() > 20) {
-				typing_buffer.erase(typing_buffer.begin());
-			}
-			
-			std::vector<Password> matches = {};
-
-			for (auto p: passwords) {
-				size_t size = p.password.size();
-				if (p.password[size - 1] == typing_buffer.back()) {
-					Password match = Password(p);
-					match.curr_index = size - 1;
-					matches.push_back(match);
-				}
-			}
-
-			// Avoid integer underflow: https://stackoverflow.com/questions/4205720/iterating-over-a-vector-in-reverse-direction
-			if (typing_buffer.size() > 1 && matches.size() > 0) {
-				for (size_t i = typing_buffer.size() - 1; i-- >= 0; ) {
-					bool pwd_found = false;
-					for (auto m = matches.begin(); m != matches.end();) {
-						m->curr_index -= 1;
-						if (m->curr_index < 0) {
-							pwd_found = true;
-							checkSound();
-							m->callback(this, m->data);
-							break;
-						} else if (m->password[m->curr_index] != typing_buffer[i]) {
-							matches.erase(m);
-						} else {
-							m++;
-						}
-					}
-					if (pwd_found || matches.size() == 0) {
-						break;
-					}
-				}
-			}
-		}
-	}
-	return Fl_Window::handle(event);
 }
 
 #pragma endregion interaction

@@ -91,24 +91,6 @@ class HTMLPage : public Fl_Group {
 	}
 };
 
-// Mostly for storing an HTML page. Might put some browser looking things (search bar?) on the top.
-// TODO: When an HTMLWindow is constructed from a root node, it returns a shared pointer 
-// May not pose a problem right now, but what if we need to make multiple windows of the same page that show different information?
-// Mayhaps some copying is in order in the future.
-
-typedef void (*password_callback)(Fl_Widget*, std::string);
-
-struct Password {
-	std::string password;
-	Fl_Callback* callback;
-	void* data = 0;
-	std::string str_data = "";
-	int curr_index=0;
-	bool operator==(const Password& other) {
-		return (password == other.password);
-	}
-};
-
 class HTMLWindow : public Fl_Window {
 	void drawChildren();
 
@@ -122,16 +104,8 @@ class HTMLWindow : public Fl_Window {
 	// Other HTML pages (or just FL_Windows) linked by <a> tags.
 	std::unordered_map<std::string, std::function<HTMLWindow*(int, int, int, int)>> linked_windows;
 	std::string title;
-	
-	std::vector<Password> passwords;
-
-	std::vector<char> typing_buffer = std::vector<char>();
 
 	public:
 	HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int h);
-
-	int handle(int event);
-
-	bool getLinkedWindow(std::string name, std::function<HTMLWindow*(int, int, int, int)> &out);
 };
 typedef std::function<HTMLWindow*(int, int, int, int)> windowCreation; 

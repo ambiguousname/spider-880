@@ -6,7 +6,7 @@
 
 #include "database/database_window.hpp"
 #include "util/window_management.hpp"
-#include <murder_blog/murder.hpp>
+#include <spider_navigator/browser.hpp>
 
 #include <util/sound.hpp>
 #include <util/base_sounds.hpp>
@@ -25,8 +25,7 @@ void createBlog(Fl_Widget*) {
 		clickSound();
 		int x, y, w, h;
 		Fl::screen_work_area(x, y, w, h);
-		MurderBlogMurderHTMLWindow* page = new MurderBlogMurderHTMLWindow(x + w/4, y + h/4, 300, 300);
-		page->show();
+		newWindow("murder_blog", "murder.html");
 	} else {
 		errorSound();
 		fl_alert("Browsing is not yet enabled.\nYou must select a name.");
@@ -81,8 +80,7 @@ int main(int argc, char **argv) {
 		// To avoid playing the sound.
 		int x, y, w, h;
 		Fl::screen_work_area(x, y, w, h);
-		MurderBlogMurderHTMLWindow* page = new MurderBlogMurderHTMLWindow(x + w/4, y + h/4, 300, 300);
-		page->show();
+		newWindow("murder_blog", "murder.html");
 	} else {
 		db->citizenSelectedOverride(overrideCitizenSelection);
 	}

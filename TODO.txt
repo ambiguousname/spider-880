@@ -1,0 +1,2 @@
+- New password system (I'm thinking broken links that require password protection, with mysterious passwords) 
+- New secret pages to go with new password system

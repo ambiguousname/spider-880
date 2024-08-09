@@ -1,2 +1,0 @@
-- Encrypt archives
-- Make python script compatible with meson build system 
