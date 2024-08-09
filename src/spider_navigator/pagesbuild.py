@@ -1,8 +1,8 @@
 from ctypes import cdll, c_void_p, create_string_buffer, pointer, addressof
 from os import path, scandir, remove
-from sys import argv
+import argparse
 
-cryptsab = cdll.LoadLibrary("cryptsab/build/libcryptsab.dll")
+cryptsab = None
 
 def readFiles(dir, relative_path=""):
 	foldername, ext = path.splitext(dir.name)
@@ -50,8 +50,16 @@ def searchDir(dir):
 	return f"{tarname}.enc".encode('utf-8')
 
 if __name__ == "__main__":
-	if len(argv) < 2:
-		raise "Need to set out archive."
+	parser = argparse.ArgumentParser(
+		prog="Pages Builder",
+	)
+
+	parser.add_argument("library_location")
+	parser.add_argument("outfile")
+
+	args = parser.parse_args()
+	
+	cryptsab = cdll.LoadLibrary(args.library_location)
 
 	cryptsab.load_legacy_provider()
 	cryptsab.start_cipher(b"des")
@@ -64,7 +72,9 @@ if __name__ == "__main__":
 			continue
 		tar_files.append(searchDir(pagefolder))
 	
-	cryptsab.tar_z_compress(argv[1].encode("utf-8"), "".encode("utf-8"), len(tar_files), *tar_files)
+	out_page = args.outfile
+
+	cryptsab.tar_z_compress(f"{out_page}.tar.z".encode("utf-8"), "".encode("utf-8"), len(tar_files), *tar_files)
 
 
 	key_out = create_string_buffer(16)
@@ -73,9 +83,9 @@ if __name__ == "__main__":
 
 	key, iv = key_out[:8], key_out[8:]
 
-	cryptsab.crypt_file_existing_cipher(1, key, iv, argv[1].encode("utf-8"), f"{argv[1]}.enc".encode("utf-8"))
+	cryptsab.crypt_file_existing_cipher(1, key, iv, f"{out_page}.tar.z".encode("utf-8"), f"{out_page}.tar.z.enc".encode("utf-8"))
 
-	remove(argv[1])
+	remove(f"{out_page}.tar.z")
 
 	cryptsab.end_cipher()
 	cryptsab.unload_legacy_provider()
