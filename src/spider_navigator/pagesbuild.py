@@ -41,8 +41,7 @@ def searchDir(dir):
 
 	tarname = f"{archive_name}.tar.z"
 	
-	# TODO: The relative folder thing is not working out due to meson building peculiarities.
-	cryptsab.tar_z_compress(tarname.encode("utf-8"), f"pages/".encode("utf-8"), len(files_to_compress), *files_to_compress)
+	cryptsab.tar_z_compress(tarname.encode("utf-8"), path.abspath(__file__ + "/../pages/").encode("utf-8"), len(files_to_compress), *files_to_compress)
 
 	cryptsab.crypt_file_existing_cipher(1, key, iv, tarname.encode("utf-8"), f"{tarname}.enc".encode("utf-8"))
 
@@ -77,7 +76,7 @@ if __name__ == "__main__":
 
 	outname, ext = path.splitext(out_page)
 
-	cryptsab.tar_z_compress(f"{outname}.tar.z".encode("utf-8"), "".encode("utf-8"), len(tar_files), *tar_files)
+	cryptsab.tar_z_compress(f"{outname}.tar.z".encode("utf-8"), ".".encode("utf-8"), len(tar_files), *tar_files)
 
 
 	key_out = create_string_buffer(16)

@@ -59,11 +59,11 @@ int tar_z_compress(const char* compressed_path, const char* files_location, int 
 
 		char file_local_location[files_location_len + file_len];
 
-		sprintf(file_local_location, "%s%s", files_location, filename);
+		sprintf(file_local_location, "%s/%s", files_location, filename);
 
 		int stat_result = stat(file_local_location, &st);
 		if (stat_result < 0) {
-			fprintf(stderr, "Error, could not get metadata for %s: %i", filename, errno);
+			fprintf(stderr, "Error, could not get metadata for %s: %i\n", file_local_location, errno);
 			archive_entry_free(entry);
 			ARCHIVE_FREE(a, write, ARCHIVE_FAILED);
 			return ARCHIVE_FAILED;

@@ -8,10 +8,11 @@ navsab = static_library('navsab', ['browser.cpp'], build_by_default: true, inclu
 
 python = find_program('python')
 
-pages = custom_target(
+custom_target(
 	'pages', 
 	output: 'pages.tar.z.enc',
 	input: 'pagesbuild.py',
-	build_always: true,
+	build_always_stale: true,
+	build_by_default: true,
 	command: [python, '@INPUT@', cryptsab.get_variable('libcrypt').full_path(), '@OUTPUT@']
 )
