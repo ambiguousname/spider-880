@@ -1,5 +1,4 @@
-#include "crypt.h"
-
+#include "include/cryptsab/crypt.h"
 #include <stdio.h>
 #include <openssl/evp.h>
 #include <openssl/kdf.h>
@@ -18,7 +17,7 @@
 /// @param iv Output for iv.
 /// @param iv_len Length of the IV.
 /// @return Success. < 0 for failure, 1 for success.
-int derive_key_scrypt(char password[], unsigned char key[], size_t key_len, unsigned char iv[], size_t iv_len) {
+int derive_key_scrypt(const char password[], unsigned char key[], size_t key_len, unsigned char iv[], size_t iv_len) {
 	EVP_KDF* kdf = EVP_KDF_fetch(NULL, "SCRYPT", NULL);
 	if (kdf == NULL) {
 		ERROR("Could not find scrypt KDF.\n");
@@ -56,7 +55,7 @@ int derive_key_scrypt(char password[], unsigned char key[], size_t key_len, unsi
 		return -1;
 	}
 
-	for (int i = 0; i < out_len; i++) {
+	for (size_t i = 0; i < out_len; i++) {
 		if (i >= key_len) {
 			iv[i - key_len] = out[i];
 		} else {
@@ -72,7 +71,7 @@ int derive_key_scrypt(char password[], unsigned char key[], size_t key_len, unsi
 /// @param password The password.
 /// @param key The key output.
 /// @return 1 on success, any number < 0 on fail.
-int derive_key_md4(char password[], unsigned char key[16]) {
+int derive_key_md4(const char password[], unsigned char key[16]) {
 	EVP_MD_CTX* ctx = EVP_MD_CTX_new();
 
 	if (ctx == NULL) {
