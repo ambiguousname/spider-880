@@ -59,7 +59,8 @@ if command -v pacman > /dev/null; then
 	pacman -S mingw-w64-ucrt-x86_64-glew
 fi
 
-# Meson build freaks out otherwise.
-python3 ./src/spider_navigator/navigator.py
+if command -v pacman > /dev/null; then
+	pacman -S mingw-w64-ucrt-x86_64-libarchive
+fi
 
 meson setup build
