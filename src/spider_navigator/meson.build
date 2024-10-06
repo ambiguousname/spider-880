@@ -13,6 +13,6 @@ custom_target(
 	input: 'pagesbuild.py',
 	build_always_stale: true,
 	build_by_default: true,
-	depends: [navsab],
+	depends: [cryptsab.get_variable('libcryptsab')],
 	command: [python, '@INPUT@', cryptsab.get_variable('libcryptsab').full_path(), '@OUTPUT@']
 )
