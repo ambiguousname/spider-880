@@ -8,14 +8,15 @@ extern "C" {
 #include <format>
 
 void newWindow(std::string site, std::string filename) {
+	OSSL_LIB_CTX* ctx = lib_ctx_local_providers("./ossl-modules");
 	OSSL_PROVIDER* pvdr;
-	load_provider("legacy", &pvdr);
+	load_provider_with_ctx("legacy", &pvdr, ctx);
 
 	unsigned char name[16];
 
 	std::string name_pwd = std::format("WEBPAGE:{0}", site);
 
-	derive_key_md4(name_pwd.c_str(), name);
+	derive_key_md4(ctx, name_pwd.c_str(), name);
 
 	std::string file = std::format("{0}.tar.z.enc", (char*)name);
 
@@ -28,4 +29,5 @@ void newWindow(std::string site, std::string filename) {
 	}
 
 	unload_provider(pvdr);
+	free_lib_ctx(ctx);
 }

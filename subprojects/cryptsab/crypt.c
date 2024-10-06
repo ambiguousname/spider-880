@@ -71,7 +71,7 @@ int derive_key_scrypt(const char password[], unsigned char key[], size_t key_len
 /// @param password The password.
 /// @param key The key output.
 /// @return 1 on success, any number < 0 on fail.
-int derive_key_md4(const char password[], unsigned char key[16]) {
+int derive_key_md4(OSSL_LIB_CTX* libctx, const char password[], unsigned char key[16]) {
 	EVP_MD_CTX* ctx = EVP_MD_CTX_new();
 
 	if (ctx == NULL) {
@@ -79,7 +79,7 @@ int derive_key_md4(const char password[], unsigned char key[16]) {
 		return -1;
 	}
 
-	EVP_MD* md = EVP_MD_fetch(NULL, "MD4", "provider=legacy");
+	EVP_MD* md = EVP_MD_fetch(libctx, "MD4", "provider=legacy");
 
 	if (md == NULL) {
 		ERROR("Could not get MD4.\n");
@@ -280,8 +280,38 @@ int crypt_file(int do_crypt, unsigned char key[], unsigned char iv[], const char
 	return 1;
 }
 
+OSSL_LIB_CTX* lib_ctx_local_providers(const char* folder) {
+	OSSL_LIB_CTX* out = OSSL_LIB_CTX_new();
+
+	if (out == NULL) {
+		ERROR("Could not create new library context.");
+		return NULL;
+	}
+
+	if (OSSL_PROVIDER_set_default_search_path(out, folder) < 0) {
+		ERROR("Could not set default search path.");
+		return NULL;
+	}
+
+
+	return out;
+}
+
+void free_lib_ctx(OSSL_LIB_CTX* ctx) {
+	OSSL_LIB_CTX_free(ctx);
+}
+
 int load_provider(const char* name, OSSL_PROVIDER** pvdr) {
 	*pvdr = OSSL_PROVIDER_load(NULL, name);
+	if (*pvdr == NULL) {
+		ERROR("Could not load provider.");
+		return -1;
+	}
+	return 0;
+}
+
+int load_provider_with_ctx(const char* name, OSSL_PROVIDER** pvdr, OSSL_LIB_CTX* ctx) {
+	*pvdr = OSSL_PROVIDER_load(ctx, name);
 	if (*pvdr == NULL) {
 		ERROR("Could not load provider.");
 		return -1;
