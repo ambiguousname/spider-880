@@ -1,7 +1,4 @@
 #!/bin/sh
-# TODO: Move into meson.build file?
-# As a run target.
-python ./src/spider_navigator/navigator.py
 
 # If this doesn't work, add C:/msys64/ucrt64/bin to your PATH
 meson compile -C build
