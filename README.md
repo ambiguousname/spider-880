@@ -13,3 +13,9 @@ https://ambiguousname.itch.io/spider-880
 - [Faker](https://faker.readthedocs.io/en/master/)
 - [OpenSSL ^3.3.1](https://openssl.org/)
 - [libarchive >= 3.7.4](https://libarchive.org/)
+
+# Building
+
+Check `install.sh` (or run it, if you're using MSYS2 on Windows) for requirements.
+
+Be sure to include `libcryptsab` in the executable path, or the game will not start (will be built in build/subprojects/cryptsab)
