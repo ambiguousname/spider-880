@@ -28,12 +28,12 @@ def searchDir(dir):
 	# Getting two keys, actually. One for our folder name, another for DES encryption. 
 
 	full = create_string_buffer(16)
-	cryptsab.derive_key_md4(foldername.encode("utf-8"), full)
+	cryptsab.derive_key_md4(None, foldername.encode("utf-8"), full)
 
 	key, iv = full.value[:8], full.value[8:]
 
 	name = create_string_buffer(16)
-	cryptsab.derive_key_md4(f"WEPBAGE:{foldername}".encode("utf-8"), name)
+	cryptsab.derive_key_md4(None, f"WEPBAGE:{foldername}".encode("utf-8"), name)
 
 	archive_name = ""
 	for n in name.value:
@@ -81,7 +81,7 @@ if __name__ == "__main__":
 
 	key_out = create_string_buffer(16)
 
-	cryptsab.derive_key_md4(b"9973", key_out)
+	cryptsab.derive_key_md4(None, b"9973", key_out)
 
 	key, iv = key_out[:8], key_out[8:]
 
