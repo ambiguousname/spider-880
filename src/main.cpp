@@ -39,6 +39,8 @@ void overrideCitizenSelection(Fl_Widget*) {
 	FILE* f = fopen("savefile.txt", "w");
 	fputs("I'll give you one more password: abababab.", f);
 	fclose(f);
+
+	initializeBrowser();
 }
 
 #include "win_screen.hpp"
@@ -74,6 +76,7 @@ int main(int argc, char **argv) {
 	if (FILE* file = fopen("savefile.txt", "r")) {
 		fclose(file);
 		pagesEnabled = true;
+		initializeBrowser();
 	}
 
 	if (pagesEnabled){
@@ -101,5 +104,6 @@ int main(int argc, char **argv) {
 	close.awaitPlay();
 	
 	SoundManager::Uninitialize();
+	uninitializeBrowser();
 	return 0;
 }
