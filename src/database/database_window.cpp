@@ -191,7 +191,7 @@ ChoiceCategory family_arr[3] = {family_married, family_spouse, family_count};
 
 const int database_widths[] = {40, 150, 0};
 DatabaseWindow::DatabaseWindow(int x, int y, int w, int h) : Fl_Window(x, y, w, h, "Citizen Database"), citizen_db(new CitizenDatabase("citizens.db")), choices{new DatabaseChoice(120, 20, w - 120, 20, selectArea, area_arr), new DatabaseChoice(120, 40, w - 120, 20, selectIncome, income_arr), new DatabaseChoice(120, 60, w - 120, 20, selectFamily, family_arr)}, search_button(0, 80, w, 20, "Search"), database_display(0, 100, w, h - 100) {
-	Fl_Box* b = new Fl_Box(0, 0, w, 20, "Who was murdered? Select them here.");
+	new Fl_Box(0, 0, w, 20, "Who was murdered? Select them here.");
 	database_display.column_widths(database_widths);
 	database_display.type(FL_HOLD_BROWSER);
 
