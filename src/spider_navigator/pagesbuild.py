@@ -33,7 +33,7 @@ def searchDir(dir):
 	key, iv = full.value[:8], full.value[8:]
 
 	name = create_string_buffer(16)
-	cryptsab.derive_key_md4(None, f"WEPBAGE:{foldername}".encode("utf-8"), name)
+	cryptsab.derive_key_md4(None, f"WEBPAGE:{foldername}".encode("utf-8"), name)
 
 	archive_name = ""
 	for n in name.value:
