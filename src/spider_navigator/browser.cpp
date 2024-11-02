@@ -60,23 +60,32 @@ void uninitializeBrowser() {
 	free_lib_ctx(libctx);
 }
 
-void newWindow(std::string site, std::string filename) {
+const char* base62 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+std::string filenameFromHash(unsigned char name[16]) {
+	std::string filename;
+	for (size_t i = 0; i < 16; i++) {
+		unsigned int v = name[i];
+		filename.push_back(base62[v % 62]);
+	}
+	return std::format("{0}.tar.z.enc", filename);
+}
+
+void newWindow(std::string site, std::string foldername) {
 	unsigned char name[16];
 
 	std::string name_pwd = std::format("WEBPAGE:{0}", site);
 
 	derive_key_md4(libctx, name_pwd.c_str(), name);
 
-	std::string file = std::format("{0}.tar.z.enc", (char*)name);
+	std::string file = filenameFromHash(name);
 
 	struct stat st;
 	int stat_result = stat(file.c_str(), &st);
 	if (stat_result < 0) {
 		fl_alert("Failed to read %s", file.c_str());
-		unload_provider(pvdr);
 		return;
 	}
 
-	unload_provider(pvdr);
-	free_lib_ctx(libctx);
+	
 }
