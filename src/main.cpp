@@ -25,7 +25,7 @@ void createBlog(Fl_Widget*) {
 		clickSound();
 		int x, y, w, h;
 		Fl::screen_work_area(x, y, w, h);
-		newWindow("murder_blog", "murder.html");
+		newWindow("murder_blog", "murder.html", x + w/4, y + h/4, 300, 300);
 	} else {
 		errorSound();
 		fl_alert("Browsing is not yet enabled.\nYou must select a name.");
@@ -83,7 +83,7 @@ int main(int argc, char **argv) {
 		// To avoid playing the sound.
 		int x, y, w, h;
 		Fl::screen_work_area(x, y, w, h);
-		newWindow("murder_blog", "murder.html");
+		newWindow("murder_blog", "murder.html", x + w/4, y + h/4, 300, 300);
 	} else {
 		db->citizenSelectedOverride(overrideCitizenSelection);
 	}

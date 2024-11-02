@@ -3,40 +3,6 @@
 #include <FL/Fl.H>
 #include <FL/fl_ask.H>
 #include <stdexcept>
-#include <util/base_sounds.hpp>
-
-void aboutCallback(Fl_Widget*, void*) {
-	// fl_message_icon();
-	errorSound();
-	fl_alert("Bureau of Sabotage Network Navigator\nBy Brian Gertwig");
-}
-
-typedef HTMLWindow* (*page_create)(int, int, int, int);
-
-void showHelp(Fl_Widget*, void*) {
-	newWindow("gertwig_blog", "index.html");
-}
-
-HTMLWindow::HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int h) : Fl_Window(x, y, w, h), menu_bar(0, 0, w, 20) {
-	menu_bar.add("NavSab", 0, 0, 0, FL_MENU_INACTIVE);
-	menu_bar.add("Help/About", FL_CTRL+'a', aboutCallback);
-	menu_bar.add("Help/Website", FL_CTRL+'w', showHelp);
-
-	auto attributes = root->attributes();
-	auto find_title = attributes.find("title");
-	if (find_title != attributes.end()) {
-		// Create a constant reference to the title so c_str doesn't bug out:
-		title = find_title->second;
-		label(title.c_str());
-	}
-
-	scrollbar = new Fl_Scroll(0, 25, w, h - 25);
-	page = new HTMLPage(root, std::shared_ptr<HTMLWindow>(this), 0, 25, w, h - 25, 10);
-	scrollbar->end();
-	scrollbar->type(Fl_Scroll::VERTICAL);
-
-	resizable(this);
-}
 
 HTMLPage::HTMLPage(std::shared_ptr<HTMLNode> r, std::shared_ptr<HTMLWindow> parent, int x, int y, int w, int h, int horizontal_padding) : Fl_Group(x, y, w, h), padding(horizontal_padding), interactive_nodes(), parent_window(parent) {
 	root.swap(r);
@@ -168,7 +134,8 @@ int HTMLPage::hoverRendered() {
 		rendered->hover(x, y, this);
 		return 1;
 	} else {
-		parent_window->cursor(FL_CURSOR_DEFAULT);
+		// TODO: Uncomment.
+		// parent_window->cursor(FL_CURSOR_DEFAULT);
 		return 0;
 	}
 }
@@ -206,7 +173,8 @@ int HTMLPage::handle(int event) {
 }
 
 void clearDraw(void* window) {
-	static_cast<HTMLWindow*>(window)->redraw();
+	// TODO: Uncomment.
+	// static_cast<HTMLWindow*>(window)->redraw();
 }
 
 #pragma endregion interaction

@@ -6,6 +6,40 @@ extern "C" {
 #include <FL/fl_ask.H>
 #include <sys/stat.h>
 #include <format>
+#include <util/base_sounds.hpp>
+
+void aboutCallback(Fl_Widget*, void*) {
+	// fl_message_icon();
+	errorSound();
+	fl_alert("Bureau of Sabotage Network Navigator\nBy Brian Gertwig");
+}
+
+
+void showHelp(Fl_Widget* widget, void*) {
+	BrowserWindow* window = dynamic_cast<BrowserWindow*>(widget);
+	newWindow("gertwig_blog", "index.html", window->x() + 10, window->y() + 10, window->w(), window->h());
+}
+
+BrowserWindow::BrowserWindow(std::string filepath, int x, int y, int w, int h) : Fl_Window(x, y, w, h), menu_bar(0, 0, w, 20) {
+	menu_bar.add("NavSab", 0, 0, 0, FL_MENU_INACTIVE);
+	menu_bar.add("Help/About", FL_CTRL+'a', aboutCallback);
+	menu_bar.add("Help/Website", FL_CTRL+'w', showHelp);
+
+	// auto attributes = root->attributes();
+	// auto find_title = attributes.find("title");
+	// if (find_title != attributes.end()) {
+	// 	// Create a constant reference to the title so c_str doesn't bug out:
+	// 	title = find_title->second;
+	// 	label(title.c_str());
+	// }
+
+	scrollbar = new Fl_Scroll(0, 25, w, h - 25);
+	// page = new HTMLPage(root, std::shared_ptr<HTMLWindow>(this), 0, 25, w, h - 25, 10);
+	scrollbar->end();
+	scrollbar->type(Fl_Scroll::VERTICAL);
+}
+
+
 
 OSSL_LIB_CTX* libctx;
 OSSL_PROVIDER* pvdr;
@@ -71,7 +105,19 @@ std::string filenameFromHash(unsigned char name[16]) {
 	return filename;
 }
 
-void newWindow(std::string site, std::string foldername) {
+void browserFromFile(std::string filepath, int x, int y, int w, int h) {
+	BrowserWindow* window = new BrowserWindow(filepath, x, y, w, h);
+	window->end();
+	window->resizable(window);
+}
+
+void newWindow(std::string site, std::string html_file, int x, int y, int w, int h) {
+	std::string file_loc = std::format("spider_navigator/{0}/{1}", site, html_file);
+	if (stat(file_loc.c_str(), NULL) > 0) {
+		browserFromFile(file_loc, x, y, w, h);
+		return;
+	}
+
 	unsigned char name[16];
 
 	std::string name_pwd = std::format("WEBPAGE:{0}", site);
@@ -131,4 +177,6 @@ void newWindow(std::string site, std::string foldername) {
 
 	remove(decrypted_file.c_str());
 	remove(file.c_str());
+
+	browserFromFile(file_loc, x, y, w, h);
 }

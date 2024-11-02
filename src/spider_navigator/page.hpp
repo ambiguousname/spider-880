@@ -90,22 +90,3 @@ class HTMLPage : public Fl_Group {
 		return (par_width - (padding * 3)); 
 	}
 };
-
-class HTMLWindow : public Fl_Window {
-	void drawChildren();
-
-	Fl_Menu_Bar menu_bar;
-
-	HTMLPage* page;
-	Fl_Scroll* scrollbar;
-
-	protected:
-
-	// Other HTML pages (or just FL_Windows) linked by <a> tags.
-	std::unordered_map<std::string, std::function<HTMLWindow*(int, int, int, int)>> linked_windows;
-	std::string title;
-
-	public:
-	HTMLWindow(std::shared_ptr<HTMLNode> root, int x, int y, int w, int h);
-};
-typedef std::function<HTMLWindow*(int, int, int, int)> windowCreation; 
