@@ -43,6 +43,8 @@ void initializeBrowser() {
 			return;
 		}
 
+		free_cipher(des);
+
 		if (tar_z_decompress("pages.tar.z") < 0) {
 			fl_alert("Could not decompress pages file.");
 			return;
