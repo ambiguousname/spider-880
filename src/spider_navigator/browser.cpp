@@ -33,6 +33,14 @@ BrowserWindow::BrowserWindow(std::string filepath, int x, int y, int w, int h) :
 	// 	label(title.c_str());
 	// }
 
+	if (FILE* f = fopen(filepath.c_str(), "r")) {
+		// TODO: Parsing.
+		fclose(f);
+	} else {
+		fl_alert("Could not open %s", filepath.c_str());
+		return;
+	}
+
 	scrollbar = new Fl_Scroll(0, 25, w, h - 25);
 	// page = new HTMLPage(root, std::shared_ptr<HTMLWindow>(this), 0, 25, w, h - 25, 10);
 	scrollbar->end();
