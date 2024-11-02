@@ -7,26 +7,33 @@
 
 HTMLNode::HTMLNode(xmlpp::Node* const node, int x, int y, int w, int h) : Fl_Group(x, y, w, h) {}
 
-void HTMLNode::measure(xmlpp::Node* const node, int& x, int& y, int& w, int& h) {}
+void HTMLNode::measure(xmlpp::Node* const node, int& w, int& h) {}
 
 void HTMLNode::parseChildren(xmlpp::Element* const element) {
-	int x, y, w, h;
-	x = this->x();
-	y = this->y();
-	w = this->w();
-	h = this->h();
+	int w, h;
+	int y = 0;
 
 	for (auto child : element->get_children()) {
+		w = this->w();
+		h = this->h();
+
 		Glib::ustring name = child->get_name();
 
-		parseChild(child, name, x, y, w, h);
+		parseChild(child, name, this->x(), y + this->y(), w, h);
+		
+		y += h;
 	}
+
+	resize(this->x(), this->y(), this->w(), y);
 }
 
-void HTMLNode::parseChild(xmlpp::Node* node, Glib::ustring node_name, int x, int y, int w, int h) {
+void HTMLNode::parseChild(xmlpp::Node* node, Glib::ustring node_name, int x, int y, int& w, int& h) {
 	if (node_name == "p") {
-		P::measure(node, x, y, w, h);
+		P::measure(node, w, h);
 		new P(node, x, y, w, h);
+	} else {
+		w = 0;
+		h = 0;
 	}
 }
 
@@ -35,24 +42,45 @@ Body::Body(xmlpp::Element* const root, int x, int y, int w, int h) : HTMLNode(ro
 	end();
 }
 
-void P::measure(xmlpp::Node* const node, int& x, int& y, int& w, int& h) {
-	std::string full_text;
+void P::measure(xmlpp::Node* const node, int& w, int& h) {
+	int full_w = 0;
+	int full_h = 0;
+	fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
 	if (auto e = dynamic_cast<xmlpp::Element*>(node)) {
 		for (auto c : e->get_children()) {
+			int new_w = w;
+			int new_h = h;
 			if (auto text = dynamic_cast<xmlpp::TextNode*>(c)) {
-				full_text.append(text->get_content());
+				fl_measure(text->get_content().c_str(), new_w, new_h);
+			} else {
+				new_w = 0;
+				new_h = 0;
 			}
+
+			full_w = std::max(new_w, full_w);
+			full_h += new_h;
 		}
 	}
-	fl_font(FL_HELVETICA, 14);
-	fl_measure(full_text.c_str(), w, h);
+	w = full_w;
+	h = full_h;
 }
 
-void P::parseChild(xmlpp::Node* node, Glib::ustring node_name, int x, int y, int w, int h) {
+void P::parseChild(xmlpp::Node* node, Glib::ustring node_name, int x, int y, int& w, int& h) {
 	if (auto text = dynamic_cast<xmlpp::TextNode*>(node)) {
-		auto out = new Fl_Multiline_Output(x, y, w, h);
+		int new_w = w;
+		int new_h = h;
+		
+		fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
+		fl_measure(text->get_content().c_str(), new_w, new_h);
+		auto out = new Fl_Multiline_Output(x, y, new_w, new_h);
 		out->value(text->get_content().c_str());
 		// out->box(FL_NO_BOX);
+
+		w = new_w;
+		h = new_h;
+	} else {
+		w = 0;
+		h = 0;
 	}
 }
 

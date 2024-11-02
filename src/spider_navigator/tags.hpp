@@ -10,10 +10,10 @@
 class HTMLNode : public Fl_Group {
 	protected:
 	void parseChildren(xmlpp::Element* const element);
-	virtual void parseChild(xmlpp::Node* const node, Glib::ustring node_name, int x, int y, int w, int h);
+	virtual void parseChild(xmlpp::Node* const node, Glib::ustring node_name, int x, int y, int& w, int& h);
 
 	public:
-	static void measure(xmlpp::Node* const node, int& x, int& y, int& w, int& h);
+	static void measure(xmlpp::Node* const node, int& w, int& h);
 
 	HTMLNode(xmlpp::Node* const root, int x, int y, int w, int h);
 };
@@ -30,10 +30,10 @@ class Body : public HTMLNode {
 
 class P : public HTMLNode {
 	protected:
-	void parseChild(xmlpp::Node* const node, Glib::ustring node_name, int x, int y, int w, int h) override;
+	void parseChild(xmlpp::Node* const node, Glib::ustring node_name, int x, int y, int& w, int& h) override;
 
 	public:
-	static void measure(xmlpp::Node* const node, int& x, int& y, int& w, int& h);
+	static void measure(xmlpp::Node* const node, int& w, int& h);
 
 	P(xmlpp::Node* const node, int x, int y, int w, int h);
 };
