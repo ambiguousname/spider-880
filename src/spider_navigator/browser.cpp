@@ -109,11 +109,12 @@ void browserFromFile(std::string filepath, int x, int y, int w, int h) {
 	BrowserWindow* window = new BrowserWindow(filepath, x, y, w, h);
 	window->end();
 	window->resizable(window);
+	window->show();
 }
 
 void newWindow(std::string site, std::string html_file, int x, int y, int w, int h) {
 	std::string file_loc = std::format("spider_navigator/{0}/{1}", site, html_file);
-	if (stat(file_loc.c_str(), NULL) > 0) {
+	if (access(file_loc.c_str(), F_OK) != -1) {
 		browserFromFile(file_loc, x, y, w, h);
 		return;
 	}
@@ -131,9 +132,7 @@ void newWindow(std::string site, std::string html_file, int x, int y, int w, int
 	std::string filename = filenameFromHash(name);
 	std::string file = std::format("spider_navigator/{0}.tar.z.enc", filename);
 
-	struct stat st;
-	int stat_result = stat(file.c_str(), &st);
-	if (stat_result < 0) {
+	if (access(file.c_str(), F_OK) != -1) {
 		fl_alert("Failed to read %s", file.c_str());
 		return;
 	}
