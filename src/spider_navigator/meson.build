@@ -1,9 +1,11 @@
 cryptsab = subproject('cryptsab')
 cryptsab_dep = cryptsab.get_variable('cryptsab_dep')
 
+libxmlpp = dependency('libxml++-3.0')
+
 incdir = include_directories('../')
 
-navsab = static_library('navsab', ['browser.cpp'], dependencies: [cryptsab_dep], include_directories: incdir)
+navsab = static_library('navsab', ['browser.cpp'], dependencies: [cryptsab_dep, libxmlpp], include_directories: incdir)
 
 python = find_program('python')
 

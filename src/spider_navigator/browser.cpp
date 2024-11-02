@@ -7,6 +7,7 @@ extern "C" {
 #include <sys/stat.h>
 #include <format>
 #include <util/base_sounds.hpp>
+#include <libxml++/libxml++.h>
 
 void aboutCallback(Fl_Widget*, void*) {
 	// fl_message_icon();
