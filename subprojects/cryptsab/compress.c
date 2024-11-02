@@ -133,7 +133,7 @@ int tar_z_compress(const char* compressed_path, const char* files_location, int 
 	return ARCHIVE_OK;
 }
 
-int tar_z_decompress(const char* compressed_path) {
+int tar_z_decompress(const char* compressed_path, const char* decompress_path) {
 	struct archive* a;
 
 	a = archive_read_new();
@@ -183,6 +183,13 @@ int tar_z_decompress(const char* compressed_path) {
 
 			return header_read;
 		}
+
+
+		const char* path = archive_entry_pathname(entry);
+		int new_pathlen = snprintf(NULL, 0, "%s%s", decompress_path, path);
+		char new_path[new_pathlen + 1];
+		snprintf(new_path, sizeof new_path, "%s%s", decompress_path, path);
+		archive_entry_set_pathname(entry, new_path);
 		
 		int header_write = archive_write_header(ext, entry);
 		if (header_write < ARCHIVE_OK) {

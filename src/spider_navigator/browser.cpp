@@ -14,7 +14,7 @@ void initializeBrowser() {
 	libctx = lib_ctx_local_providers("./ossl-modules");
 	load_provider_with_ctx("legacy", &pvdr, libctx);
 
-	if (FILE* f = fopen("pages.tar.z.enc", "r")) {
+	if (FILE* f = fopen("spider_navigator/pages.tar.z.enc", "r")) {
 		fclose(f);
 		EVP_CIPHER_CTX* des;
 		if (start_des_cipher(libctx, &des) < 0) {
@@ -36,7 +36,7 @@ void initializeBrowser() {
 		memcpy(key, pwd, 8);
 		memcpy(iv, pwd + 8, 8);
 
-		if (crypt_file(0, key, iv, "pages.tar.z.enc", "pages.tar.z", des) < 0) {
+		if (crypt_file(0, key, iv, "spider_navigator/pages.tar.z.enc", "spider_navigator/pages.tar.z", des) < 0) {
 			free_cipher(des);
 
 			fl_alert("Could not decrypt pages file. Decryption failed.");
@@ -45,13 +45,13 @@ void initializeBrowser() {
 
 		free_cipher(des);
 
-		if (tar_z_decompress("pages.tar.z") < 0) {
+		if (tar_z_decompress("spider_navigator/pages.tar.z", "spider_navigator/") < 0) {
 			fl_alert("Could not decompress pages file.");
 			return;
 		}
 
-		remove("pages.tar.z");
-		remove("pages.tar.z.enc");
+		remove("spider_navigator/pages.tar.z");
+		remove("spider_navigator/pages.tar.z.enc");
 	}
 }
 
@@ -68,7 +68,7 @@ std::string filenameFromHash(unsigned char name[16]) {
 		unsigned int v = name[i];
 		filename.push_back(base62[v % 62]);
 	}
-	return std::format("{0}.tar.z.enc", filename);
+	return std::format("spider_navigator/{0}.tar.z.enc", filename);
 }
 
 void newWindow(std::string site, std::string foldername) {
