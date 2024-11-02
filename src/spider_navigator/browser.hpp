@@ -1,7 +1,9 @@
 #pragma once
 #include <FL/Fl_Window.H>
 #include <string>
-#include "page.hpp"
+#include <FL/Fl_Scroll.H>
+#include <FL/Fl_Menu_Bar.H>
+#include "tags.hpp"
 
 void initializeBrowser();
 void uninitializeBrowser();
@@ -13,7 +15,7 @@ class BrowserWindow : public Fl_Window {
 	
 	Fl_Menu_Bar menu_bar;
 
-	HTMLPage* page;
+	Body* body;
 	Fl_Scroll* scrollbar;
 
 	std::string title;

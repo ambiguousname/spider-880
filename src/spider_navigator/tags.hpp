@@ -1,22 +1,45 @@
 #pragma once
 
-#include <memory>
 #include <vector>
 #include <unordered_map>
 #include <string>
-#include <FL/Enumerations.H>
+#include <FL/Fl_Group.H>
 #include "util/image_box.hpp"
-#include "page.hpp"
+#include <libxml++/libxml++.h>
 
+class HTMLNode : public Fl_Group {
+	protected:
+	void parseChildren(xmlpp::Element* const element);
+	virtual void parseChild(xmlpp::Node* const node, Glib::ustring node_name, int x, int y, int w, int h);
+
+	public:
+	static void measure(xmlpp::Node* const node, int& x, int& y, int& w, int& h);
+
+	HTMLNode(xmlpp::Node* const root, int x, int y, int w, int h);
+};
+
+class Body : public HTMLNode {
+	public:
+
+	Body(xmlpp::Element* const root, int x, int y, int w, int h);
+};
+
+// class Text : public Fl_Output {
+
+// };
+
+class P : public HTMLNode {
+	protected:
+	void parseChild(xmlpp::Node* const node, Glib::ustring node_name, int x, int y, int w, int h) override;
+
+	public:
+	static void measure(xmlpp::Node* const node, int& x, int& y, int& w, int& h);
+
+	P(xmlpp::Node* const node, int x, int y, int w, int h);
+};
+
+/*
 class HTMLPage;
-
-#define NODE_CONSTRUCTOR const int id, const char* dat, std::vector<std::shared_ptr<HTMLNode>> c, std::unordered_map<std::string, std::string> attr
-
-#define NODE_OPENER HTMLPage* current_page, int& start_x, int& start_y, int& out_w, int& out_h
-
-#define NODE_CHILD_CLOSER HTMLPage* current_page, const int child_x, const int child_y, const int child_w, const int child_h, int& start_x, int& start_y, int& out_w, int& out_h
-
-#define NODE_CLOSER HTMLPage* current_page, int& start_x, int& start_y, int& out_w, int& out_h
 
 class HTMLNode {
 	protected:
@@ -119,4 +142,4 @@ class Img : public HTMLNode {
 	void draw(const int, const int, const int, const int, HTMLPage*) override { 
 		box->draw();
 	}
-};
+};*/

@@ -1,8 +1,67 @@
 #include "tags.hpp"
 #include <FL/fl_draw.H>
+#include <FL/fl_ask.H>
+#include <FL/Fl_Multiline_Output.H>
 #include <typeinfo>
 #include <util/base_sounds.hpp>
 
+HTMLNode::HTMLNode(xmlpp::Node* const node, int x, int y, int w, int h) : Fl_Group(x, y, w, h) {}
+
+void HTMLNode::measure(xmlpp::Node* const node, int& x, int& y, int& w, int& h) {}
+
+void HTMLNode::parseChildren(xmlpp::Element* const element) {
+	int x, y, w, h;
+	x = this->x();
+	y = this->y();
+	w = this->w();
+	h = this->h();
+
+	for (auto child : element->get_children()) {
+		Glib::ustring name = child->get_name();
+
+		parseChild(child, name, x, y, w, h);
+	}
+}
+
+void HTMLNode::parseChild(xmlpp::Node* node, Glib::ustring node_name, int x, int y, int w, int h) {
+	if (node_name == "p") {
+		P::measure(node, x, y, w, h);
+		new P(node, x, y, w, h);
+	}
+}
+
+Body::Body(xmlpp::Element* const root, int x, int y, int w, int h) : HTMLNode(root, x, y, w, h) {
+	parseChildren(root);
+	end();
+}
+
+void P::measure(xmlpp::Node* const node, int& x, int& y, int& w, int& h) {
+	std::string full_text;
+	if (auto e = dynamic_cast<xmlpp::Element*>(node)) {
+		for (auto c : e->get_children()) {
+			if (auto text = dynamic_cast<xmlpp::TextNode*>(c)) {
+				full_text.append(text->get_content());
+			}
+		}
+	}
+	fl_font(FL_HELVETICA, 14);
+	fl_measure(full_text.c_str(), w, h);
+}
+
+void P::parseChild(xmlpp::Node* node, Glib::ustring node_name, int x, int y, int w, int h) {
+	if (auto text = dynamic_cast<xmlpp::TextNode*>(node)) {
+		auto out = new Fl_Multiline_Output(x, y, w, h);
+		out->value(text->get_content().c_str());
+		// out->box(FL_NO_BOX);
+	}
+}
+
+P::P(xmlpp::Node* const node, int x, int y, int w, int h) : HTMLNode(node, x, y, w, h) {
+	parseChildren(dynamic_cast<xmlpp::Element*>(node));
+	end();
+}
+
+/*
 void HTMLNode::init() {
 	auto color_prop = _attributes.find("color");
 	if (color_prop != _attributes.end()) {
@@ -173,3 +232,4 @@ void Img::open(HTMLPage* current_page, int&, int&, int&, int&) {
 
 	current_page->setCursor(cursor_x, cursor_y);
 }
+*/

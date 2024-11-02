@@ -7,7 +7,6 @@ extern "C" {
 #include <sys/stat.h>
 #include <format>
 #include <util/base_sounds.hpp>
-#include <libxml++/libxml++.h>
 
 void aboutCallback(Fl_Widget*, void*) {
 	// fl_message_icon();
@@ -34,7 +33,8 @@ BrowserWindow::BrowserWindow(std::string filepath, int x, int y, int w, int h) :
 	// 	label(title.c_str());
 	// }
 
-	
+	scrollbar = new Fl_Scroll(0, 25, w, h - 25);
+
 	xmlpp::DomParser parser(filepath);
 	xmlpp::Document* d = parser.get_document();
 	xmlpp::Element* root = d->get_root_node();
@@ -42,21 +42,13 @@ BrowserWindow::BrowserWindow(std::string filepath, int x, int y, int w, int h) :
 	xmlpp::Node::NodeList children = root->get_children();
 	for (auto child : children) {
 		Glib::ustring child_name = child->get_name();
-		
-		// TODO:
-		// xmlpp::Element* e = dynamic_cast<xmlpp::Element*>(child);
-		// if (e != nullptr) {
-		// 	if (child_name == "head") {
-		// 		for (auto c : child->get_children()) {
-		// 			xmlpp::Element* el = dynamic_cast<xmlpp::Element*>(c);
-		// 			if (el != nullptr) {  }
-		// 		}
-		// 	}
-		// }
-	}
 
-	scrollbar = new Fl_Scroll(0, 25, w, h - 25);
-	// page = new HTMLPage(root, std::shared_ptr<HTMLWindow>(this), 0, 25, w, h - 25, 10);
+		if (child_name == "head") {
+
+		} else if (child_name == "body") {
+			body = new Body(dynamic_cast<xmlpp::Element*>(child), 0, 25, w, h - 25);
+		}
+	}
 	scrollbar->end();
 	scrollbar->type(Fl_Scroll::VERTICAL);
 }
