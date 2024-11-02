@@ -83,7 +83,7 @@ void newWindow(std::string site, std::string foldername) {
 
 
 	std::string filename = filenameFromHash(name);
-	std::string file = std::format("spider_navigator/{0}.tar.enc", filename);
+	std::string file = std::format("spider_navigator/{0}.tar.z.enc", filename);
 
 	struct stat st;
 	int stat_result = stat(file.c_str(), &st);
@@ -124,7 +124,7 @@ void newWindow(std::string site, std::string foldername) {
 
 	free_cipher(des);
 
-	if (tar_z_decompress(decrypted_file.c_str(), std::format("spider_navigator/{0}", foldername).c_str()) < 0) {
+	if (tar_z_decompress(decrypted_file.c_str(), std::format("spider_navigator/{0}", "./").c_str()) < 0) {
 		fl_alert("Could not decompress %s.", decrypted_file.c_str());
 		return;
 	}
