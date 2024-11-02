@@ -174,7 +174,7 @@ int start_rc2_cipher(EVP_CIPHER_CTX** ctx) {
 	return 1;
 }
 
-int start_des_cipher(EVP_CIPHER_CTX** ctx) {
+int start_des_cipher(OSSL_LIB_CTX* libctx, EVP_CIPHER_CTX** ctx) {
 	*ctx = NULL;
 	*ctx = EVP_CIPHER_CTX_new();
 
@@ -184,7 +184,7 @@ int start_des_cipher(EVP_CIPHER_CTX** ctx) {
 	}
 
 	EVP_CIPHER* cipher = NULL;
-	cipher = EVP_CIPHER_fetch(NULL, "DES-CBC", "provider=legacy");
+	cipher = EVP_CIPHER_fetch(libctx, "DES-CBC", "provider=legacy");
 	if (cipher == NULL) {
 		ERROR("Could not fetch DES-CBC cipher.\n");
 		return -1;
@@ -217,7 +217,7 @@ int start_cipher(const char* ciphername) {
 	} else if (strncmp(ciphername, "rc2", 3) == 0) {
 		return start_rc2_cipher(&global_ctx);
 	} else if (strncmp(ciphername, "des", 3) == 0) {
-		return start_des_cipher(&global_ctx);
+		return start_des_cipher(NULL, &global_ctx);
 	}
 
 	return -3;

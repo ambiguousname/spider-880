@@ -17,7 +17,7 @@ void initializeBrowser() {
 	if (FILE* f = fopen("pages.tar.z.enc", "r")) {
 		fclose(f);
 		EVP_CIPHER_CTX* des;
-		if (start_des_cipher(&des) < 0) {
+		if (start_des_cipher(libctx, &des) < 0) {
 			fl_alert("Could not decrypt pages file. DES cipher could not be initialized.");
 			return;
 		}

@@ -19,7 +19,7 @@ void end_cipher();
 
 int start_aes_cipher(EVP_CIPHER_CTX** ctx);
 int start_rc2_cipher(EVP_CIPHER_CTX** ctx);
-int start_des_cipher(EVP_CIPHER_CTX** ctx);
+int start_des_cipher(OSSL_LIB_CTX* libctx, EVP_CIPHER_CTX** ctx);
 void free_cipher(EVP_CIPHER_CTX* ctx);
 
 int derive_key_scrypt(const char password[], unsigned char key[], size_t key_len, unsigned char iv[], size_t iv_len);
