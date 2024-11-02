@@ -34,12 +34,25 @@ BrowserWindow::BrowserWindow(std::string filepath, int x, int y, int w, int h) :
 	// 	label(title.c_str());
 	// }
 
-	if (FILE* f = fopen(filepath.c_str(), "r")) {
-		// TODO: Parsing.
-		fclose(f);
-	} else {
-		fl_alert("Could not open %s", filepath.c_str());
-		return;
+	
+	xmlpp::DomParser parser(filepath);
+	xmlpp::Document* d = parser.get_document();
+	xmlpp::Element* root = d->get_root_node();
+
+	xmlpp::Node::NodeList children = root->get_children();
+	for (auto child : children) {
+		Glib::ustring child_name = child->get_name();
+		
+		// TODO:
+		// xmlpp::Element* e = dynamic_cast<xmlpp::Element*>(child);
+		// if (e != nullptr) {
+		// 	if (child_name == "head") {
+		// 		for (auto c : child->get_children()) {
+		// 			xmlpp::Element* el = dynamic_cast<xmlpp::Element*>(c);
+		// 			if (el != nullptr) {  }
+		// 		}
+		// 	}
+		// }
 	}
 
 	scrollbar = new Fl_Scroll(0, 25, w, h - 25);
