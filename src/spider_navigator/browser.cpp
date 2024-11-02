@@ -51,6 +51,7 @@ void initializeBrowser() {
 		}
 
 		remove("pages.tar.z");
+		remove("pages.tar.z.enc");
 	}
 }
 
