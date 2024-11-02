@@ -1,2 +1,3 @@
 - New password system (I'm thinking broken links that require password protection, with mysterious passwords) 
+- Update Star Information System secret pages accordingly (and their content!)
 - New secret pages to go with new password system
