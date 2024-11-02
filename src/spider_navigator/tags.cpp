@@ -43,7 +43,7 @@ Body::Body(xmlpp::Element* const root, int x, int y, int w, int h) : HTMLNode(ro
 }
 
 void P::measure(xmlpp::Node* const node, int& w, int& h) {
-	int full_w = 0;
+	int full_w = w;
 	int full_h = 0;
 	fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
 	if (auto e = dynamic_cast<xmlpp::Element*>(node)) {
@@ -57,7 +57,6 @@ void P::measure(xmlpp::Node* const node, int& w, int& h) {
 				new_h = 0;
 			}
 
-			full_w = std::max(new_w, full_w);
 			full_h += new_h;
 		}
 	}
@@ -74,9 +73,9 @@ void P::parseChild(xmlpp::Node* node, Glib::ustring node_name, int x, int y, int
 		fl_measure(text->get_content().c_str(), new_w, new_h);
 		auto out = new Fl_Multiline_Output(x, y, new_w, new_h);
 		out->value(text->get_content().c_str());
-		// out->box(FL_NO_BOX);
+		out->box(FL_FLAT_BOX);
+		out->wrap(FL_MULTILINE_OUTPUT_WRAP);
 
-		w = new_w;
 		h = new_h;
 	} else {
 		w = 0;
