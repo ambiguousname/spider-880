@@ -24,14 +24,9 @@ void HTMLNode::parseChildren(xmlpp::Element* const element) {
 		parseChild(child, name, this->x(), children_y, w, h);
 		
 		children_y += h;
-
-		std::cout << element->get_name() << "CHILD: " << name << " " << h << " __ " << children_y << std::endl;
 	}
 
 	height = children_y - this->y();
-
-	std::cout << element->get_name() << ": " << children_y << " " << this->y() << std::endl;
-	std::cout << "-----------" << std::endl;
 }
 
 void HTMLNode::parseChild(xmlpp::Node* node, Glib::ustring node_name, int x, int y, int& w, int& h) {
@@ -53,7 +48,6 @@ Body::Body(xmlpp::Element* const root, int x, int y, int w, int h) : HTMLNode(ro
 	resizable(this);
 }
 
-#include <iostream>
 void P::measure(xmlpp::Node* const node, int& w, int& h) {
 	int full_w = w;
 	int full_h = 0;
@@ -70,7 +64,6 @@ void P::measure(xmlpp::Node* const node, int& w, int& h) {
 		}
 	}
 	
-	std::cout << "H:" << full_h << std::endl;
 	w = full_w;
 	h = full_h;
 }
@@ -86,9 +79,6 @@ void P::parseChild(xmlpp::Node* node, Glib::ustring node_name, int x, int y, int
 		out->value(text->get_content().c_str());
 		out->box(FL_FLAT_BOX);
 		out->wrap(FL_MULTILINE_OUTPUT_WRAP);
-
-		
-		std::cout << "p_H:" << new_h <<  " - " << text->get_content() << std::endl;
 
 		h = new_h;
 	} else {
