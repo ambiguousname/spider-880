@@ -9,6 +9,8 @@
 
 class HTMLNode : public Fl_Group {
 	protected:
+	int height;
+
 	void parseChildren(xmlpp::Element* const element);
 	virtual void parseChild(xmlpp::Node* const node, Glib::ustring node_name, int x, int y, int& w, int& h);
 

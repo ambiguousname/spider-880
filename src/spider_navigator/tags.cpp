@@ -9,9 +9,10 @@ HTMLNode::HTMLNode(xmlpp::Node* const node, int x, int y, int w, int h) : Fl_Gro
 
 void HTMLNode::measure(xmlpp::Node* const node, int& w, int& h) {}
 
+#include <iostream>
 void HTMLNode::parseChildren(xmlpp::Element* const element) {
 	int w, h;
-	int y = 0;
+	int children_y = this->y();
 
 	for (auto child : element->get_children()) {
 		w = this->w();
@@ -19,12 +20,18 @@ void HTMLNode::parseChildren(xmlpp::Element* const element) {
 
 		Glib::ustring name = child->get_name();
 
-		parseChild(child, name, this->x(), y + this->y(), w, h);
+		// TODO: this->y() provides coordinates relative to the top window. This is causing bigger and bigger offsets.
+		parseChild(child, name, this->x(), children_y, w, h);
 		
-		y += h;
+		children_y += h;
+
+		std::cout << element->get_name() << "CHILD: " << name << " " << h << " __ " << children_y << std::endl;
 	}
 
-	resize(this->x(), this->y(), this->w(), y);
+	height = children_y - this->y();
+
+	std::cout << element->get_name() << ": " << children_y << " " << this->y() << std::endl;
+	std::cout << "-----------" << std::endl;
 }
 
 void HTMLNode::parseChild(xmlpp::Node* node, Glib::ustring node_name, int x, int y, int& w, int& h) {
@@ -40,8 +47,13 @@ void HTMLNode::parseChild(xmlpp::Node* node, Glib::ustring node_name, int x, int
 Body::Body(xmlpp::Element* const root, int x, int y, int w, int h) : HTMLNode(root, x, y, w, h) {
 	parseChildren(root);
 	end();
+
+	resizable(NULL);
+	resize(x, y, w, height);
+	resizable(this);
 }
 
+#include <iostream>
 void P::measure(xmlpp::Node* const node, int& w, int& h) {
 	int full_w = w;
 	int full_h = 0;
@@ -49,17 +61,16 @@ void P::measure(xmlpp::Node* const node, int& w, int& h) {
 	if (auto e = dynamic_cast<xmlpp::Element*>(node)) {
 		for (auto c : e->get_children()) {
 			int new_w = w;
-			int new_h = h;
+			int new_h = 0;
 			if (auto text = dynamic_cast<xmlpp::TextNode*>(c)) {
 				fl_measure(text->get_content().c_str(), new_w, new_h);
-			} else {
-				new_w = 0;
-				new_h = 0;
+				
+				full_h += new_h;
 			}
-
-			full_h += new_h;
 		}
 	}
+	
+	std::cout << "H:" << full_h << std::endl;
 	w = full_w;
 	h = full_h;
 }
@@ -67,7 +78,7 @@ void P::measure(xmlpp::Node* const node, int& w, int& h) {
 void P::parseChild(xmlpp::Node* node, Glib::ustring node_name, int x, int y, int& w, int& h) {
 	if (auto text = dynamic_cast<xmlpp::TextNode*>(node)) {
 		int new_w = w;
-		int new_h = h;
+		int new_h = 0;
 		
 		fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
 		fl_measure(text->get_content().c_str(), new_w, new_h);
@@ -75,6 +86,9 @@ void P::parseChild(xmlpp::Node* node, Glib::ustring node_name, int x, int y, int
 		out->value(text->get_content().c_str());
 		out->box(FL_FLAT_BOX);
 		out->wrap(FL_MULTILINE_OUTPUT_WRAP);
+
+		
+		std::cout << "p_H:" << new_h <<  " - " << text->get_content() << std::endl;
 
 		h = new_h;
 	} else {
