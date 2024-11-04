@@ -26,9 +26,14 @@ class Body : public HTMLNode {
 	Body(xmlpp::Element* const root, int x, int y, int w, int h);
 };
 
-// class Text : public Fl_Output {
+class Text : public Fl_Widget {
+	std::string content;
 
-// };
+	public:
+	Text(std::string text, int x, int y, int w, int h);
+
+	void draw() override;
+};
 
 class P : public HTMLNode {
 	protected:

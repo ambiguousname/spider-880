@@ -1,7 +1,6 @@
 #include "tags.hpp"
 #include <FL/fl_draw.H>
 #include <FL/fl_ask.H>
-#include <FL/Fl_Multiline_Output.H>
 #include <typeinfo>
 #include <util/base_sounds.hpp>
 
@@ -48,6 +47,16 @@ Body::Body(xmlpp::Element* const root, int x, int y, int w, int h) : HTMLNode(ro
 	resizable(this);
 }
 
+Text::Text(std::string text, int x, int y, int w, int h) : Fl_Widget(x, y, w, h) {
+	content = text;
+}
+
+void Text::draw() {
+	fl_color(FL_BLACK);
+	fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
+	fl_draw(content.c_str(), x(), y(), w(), h(), FL_ALIGN_WRAP);
+}
+
 void P::measure(xmlpp::Node* const node, int& w, int& h) {
 	int full_w = w;
 	int full_h = 0;
@@ -75,10 +84,8 @@ void P::parseChild(xmlpp::Node* node, Glib::ustring node_name, int x, int y, int
 		
 		fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
 		fl_measure(text->get_content().c_str(), new_w, new_h);
-		auto out = new Fl_Multiline_Output(x, y, new_w, new_h);
-		out->value(text->get_content().c_str());
+		auto out = new Text(text->get_content(), x, y, new_w, new_h);
 		out->box(FL_FLAT_BOX);
-		out->wrap(FL_MULTILINE_OUTPUT_WRAP);
 
 		h = new_h;
 	} else {
