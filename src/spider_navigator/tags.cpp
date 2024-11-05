@@ -4,28 +4,25 @@
 #include <typeinfo>
 #include <util/base_sounds.hpp>
 
-HTMLNode::HTMLNode(xmlpp::Node* const node, int x, int y, int w, int h) : Fl_Group(x, y, w, h) {}
-
 void HTMLNode::measure(xmlpp::Node* const node, int& w, int& h) {}
 
-#include <iostream>
-void HTMLNode::parseChildren(xmlpp::Element* const element) {
-	int w, h;
-	int children_y = this->y();
+void HTMLNode::parseChildren(xmlpp::Element* const element, int x, int y, int w, int h) {
+	int child_w, child_h;
+	int children_y = y;
 
 	for (auto child : element->get_children()) {
-		w = this->w();
-		h = this->h();
+		child_w = w;
+		child_h = h;
 
 		Glib::ustring name = child->get_name();
 
 		// TODO: this->y() provides coordinates relative to the top window. This is causing bigger and bigger offsets.
-		parseChild(child, name, this->x(), children_y, w, h);
+		parseChild(child, name, x, children_y, child_w, child_h);
 		
 		children_y += h;
 	}
 
-	height = children_y - this->y();
+	height = children_y - y;
 }
 
 void HTMLNode::parseChild(xmlpp::Node* node, Glib::ustring node_name, int x, int y, int& w, int& h) {
@@ -38,23 +35,13 @@ void HTMLNode::parseChild(xmlpp::Node* node, Glib::ustring node_name, int x, int
 	}
 }
 
-Body::Body(xmlpp::Element* const root, int x, int y, int w, int h) : HTMLNode(root, x, y, w, h) {
-	parseChildren(root);
+Body::Body(xmlpp::Element* const root, int x, int y, int w, int h) : Fl_Group(x, y, w, h) {
+	parseChildren(root, x, y, w, h);
 	end();
 
 	resizable(NULL);
-	resize(x, y, w, height);
-	resizable(this);
-}
-
-Text::Text(std::string text, int x, int y, int w, int h) : Fl_Widget(x, y, w, h) {
-	content = text;
-}
-
-void Text::draw() {
-	fl_color(FL_BLACK);
-	fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
-	fl_draw(content.c_str(), x(), y(), w(), h(), FL_ALIGN_WRAP);
+	Fl_Group::resize(x, y, w, height);
+	Fl_Group::resizable((Fl_Group*)this);
 }
 
 void P::measure(xmlpp::Node* const node, int& w, int& h) {
@@ -82,10 +69,11 @@ void P::parseChild(xmlpp::Node* node, Glib::ustring node_name, int x, int y, int
 		int new_w = w;
 		int new_h = 0;
 		
-		fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
-		fl_measure(text->get_content().c_str(), new_w, new_h);
-		auto out = new Text(text->get_content(), x, y, new_w, new_h);
-		out->box(FL_FLAT_BOX);
+		// fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
+		// fl_measure(text->get_content().c_str(), new_w, new_h);
+		text_content.push_back(Text{
+			text->get_content(),
+		});
 
 		h = new_h;
 	} else {
@@ -94,9 +82,14 @@ void P::parseChild(xmlpp::Node* node, Glib::ustring node_name, int x, int y, int
 	}
 }
 
-P::P(xmlpp::Node* const node, int x, int y, int w, int h) : HTMLNode(node, x, y, w, h) {
-	parseChildren(dynamic_cast<xmlpp::Element*>(node));
-	end();
+P::P(xmlpp::Node* const node, int x, int y, int w, int h) : Fl_Widget(x, y, w, h) {
+	parseChildren(dynamic_cast<xmlpp::Element*>(node), x, y, w, h);
+}
+
+void P::draw() {
+	for (auto c : text_content) {
+
+	}
 }
 
 /*
