@@ -162,7 +162,11 @@ P::P(std::shared_ptr<HTMLNode> parent, xmlpp::Node* const node) : HTMLNode(paren
 void P::parseChild(xmlpp::Node* node, Glib::ustring node_name) {
 	if (auto text = dynamic_cast<xmlpp::TextNode*>(node)) {
 		_children.push_back(std::make_shared<Text>(std::shared_ptr<HTMLNode>(this), text));
-	}
+	} else if (node_name == "a") {
+		if (auto t = dynamic_cast<xmlpp::TextNode*>(node->get_first_child())) {
+			_children.push_back(std::make_shared<A>(std::shared_ptr<HTMLNode>(this), t));
+		}
+	} 
 }
 
 void P::drawChildren(int& x, int& y, int& w, int& h) {

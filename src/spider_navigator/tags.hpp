@@ -59,6 +59,11 @@ class Text : public HTMLNode {
 	void drawChildren(int& x, int& y, int& w, int& h) override;
 };
 
+class A : public Text {
+	public:
+	A(std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node) : Text(parent, text_node) {}	
+};
+
 class P : public HTMLNode {
 	protected:
 	void parseChild(xmlpp::Node* const node, Glib::ustring node_name) override;	
