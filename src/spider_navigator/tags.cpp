@@ -117,7 +117,7 @@ void Text::drawChildren(int& x, int& y, int& w, int& h) {
 	fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
 	fl_color(FL_BLACK);
 	for (auto c : _content_info) {
-		if (x + (int)c.width > w) {
+		if (x + (int)c.width > (w - x_margin)) {
 			x = x_margin;
 
 			int add = fl_height() + fl_descent();
@@ -129,6 +129,10 @@ void Text::drawChildren(int& x, int& y, int& w, int& h) {
 
 		fl_draw(c_str + c.ptr, c.buf_size, x, y);
 		x += (int)c.width;
+
+		if (out_w < w) {
+			out_w += (int)c.width;
+		}
 	}
 	
 	w = out_w;
