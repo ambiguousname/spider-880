@@ -4,91 +4,101 @@
 #include <typeinfo>
 #include <util/base_sounds.hpp>
 
-void HTMLNode::measure(xmlpp::Node* const node, int& w, int& h) {}
-
-void HTMLNode::parseChildren(xmlpp::Element* const element, int x, int y, int w, int h) {
-	int child_w, child_h;
-	int children_y = y;
-
+void HTMLNode::parseChildren(xmlpp::Element* const element) {
 	for (auto child : element->get_children()) {
-		child_w = w;
-		child_h = h;
-
 		Glib::ustring name = child->get_name();
 
-		// TODO: this->y() provides coordinates relative to the top window. This is causing bigger and bigger offsets.
-		parseChild(child, name, x, children_y, child_w, child_h);
-		
-		children_y += h;
+		parseChild(child, name);
 	}
-
-	height = children_y - y;
 }
 
-void HTMLNode::parseChild(xmlpp::Node* node, Glib::ustring node_name, int x, int y, int& w, int& h) {
+void HTMLNode::parseChild(xmlpp::Node* node, Glib::ustring node_name) {
 	if (node_name == "p") {
-		P::measure(node, w, h);
-		new P(node, x, y, w, h);
-	} else {
-		w = 0;
-		h = 0;
+		_children.push_back(std::make_shared<P>(std::shared_ptr<HTMLNode>(this), node));
 	}
 }
 
-Body::Body(xmlpp::Element* const root, int x, int y, int w, int h) : Fl_Group(x, y, w, h) {
-	parseChildren(root, x, y, w, h);
-	end();
+void HTMLNode::drawChildren(int& x, int& y, int& w, int& h) {
+	int curr_y = y;
 
-	resizable(NULL);
-	Fl_Group::resize(x, y, w, height);
-	Fl_Group::resizable((Fl_Group*)this);
+	int out_w, out_h;
+	int max_w = 0;
+	for (auto c : _children) {
+		out_w = w;
+		out_h = h;
+		c->drawChildren(x, curr_y, out_w, out_h);
+		
+		max_w = std::max(out_w, max_w);
+		curr_y += out_h;
+	}
+
+	w = max_w;
+	h = curr_y - y;
 }
 
-void P::measure(xmlpp::Node* const node, int& w, int& h) {
-	int full_w = w;
-	int full_h = 0;
+Body::Body(xmlpp::Element* const root, int x, int y, int w, int h) : Fl_Group(x, y, w, h), HTMLNode(nullptr) {
+	parseChildren(root);
+	end();
+}
+
+void Body::draw() {
+	int x, y, w, h;
+	x = this->x();
+	y = this->y();
+	w = this->w();
+	h = this->h();
+	
+	drawChildren(x, y, w, h);
+}
+
+Text::Text(std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node) : HTMLNode(parent) {
+	_content = text_node->get_content();
+	
 	fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
-	if (auto e = dynamic_cast<xmlpp::Element*>(node)) {
-		for (auto c : e->get_children()) {
-			int new_w = w;
-			int new_h = 0;
-			if (auto text = dynamic_cast<xmlpp::TextNode*>(c)) {
-				fl_measure(text->get_content().c_str(), new_w, new_h);
-				
-				full_h += new_h;
-			}
-		}
+	_content_w = fl_width(_content.c_str(), _content.length());
+	_base_content_h = fl_height();
+}
+
+void Text::drawChildren(int& x, int& y, int& w, int& h) {
+	int height_draw = (((int)_content_w / w) + 1) * _base_content_h;
+	int num_lines = ((int)_content_w / w) + 1;
+
+	// TODO: Better wrapping.
+
+	if (num_lines > 1) {
+		x = x_margin;
+		y += _base_content_h;
 	}
 	
-	w = full_w;
-	h = full_h;
+	fl_color(FL_BLACK);
+	fl_draw(_content.c_str(), x, y, w, height_draw, FL_ALIGN_WRAP);
+	
+	w = std::min((int)_content_w, w);
+	h = (num_lines - 1) * _base_content_h;
 }
 
-void P::parseChild(xmlpp::Node* node, Glib::ustring node_name, int x, int y, int& w, int& h) {
-	if (auto text = dynamic_cast<xmlpp::TextNode*>(node)) {
-		int new_w = w;
-		int new_h = 0;
-		
-		// fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
-		// fl_measure(text->get_content().c_str(), new_w, new_h);
-		text_content.push_back(Text{
-			text->get_content(),
-		});
+P::P(std::shared_ptr<HTMLNode> parent, xmlpp::Node* const node) : HTMLNode(parent) {
+	parseChildren(dynamic_cast<xmlpp::Element*>(node));
+}
 
-		h = new_h;
-	} else {
-		w = 0;
-		h = 0;
+void P::parseChild(xmlpp::Node* node, Glib::ustring node_name) {
+	if (auto text = dynamic_cast<xmlpp::TextNode*>(node)) {
+		_children.push_back(std::make_shared<Text>(std::shared_ptr<HTMLNode>(this), text));
 	}
 }
 
-P::P(xmlpp::Node* const node, int x, int y, int w, int h) : Fl_Widget(x, y, w, h) {
-	parseChildren(dynamic_cast<xmlpp::Element*>(node), x, y, w, h);
-}
+void P::drawChildren(int& x, int& y, int& w, int& h) {
+	int curr_x = x;
+	int curr_y = y;
 
-void P::draw() {
-	for (auto c : text_content) {
+	int out_w, out_h;
+	for (auto c : _children) {
+		out_w = w;
+		out_h = h;
+		c->drawChildren(curr_x, curr_y, out_w, out_h);
 
+		curr_x += out_w;
+		curr_y += out_h;
 	}
 }
 

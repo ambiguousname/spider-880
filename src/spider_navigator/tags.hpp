@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <unordered_map>
+#include <memory>
 #include <string>
 #include <FL/Fl_Group.H>
 #include "util/image_box.hpp"
@@ -9,37 +10,53 @@
 
 class HTMLNode {
 	protected:
-	int height;
+	std::shared_ptr<HTMLNode> _parent;
+	std::vector<std::shared_ptr<HTMLNode>> _children;
 
-	void parseChildren(xmlpp::Element* const element, int x, int y, int w, int h);
-	virtual void parseChild(xmlpp::Node* const node, Glib::ustring node_name, int x, int y, int& w, int& h);
+	void parseChildren(xmlpp::Element* const element);
+	virtual void parseChild(xmlpp::Node* const node, Glib::ustring node_name);
+
+	int x_margin = 0;
 
 	public:
-	static void measure(xmlpp::Node* const node, int& w, int& h);
+	HTMLNode(std::shared_ptr<HTMLNode> parent) { _parent = parent; }
+	~HTMLNode() { _parent.reset(); for (auto c: _children) { c.reset(); } }
+	
+	/// @brief Draw the node at the given position.
+	/// @param x X-position to draw of the node. The node can change its own starting position if it determines that there is not sufficient space. X can only go up, never down.
+	/// @param y Y-position to draw of the node. The node can change its own starting position if it determines that there is not sufficient space. X can only go up, never down.
+	/// @param w Pass the width of the parent node in, and get the width of the drawn node out.
+	/// @param h Pass the height of the parent node in, and get the height of the drawn node out.
+	virtual void drawChildren(int& x, int& y, int& w, int& h);
 };
 
 class Body : public Fl_Group, public HTMLNode {
 	public:
 
 	Body(xmlpp::Element* const root, int x, int y, int w, int h);
+	void draw() override;
 };
 
-struct Text {
-	std::string content;
-};
-
-class P : public Fl_Widget, public HTMLNode {
+class Text : public HTMLNode {
 	protected:
-	void parseChild(xmlpp::Node* const node, Glib::ustring node_name, int x, int y, int& w, int& h) override;
-
-	std::vector<Text> text_content;	
+	std::string _content;
+	double _content_w;
+	int _base_content_h;
 
 	public:
-	static void measure(xmlpp::Node* const node, int& w, int& h);
+	Text(std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node);
 
-	P(xmlpp::Node* const node, int x, int y, int w, int h);
+	void drawChildren(int& x, int& y, int& w, int& h) override;
+};
 
-	void draw() override;
+class P : public HTMLNode {
+	protected:
+	void parseChild(xmlpp::Node* const node, Glib::ustring node_name) override;	
+
+	public:
+	P(std::shared_ptr<HTMLNode> parent, xmlpp::Node* const node);
+	
+	void drawChildren(int& x, int& y, int& w, int& h) override;
 };
 
 /*

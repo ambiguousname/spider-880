@@ -11,8 +11,6 @@ void uninitializeBrowser();
 void newWindow(std::string site, std::string filename, int x, int y, int w, int h);
 
 class BrowserWindow : public Fl_Window {
-	void drawChildren();
-	
 	Fl_Menu_Bar menu_bar;
 
 	Body* body;
