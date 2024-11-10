@@ -44,13 +44,13 @@ Body::Body(xmlpp::Element* const root, int x, int y, int w, int h) : Fl_Group(x,
 void Body::draw() {
 	int x, y, w, h;
 	x = this->x();
-	y = this->y();
+	y = this->y() + fl_height() + fl_descent();
 	w = this->w();
 	h = this->h();
 	
 	drawChildren(x, y, w, h);
 	resizable(NULL);
-	resize(this->x(), this->y(), w, h);
+	resize(this->x(), this->y(), w, h + fl_descent());
 	resizable(this);
 }
 
