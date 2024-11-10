@@ -49,6 +49,9 @@ void Body::draw() {
 	h = this->h();
 	
 	drawChildren(x, y, w, h);
+	resizable(NULL);
+	resize(this->x(), this->y(), w, h);
+	resizable(this);
 }
 
 Text::Text(std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node) : HTMLNode(parent) {
@@ -70,6 +73,7 @@ void Text::drawChildren(int& x, int& y, int& w, int& h) {
 		y += _base_content_h;
 	}
 	
+	fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
 	fl_color(FL_BLACK);
 	fl_draw(_content.c_str(), x, y, w, height_draw, FL_ALIGN_WRAP);
 	
@@ -100,6 +104,13 @@ void P::drawChildren(int& x, int& y, int& w, int& h) {
 		curr_x += out_w;
 		curr_y += out_h;
 	}
+
+	if (out_h == 0) {
+		out_h = fl_height();
+	}
+
+	w = out_w;
+	h = out_h;
 }
 
 /*
