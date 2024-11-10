@@ -48,6 +48,7 @@ class Text : public HTMLNode {
 	std::string _content;
 	std::vector<TextInfo> _content_info;
 	int _base_content_h;
+	int _base_content_descent;
 	double _content_w;
 
 	double addContent(int ptr, int& start_ptr, int& size, std::string& word);

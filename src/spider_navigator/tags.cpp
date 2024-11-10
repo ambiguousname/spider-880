@@ -105,6 +105,7 @@ Text::Text(std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node) : HTMLN
 	_content_w += addContent(0, start_ptr, size, word);
 	
 	_base_content_h = fl_height();
+	_base_content_descent = fl_descent();
 }
 
 void Text::drawChildren(int& x, int& y, int& w, int& h) {
@@ -118,7 +119,7 @@ void Text::drawChildren(int& x, int& y, int& w, int& h) {
 		if (x + (int)c.width > (w - x_margin)) {
 			x = x_margin;
 
-			int add = fl_height() + fl_descent();
+			int add = _base_content_h + _base_content_descent;
 			y += add;
 			
 			out_w = w;
