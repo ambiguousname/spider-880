@@ -25,14 +25,6 @@ BrowserWindow::BrowserWindow(std::string filepath, int x, int y, int w, int h) :
 	menu_bar.add("Help/About", FL_CTRL+'a', aboutCallback);
 	menu_bar.add("Help/Website", FL_CTRL+'w', showHelp);
 
-	// auto attributes = root->attributes();
-	// auto find_title = attributes.find("title");
-	// if (find_title != attributes.end()) {
-	// 	// Create a constant reference to the title so c_str doesn't bug out:
-	// 	title = find_title->second;
-	// 	label(title.c_str());
-	// }
-
 	scrollbar = new Fl_Scroll(0, 25, w, h - 25);
 
 	xmlpp::DomParser parser(filepath);
@@ -44,7 +36,7 @@ BrowserWindow::BrowserWindow(std::string filepath, int x, int y, int w, int h) :
 		Glib::ustring child_name = child->get_name();
 
 		if (child_name == "head") {
-
+			evaluateHead(dynamic_cast<xmlpp::Element*>(child));
 		} else if (child_name == "body") {
 			body = new Body(dynamic_cast<xmlpp::Element*>(child), 0, 25, w, h - 25);
 		}
@@ -53,6 +45,21 @@ BrowserWindow::BrowserWindow(std::string filepath, int x, int y, int w, int h) :
 	scrollbar->type(Fl_Scroll::VERTICAL);
 }
 
+void BrowserWindow::evaluateHead(xmlpp::Element* head) {
+	if (head != nullptr) {
+		xmlpp::Node::NodeList children = head->get_children();
+		for (auto child : children) {
+			Glib::ustring child_name = child->get_name();
+
+			if (child_name == "title") {
+				if (auto t = dynamic_cast<xmlpp::TextNode*>(child->get_first_child())) {
+					title = t->get_content();
+					label(title.c_str());	
+				}
+			}
+		}
+	}
+}
 
 
 OSSL_LIB_CTX* libctx;
