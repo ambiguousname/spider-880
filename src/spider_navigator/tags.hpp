@@ -50,6 +50,8 @@ class Text : public HTMLNode {
 	int _base_content_h;
 	double _content_w;
 
+	double addContent(int ptr, int& start_ptr, int& size, std::string& word);
+
 	public:
 	Text(std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node);
 

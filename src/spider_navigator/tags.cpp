@@ -54,6 +54,19 @@ void Body::draw() {
 	resizable(this);
 }
 
+double Text::addContent(int ptr, int& start_ptr, int& size, std::string& word) {
+	double w = fl_width(word.c_str());
+	_content_info.push_back(TextInfo{
+		start_ptr, size, w,
+	});
+	
+	start_ptr = ptr;
+	size = 0;
+	word.clear();
+
+	return w;
+}
+
 Text::Text(std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node) : HTMLNode(parent) {
 	_content = text_node->get_content();
 	_content_w = 0;
@@ -67,8 +80,9 @@ Text::Text(std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node) : HTMLN
 	std::string word;
 
 	bool was_space = false;
+	int size = 0;
 
-	for (int ptr = 0, size = 0; ptr < _content.length(); ptr++, size++) {
+	for (int ptr = 0; ptr < _content.length(); ptr++, size++) {
 		char c = c_str[ptr];
 		word += c;
 
@@ -76,35 +90,19 @@ Text::Text(std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node) : HTMLN
 		if (is_space && !was_space) {
 			was_space = true;
 
-			double w = fl_width(word.c_str());
-			_content_info.push_back(TextInfo{
-				start_ptr, size, w,
-			});
-
-			_content_w += w;
-			
-			start_ptr = ptr;
-			size = 0;
-			word.clear();
+			_content_w += addContent(ptr, start_ptr, size, word);
 		} else if (!is_space && was_space) {
 			was_space = false;
 
 			word.pop_back();
-
-			double w = fl_width(word.c_str());
-			_content_info.push_back(TextInfo{
-				start_ptr, size, w
-			});
-
-			_content_w += w;
 			
-			start_ptr = ptr;
-			size = 0;
+			_content_w += addContent(ptr, start_ptr, size, word);
 
-			word.clear();
 			word += c;
 		}
 	}
+
+	_content_w += addContent(0, start_ptr, size, word);
 	
 	_base_content_h = fl_height();
 }
