@@ -43,6 +43,12 @@ struct TextInfo {
 	double width;
 };
 
+enum TextPositionInfo {
+	NONE = 0,
+	FIRST = 1,
+	LAST = 2
+};
+
 class Text : public HTMLNode {
 	protected:
 	std::string _content;
@@ -54,14 +60,14 @@ class Text : public HTMLNode {
 	double addContent(int ptr, int& start_ptr, int& size, std::string& word);
 
 	public:
-	Text(std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node);
+	Text(std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node, int position_info);
 
 	void drawChildren(int& x, int& y, int& w, int& h) override;
 };
 
 class A : public Text {
 	public:
-	A(std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node) : Text(parent, text_node) {}	
+	A(std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node, int position_info) : Text(parent, text_node, position_info) {}	
 };
 
 class P : public HTMLNode {

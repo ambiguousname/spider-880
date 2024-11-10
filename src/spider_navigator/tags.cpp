@@ -67,27 +67,31 @@ double Text::addContent(int ptr, int& start_ptr, int& size, std::string& word) {
 	return w;
 }
 
-Text::Text(std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node) : HTMLNode(parent) {
+Text::Text(std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node, int position_info) : HTMLNode(parent) {
 	_content = text_node->get_content();
 	_content_w = 0;
 
-	int i;
-	for (i = 0; i < _content.length(); i++) {
-		if (!iswspace(_content[i])) {
-			break;
+	if (position_info & TextPositionInfo::FIRST) {
+		size_t i;
+		for (i = 0; i < _content.length(); i++) {
+			if (!iswspace(_content[i])) {
+				break;
+			}
 		}
+
+		_content.erase(0, i);
 	}
 
-	_content.erase(0, i);
-
-	int j;
-	for (j = _content.length() - 1; j >= 0; j--) {
-		if (!iswspace(_content[j])) {
-			break;
+	if (position_info & TextPositionInfo::LAST) {
+		size_t j;
+		for (j = _content.length() - 1; j >= 0; j--) {
+			if (!iswspace(_content[j])) {
+				break;
+			}
 		}
-	}
 
-	_content.resize(j + 1);
+		_content.resize(j + 1);
+	}
 
 	fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
 
@@ -160,11 +164,12 @@ P::P(std::shared_ptr<HTMLNode> parent, xmlpp::Node* const node) : HTMLNode(paren
 }
 
 void P::parseChild(xmlpp::Node* node, Glib::ustring node_name) {
+	int position = ((node->get_next_sibling() == nullptr) << 1) | (node->get_previous_sibling() == nullptr);
 	if (auto text = dynamic_cast<xmlpp::TextNode*>(node)) {
-		_children.push_back(std::make_shared<Text>(std::shared_ptr<HTMLNode>(this), text));
+		_children.push_back(std::make_shared<Text>(std::shared_ptr<HTMLNode>(this), text, position));
 	} else if (node_name == "a") {
 		if (auto t = dynamic_cast<xmlpp::TextNode*>(node->get_first_child())) {
-			_children.push_back(std::make_shared<A>(std::shared_ptr<HTMLNode>(this), t));
+			_children.push_back(std::make_shared<A>(std::shared_ptr<HTMLNode>(this), t, position));
 		}
 	} 
 }
