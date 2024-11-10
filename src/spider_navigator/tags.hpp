@@ -37,11 +37,18 @@ class Body : public Fl_Group, public HTMLNode {
 	void draw() override;
 };
 
+struct TextInfo {
+	int ptr;
+	int buf_size;
+	double width;
+};
+
 class Text : public HTMLNode {
 	protected:
 	std::string _content;
-	double _content_w;
+	std::vector<TextInfo> _content_info;
 	int _base_content_h;
+	double _content_w;
 
 	public:
 	Text(std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node);

@@ -56,29 +56,83 @@ void Body::draw() {
 
 Text::Text(std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node) : HTMLNode(parent) {
 	_content = text_node->get_content();
-	
+	_content_w = 0;
+
+
 	fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
-	_content_w = fl_width(_content.c_str(), _content.length());
+
+	const char* c_str = _content.c_str();
+
+	int start_ptr = 0;
+	std::string word;
+
+	bool was_space = false;
+
+	for (int ptr = 0, size = 0; ptr < _content.length(); ptr++, size++) {
+		char c = c_str[ptr];
+		word += c;
+
+		int is_space = isspace(c);
+		if (is_space && !was_space) {
+			was_space = true;
+
+			double w = fl_width(word.c_str());
+			_content_info.push_back(TextInfo{
+				start_ptr, size, w,
+			});
+
+			_content_w += w;
+			
+			start_ptr = ptr;
+			size = 0;
+			word.clear();
+		} else if (!is_space) {
+			was_space = false;
+
+			word.pop_back();
+
+			double w = fl_width(word.c_str());
+			_content_info.push_back(TextInfo{
+				start_ptr, size, w
+			});
+
+			_content_w += w;
+			
+			start_ptr = ptr;
+			size = 0;
+
+			word.clear();
+			word += c;
+		}
+	}
+	
 	_base_content_h = fl_height();
 }
 
 void Text::drawChildren(int& x, int& y, int& w, int& h) {
-	int height_draw = (((int)_content_w / w) + 1) * _base_content_h;
-	int num_lines = ((int)_content_w / w) + 1;
+	const char* c_str = _content.c_str();
 
-	// TODO: Better wrapping.
-
-	if (num_lines > 1) {
-		x = x_margin;
-		y += _base_content_h;
-	}
+	int out_w, out_h = 0;
 	
 	fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
 	fl_color(FL_BLACK);
-	fl_draw(_content.c_str(), x, y, w, height_draw, FL_ALIGN_WRAP);
+	for (auto c : _content_info) {
+		if (x + (int)c.width > w) {
+			x = x_margin;
+
+			int add = fl_height() + fl_descent();
+			y += add;
+			
+			out_w = w;
+			out_h += add;
+		}
+
+		fl_draw(c_str + c.ptr, c.buf_size, x, y);
+		x += (int)c.width;
+	}
 	
-	w = std::min((int)_content_w, w);
-	h = (num_lines - 1) * _base_content_h;
+	w = out_w;
+	h = out_h;
 }
 
 P::P(std::shared_ptr<HTMLNode> parent, xmlpp::Node* const node) : HTMLNode(parent) {
@@ -95,22 +149,25 @@ void P::drawChildren(int& x, int& y, int& w, int& h) {
 	int curr_x = x;
 	int curr_y = y;
 
+
+	int p_w, p_h = 0;
+
 	int out_w, out_h;
 	for (auto c : _children) {
 		out_w = w;
 		out_h = h;
 		c->drawChildren(curr_x, curr_y, out_w, out_h);
 
-		curr_x += out_w;
-		curr_y += out_h;
+		p_w = std::min(p_w + out_w, w);
+		p_h += out_h;
 	}
 
-	if (out_h == 0) {
-		out_h = fl_height();
-	}
+	x = x_margin;
+	p_h += fl_height() + fl_descent();
+	
 
-	w = out_w;
-	h = out_h;
+	w = p_w;
+	h = p_h;
 }
 
 /*
