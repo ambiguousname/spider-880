@@ -86,7 +86,7 @@ Text::Text(std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node) : HTMLN
 			start_ptr = ptr;
 			size = 0;
 			word.clear();
-		} else if (!is_space) {
+		} else if (!is_space && was_space) {
 			was_space = false;
 
 			word.pop_back();
