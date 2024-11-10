@@ -9,11 +9,9 @@ extern "C" {
 #include <util/base_sounds.hpp>
 
 void aboutCallback(Fl_Widget*, void*) {
-	// fl_message_icon();
 	errorSound();
 	fl_alert("Bureau of Sabotage Network Navigator\nBy Brian Gertwig");
 }
-
 
 void showHelp(Fl_Widget* widget, void*) {
 	BrowserWindow* window = dynamic_cast<BrowserWindow*>(widget);
