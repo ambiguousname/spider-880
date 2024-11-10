@@ -71,6 +71,23 @@ Text::Text(std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node) : HTMLN
 	_content = text_node->get_content();
 	_content_w = 0;
 
+	int i;
+	for (i = 0; i < _content.length(); i++) {
+		if (!iswspace(_content[i])) {
+			break;
+		}
+	}
+
+	_content.erase(0, i);
+
+	int j;
+	for (j = _content.length() - 1; j >= 0; j--) {
+		if (!iswspace(_content[j])) {
+			break;
+		}
+	}
+
+	_content.resize(j + 1);
 
 	fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
 
@@ -86,7 +103,7 @@ Text::Text(std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node) : HTMLN
 		char c = c_str[ptr];
 		word += c;
 
-		int is_space = isspace(c);
+		int is_space = iswspace(c);
 		if (is_space && !was_space) {
 			was_space = true;
 
