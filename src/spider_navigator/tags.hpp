@@ -23,12 +23,18 @@ class HTMLNode {
 
 	int x_margin = 0;
 
-	int node_x;
-	int node_y;
-	int node_w;
-	int node_h;
+	int _node_x;
+	int _node_y;
+	int _node_w;
+	int _node_h;
 
 	public:
+	int nodeX() const { return _node_x; }
+	int nodeY() const { return _node_y; }
+	int nodeW() const { return _node_w; }
+	int nodeH() const { return _node_h; }
+	virtual int handleEvent(int event) { return 0; }
+
 	HTMLNode(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent) { _root = root; _parent = parent; }
 	~HTMLNode() { _parent.reset(); for (auto c: _children) { c.reset(); } }
 	
@@ -50,6 +56,7 @@ class Body : public Fl_Group, public HTMLNode {
 
 	Body(xmlpp::Element* const root, int x, int y, int w, int h);
 	void draw() override;
+	int handle(int event);
 };
 
 struct TextInfo {
@@ -83,6 +90,8 @@ class Text : public HTMLNode {
 class A : public Text {
 	public:
 	A(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node, int position_info) : Text(root, parent, text_node, position_info) { _root->addInteractive(std::shared_ptr<HTMLNode>(this)); }
+
+	int handleEvent(int event) override { return 0; }
 };
 
 class P : public HTMLNode {

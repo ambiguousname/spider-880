@@ -1,6 +1,7 @@
 #include "tags.hpp"
 #include <FL/fl_draw.H>
 #include <FL/fl_ask.H>
+#include <FL/Fl.H>
 #include <typeinfo>
 #include <util/base_sounds.hpp>
 
@@ -19,7 +20,8 @@ void HTMLNode::parseChild(std::shared_ptr<RootNode> root, xmlpp::Node* node, Gli
 }
 
 void HTMLNode::drawChildren(int& x, int& y, int& w, int& h) {
-	int curr_y = y;
+	_node_x = x;
+	int curr_y = _node_y = y;
 
 	int out_w, out_h;
 	int max_w = 0;
@@ -32,8 +34,8 @@ void HTMLNode::drawChildren(int& x, int& y, int& w, int& h) {
 		curr_y += out_h;
 	}
 
-	w = max_w;
-	h = curr_y - y;
+	w = _node_w = max_w;
+	h = _node_h = curr_y - y;
 }
 
 Body::Body(xmlpp::Element* const root, int x, int y, int w, int h) : Fl_Group(x, y, w, h), HTMLNode(nullptr, nullptr) {
@@ -52,6 +54,20 @@ void Body::draw() {
 	resizable(NULL);
 	resize(Fl_Group::x(), Fl_Group::y(), w, h + fl_descent());
 	resizable(this);
+}
+
+int Body::handle(int event) {
+	int x = Fl::event_x();
+	int y = Fl::event_y();
+
+	for (auto node : _interactiveNodes) {
+		int node_x = node->nodeX();
+		int node_y = node->nodeY();
+		if (x > node_x && x < node_x + node->nodeW() && y > node_y && y < node_y + node->nodeH()) {
+			return node->handleEvent(event);
+		}
+	}
+	return 0;
 }
 
 double Text::addContent(int ptr, int& start_ptr, int& size, std::string& word) {
@@ -132,8 +148,8 @@ Text::Text(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xml
 void Text::drawChildren(int& x, int& y, int& w, int& h) {
 	const char* c_str = _content.c_str();
 
-	node_x = x;
-	node_y = y;
+	_node_x = x;
+	_node_y = y;
 
 	int out_w, out_h = 0;
 	
@@ -158,8 +174,8 @@ void Text::drawChildren(int& x, int& y, int& w, int& h) {
 		}
 	}
 	
-	w = node_w = out_w;
-	h = node_h = out_h;
+	w = _node_w = out_w;
+	h = _node_h = out_h;
 }
 
 P::P(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::Node* const node) : HTMLNode(root, parent) {
@@ -179,9 +195,8 @@ void P::parseChild(std::shared_ptr<RootNode> root, xmlpp::Node* node, Glib::ustr
 }
 
 void P::drawChildren(int& x, int& y, int& w, int& h) {
-	int curr_x = node_x = x;
-	int curr_y = node_y = y;
-
+	int curr_x = _node_x = x;
+	int curr_y = _node_y = y;
 
 	int p_w, p_h = 0;
 
@@ -199,8 +214,8 @@ void P::drawChildren(int& x, int& y, int& w, int& h) {
 	p_h += fl_height() + fl_descent();
 	
 
-	w = node_w = p_w;
-	h = node_h = p_h;
+	w = _node_w = p_w;
+	h = _node_h = p_h;
 }
 
 /*
