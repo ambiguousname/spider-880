@@ -65,7 +65,7 @@ int Body::handle(int event) {
 	if (_enteredHandler != nullptr && 
 		(event == FL_LEAVE || 
 			(event == FL_MOVE && 
-			(x < _enteredHandler->nodeX() || x > _enteredHandler->nodeX() + _enteredHandler->nodeW() || y < _enteredHandler->nodeY() || _enteredHandler->nodeH()))
+			(x < _enteredHandler->nodeX() || x > _enteredHandler->nodeX() + _enteredHandler->nodeW() || y < _enteredHandler->nodeY() ||y > _enteredHandler->nodeY() + _enteredHandler->nodeH()))
 		)
 	) {
 		int out = _enteredHandler->handleEvent(FL_LEAVE);
@@ -83,7 +83,7 @@ int Body::handle(int event) {
 			if (_enteredHandler == nullptr && (event & (FL_MOVE | FL_ENTER))) {
 				send_event = FL_ENTER;
 			}
-			int out = node->handleEvent(event);
+			int out = node->handleEvent(send_event);
 			if (out != 0) {
 				if (send_event == FL_ENTER) {
 					_enteredHandler = node;
@@ -196,6 +196,11 @@ void Text::drawChildren(int& x, int& y, int& w, int& h) {
 			out_h += add;
 		}
 
+		
+		if (highlight) {
+			fl_draw_box(FL_FLAT_BOX, x, y, c.width, _base_content_h, FL_BLUE);
+		}
+
 		fl_draw(c_str + c.ptr, c.buf_size, x, y);
 		x += (int)c.width;
 
@@ -250,11 +255,19 @@ void P::drawChildren(int& x, int& y, int& w, int& h) {
 
 int P::handleEvent(int event) {
 	if (event == FL_ENTER) {
-		_highlight = true;
+		for (auto c : _children) {
+			if (auto t = dynamic_cast<Text*>(c.get())) {
+				t->highlight = true;
+			}
+		}
 		_root->redraw();
 		return 1;
 	} else if (event == FL_LEAVE) {
-		_highlight = false;
+		for (auto c : _children) {
+			if (auto t = dynamic_cast<Text*>(c.get())) {
+				t->highlight = false;
+			}
+		}
 		_root->redraw();
 		return 1;
 	}

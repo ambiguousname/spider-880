@@ -84,6 +84,8 @@ class Text : public HTMLNode {
 	double addContent(int ptr, int& start_ptr, int& size, std::string& word);
 
 	public:
+	bool highlight = false;
+	
 	Text(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node, int position_info);
 
 	void drawChildren(int& x, int& y, int& w, int& h) override;
@@ -99,8 +101,6 @@ class A : public Text {
 class P : public HTMLNode {
 	protected:
 	void parseChild(std::shared_ptr<RootNode> root, xmlpp::Node* const node, Glib::ustring node_name) override;	
-
-	bool _highlight = false;
 
 	public:
 	P(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::Node* const node);
