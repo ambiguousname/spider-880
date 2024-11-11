@@ -64,7 +64,10 @@ int Body::handle(int event) {
 		int node_x = node->nodeX();
 		int node_y = node->nodeY();
 		if (x > node_x && x < node_x + node->nodeW() && y > node_y && y < node_y + node->nodeH()) {
-			return node->handleEvent(event);
+			int out = node->handleEvent(event);
+			if (out != 0) {
+				return out;
+			}
 		}
 	}
 	return 0;
