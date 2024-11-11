@@ -179,7 +179,7 @@ void Text::drawChildren(int& x, int& y, int& w, int& h) {
 	const char* c_str = _content.c_str();
 
 	_node_x = x;
-	_node_y = y;
+	_node_y = y - _base_content_h;
 
 	int out_w, out_h = 0;
 	
@@ -198,7 +198,7 @@ void Text::drawChildren(int& x, int& y, int& w, int& h) {
 
 		
 		if (highlight) {
-			fl_draw_box(FL_FLAT_BOX, x, y, c.width, _base_content_h, FL_BLUE);
+			fl_draw_box(FL_FLAT_BOX, x, y - _base_content_h, c.width, _base_content_h + _base_content_descent, FL_BLUE);
 		}
 
 		fl_draw(c_str + c.ptr, c.buf_size, x, y);
