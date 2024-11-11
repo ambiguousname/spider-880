@@ -50,6 +50,8 @@ class Body : public Fl_Group, public HTMLNode {
 	protected:
 	std::vector<std::shared_ptr<HTMLNode>> _interactiveNodes;
 
+	std::shared_ptr<HTMLNode> _enteredHandler;
+
 	public:
 
 	void addInteractive(std::shared_ptr<HTMLNode> node) { _interactiveNodes.push_back(node); }
@@ -91,7 +93,7 @@ class A : public Text {
 	public:
 	A(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node, int position_info) : Text(root, parent, text_node, position_info) { _root->addInteractive(std::shared_ptr<HTMLNode>(this)); }
 
-	int handleEvent(int event) override { return 0; }
+	int handleEvent(int event) override;
 };
 
 class P : public HTMLNode {

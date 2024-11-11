@@ -60,17 +60,42 @@ int Body::handle(int event) {
 	int x = Fl::event_x();
 	int y = Fl::event_y();
 
+	if (_enteredHandler != nullptr && 
+		(event == FL_LEAVE || 
+			(event == FL_MOVE && 
+			(x < _enteredHandler->nodeX() || x > _enteredHandler->nodeX() + _enteredHandler->nodeW() || y < _enteredHandler->nodeY() || _enteredHandler->nodeH()))
+		)
+	) {
+		int out = _enteredHandler->handleEvent(FL_LEAVE);
+		if (out != 0) {
+			_enteredHandler = nullptr;
+			return out;
+		}
+	}
+
 	for (auto node : _interactiveNodes) {
 		int node_x = node->nodeX();
 		int node_y = node->nodeY();
 		if (x > node_x && x < node_x + node->nodeW() && y > node_y && y < node_y + node->nodeH()) {
+			int send_event = event;
+			if (_enteredHandler == nullptr && (event & (FL_MOVE | FL_ENTER))) {
+				send_event = FL_ENTER;
+			}
 			int out = node->handleEvent(event);
 			if (out != 0) {
+				if (send_event == FL_ENTER) {
+					_enteredHandler = node;
+				}
 				return out;
 			}
 		}
 	}
-	return 0;
+
+	if (event == FL_ENTER) {
+		return 1;
+	} else {
+		return 0;
+	}
 }
 
 double Text::addContent(int ptr, int& start_ptr, int& size, std::string& word) {
@@ -219,6 +244,14 @@ void P::drawChildren(int& x, int& y, int& w, int& h) {
 
 	w = _node_w = p_w;
 	h = _node_h = p_h;
+}
+
+int A::handleEvent(int event) {
+	if (event == FL_ENTER) {
+		fl_message("TEST");
+		return 1;
+	}
+	return 0;
 }
 
 /*
