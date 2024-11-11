@@ -49,6 +49,8 @@ void Body::draw() {
 	y = Fl_Group::y() + fl_height() + fl_descent();
 	w = Fl_Group::w();
 	h = Fl_Group::h();
+
+	fl_draw_box(FL_FLAT_BOX, x, Fl_Group::y(), w, h, FL_WHITE);
 	
 	drawChildren(x, y, w, h);
 	resizable(NULL);
@@ -244,6 +246,19 @@ void P::drawChildren(int& x, int& y, int& w, int& h) {
 
 	w = _node_w = p_w;
 	h = _node_h = p_h;
+}
+
+int P::handleEvent(int event) {
+	if (event == FL_ENTER) {
+		_highlight = true;
+		_root->redraw();
+		return 1;
+	} else if (event == FL_LEAVE) {
+		_highlight = false;
+		_root->redraw();
+		return 1;
+	}
+	return 0;
 }
 
 int A::handleEvent(int event) {

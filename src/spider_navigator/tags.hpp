@@ -100,10 +100,14 @@ class P : public HTMLNode {
 	protected:
 	void parseChild(std::shared_ptr<RootNode> root, xmlpp::Node* const node, Glib::ustring node_name) override;	
 
+	bool _highlight = false;
+
 	public:
 	P(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::Node* const node);
 	
 	void drawChildren(int& x, int& y, int& w, int& h) override;
+
+	int handleEvent(int event) override;
 };
 
 /*
