@@ -8,18 +8,28 @@
 #include "util/image_box.hpp"
 #include <libxml++/libxml++.h>
 
+class Body;
+
+typedef Body RootNode;
+
 class HTMLNode {
 	protected:
+	std::shared_ptr<RootNode> _root;
 	std::shared_ptr<HTMLNode> _parent;
 	std::vector<std::shared_ptr<HTMLNode>> _children;
 
-	void parseChildren(xmlpp::Element* const element);
-	virtual void parseChild(xmlpp::Node* const node, Glib::ustring node_name);
+	void parseChildren(std::shared_ptr<RootNode> root, xmlpp::Element* const element);
+	virtual void parseChild(std::shared_ptr<RootNode> root, xmlpp::Node* const node, Glib::ustring node_name);
 
 	int x_margin = 0;
 
+	int node_x;
+	int node_y;
+	int node_w;
+	int node_h;
+
 	public:
-	HTMLNode(std::shared_ptr<HTMLNode> parent) { _parent = parent; }
+	HTMLNode(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent) { _root = root; _parent = parent; }
 	~HTMLNode() { _parent.reset(); for (auto c: _children) { c.reset(); } }
 	
 	/// @brief Draw the node at the given position.
@@ -31,7 +41,12 @@ class HTMLNode {
 };
 
 class Body : public Fl_Group, public HTMLNode {
+	protected:
+	std::vector<std::shared_ptr<HTMLNode>> _interactiveNodes;
+
 	public:
+
+	void addInteractive(std::shared_ptr<HTMLNode> node) { _interactiveNodes.push_back(node); }
 
 	Body(xmlpp::Element* const root, int x, int y, int w, int h);
 	void draw() override;
@@ -60,22 +75,22 @@ class Text : public HTMLNode {
 	double addContent(int ptr, int& start_ptr, int& size, std::string& word);
 
 	public:
-	Text(std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node, int position_info);
+	Text(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node, int position_info);
 
 	void drawChildren(int& x, int& y, int& w, int& h) override;
 };
 
 class A : public Text {
 	public:
-	A(std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node, int position_info) : Text(parent, text_node, position_info) {}	
+	A(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node, int position_info) : Text(root, parent, text_node, position_info) { _root->addInteractive(std::shared_ptr<HTMLNode>(this)); }
 };
 
 class P : public HTMLNode {
 	protected:
-	void parseChild(xmlpp::Node* const node, Glib::ustring node_name) override;	
+	void parseChild(std::shared_ptr<RootNode> root, xmlpp::Node* const node, Glib::ustring node_name) override;	
 
 	public:
-	P(std::shared_ptr<HTMLNode> parent, xmlpp::Node* const node);
+	P(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::Node* const node);
 	
 	void drawChildren(int& x, int& y, int& w, int& h) override;
 };

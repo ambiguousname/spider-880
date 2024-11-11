@@ -4,17 +4,17 @@
 #include <typeinfo>
 #include <util/base_sounds.hpp>
 
-void HTMLNode::parseChildren(xmlpp::Element* const element) {
+void HTMLNode::parseChildren(std::shared_ptr<RootNode> root, xmlpp::Element* const element) {
 	for (auto child : element->get_children()) {
 		Glib::ustring name = child->get_name();
 
-		parseChild(child, name);
+		parseChild(root, child, name);
 	}
 }
 
-void HTMLNode::parseChild(xmlpp::Node* node, Glib::ustring node_name) {
+void HTMLNode::parseChild(std::shared_ptr<RootNode> root, xmlpp::Node* node, Glib::ustring node_name) {
 	if (node_name == "p") {
-		_children.push_back(std::make_shared<P>(std::shared_ptr<HTMLNode>(this), node));
+		_children.push_back(std::make_shared<P>(root, std::shared_ptr<HTMLNode>(this), node));
 	}
 }
 
@@ -36,21 +36,21 @@ void HTMLNode::drawChildren(int& x, int& y, int& w, int& h) {
 	h = curr_y - y;
 }
 
-Body::Body(xmlpp::Element* const root, int x, int y, int w, int h) : Fl_Group(x, y, w, h), HTMLNode(nullptr) {
-	parseChildren(root);
+Body::Body(xmlpp::Element* const root, int x, int y, int w, int h) : Fl_Group(x, y, w, h), HTMLNode(nullptr, nullptr) {
+	parseChildren(std::shared_ptr<RootNode>(this), root);
 	end();
 }
 
 void Body::draw() {
 	int x, y, w, h;
-	x = this->x();
-	y = this->y() + fl_height() + fl_descent();
-	w = this->w();
-	h = this->h();
+	x = Fl_Group::x();
+	y = Fl_Group::y() + fl_height() + fl_descent();
+	w = Fl_Group::w();
+	h = Fl_Group::h();
 	
 	drawChildren(x, y, w, h);
 	resizable(NULL);
-	resize(this->x(), this->y(), w, h + fl_descent());
+	resize(Fl_Group::x(), Fl_Group::y(), w, h + fl_descent());
 	resizable(this);
 }
 
@@ -67,7 +67,7 @@ double Text::addContent(int ptr, int& start_ptr, int& size, std::string& word) {
 	return w;
 }
 
-Text::Text(std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node, int position_info) : HTMLNode(parent) {
+Text::Text(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node, int position_info) : HTMLNode(root, parent) {
 	_content = text_node->get_content();
 	_content_w = 0;
 
@@ -132,6 +132,9 @@ Text::Text(std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node, int pos
 void Text::drawChildren(int& x, int& y, int& w, int& h) {
 	const char* c_str = _content.c_str();
 
+	node_x = x;
+	node_y = y;
+
 	int out_w, out_h = 0;
 	
 	fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
@@ -155,28 +158,29 @@ void Text::drawChildren(int& x, int& y, int& w, int& h) {
 		}
 	}
 	
-	w = out_w;
-	h = out_h;
+	w = node_w = out_w;
+	h = node_h = out_h;
 }
 
-P::P(std::shared_ptr<HTMLNode> parent, xmlpp::Node* const node) : HTMLNode(parent) {
-	parseChildren(dynamic_cast<xmlpp::Element*>(node));
+P::P(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::Node* const node) : HTMLNode(root, parent) {
+	parseChildren(root, dynamic_cast<xmlpp::Element*>(node));
+	_root->addInteractive(std::shared_ptr<HTMLNode>(this));
 }
 
-void P::parseChild(xmlpp::Node* node, Glib::ustring node_name) {
+void P::parseChild(std::shared_ptr<RootNode> root, xmlpp::Node* node, Glib::ustring node_name) {
 	int position = ((node->get_next_sibling() == nullptr) << 1) | (node->get_previous_sibling() == nullptr);
 	if (auto text = dynamic_cast<xmlpp::TextNode*>(node)) {
-		_children.push_back(std::make_shared<Text>(std::shared_ptr<HTMLNode>(this), text, position));
+		_children.push_back(std::make_shared<Text>(root, std::shared_ptr<HTMLNode>(this), text, position));
 	} else if (node_name == "a") {
 		if (auto t = dynamic_cast<xmlpp::TextNode*>(node->get_first_child())) {
-			_children.push_back(std::make_shared<A>(std::shared_ptr<HTMLNode>(this), t, position));
+			_children.push_back(std::make_shared<A>(root, std::shared_ptr<HTMLNode>(this), t, position));
 		}
 	} 
 }
 
 void P::drawChildren(int& x, int& y, int& w, int& h) {
-	int curr_x = x;
-	int curr_y = y;
+	int curr_x = node_x = x;
+	int curr_y = node_y = y;
 
 
 	int p_w, p_h = 0;
@@ -195,8 +199,8 @@ void P::drawChildren(int& x, int& y, int& w, int& h) {
 	p_h += fl_height() + fl_descent();
 	
 
-	w = p_w;
-	h = p_h;
+	w = node_w = p_w;
+	h = node_h = p_h;
 }
 
 /*
