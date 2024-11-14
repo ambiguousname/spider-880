@@ -50,7 +50,7 @@ void Body::draw() {
 	w = Fl_Group::w();
 	h = Fl_Group::h();
 
-	fl_draw_box(FL_FLAT_BOX, x, Fl_Group::y(), w, h, FL_WHITE);
+	fl_draw_box(FL_FLAT_BOX, x, Fl_Group::y(), w, h, _background_color);
 	
 	drawChildren(x, y, w, h);
 	resizable(NULL);
@@ -186,7 +186,7 @@ void Text::drawChildren(int& x, int& y, int& w, int& h) {
 	int out_w, out_h = 0;
 	
 	fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
-	fl_color(FL_BLACK);
+	fl_color(_text_color);
 	for (auto c : _content_info) {
 		if (x + (int)c.width > (w - x_margin)) {
 			x = x_margin;
@@ -200,7 +200,8 @@ void Text::drawChildren(int& x, int& y, int& w, int& h) {
 
 		
 		if (highlight) {
-			fl_draw_box(FL_FLAT_BOX, x, y - _base_content_h, c.width, _base_content_h + _base_content_descent, FL_BLUE);
+			fl_draw_box(FL_FLAT_BOX, x, y - _base_content_h, c.width, _base_content_h + _base_content_descent, _highlight_bg);
+			fl_color(_highlight_text);
 		}
 
 		fl_draw(c_str + c.ptr, c.buf_size, x, y);

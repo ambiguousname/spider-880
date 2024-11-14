@@ -18,6 +18,12 @@ class HTMLNode {
 	std::shared_ptr<HTMLNode> _parent;
 	std::vector<std::shared_ptr<HTMLNode>> _children;
 
+	int _background_color = FL_BACKGROUND_COLOR;
+	int _text_color = FL_FOREGROUND_COLOR;
+
+	int _highlight_bg = FL_BLUE;
+	int _highlight_text = FL_WHITE;
+
 	void parseChildren(std::shared_ptr<RootNode> root, xmlpp::Element* const element);
 	virtual void parseChild(std::shared_ptr<RootNode> root, xmlpp::Node* const node, Glib::ustring node_name);
 
