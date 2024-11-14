@@ -211,6 +211,7 @@ void Text::drawChildren(int& x, int& y, int& w, int& h) {
 	
 	w = _node_w = out_w;
 	h = _node_h = out_h;
+	_node_h += _base_content_h + _base_content_descent;
 }
 
 P::P(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::Node* const node) : HTMLNode(root, parent) {
@@ -232,6 +233,8 @@ void P::parseChild(std::shared_ptr<RootNode> root, xmlpp::Node* node, Glib::ustr
 void P::drawChildren(int& x, int& y, int& w, int& h) {
 	int curr_x = _node_x = x;
 	int curr_y = _node_y = y;
+
+	_node_y -= fl_height();
 
 	int p_w, p_h = 0;
 
@@ -276,7 +279,12 @@ int P::handleEvent(int event) {
 
 int A::handleEvent(int event) {
 	if (event == FL_ENTER) {
-		fl_message("TEST");
+		highlight = true;
+		_root->redraw();
+		return 1;
+	} else if (event == FL_LEAVE) {
+		highlight = false;
+		_root->redraw();
 		return 1;
 	}
 	return 0;
