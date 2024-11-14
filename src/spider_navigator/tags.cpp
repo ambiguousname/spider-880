@@ -38,27 +38,7 @@ void HTMLNode::drawChildren(int& x, int& y, int& w, int& h) {
 	h = _node_h = curr_y - y;
 }
 
-Body::Body(xmlpp::Element* const root, int x, int y, int w, int h) : Fl_Group(x, y, w, h), HTMLNode(nullptr, nullptr) {
-	parseChildren(std::shared_ptr<RootNode>(this), root);
-	end();
-}
-
-void Body::draw() {
-	int x, y, w, h;
-	x = Fl_Group::x();
-	y = Fl_Group::y() + fl_height() + fl_descent();
-	w = Fl_Group::w();
-	h = Fl_Group::h();
-
-	fl_draw_box(FL_FLAT_BOX, x, Fl_Group::y(), w, h, _background_color);
-	
-	drawChildren(x, y, w, h);
-	resizable(NULL);
-	resize(Fl_Group::x(), Fl_Group::y(), w, h + fl_descent());
-	resizable(this);
-}
-
-int Body::handle(int event) {
+int HTMLNode::handleEvent(int event) {
 	int x = Fl::event_x();
 	int y = Fl::event_y();
 
@@ -93,11 +73,31 @@ int Body::handle(int event) {
 		}
 	}
 
-	if (event == FL_ENTER) {
-		return 1;
-	} else {
-		return 0;
-	}
+	return 0;
+}
+
+Body::Body(xmlpp::Element* const root, int x, int y, int w, int h) : Fl_Group(x, y, w, h), HTMLNode(nullptr, nullptr) {
+	parseChildren(std::shared_ptr<RootNode>(this), root);
+	end();
+}
+
+void Body::draw() {
+	int x, y, w, h;
+	x = Fl_Group::x();
+	y = Fl_Group::y() + fl_height() + fl_descent();
+	w = Fl_Group::w();
+	h = Fl_Group::h();
+
+	fl_draw_box(FL_FLAT_BOX, x, Fl_Group::y(), w, h, _background_color);
+	
+	drawChildren(x, y, w, h);
+	resizable(NULL);
+	resize(Fl_Group::x(), Fl_Group::y(), w, h + fl_descent());
+	resizable(this);
+}
+
+int Body::handle(int event) {
+	return handleEvent(event);
 }
 
 double Text::addContent(int ptr, int& start_ptr, int& size, std::string& word) {
@@ -175,8 +175,6 @@ Text::Text(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xml
 	
 	_base_content_h = fl_height();
 	_base_content_descent = fl_descent();
-	
-	_root->addInteractive(std::shared_ptr<HTMLNode>(this));
 }
 
 void Text::drawChildren(int& x, int& y, int& w, int& h) {
@@ -221,6 +219,7 @@ void Text::drawChildren(int& x, int& y, int& w, int& h) {
 
 P::P(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::Node* const node) : HTMLNode(root, parent) {
 	parseChildren(root, dynamic_cast<xmlpp::Element*>(node));
+	_parent->addInteractive(std::shared_ptr<HTMLNode>(this));
 }
 
 void P::parseChild(std::shared_ptr<RootNode> root, xmlpp::Node* node, Glib::ustring node_name) {
@@ -260,8 +259,35 @@ void P::drawChildren(int& x, int& y, int& w, int& h) {
 	h = _node_h = p_h;
 }
 
-int Text::handleEvent(int event) {
+int P::handleEvent(int event) {
+	int out = HTMLNode::handleEvent(event);
+	if (out != 0) {
+		return out;
+	}
+
 	if (event == FL_ENTER) {
+		setChildrenHighlight(true);
+		_root->redraw();
+		return 1;
+	} else if (event == FL_LEAVE) {
+		setChildrenHighlight(false);
+		_root->redraw();
+		return 1;
+	}
+	return 0;
+}
+
+void P::setChildrenHighlight(bool highlight) {
+	for (auto c : _children) {
+		if (auto t = dynamic_cast<Text*>(c.get())) {
+			t->highlight = highlight;
+		}
+	}
+}
+
+int A::handleEvent(int event) {
+	if (event == FL_ENTER) {
+		dynamic_cast<P*>(_parent.get())->setChildrenHighlight(false);
 		highlight = true;
 		_root->redraw();
 		return 1;
@@ -269,14 +295,6 @@ int Text::handleEvent(int event) {
 		highlight = false;
 		_root->redraw();
 		return 1;
-	}
-	return 0;
-}
-
-int A::handleEvent(int event) {
-	int out = Text::handleEvent(event);
-	if (out != 0) {
-		return out;
 	}
 	return 0;
 }
