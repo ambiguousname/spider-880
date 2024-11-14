@@ -117,11 +117,9 @@ Text::Text(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xml
 	_content = text_node->get_content();
 	_content_w = 0;
 
-	size_t content_length = _content.length();
-
 	if (position_info & TextPositionInfo::FIRST) {
 		size_t i;
-		for (i = 0; i < content_length; i++) {
+		for (i = 0; i < _content.length(); i++) {
 			if (!iswspace(_content[i])) {
 				break;
 			}
@@ -129,6 +127,8 @@ Text::Text(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xml
 
 		_content.erase(0, i);
 	}
+
+	size_t content_length = _content.length();
 
 	if (position_info & TextPositionInfo::LAST) {
 		size_t j;
