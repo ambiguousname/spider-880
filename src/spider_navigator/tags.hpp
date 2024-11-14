@@ -39,7 +39,7 @@ class HTMLNode {
 	int nodeY() const { return _node_y; }
 	int nodeW() const { return _node_w; }
 	int nodeH() const { return _node_h; }
-	virtual int handleEvent(int event) { return 0; }
+	virtual int handleEvent(int) { return 0; }
 
 	HTMLNode(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent) { _root = root; _parent = parent; }
 	~HTMLNode() { _parent.reset(); for (auto c: _children) { c.reset(); } }
@@ -95,6 +95,8 @@ class Text : public HTMLNode {
 	Text(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node, int position_info);
 
 	void drawChildren(int& x, int& y, int& w, int& h) override;
+
+	virtual int handleEvent(int event) override;
 };
 
 class A : public Text {
@@ -112,8 +114,6 @@ class P : public HTMLNode {
 	P(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::Node* const node);
 	
 	void drawChildren(int& x, int& y, int& w, int& h) override;
-
-	int handleEvent(int event) override;
 };
 
 /*
