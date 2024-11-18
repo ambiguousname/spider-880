@@ -185,8 +185,10 @@ void Text::drawChildren(int& x, int& y, int& w, int& h) {
 
 	_node_x = x;
 	_node_y = y - _base_content_h;
+	_node_h = 0;
 
 	int out_w, out_h = 0;
+
 	
 	fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
 	fl_color(_text_color);
@@ -199,12 +201,15 @@ void Text::drawChildren(int& x, int& y, int& w, int& h) {
 			int add = _base_content_h + _base_content_descent;
 			y += add;
 
+			out_h += add;
+			_node_h += add;
+			
 			if (iter == _content_info.begin()) {
 				_node_x = x;
 				_node_y += add;
+				_node_h = 0;
 			} else {
 				out_w = w;
-				out_h += add;
 			}
 		}
 		
@@ -222,7 +227,7 @@ void Text::drawChildren(int& x, int& y, int& w, int& h) {
 	}
 	
 	w = _node_w = out_w;
-	h = _node_h = out_h;
+	h = out_h;
 	_node_h += _base_content_h + _base_content_descent;
 }
 
