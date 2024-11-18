@@ -23,10 +23,6 @@ class HTMLNode {
 	std::shared_ptr<HTMLNode> _enteredHandler;
 
 	int _background_color = FL_BACKGROUND_COLOR;
-	int _text_color = FL_FOREGROUND_COLOR;
-
-	int _highlight_bg = FL_BLUE;
-	int _highlight_text = FL_WHITE;
 
 	void parseChildren(std::shared_ptr<RootNode> root, xmlpp::Element* const element);
 	virtual void parseChild(std::shared_ptr<RootNode> root, xmlpp::Node* const node, Glib::ustring node_name);
@@ -44,6 +40,8 @@ class HTMLNode {
 	int nodeW() const { return _node_w; }
 	int nodeH() const { return _node_h; }
 	virtual int handleEvent(int event);
+	// Called if we're still in focus even after having left an interactive node child.
+	virtual void handleChildLeave() {}
 
 	void addInteractive(std::shared_ptr<HTMLNode> node) { _interactiveNodes.push_back(node); }
 
@@ -79,6 +77,11 @@ enum TextPositionInfo {
 
 class Text : public HTMLNode {
 	protected:
+	int _text_color = FL_FOREGROUND_COLOR;
+
+	int _highlight_bg = FL_BLUE;
+	int _highlight_text = FL_WHITE;
+
 	std::string _content;
 	std::vector<TextInfo> _content_info;
 	int _base_content_h;
@@ -97,7 +100,7 @@ class Text : public HTMLNode {
 
 class A : public Text {
 	public:
-	A(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node, int position_info) : Text(root, parent, text_node, position_info) { _parent->addInteractive(std::shared_ptr<HTMLNode>(this)); }
+	A(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node, int position_info) : Text(root, parent, text_node, position_info) { _text_color = 4; _parent->addInteractive(std::shared_ptr<HTMLNode>(this)); }
 
 	int handleEvent(int event) override;
 };
@@ -114,6 +117,7 @@ class P : public HTMLNode {
 	void setChildrenHighlight(bool highlight);
 
 	int handleEvent(int event) override;
+	void handleChildLeave() override;
 };
 
 /*

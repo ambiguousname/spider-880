@@ -51,6 +51,9 @@ int HTMLNode::handleEvent(int event) {
 		int out = _enteredHandler->handleEvent(FL_LEAVE);
 		if (out != 0) {
 			_enteredHandler = nullptr;
+			if (event == FL_MOVE) {
+				handleChildLeave();
+			}
 			return out;
 		}
 	}
@@ -187,17 +190,23 @@ void Text::drawChildren(int& x, int& y, int& w, int& h) {
 	
 	fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
 	fl_color(_text_color);
-	for (auto c : _content_info) {
+	for (auto iter = _content_info.begin(); iter != _content_info.end(); iter++) {
+		auto c = *iter;
+
 		if (x + (int)c.width > (w - x_margin)) {
 			x = x_margin;
 
 			int add = _base_content_h + _base_content_descent;
 			y += add;
-			
-			out_w = w;
-			out_h += add;
-		}
 
+			if (iter == _content_info.begin()) {
+				_node_x = x;
+				_node_y += add;
+			} else {
+				out_w = w;
+				out_h += add;
+			}
+		}
 		
 		if (highlight) {
 			fl_draw_box(FL_FLAT_BOX, x, y - _base_content_h, c.width, _base_content_h + _base_content_descent, _highlight_bg);
@@ -275,6 +284,11 @@ int P::handleEvent(int event) {
 		return 1;
 	}
 	return 0;
+}
+
+void P::handleChildLeave() {
+	setChildrenHighlight(true);
+	_root->redraw();
 }
 
 void P::setChildrenHighlight(bool highlight) {
