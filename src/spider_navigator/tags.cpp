@@ -299,7 +299,9 @@ void P::handleChildLeave() {
 void P::setChildrenHighlight(bool highlight) {
 	for (auto c : _children) {
 		if (auto t = dynamic_cast<Text*>(c.get())) {
-			t->highlight = highlight;
+			if (dynamic_cast<A*>(c.get()) == nullptr) {
+				t->highlight = highlight;
+			}
 		}
 	}
 }
