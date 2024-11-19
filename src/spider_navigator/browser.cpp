@@ -23,8 +23,6 @@ BrowserWindow::BrowserWindow(std::string filepath, int x, int y, int w, int h) :
 	menu_bar.add("Help/About", FL_CTRL+'a', aboutCallback);
 	menu_bar.add("Help/Website", FL_CTRL+'w', showHelp);
 
-	scrollbar = new Fl_Scroll(0, 25, w, h - 25);
-
 	xmlpp::DomParser parser(filepath);
 	xmlpp::Document* d = parser.get_document();
 	xmlpp::Element* root = d->get_root_node();
@@ -36,11 +34,19 @@ BrowserWindow::BrowserWindow(std::string filepath, int x, int y, int w, int h) :
 		if (child_name == "head") {
 			evaluateHead(dynamic_cast<xmlpp::Element*>(child));
 		} else if (child_name == "body") {
-			body = new Body(dynamic_cast<xmlpp::Element*>(child), 0, 25, w, h - 25);
+			scrollbar = new Fl_Scroll(0, 25, w, h - 25);
+			body = new Body(dynamic_cast<xmlpp::Element*>(child), 0, 20, w, h - 20);
+			scrollbar->end();
+			scrollbar->type(Fl_Scroll::VERTICAL);
 		}
 	}
-	scrollbar->end();
-	scrollbar->type(Fl_Scroll::VERTICAL);
+	resizable(this);
+	end();
+}
+
+void BrowserWindow::draw() {
+	body->resize(body->x(), body->y(), w(), body->h());
+	Fl_Window::draw();
 }
 
 void BrowserWindow::evaluateHead(xmlpp::Element* head) {
@@ -126,8 +132,6 @@ std::string filenameFromHash(unsigned char name[16]) {
 
 void browserFromFile(std::string filepath, int x, int y, int w, int h) {
 	BrowserWindow* window = new BrowserWindow(filepath, x, y, w, h);
-	window->end();
-	window->resizable(window);
 	window->show();
 }
 

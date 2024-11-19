@@ -22,5 +22,5 @@ class BrowserWindow : public Fl_Window {
 
 	public:
 	BrowserWindow(std::string filepath, int x, int y, int w, int h);
-
+	void draw();
 };
