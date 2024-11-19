@@ -16,6 +16,8 @@ void HTMLNode::parseChildren(std::shared_ptr<RootNode> root, xmlpp::Element* con
 void HTMLNode::parseChild(std::shared_ptr<RootNode> root, xmlpp::Node* node, Glib::ustring node_name) {
 	if (node_name == "p") {
 		_children.push_back(std::make_shared<P>(root, std::shared_ptr<HTMLNode>(this), node));
+	} else if (node_name == "img") {
+		_children.push_back(std::make_shared<Img>(root, std::shared_ptr<HTMLNode>(this), node));
 	}
 }
 
@@ -320,6 +322,30 @@ int A::handleEvent(int event) {
 		return 1;
 	}
 	return 0;
+}
+
+Img::Img(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::Node* const node) : HTMLNode(root, parent) {
+	if (auto i = dynamic_cast<xmlpp::Element*>(node)) {
+		auto a = i->get_attribute("src");
+		if (a != nullptr) {
+			Glib::ustring src = a->get_value();
+			box = std::make_unique<ImageBox>(src.c_str());
+		}
+	}
+}
+
+void Img::drawChildren(int& x, int& y, int& w, int& h) {
+	w = w * 3/4;
+
+	int full_w, full_h;
+	box->getFullDimensions(full_w, full_h);
+	double ratio = (double)full_h/(double)full_w;
+	h = ratio * w;
+
+	box->prepareDraw(x_margin * 2, y, w, h);
+	box->draw();
+
+	y += 20;
 }
 
 /*
