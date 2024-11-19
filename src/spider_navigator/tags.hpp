@@ -68,6 +68,10 @@ class Body : public Fl_Group, public HTMLNode {
 	int handle(int event);
 
 	void setCursor(Fl_Cursor cursor) { _parent->cursor(cursor); }
+	int parentX() { return _parent->x(); }
+	int parentY() { return _parent->y(); }
+	int parentW() { return _parent->w(); }
+	int parentH() { return _parent->h(); }
 };
 
 struct TextInfo {
@@ -106,6 +110,10 @@ class Text : public HTMLNode {
 };
 
 class A : public Text {
+	protected:
+	std::string site;
+	std::string filename;
+
 	public:
 	A(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node, int position_info) : Text(root, parent, text_node, position_info) { 
 		_text_color = 4;
