@@ -79,7 +79,7 @@ int HTMLNode::handleEvent(int event) {
 	return 0;
 }
 
-Body::Body(xmlpp::Element* const root, int x, int y, int w, int h) : Fl_Group(x, y, w, h), HTMLNode(nullptr, nullptr) {
+Body::Body(std::shared_ptr<Fl_Window> parent, xmlpp::Element* const root, int x, int y, int w, int h) : Fl_Group(x, y, w, h), HTMLNode(nullptr, nullptr), _parent(parent) {
 	parseChildren(std::shared_ptr<RootNode>(this), root);
 	end();
 }
@@ -311,9 +311,11 @@ int A::handleEvent(int event) {
 		dynamic_cast<P*>(_parent.get())->setChildrenHighlight(false);
 		highlight = true;
 		_root->redraw();
+		_root->setCursor(FL_CURSOR_HAND);
 		return 1;
 	} else if (event == FL_LEAVE) {
 		highlight = false;
+		_root->setCursor(FL_CURSOR_DEFAULT);
 		_root->redraw();
 		return 1;
 	}

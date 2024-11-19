@@ -35,7 +35,7 @@ BrowserWindow::BrowserWindow(std::string filepath, int x, int y, int w, int h) :
 			evaluateHead(dynamic_cast<xmlpp::Element*>(child));
 		} else if (child_name == "body") {
 			scrollbar = new Fl_Scroll(0, 25, w, h - 25);
-			body = new Body(dynamic_cast<xmlpp::Element*>(child), 0, 20, w, h - 20);
+			body = new Body(std::shared_ptr<Fl_Window>(this), dynamic_cast<xmlpp::Element*>(child), 0, 20, w, h - 20);
 			scrollbar->end();
 			scrollbar->type(Fl_Scroll::VERTICAL);
 		}

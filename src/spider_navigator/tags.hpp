@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 #include <FL/Fl_Group.H>
+#include <FL/Fl_Window.H>
 #include "util/image_box.hpp"
 #include <libxml++/libxml++.h>
 
@@ -57,10 +58,15 @@ class HTMLNode {
 };
 
 class Body : public Fl_Group, public HTMLNode {
+	protected:
+	std::shared_ptr<Fl_Window> _parent;
+
 	public:
-	Body(xmlpp::Element* const root, int x, int y, int w, int h);
+	Body(std::shared_ptr<Fl_Window> parent, xmlpp::Element* const root, int x, int y, int w, int h);
 	void draw() override;
 	int handle(int event);
+
+	void setCursor(Fl_Cursor cursor) { _parent->cursor(cursor); }
 };
 
 struct TextInfo {
@@ -100,7 +106,18 @@ class Text : public HTMLNode {
 
 class A : public Text {
 	public:
-	A(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node, int position_info) : Text(root, parent, text_node, position_info) { _text_color = 4; _parent->addInteractive(std::shared_ptr<HTMLNode>(this)); }
+	A(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node, int position_info) : Text(root, parent, text_node, position_info) { 
+		_text_color = 4;
+		_parent->addInteractive(std::shared_ptr<HTMLNode>(this));
+
+		// Hack: avoid A tags appearing on one line.
+		_content_info.clear();
+		_content_info.push_back(TextInfo{
+			0,
+			(int)_content.length(),
+			_content_w
+		});
+	}
 
 	int handleEvent(int event) override;
 };
