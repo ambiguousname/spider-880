@@ -27,7 +27,7 @@ class HTMLNode {
 	void parseChildren(std::shared_ptr<RootNode> root, xmlpp::Element* const element);
 	virtual void parseChild(std::shared_ptr<RootNode> root, xmlpp::Node* const node, Glib::ustring node_name);
 
-	int x_margin = 0;
+	int x_margin = 15;
 
 	int _node_x;
 	int _node_y;

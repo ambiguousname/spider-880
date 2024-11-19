@@ -86,7 +86,7 @@ Body::Body(xmlpp::Element* const root, int x, int y, int w, int h) : Fl_Group(x,
 
 void Body::draw() {
 	int x, y, w, h;
-	x = Fl_Group::x();
+	x = Fl_Group::x() + x_margin;
 	y = Fl_Group::y() + fl_height() + fl_descent();
 	w = Fl_Group::w();
 	h = Fl_Group::h();
