@@ -155,7 +155,7 @@ void newWindow(std::string site, std::string html_file, int x, int y, int w, int
 	std::string filename = filenameFromHash(name);
 	std::string file = std::format("spider_navigator/{0}.tar.z.enc", filename);
 
-	if (access(file.c_str(), F_OK) != -1) {
+	if (access(file.c_str(), F_OK) == -1) {
 		fl_alert("Failed to read %s", file.c_str());
 		return;
 	}
