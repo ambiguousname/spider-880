@@ -115,18 +115,7 @@ class A : public Text {
 	std::string filename;
 
 	public:
-	A(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node, int position_info) : Text(root, parent, text_node, position_info) { 
-		_text_color = 4;
-		_parent->addInteractive(std::shared_ptr<HTMLNode>(this));
-
-		// Hack: avoid A tags appearing on one line.
-		_content_info.clear();
-		_content_info.push_back(TextInfo{
-			0,
-			(int)_content.length(),
-			_content_w
-		});
-	}
+	A(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::Node* node, int position_info);
 
 	int handleEvent(int event) override;
 };

@@ -121,6 +121,9 @@ double Text::addContent(int ptr, int& start_ptr, int& size, std::string& word) {
 }
 
 Text::Text(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node, int position_info) : HTMLNode(root, parent) {
+	if (text_node == nullptr) {
+		return;
+	}
 	_content = text_node->get_content();
 	_content_w = 0;
 
@@ -245,9 +248,7 @@ void P::parseChild(std::shared_ptr<RootNode> root, xmlpp::Node* node, Glib::ustr
 	if (auto text = dynamic_cast<xmlpp::TextNode*>(node)) {
 		_children.push_back(std::make_shared<Text>(root, std::shared_ptr<HTMLNode>(this), text, position));
 	} else if (node_name == "a") {
-		if (auto t = dynamic_cast<xmlpp::TextNode*>(node->get_first_child())) {
-			_children.push_back(std::make_shared<A>(root, std::shared_ptr<HTMLNode>(this), t, position));
-		}
+		_children.push_back(std::make_shared<A>(root, std::shared_ptr<HTMLNode>(this), node, position));
 	} 
 }
 
@@ -308,6 +309,38 @@ void P::setChildrenHighlight(bool highlight) {
 			}
 		}
 	}
+}
+
+A::A(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::Node* node, int position_info) : Text(root, parent, dynamic_cast<xmlpp::TextNode*>(node->get_first_child()), position_info) {
+	if (auto e = dynamic_cast<xmlpp::Element*>(node)) {
+		if (auto href = e->get_attribute("href")) {
+			std::string href_val = href->get_value();
+
+			bool is_file = false;
+			for (auto c : href_val) {
+				if (c == '/') {
+					is_file = true;
+					continue;
+				}
+
+				if (is_file) {
+					filename += c;
+				} else {
+					site += c;
+				}
+			}
+		}
+	}
+	_text_color = 4;
+	_parent->addInteractive(std::shared_ptr<HTMLNode>(this));
+
+	// Hack: avoid A tags appearing on one line.
+	_content_info.clear();
+	_content_info.push_back(TextInfo{
+		0,
+		(int)_content.length(),
+		_content_w
+	});
 }
 
 int A::handleEvent(int event) {
