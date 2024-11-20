@@ -7,7 +7,28 @@
 
 #include "browser.hpp"
 
+HTMLNode::HTMLNode(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent) { 
+	_root = root;
+	_parent = parent;
+
+	if (_parent != nullptr) {
+		_background_color = parent->backgroundColor();
+		_text_color = parent->textColor();
+
+		_highlight_bg = parent->highlightBackground();
+		_highlight_text = parent->highlightText();
+	}
+}
+
 void HTMLNode::parseChildren(std::shared_ptr<RootNode> root, xmlpp::Element* const element) {
+	if (auto bg = element->get_attribute("background-color")) {
+		_background_color = std::stoi(bg->get_value());
+	}
+
+	if (auto text = element->get_attribute("color")) {
+		_text_color = std::stoi(text->get_value());
+	}
+
 	for (auto child : element->get_children()) {
 		Glib::ustring name = child->get_name();
 
