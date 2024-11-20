@@ -358,6 +358,7 @@ int A::handleEvent(int event) {
 	} else if (event == FL_PUSH) {
 		clickSound();
 		newWindow(site, filename, _root->parentX() + 10, _root->parentY() + 10, _root->parentW(), _root->parentH());
+		return 1;
 	}
 	return 0;
 }
