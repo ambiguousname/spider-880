@@ -292,7 +292,7 @@ void P::drawChildren(int& x, int& y, int& w, int& h) {
 	}
 
 	x = x_margin;
-	p_h += fl_height() + fl_descent();
+	p_h += fl_height() + fl_descent() + 20;
 	
 
 	w = _node_w = p_w;
