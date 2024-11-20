@@ -137,7 +137,7 @@ void browserFromFile(std::string filepath, int x, int y, int w, int h) {
 
 void newWindow(std::string site, std::string html_file, int x, int y, int w, int h) {
 	std::string file_loc = std::format("spider_navigator/{0}/{1}", site, html_file);
-	if (access(file_loc.c_str(), F_OK) != -1) {
+	if (access(file_loc.c_str(), F_OK) == 0) {
 		browserFromFile(file_loc, x, y, w, h);
 		return;
 	}

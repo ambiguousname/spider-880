@@ -339,7 +339,7 @@ A::A(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::No
 
 			bool is_file = false;
 			for (auto c : href_val) {
-				if (c == '/') {
+				if (c == '/' && !is_file) {
 					is_file = true;
 					continue;
 				}
