@@ -30,10 +30,10 @@ class HTMLNode {
 
 	int x_margin = 15;
 
-	int _node_x;
-	int _node_y;
-	int _node_w;
-	int _node_h;
+	int _node_x = -1;
+	int _node_y = -1;
+	int _node_w = -1;
+	int _node_h = -1;
 
 	public:
 	int nodeX() const { return _node_x; }
