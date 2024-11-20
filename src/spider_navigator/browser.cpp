@@ -23,23 +23,28 @@ BrowserWindow::BrowserWindow(std::string filepath, int x, int y, int w, int h) :
 	menu_bar.add("Help/About", FL_CTRL+'a', aboutCallback);
 	menu_bar.add("Help/Website", FL_CTRL+'w', showHelp);
 
-	xmlpp::DomParser parser(filepath);
-	xmlpp::Document* d = parser.get_document();
-	xmlpp::Element* root = d->get_root_node();
+	try {
+		xmlpp::DomParser parser(filepath);
+		xmlpp::Document* d = parser.get_document();
+		xmlpp::Element* root = d->get_root_node();
 
-	xmlpp::Node::NodeList children = root->get_children();
-	for (auto child : children) {
-		Glib::ustring child_name = child->get_name();
+		xmlpp::Node::NodeList children = root->get_children();
+		for (auto child : children) {
+			Glib::ustring child_name = child->get_name();
 
-		if (child_name == "head") {
-			evaluateHead(dynamic_cast<xmlpp::Element*>(child));
-		} else if (child_name == "body") {
-			scrollbar = new Fl_Scroll(0, 25, w, h - 25);
-			body = new Body(std::shared_ptr<Fl_Window>(this), dynamic_cast<xmlpp::Element*>(child), 0, 20, w, h - 20);
-			scrollbar->end();
-			scrollbar->type(Fl_Scroll::VERTICAL);
+			if (child_name == "head") {
+				evaluateHead(dynamic_cast<xmlpp::Element*>(child));
+			} else if (child_name == "body") {
+				scrollbar = new Fl_Scroll(0, 25, w, h - 25);
+				body = new Body(std::shared_ptr<Fl_Window>(this), dynamic_cast<xmlpp::Element*>(child), 0, 20, w, h - 20);
+				scrollbar->end();
+				scrollbar->type(Fl_Scroll::VERTICAL);
+			}
 		}
+	} catch (xmlpp::parse_error& e) {
+		fl_alert("Could not parse: %s", e.what());
 	}
+	
 	resizable(this);
 	end();
 }
