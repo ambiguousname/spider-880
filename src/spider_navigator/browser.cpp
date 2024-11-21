@@ -124,13 +124,14 @@ void uninitializeBrowser() {
 	free_lib_ctx(libctx);
 }
 
-const char* base62 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+const char* base16 = "0123456789abcdef";
 
 std::string filenameFromHash(unsigned char name[16]) {
 	std::string filename;
 	for (size_t i = 0; i < 16; i++) {
-		unsigned int v = name[i];
-		filename.push_back(base62[v % 62]);
+		unsigned char v = name[i];
+		filename.push_back(base16[(v >> 4) % 16]);
+		filename.push_back(base16[(v & 0xff) % 16]);
 	}
 	return filename;
 }
