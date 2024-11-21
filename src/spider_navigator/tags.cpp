@@ -394,7 +394,7 @@ Img::Img(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp
 	}
 }
 
-void Img::drawChildren(int& x, int& y, int& w, int& h) {
+void Img::drawChildren(int&, int& y, int& w, int& h) {
 	w = w * 3/4;
 
 	int full_w, full_h;

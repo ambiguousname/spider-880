@@ -281,7 +281,7 @@ void DatabaseWindow::citizenMurdered(Fl_Widget* browser, void* db_window) {
 			checkSound();
 			new WinScreen();
 		} else {
-			static_cast<DatabaseWindow*>(db_window)->citizen_db->DeleteCitizen(std::stoi(citizen.id->c_str()), std::stoi(citizen.household_id->c_str()));
+			static_cast<DatabaseWindow*>(db_window)->citizen_db->DeleteCitizen(std::stoi(citizen.id->c_str()));
 			
 			errorSound();
 			fl_alert("Soul no longer found. Your guess must have been incorrect.");

@@ -13,7 +13,7 @@ void Object::load_from_stream(std::istream &in) {
 			s >> v.y;
 			s >> v.z;
 			v.w = 1.0f;
-			vertices.push_back(Vertex{v});
+			vertices.push_back(Vertex{v, vec3(), vec2()});
 		} else if (line.substr(0, 3) == "vn ") {
 			std::istringstream s(line.substr(3));
 

@@ -85,7 +85,7 @@ template std::vector<std::shared_ptr<Household>> CitizenDatabase::Query<Househol
 template std::vector<std::shared_ptr<Citizen>> CitizenDatabase::Query<Citizen>(const char*);
 template std::vector<std::shared_ptr<SQLColumns>> CitizenDatabase::Query<SQLColumns>(const char*);
 
-void CitizenDatabase::DeleteCitizen(int citizen_id, int household_id) {
+void CitizenDatabase::DeleteCitizen(int citizen_id) {
 	sqlite3_stmt* delete_citizen;
 	sqlite3_prepare_v2(database, "DELETE FROM citizens WHERE id=?", 32, &delete_citizen, nullptr);
 

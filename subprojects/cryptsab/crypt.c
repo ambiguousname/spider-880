@@ -37,7 +37,7 @@ int derive_key_scrypt(const char password[], unsigned char key[], size_t key_len
 	uint32_t r = 8;
 	uint32_t p = 16;
 
-	params[0] = OSSL_PARAM_construct_octet_string("pass", password, strlen(password)); 
+	params[0] = OSSL_PARAM_construct_octet_string("pass", (void*)password, strlen(password)); 
 	params[1] = OSSL_PARAM_construct_octet_string("salt", "", 0);
 	params[2] = OSSL_PARAM_construct_uint64("n", &n);
 	params[3] = OSSL_PARAM_construct_uint32("r", &r);
