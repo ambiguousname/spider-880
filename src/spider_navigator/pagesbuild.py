@@ -63,7 +63,7 @@ def searchDir(dir):
 	name = create_string_buffer(16)
 	cryptsab.derive_key_md4(None, f"WEBPAGE:{foldername}".encode("utf-8"), name)
 
-	archive_name = name.value.hex()
+	archive_name = name.raw.hex()
 
 	tarname = f"{archive_name}.tar.z"
 	
