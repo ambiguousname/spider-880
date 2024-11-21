@@ -1,8 +1,8 @@
-# Valid OpenSSL Commands:
+# Decrypting BuSab
 
 ## MD4 key/iv derivation:
 
-`echo -n "PASSWORD" | openssl dgst -md4 -provider legacy password.txt`
+`echo -n "PASSWORD" | openssl dgst -md4 -provider legacy`
 
 ## Decryption (des):
 
@@ -24,4 +24,28 @@ We can decrypt the pages with:
 
 
 ## Decrypting HTML Files
-The password for any tar file contained in the archive will be the name of the webpage.
+The password for any tar file contained in the archive will be the name of the webpage (i.e., `page_name`).
+
+The name of the tar file is derived through the hash from `WEBPAGE:page_name`.
+
+The name of the first site is `murder_blog`, so:
+
+`echo -n "WEBPAGE:murder_blog" | openssl dgst -md4 -provider legacy`
+
+Gives us
+
+`d46aabca7765eec9cc78b1165c44c9ad`
+
+Which is the base name of our tar file.
+
+Then derive the password:
+
+`echo -n "murder_blog" | openssl dgst -md4 -provider legacy`
+
+Which gives
+
+`aace94fa5c94c1901e55a07c2945bdd4`
+
+So we decrypt with 
+
+`openssl enc -provider legacy --des -d -in d46aabca7765eec9cc78b1165c44c9ad.tar.z.enc -out murder_blog.tar.z -K aace94fa5c94c190 -iv 1e55a07c2945bdd4`
