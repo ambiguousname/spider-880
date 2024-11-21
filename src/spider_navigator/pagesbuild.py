@@ -1,27 +1,57 @@
 from ctypes import cdll, c_void_p, create_string_buffer, pointer, addressof
 from os import path, scandir, remove
 import argparse
+import tomllib
 
 cryptsab = None
+
+def encryptSingleFile(filepath, file):
+	full = create_string_buffer(16)
+	cryptsab.derive_key_md4(None, file['pwd'].encode("utf-8"), full)
+
+	key, iv = full.value[:8], full.value[8:]
+
+	p = path.join(filepath, "../", f"{file['file']}.enc").encode("utf-8")
+
+	cryptsab.crypt_file_existing_cipher(1, key, iv, filepath.encode("utf-8"), p)
+
+	return p, f"{file['file']}.enc"
 
 def readFiles(dir, relative_path=""):
 	foldername, ext = path.splitext(dir.name)
 
+	ignore_files = []
 	files = []
+	files_to_remove = []
+
+	file_info_path = path.join(dir, "files.toml")
+	if path.exists(file_info_path):
+		with open(file_info_path, "rb") as f:
+			file_info = tomllib.load(f)
+			for value in file_info.values():
+				ignore_files.append(value['file'])
+
+				filepath, name = encryptSingleFile(file_info_path, value)
+				files.append(f"{relative_path}{foldername}/{name}".encode("utf-8"))
+				files_to_remove.append(filepath)
+
 	for entry in scandir(dir):
 		if entry.is_dir():
-			files = files + readFiles(entry, f"{foldername}/")
+			new_files, new_remove = readFiles(entry, f"{foldername}/")
+
+			files = files + new_files
+			files_to_remove = files_to_remove + new_remove
 		
 		filename, extension = path.splitext(entry.name)
 
-		if extension == ".html":
+		if extension == ".html" and entry.name not in ignore_files:
 			files.append(f"{relative_path}{foldername}/{entry.name}".encode("utf-8"))
-	return files
+	return files, files_to_remove
 
 base62 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
 def searchDir(dir):
-	files_to_compress = readFiles(dir)
+	files_to_compress, files_to_remove = readFiles(dir)
 
 	foldername, ext = path.splitext(dir.name)
 
@@ -46,6 +76,9 @@ def searchDir(dir):
 	cryptsab.crypt_file_existing_cipher(1, key, iv, tarname.encode("utf-8"), f"{tarname}.enc".encode("utf-8"))
 
 	remove(tarname)
+
+	for f in files_to_remove:
+		remove(f)
 
 	return f"{tarname}.enc".encode('utf-8')
 
