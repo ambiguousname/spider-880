@@ -48,8 +48,6 @@ def readFiles(dir, relative_path=""):
 			files.append(f"{relative_path}{foldername}/{entry.name}".encode("utf-8"))
 	return files, files_to_remove
 
-base62 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-
 def searchDir(dir):
 	files_to_compress, files_to_remove = readFiles(dir)
 
@@ -65,9 +63,7 @@ def searchDir(dir):
 	name = create_string_buffer(16)
 	cryptsab.derive_key_md4(None, f"WEBPAGE:{foldername}".encode("utf-8"), name)
 
-	archive_name = ""
-	for n in name.value:
-		archive_name += base62[n % 62]
+	archive_name = name.value.hex()
 
 	tarname = f"{archive_name}.tar.z"
 	
