@@ -74,6 +74,7 @@ std::vector<ChoiceOptions> area_options {{"0", 0}, {"1", 1}, {"2", 2}, {"3", 3},
 
 // TODO: Make these binding instead.
 std::string selectArea(int tier, int value) {
+	// TODO: These should really use sqlite_prepare.
 	std::string base_selector = "SELECT * FROM households WHERE SUBSTRING(households.zip, " + std::to_string(tier + 1) + ", 1) = '" + std::to_string(value) + "'";
 	if (value == 0 && tier < 2) {
 		base_selector += " OR LENGTH(households.zip) == " + std::to_string(tier + 1);
@@ -122,6 +123,7 @@ ChoiceCategory income_range_fine {
 };
 
 std::string selectIncome(int tier, int value) {
+	// TODO: These should really use sqlite_prepare.
 	int high = (value >> 8) & 0b11111111;
 	int low = value & 0b11111111;
 	if (tier >= 1) {
@@ -164,6 +166,7 @@ ChoiceCategory family_count {
 };
 
 std::string selectFamily(int tier, int value) {
+	// TODO: These should really use sqlite_prepare.
 	if (tier == 2) {
 		return "SELECT households.* FROM households JOIN citizens ON households.id = citizens.household_id GROUP BY household_id HAVING count(household_id) > " + std::to_string(value);
 	}
