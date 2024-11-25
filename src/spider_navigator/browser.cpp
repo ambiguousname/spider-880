@@ -45,8 +45,9 @@ BrowserWindow::BrowserWindow(std::string filepath, int x, int y, int w, int h) :
 				scrollbar->type(Fl_Scroll::VERTICAL);
 			}
 		}
-	} catch (xmlpp::parse_error& e) {
+	} catch (xmlpp::exception& e) {
 		fl_alert("Could not parse: %s", e.what());
+		body = nullptr;
 	}
 	
 	resizable(this);
