@@ -37,7 +37,7 @@ void overrideCitizenSelection(Fl_Widget*) {
 	pagesEnabled = true;
 	createBlog(nullptr);
 	FILE* f = fopen("savefile.0.txt", "w");
-	fputs("I'll give you one more password: my_socrates_note.", f);
+	fputs("story_encase_tome", f);
 	fclose(f);
 
 	Browser::Initialize();
