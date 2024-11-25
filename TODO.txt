@@ -3,4 +3,3 @@
 - Ocean hints
 - Deadbeef location
 - More links to rarer webpages (cool_myths)
-- Purple text for pages that have been visited
