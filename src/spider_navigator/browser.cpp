@@ -209,9 +209,9 @@ void decryptCallback(Fl_Widget*, void* decryption_window) {
 	unsigned char key[8], iv[8];
 	for (int i = 0; i < 16; i++) {
 		if (i < 8) {
-			key[i] = pwd[i];
+			key[i] = out[i];
 		} else {
-			iv[i % 8] = pwd[i];
+			iv[i % 8] = out[i];
 		}
 	}
 
