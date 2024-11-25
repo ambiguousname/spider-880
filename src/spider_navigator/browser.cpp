@@ -224,7 +224,7 @@ void decryptCallback(Fl_Widget*, void* decryption_window) {
 	std::string dec_filepath = window->decFilepath();
 	std::string enc_filepath = window->encFilepath();
 
-	if (crypt_file(1, key, iv, enc_filepath.c_str(), dec_filepath.c_str(), des) < 0) {
+	if (crypt_file(0, key, iv, enc_filepath.c_str(), dec_filepath.c_str(), des) < 0) {
 		free_cipher(des);
 		fl_alert("Could not decrypt %s. Decryption failed.", window->filename().c_str());
 		return;
