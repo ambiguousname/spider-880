@@ -37,7 +37,7 @@ void overrideCitizenSelection(Fl_Widget*) {
 	pagesEnabled = true;
 	createBlog(nullptr);
 	FILE* f = fopen("savefile.0.txt", "w");
-	fputs("story_encase_tome", f);
+	fputs("montereys_coast", f);
 	fclose(f);
 
 	Browser::Initialize();
