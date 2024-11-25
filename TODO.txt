@@ -1,5 +1,4 @@
 - Liveforever hints
 - Ocean hints
-- Deadbeef location
 - More links to rarer webpages (cool_myths)
 - Add Licenses to distribution
