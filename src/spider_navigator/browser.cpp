@@ -15,15 +15,15 @@ void aboutCallback(Fl_Widget*, void*) {
 	fl_alert("Bureau of Sabotage Network Navigator\nBy Brian Gertwig");
 }
 
-void showHelp(Fl_Widget* widget, void*) {
-	BrowserWindow* window = dynamic_cast<BrowserWindow*>(widget);
+void showHelp(Fl_Widget*, void* w) {
+	BrowserWindow* window = (BrowserWindow*)w;
 	newWindow("gertwig_blog", "index.html", window->x() + 10, window->y() + 10, window->w(), window->h());
 }
 
 BrowserWindow::BrowserWindow(std::string filepath, int x, int y, int w, int h) : Fl_Window(x, y, w, h), menu_bar(0, 0, w, 20) {
 	menu_bar.add("NavSab", 0, 0, 0, FL_MENU_INACTIVE);
 	menu_bar.add("Help/About", FL_CTRL+'a', aboutCallback);
-	menu_bar.add("Help/Website", FL_CTRL+'w', showHelp);
+	menu_bar.add("Help/Website", FL_CTRL+'w', showHelp, this);
 
 	try {
 		xmlpp::DomParser parser(filepath);
