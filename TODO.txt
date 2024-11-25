@@ -1,2 +1,3 @@
 - More links to rarer webpages (cool_myths)
+- Fix database to recognize lack of zeroes in front of zip codes (084 is 84).
 - Add Licenses to distribution
