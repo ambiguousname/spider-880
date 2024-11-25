@@ -54,7 +54,9 @@ BrowserWindow::BrowserWindow(std::string filepath, int x, int y, int w, int h) :
 }
 
 void BrowserWindow::draw() {
-	body->resize(body->x(), body->y(), w(), body->h());
+	if (body != nullptr) {
+		body->resize(body->x(), body->y(), w(), body->h());
+	}
 	Fl_Window::draw();
 }
 
@@ -158,30 +160,87 @@ void browserFromFile(std::string filepath, int x, int y, int w, int h) {
 	window->show();
 }
 
-void decryptCallback(Fl_Widget*, void* input_widget) {
-	Fl_Input* input = (Fl_Input*)input_widget;
+void decryptCallback(Fl_Widget*, void* decryption_window);
 
-	const char* pwd = input->value();
-}
+class DecryptionWindow : public Fl_Window {
+	private:
+	std::string _filepath;
+	std::string _filename;
 
-void decryptAccess(std::string filepath, std::string filename, int x, int y, int w, int h) {
-	Fl_Window* window = new Fl_Window(x, y, w, h, filepath.c_str());
+	std::string _enc_filepath;
 
-	std::string label = std::format("The file {0}.enc is encrypted. Please enter a password:", filename);
-	Fl_Box* box = new Fl_Box(FL_DOWN_BOX, 0, h/2, w, h/5, 0);
-	box->copy_label(label.c_str());
-	box->align(FL_ALIGN_TOP | FL_ALIGN_WRAP);
+	public:
+	Fl_Input* input;
 
-	Fl_Input* input = new Fl_Input(0, h/2, w, h/10);
+	std::string encFilepath() const { return _enc_filepath; }
+	std::string decFilepath() const { return _filepath; }
+	std::string filename() const { return _filename; }
 
-	Fl_Return_Button* btn = new Fl_Return_Button(w/2 - w/8, h/2 + h/10, w/4, h/10, "Enter");
-	btn->callback(decryptCallback, (void*)input);
+	DecryptionWindow(std::string filepath, std::string filename, int x, int y, int w, int h) : Fl_Window(x, y, w, h, filepath.c_str()), _filepath(filepath), _filename(filename) {
+		_enc_filepath = std::format("{0}.enc", filepath);
 
-	window->end();
+		std::string label = std::format("The file {0}.enc is encrypted. Please enter a password:", filename);
+		Fl_Box* box = new Fl_Box(FL_DOWN_BOX, 0, h/2, w, h/5, 0);
+		box->copy_label(label.c_str());
+		box->align(FL_ALIGN_TOP | FL_ALIGN_WRAP);
+
+		input = new Fl_Input(0, h/2, w, h/10);
+
+		Fl_Return_Button* btn = new Fl_Return_Button(w/2 - w/8, h/2 + h/10, w/4, h/10, "Enter");
+		btn->callback(decryptCallback, this);
+
+		end();
+		resizable(this);
+		show();
+	}
+};
+
+void decryptCallback(Fl_Widget*, void* decryption_window) {
+	DecryptionWindow* window = (DecryptionWindow*)decryption_window;
+
+	const char* pwd = window->input->value();
+
+	unsigned char out[16];
+	if (derive_key_md4(libctx, pwd, out) < 0) {
+		fl_alert("Could not derive MD4 password from %s", pwd);
+		return;
+	}
+
+	unsigned char key[8], iv[8];
+	for (int i = 0; i < 16; i++) {
+		if (i < 8) {
+			key[i] = pwd[i];
+		} else {
+			iv[i % 8] = pwd[i];
+		}
+	}
+
+	EVP_CIPHER_CTX* des;
+	if (start_des_cipher(libctx, &des) < 0) {
+		fl_alert("Could not decrypt %s. DES cipher could not be initialized.", window->filename().c_str());
+		return;
+	}
+
+	std::string dec_filepath = window->decFilepath();
+
+	if (crypt_file(1, key, iv, window->encFilepath().c_str(), dec_filepath.c_str(), des) < 0) {
+		free_cipher(des);
+		fl_alert("Could not decrypt %s. Decryption failed.", window->filename().c_str());
+		return;
+	}
 	
-	window->resizable(window);
+	free_cipher(des);
 
-	window->show();
+	try {
+		auto validation = xmlpp::DomParser(dec_filepath, true);
+		browserFromFile(dec_filepath, window->x(), window->y(), window->w(), window->h());
+		window->hide();
+	} catch (xmlpp::validity_error& e) {
+		remove(dec_filepath.c_str());
+		fl_alert("Incorrect password.");
+	} catch (xmlpp::internal_error& e) {
+		fl_alert("XMLPP Could not parse HTML correctly: %s", e.what());
+	}
 }
 
 void Browser::NewWindow(std::string site, std::string html_file, int x, int y, int w, int h) {
@@ -193,7 +252,7 @@ void Browser::NewWindow(std::string site, std::string html_file, int x, int y, i
 
 	std::string encrypted_file_loc = std::format("{0}.enc", file_loc);
 	if (access(encrypted_file_loc.c_str(), F_OK) == 0) {
-		decryptAccess(encrypted_file_loc, html_file, x, y, w, h);
+		new DecryptionWindow(file_loc, html_file, x, y, w, h);
 		return;
 	}
 
@@ -258,7 +317,7 @@ void Browser::NewWindow(std::string site, std::string html_file, int x, int y, i
 	if (access(file_loc.c_str(), F_OK) == 0) {
 		browserFromFile(file_loc, x, y, w, h);
 	} else if (access(encrypted_file_loc.c_str(), F_OK) == 0) {
-		decryptAccess(encrypted_file_loc, html_file, x, y, w, h);
+		new DecryptionWindow(encrypted_file_loc, html_file, x, y, w, h);
 	} else {
 		fl_alert("No such file %s exists.", file_loc.c_str());
 	}
