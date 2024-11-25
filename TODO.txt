@@ -1,4 +1,4 @@
 - Update Navsab to use new password system
 - Liveforever location and hints
 - Ocean location and hints
-- Memo location and hints
+- Deadbeef location
