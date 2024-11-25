@@ -118,11 +118,17 @@ class A : public Text {
 	protected:
 	std::string site;
 	std::string filename;
+	std::string filepath;
+	std::string full_path;
+
+	int visited_color = 13;
 
 	public:
 	A(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::Node* node, int position_info);
 
 	int handleEvent(int event) override;
+
+	void drawChildren(int& x, int& y, int& w, int& h) override;
 };
 
 class P : public HTMLNode {

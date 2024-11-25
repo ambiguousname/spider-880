@@ -5,10 +5,15 @@
 #include <FL/Fl_Menu_Bar.H>
 #include "tags.hpp"
 
-void initializeBrowser();
-void uninitializeBrowser();
+namespace Browser {
+	void Initialize();
+	void Uninitialize();
 
-void newWindow(std::string site, std::string filename, int x, int y, int w, int h);
+	void NewWindow(std::string site, std::string filename, int x, int y, int w, int h);
+
+	void VisitPage(std::string filepath);
+	bool VisitedPage(std::string filepath);
+}
 
 class BrowserWindow : public Fl_Window {
 	Fl_Menu_Bar menu_bar;

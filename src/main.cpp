@@ -25,7 +25,7 @@ void createBlog(Fl_Widget*) {
 		clickSound();
 		int x, y, w, h;
 		Fl::screen_work_area(x, y, w, h);
-		newWindow("murder_blog", "murder.html", x + w/4, y + h/4, 300, 300);
+		Browser::NewWindow("murder_blog", "murder.html", x + w/4, y + h/4, 300, 300);
 	} else {
 		errorSound();
 		fl_alert("Browsing is not yet enabled.\nYou must select a name.");
@@ -40,7 +40,7 @@ void overrideCitizenSelection(Fl_Widget*) {
 	fputs("I'll give you one more password: my_socrates_note.", f);
 	fclose(f);
 
-	initializeBrowser();
+	Browser::Initialize();
 }
 
 #include "win_screen.hpp"
@@ -76,14 +76,14 @@ int main(int argc, char **argv) {
 	if (FILE* file = fopen("savefile.0.txt", "r")) {
 		fclose(file);
 		pagesEnabled = true;
-		initializeBrowser();
+		Browser::Initialize();
 	}
 
 	if (pagesEnabled){
 		// To avoid playing the sound.
 		int x, y, w, h;
 		Fl::screen_work_area(x, y, w, h);
-		newWindow("murder_blog", "murder.html", x + w/4, y + h/4, 300, 300);
+		Browser::NewWindow("murder_blog", "murder.html", x + w/4, y + h/4, 300, 300);
 	} else {
 		db->citizenSelectedOverride(overrideCitizenSelection);
 	}
@@ -104,6 +104,6 @@ int main(int argc, char **argv) {
 	close.awaitPlay();
 	
 	SoundManager::Uninitialize();
-	uninitializeBrowser();
+	Browser::Uninitialize();
 	return 0;
 }

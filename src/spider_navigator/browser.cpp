@@ -9,6 +9,7 @@ extern "C" {
 #include <FL/Fl_Input.H>
 #include <sys/stat.h>
 #include <format>
+#include <set>
 #include <util/base_sounds.hpp>
 
 void aboutCallback(Fl_Widget*, void*) {
@@ -18,7 +19,7 @@ void aboutCallback(Fl_Widget*, void*) {
 
 void showHelp(Fl_Widget*, void* w) {
 	BrowserWindow* window = (BrowserWindow*)w;
-	newWindow("gertwig_blog", "index.html", window->x() + 10, window->y() + 10, window->w(), window->h());
+	Browser::NewWindow("gertwig_blog", "index.html", window->x() + 10, window->y() + 10, window->w(), window->h());
 }
 
 BrowserWindow::BrowserWindow(std::string filepath, int x, int y, int w, int h) : Fl_Window(x, y, w, h), menu_bar(0, 0, w, 20) {
@@ -77,7 +78,11 @@ void BrowserWindow::evaluateHead(xmlpp::Element* head) {
 OSSL_LIB_CTX* libctx;
 OSSL_PROVIDER* pvdr;
 
-void initializeBrowser() {
+std::set<std::string> visited_pages;
+
+void Browser::Initialize() {
+	visited_pages = std::set<std::string>();
+
 	libctx = lib_ctx_local_providers("./ossl-modules");
 	load_provider_with_ctx("legacy", &pvdr, libctx);
 
@@ -122,9 +127,17 @@ void initializeBrowser() {
 	}
 }
 
-void uninitializeBrowser() {
+void Browser::Uninitialize() {
 	unload_provider(pvdr);
 	free_lib_ctx(libctx);
+}
+
+void Browser::VisitPage(std::string filepath) {
+	visited_pages.insert(filepath);
+}
+
+bool Browser::VisitedPage(std::string filepath) {
+	return visited_pages.contains(filepath);
 }
 
 const char* base16 = "0123456789abcdef";
@@ -140,6 +153,7 @@ std::string filenameFromHash(unsigned char name[16]) {
 }
 
 void browserFromFile(std::string filepath, int x, int y, int w, int h) {
+	Browser::VisitPage(filepath);
 	BrowserWindow* window = new BrowserWindow(filepath, x, y, w, h);
 	window->show();
 }
@@ -163,7 +177,7 @@ void decryptAccess(std::string filepath, int x, int y, int w, int h) {
 	window->show();
 }
 
-void newWindow(std::string site, std::string html_file, int x, int y, int w, int h) {
+void Browser::NewWindow(std::string site, std::string html_file, int x, int y, int w, int h) {
 	std::string file_loc = std::format("spider_navigator/{0}/{1}", site, html_file);
 	if (access(file_loc.c_str(), F_OK) == 0) {
 		browserFromFile(file_loc, x, y, w, h);

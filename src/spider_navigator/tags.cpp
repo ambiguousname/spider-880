@@ -3,6 +3,7 @@
 #include <FL/fl_ask.H>
 #include <FL/Fl.H>
 #include <typeinfo>
+#include <format>
 #include <util/base_sounds.hpp>
 
 #include "browser.hpp"
@@ -335,10 +336,11 @@ void P::setChildrenHighlight(bool highlight) {
 A::A(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::Node* node, int position_info) : Text(root, parent, dynamic_cast<xmlpp::TextNode*>(node->get_first_child()), position_info) {
 	if (auto e = dynamic_cast<xmlpp::Element*>(node)) {
 		if (auto href = e->get_attribute("href")) {
-			std::string href_val = href->get_value();
+			filepath = href->get_value();
+			full_path = std::format("spider_navigator/{0}", filepath);
 
 			bool is_file = false;
-			for (auto c : href_val) {
+			for (auto c : filepath) {
 				if (c == '/' && !is_file) {
 					is_file = true;
 					continue;
@@ -378,10 +380,17 @@ int A::handleEvent(int event) {
 		return 1;
 	} else if (event == FL_PUSH) {
 		clickSound();
-		newWindow(site, filename, _root->parentX() + 10, _root->parentY() + 10, _root->parentW(), _root->parentH());
+		Browser::NewWindow(site, filename, _root->parentX() + 10, _root->parentY() + 10, _root->parentW(), _root->parentH());
 		return 1;
 	}
 	return 0;
+}
+
+void A::drawChildren(int& x, int& y, int& w, int& h) {
+	if (Browser::VisitedPage(full_path)) {
+		_text_color = visited_color;
+	}
+	Text::drawChildren(x, y, w, h);
 }
 
 Img::Img(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::Node* const node) : HTMLNode(root, parent) {
