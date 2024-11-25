@@ -224,7 +224,7 @@ void decryptCallback(Fl_Widget*, void* decryption_window) {
 	std::string enc_filepath = window->encFilepath();
 
 	if (crypt_file(0, key, iv, enc_filepath.c_str(), dec_filepath.c_str(), des) < 0) {
-		fl_alert("Could not decrypt %s. Decryption failed.", window->filename().c_str());
+		fl_alert("Could not decrypt %s. Incorrect password.", window->filename().c_str());
 		return;
 	}
 	
@@ -251,6 +251,8 @@ void decryptCallback(Fl_Widget*, void* decryption_window) {
 		
 		browserFromFile(dec_filepath, window->x(), window->y(), window->w(), window->h());
 		window->hide();
+	} else {
+		fl_alert("Could not decrypt %s. Incorrect password.", window->filename().c_str());
 	}
 }
 
