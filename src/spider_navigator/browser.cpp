@@ -111,8 +111,6 @@ void Browser::Initialize() {
 		memcpy(iv, pwd + 8, 8);
 
 		if (crypt_file(0, key, iv, "spider_navigator/pages.tar.z.enc", "spider_navigator/pages.tar.z", des) < 0) {
-			free_cipher(des);
-
 			fl_alert("Could not decrypt pages file. Decryption failed.");
 			return;
 		}
@@ -225,7 +223,6 @@ void decryptCallback(Fl_Widget*, void* decryption_window) {
 	std::string enc_filepath = window->encFilepath();
 
 	if (crypt_file(0, key, iv, enc_filepath.c_str(), dec_filepath.c_str(), des) < 0) {
-		free_cipher(des);
 		fl_alert("Could not decrypt %s. Decryption failed.", window->filename().c_str());
 		return;
 	}
@@ -244,7 +241,7 @@ void decryptCallback(Fl_Widget*, void* decryption_window) {
 		if (strncmp(out, match, 7) == 0) {
 			is_valid = true;
 		}
-		
+
 		fclose(f);
 	}
 
@@ -310,7 +307,6 @@ void Browser::NewWindow(std::string site, std::string html_file, int x, int y, i
 	std::string decrypted_file = std::format("spider_navigator/{0}.tar.z", filename);
 
 	if (crypt_file(0, key, iv, file.c_str(), decrypted_file.c_str(), des) < 0) {
-		free_cipher(des);
 		fl_alert("Could not decrypt %s. Decryption failed.", file.c_str());
 		return;
 	}
