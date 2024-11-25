@@ -5,6 +5,7 @@ extern "C" {
 }
 #include <FL/fl_ask.H>
 #include <FL/Fl_Box.H>
+#include <FL/Fl_Return_Button.H>
 #include <FL/Fl_Input.H>
 #include <sys/stat.h>
 #include <format>
@@ -147,9 +148,13 @@ void decryptAccess(std::string filepath, int x, int y, int w, int h) {
 	Fl_Window* window = new Fl_Window(x, y, w, h, filepath.c_str());
 
 	std::string label = std::format("The file {0} is encrypted. Please enter a password:", filepath);
-	Fl_Box* box = new Fl_Box(x, y + h/2, w, h/3, label.c_str());
+	Fl_Box* box = new Fl_Box(FL_DOWN_BOX, 0, h/2, w, h/4, 0);
+	box->copy_label(label.c_str());
+	box->align(FL_ALIGN_TOP | FL_ALIGN_WRAP);
 
-	Fl_Input* input = new Fl_Input(x, y + h/2, w, 20);
+	Fl_Input* input = new Fl_Input(0, h/2, w, 20);
+
+	Fl_Return_Button* btn = new Fl_Return_Button(0, h/2 + 20, w/4, 20, "Enter");
 
 	window->end();
 	
