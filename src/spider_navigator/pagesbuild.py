@@ -9,7 +9,7 @@ def encryptSingleFile(filepath, file):
 	full = create_string_buffer(16)
 	cryptsab.derive_key_md4(None, file['pwd'].encode("utf-8"), full)
 
-	key, iv = full.value[:8], full.value[8:]
+	key, iv = full.raw[:8], full.raw[8:]
 
 	p = path.join(filepath, "../", f"{file['file']}.enc").encode("utf-8")
 
@@ -58,7 +58,7 @@ def searchDir(dir):
 	full = create_string_buffer(16)
 	cryptsab.derive_key_md4(None, foldername.encode("utf-8"), full)
 
-	key, iv = full.value[:8], full.value[8:]
+	key, iv = full.raw[:8], full.raw[8:]
 
 	name = create_string_buffer(16)
 	cryptsab.derive_key_md4(None, f"WEBPAGE:{foldername}".encode("utf-8"), name)
