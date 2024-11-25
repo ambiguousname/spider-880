@@ -36,8 +36,8 @@ void overrideCitizenSelection(Fl_Widget*) {
 	fl_alert("Guessing won't get you anywhere.\nLucky you have an internet connection.");
 	pagesEnabled = true;
 	createBlog(nullptr);
-	FILE* f = fopen("savefile.txt", "w");
-	fputs("I'll give you one more password: abababab.", f);
+	FILE* f = fopen("savefile.0.txt", "w");
+	fputs("I'll give you one more password: my_socrates_note.", f);
 	fclose(f);
 
 	initializeBrowser();
@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
 	DatabaseWindow* db = new DatabaseWindow(x + 3 * w/4, y + h/4, 400, 300);
 	db->show();
 
-	if (FILE* file = fopen("savefile.txt", "r")) {
+	if (FILE* file = fopen("savefile.0.txt", "r")) {
 		fclose(file);
 		pagesEnabled = true;
 		initializeBrowser();
