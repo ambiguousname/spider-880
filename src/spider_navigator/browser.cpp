@@ -235,11 +235,11 @@ void decryptCallback(Fl_Widget*, void* decryption_window) {
 	bool is_valid = false;
 	if (FILE* f = fopen(dec_filepath.c_str(), "r")) {
 		const char* match = "<html>";
-		char out[7];
+		char out[6];
 
 		fread(out, sizeof(char), sizeof(out), f);
 
-		if (strncmp(out, match, 7) == 0) {
+		if (strncmp(out, match, 6) == 0) {
 			is_valid = true;
 		}
 
