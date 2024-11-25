@@ -222,8 +222,9 @@ void decryptCallback(Fl_Widget*, void* decryption_window) {
 	}
 
 	std::string dec_filepath = window->decFilepath();
+	std::string enc_filepath = window->encFilepath();
 
-	if (crypt_file(1, key, iv, window->encFilepath().c_str(), dec_filepath.c_str(), des) < 0) {
+	if (crypt_file(1, key, iv, enc_filepath.c_str(), dec_filepath.c_str(), des) < 0) {
 		free_cipher(des);
 		fl_alert("Could not decrypt %s. Decryption failed.", window->filename().c_str());
 		return;
@@ -232,15 +233,19 @@ void decryptCallback(Fl_Widget*, void* decryption_window) {
 	free_cipher(des);
 
 	try {
-		auto validation = xmlpp::DomParser(dec_filepath, true);
-		browserFromFile(dec_filepath, window->x(), window->y(), window->w(), window->h());
-		window->hide();
-	} catch (xmlpp::validity_error& e) {
-		remove(dec_filepath.c_str());
+		auto validation = xmlpp::DomParser();
+		validation.set_validate(true);
+		validation.parse_file(dec_filepath);
+	} catch (const xmlpp::exception& e) {
 		fl_alert("Incorrect password.");
-	} catch (xmlpp::internal_error& e) {
-		fl_alert("XMLPP Could not parse HTML correctly: %s", e.what());
+		remove(dec_filepath.c_str());
+		return;
 	}
+
+	remove(enc_filepath.c_str());
+	
+	browserFromFile(dec_filepath, window->x(), window->y(), window->w(), window->h());
+	window->hide();
 }
 
 void Browser::NewWindow(std::string site, std::string html_file, int x, int y, int w, int h) {
