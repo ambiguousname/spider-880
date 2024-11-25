@@ -329,7 +329,7 @@ void Browser::NewWindow(std::string site, std::string html_file, int x, int y, i
 	if (access(file_loc.c_str(), F_OK) == 0) {
 		browserFromFile(file_loc, x, y, w, h);
 	} else if (access(encrypted_file_loc.c_str(), F_OK) == 0) {
-		new DecryptionWindow(encrypted_file_loc, html_file, x, y, w, h);
+		new DecryptionWindow(file_loc, html_file, x, y, w, h);
 	} else {
 		fl_alert("No such file %s exists.", file_loc.c_str());
 	}
