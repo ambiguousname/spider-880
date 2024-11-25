@@ -232,14 +232,20 @@ void decryptCallback(Fl_Widget*, void* decryption_window) {
 	
 	free_cipher(des);
 
-	try {
-		auto validation = xmlpp::DomParser();
-		validation.set_validate(true);
-		validation.parse_file(dec_filepath);
-	} catch (const xmlpp::exception& e) {
-		fl_alert("Incorrect password.");
-		remove(dec_filepath.c_str());
-		return;
+	// XML Validation doesn't work for HTML, so we just see if there's an HTML tag at the beginning:
+
+	bool is_valid = false;
+	if (FILE* f = fopen(dec_filepath.c_str(), "r")) {
+		const char* match = "<html>";
+		char out[7];
+
+		fread(out, sizeof(char), sizeof(out), f);
+
+		if (strncmp(out, match, 7) == 0) {
+			is_valid = true;
+		}
+		
+		fclose(f);
 	}
 
 	remove(enc_filepath.c_str());
