@@ -4,6 +4,8 @@ extern "C" {
 	#include <cryptsab/compress.h>
 }
 #include <FL/fl_ask.H>
+#include <FL/Fl_Box.H>
+#include <FL/Fl_Input.H>
 #include <sys/stat.h>
 #include <format>
 #include <util/base_sounds.hpp>
@@ -141,10 +143,31 @@ void browserFromFile(std::string filepath, int x, int y, int w, int h) {
 	window->show();
 }
 
+void decryptAccess(std::string filepath, int x, int y, int w, int h) {
+	Fl_Window* window = new Fl_Window(x, y, w, h, filepath.c_str());
+
+	std::string label = std::format("The file {0} is encrypted. Please enter a password:", filepath);
+	Fl_Box* box = new Fl_Box(x, y + h/2, w, h/3, label.c_str());
+
+	Fl_Input* input = new Fl_Input(x, y + h/2, w, 20);
+
+	window->end();
+	
+	window->resizable(window);
+
+	window->show();
+}
+
 void newWindow(std::string site, std::string html_file, int x, int y, int w, int h) {
 	std::string file_loc = std::format("spider_navigator/{0}/{1}", site, html_file);
 	if (access(file_loc.c_str(), F_OK) == 0) {
 		browserFromFile(file_loc, x, y, w, h);
+		return;
+	}
+
+	std::string encrypted_file_loc = std::format("{0}.enc", file_loc);
+	if (access(encrypted_file_loc.c_str(), F_OK) == 0) {
+		decryptAccess(encrypted_file_loc, x, y, w, h);
 		return;
 	}
 
@@ -206,5 +229,11 @@ void newWindow(std::string site, std::string html_file, int x, int y, int w, int
 	remove(decrypted_file.c_str());
 	remove(file.c_str());
 
-	browserFromFile(file_loc, x, y, w, h);
+	if (access(file_loc.c_str(), F_OK) == 0) {
+		browserFromFile(file_loc, x, y, w, h);
+	} else if (access(encrypted_file_loc.c_str(), F_OK) == 0) {
+		decryptAccess(encrypted_file_loc, x, y, w, h);
+	} else {
+		fl_alert("No such file %s exists.", file_loc.c_str());
+	}
 }
