@@ -1,3 +1,1 @@
-- More links to rarer webpages (cool_myths)
 - Add Licenses to distribution
-- Test all passwords and all pages
