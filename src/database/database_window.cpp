@@ -155,7 +155,7 @@ ChoiceCategory family_spouse {
 };
 
 ChoiceCategory family_count {
-	"Size",
+	">= Size",
 	{
 		{"1", 1},
 		{"2", 2},
@@ -168,7 +168,7 @@ ChoiceCategory family_count {
 std::string selectFamily(int tier, int value) {
 	// TODO: These should really use sqlite_prepare.
 	if (tier == 2) {
-		return "SELECT households.* FROM households JOIN citizens ON households.id = citizens.household_id GROUP BY household_id HAVING count(household_id) > " + std::to_string(value);
+		return "SELECT households.* FROM households JOIN citizens ON households.id = citizens.household_id GROUP BY household_id HAVING count(household_id) >= " + std::to_string(value);
 	}
 	if (tier == 0) {
 		// EITHER: Married w/ Family or Not Married w/ Family
