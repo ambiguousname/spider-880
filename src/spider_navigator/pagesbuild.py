@@ -5,13 +5,15 @@ import tomllib
 
 cryptsab = None
 
-def encryptSingleFile(filepath, file):
+def encryptSingleFile(dir, file):
 	full = create_string_buffer(16)
 	cryptsab.derive_key_md4(None, file['pwd'].encode("utf-8"), full)
 
 	key, iv = full.raw[:8], full.raw[8:]
 
-	p = path.join(filepath, "../", f"{file['file']}.enc").encode("utf-8")
+	filepath = path.join(dir, file['file'])
+
+	p = f"{filepath}.enc".encode("utf-8")
 
 	cryptsab.crypt_file_existing_cipher(1, key, iv, filepath.encode("utf-8"), p)
 
@@ -31,7 +33,7 @@ def readFiles(dir, relative_path=""):
 			for value in file_info.values():
 				ignore_files.append(value['file'])
 
-				filepath, name = encryptSingleFile(file_info_path, value)
+				filepath, name = encryptSingleFile(dir, value)
 				files.append(f"{relative_path}{foldername}/{name}".encode("utf-8"))
 				files_to_remove.append(filepath)
 
