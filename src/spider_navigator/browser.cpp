@@ -246,10 +246,12 @@ void decryptCallback(Fl_Widget*, void* decryption_window) {
 		fclose(f);
 	}
 
-	remove(enc_filepath.c_str());
-	
-	browserFromFile(dec_filepath, window->x(), window->y(), window->w(), window->h());
-	window->hide();
+	if (is_valid) {
+		remove(enc_filepath.c_str());
+		
+		browserFromFile(dec_filepath, window->x(), window->y(), window->w(), window->h());
+		window->hide();
+	}
 }
 
 void Browser::NewWindow(std::string site, std::string html_file, int x, int y, int w, int h) {
