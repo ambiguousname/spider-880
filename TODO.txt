@@ -1,3 +1,6 @@
+- Sound effects for decryption
+
 - Fix SQL queries to be bound
 - Remove libxml++ dependency (replace with libxml?) To eliminate glib dependencies.
 - Move Spider-880.exe to bin/ directory, make it work from there.
+- Is there a way to limit DLL dependencies for some libraries where we don't need everything? (libarchive, for example uses liblzma and libbz2 which we don't need)
