@@ -216,7 +216,7 @@ void Text::drawChildren(int& x, int& y, int& w, int& h) {
 	_node_y = y - _base_content_h;
 	_node_h = 0;
 
-	int out_w, out_h = 0;
+	int out_w = 0, out_h = 0;
 
 	
 	fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
@@ -280,9 +280,9 @@ void P::drawChildren(int& x, int& y, int& w, int& h) {
 
 	_node_y -= fl_height();
 
-	int p_w, p_h = 0;
+	int p_w = 0, p_h = 0;
 
-	int out_w, out_h;
+	int out_w = 0, out_h;
 	for (auto c : _children) {
 		out_w = w;
 		out_h = h;

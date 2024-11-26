@@ -64,6 +64,9 @@ class Citizen : public SQLColumns {
 					case 6:
 						to_set = &spouse_id;
 						break;
+					default:
+						to_set = nullptr;
+						break;
 				}
 				*to_set = column_key(std::make_unique<std::string>(buf));
 				buf = "";
