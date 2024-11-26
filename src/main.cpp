@@ -39,6 +39,7 @@ void writeSavefile() {
 }
 
 void overrideCitizenSelection(Fl_Widget*) {
+	errorSound();
 	fl_alert("Guessing won't get you anywhere.\nLucky you have an internet connection.");
 	pagesEnabled = true;
 	writeSavefile();

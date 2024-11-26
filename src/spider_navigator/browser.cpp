@@ -46,6 +46,7 @@ BrowserWindow::BrowserWindow(std::string filepath, int x, int y, int w, int h) :
 			}
 		}
 	} catch (xmlpp::exception& e) {
+		errorSound();
 		fl_alert("Could not parse: %s", e.what());
 		body = nullptr;
 	}
@@ -93,6 +94,7 @@ void Browser::Initialize() {
 		fclose(f);
 		EVP_CIPHER_CTX* des;
 		if (start_des_cipher(libctx, &des) < 0) {
+			errorSound();
 			fl_alert("Could not decrypt pages file. DES cipher could not be initialized.");
 			return;
 		}
@@ -102,6 +104,7 @@ void Browser::Initialize() {
 		if (derive_key_md4(libctx, "9973", pwd) < 0) {
 			free_cipher(des);
 			
+			errorSound();
 			fl_alert("Could not decrypt pages file. MD4 key could not be derived.");
 			return;
 		}
@@ -112,6 +115,7 @@ void Browser::Initialize() {
 		memcpy(iv, pwd + 8, 8);
 
 		if (crypt_file(0, key, iv, "spider_navigator/pages.tar.z.enc", "spider_navigator/pages.tar.z", des) < 0) {
+			errorSound();
 			fl_alert("Could not decrypt pages file. Decryption failed.");
 			return;
 		}
@@ -119,6 +123,7 @@ void Browser::Initialize() {
 		free_cipher(des);
 
 		if (tar_z_decompress("spider_navigator/pages.tar.z", "spider_navigator/") < 0) {
+			errorSound();
 			fl_alert("Could not decompress pages file.");
 			return;
 		}
@@ -199,6 +204,7 @@ void decryptCallback(Fl_Widget*, void* decryption_window) {
 
 	std::string enc_filepath = window->encFilepath();
 	if (access(enc_filepath.c_str(), F_OK) != 0) {
+		errorSound();
 		fl_alert("Encrypted file no longer exists.");
 		window->hide();
 		return;
@@ -209,6 +215,7 @@ void decryptCallback(Fl_Widget*, void* decryption_window) {
 
 	unsigned char out[16];
 	if (derive_key_md4(libctx, pwd, out) < 0) {
+		errorSound();
 		fl_alert("Could not derive MD4 password from %s", pwd);
 		return;
 	}
@@ -224,6 +231,7 @@ void decryptCallback(Fl_Widget*, void* decryption_window) {
 
 	EVP_CIPHER_CTX* des;
 	if (start_des_cipher(libctx, &des) < 0) {
+		errorSound();
 		fl_alert("Could not decrypt %s. DES cipher could not be initialized.", window->filename().c_str());
 		return;
 	}
@@ -231,6 +239,7 @@ void decryptCallback(Fl_Widget*, void* decryption_window) {
 	std::string dec_filepath = window->decFilepath();
 
 	if (crypt_file(0, key, iv, enc_filepath.c_str(), dec_filepath.c_str(), des) < 0) {
+		errorSound();
 		fl_alert("Could not decrypt %s. Incorrect password.", window->filename().c_str());
 		remove(dec_filepath.c_str());
 		return;
@@ -255,11 +264,13 @@ void decryptCallback(Fl_Widget*, void* decryption_window) {
 	}
 
 	if (is_valid) {
+		clickSound();
 		remove(enc_filepath.c_str());
 		
 		browserFromFile(dec_filepath, window->x(), window->y(), window->w(), window->h());
 		window->hide();
 	} else {
+		errorSound();
 		fl_alert("Could not decrypt %s. Incorrect password.", window->filename().c_str());
 		remove(dec_filepath.c_str());
 	}
@@ -283,6 +294,7 @@ void Browser::NewWindow(std::string site, std::string html_file, int x, int y, i
 	std::string name_pwd = std::format("WEBPAGE:{0}", site);
 
 	if (derive_key_md4(libctx, name_pwd.c_str(), name) < 0) {
+		errorSound();
 		fl_alert("Could not derive MD4 hash from %s", site.c_str());
 		return;
 	} 
@@ -292,6 +304,7 @@ void Browser::NewWindow(std::string site, std::string html_file, int x, int y, i
 	std::string file = std::format("spider_navigator/{0}.tar.z.enc", filename);
 
 	if (access(file.c_str(), F_OK) == -1) {
+		errorSound();
 		fl_alert("Failed to read %s", file.c_str());
 		return;
 	}
@@ -299,6 +312,7 @@ void Browser::NewWindow(std::string site, std::string html_file, int x, int y, i
 	unsigned char pwd[16];
 
 	if (derive_key_md4(libctx, site.c_str(), pwd) < 0) {
+		errorSound();
 		fl_alert("Could not derive MD4 password from %s", site.c_str());
 		return;
 	}
@@ -314,6 +328,7 @@ void Browser::NewWindow(std::string site, std::string html_file, int x, int y, i
 
 	EVP_CIPHER_CTX* des;
 	if (start_des_cipher(libctx, &des) < 0) {
+		errorSound();
 		fl_alert("Could not decrypt %s. DES cipher could not be initialized.", file.c_str());
 		return;
 	}
@@ -321,6 +336,7 @@ void Browser::NewWindow(std::string site, std::string html_file, int x, int y, i
 	std::string decrypted_file = std::format("spider_navigator/{0}.tar.z", filename);
 
 	if (crypt_file(0, key, iv, file.c_str(), decrypted_file.c_str(), des) < 0) {
+		errorSound();
 		fl_alert("Could not decrypt %s. Decryption failed.", file.c_str());
 		return;
 	}
@@ -328,6 +344,7 @@ void Browser::NewWindow(std::string site, std::string html_file, int x, int y, i
 	free_cipher(des);
 
 	if (tar_z_decompress(decrypted_file.c_str(), std::format("spider_navigator/{0}", "./").c_str()) < 0) {
+		errorSound();
 		fl_alert("Could not decompress %s.", decrypted_file.c_str());
 		return;
 	}
@@ -340,6 +357,7 @@ void Browser::NewWindow(std::string site, std::string html_file, int x, int y, i
 	} else if (access(encrypted_file_loc.c_str(), F_OK) == 0) {
 		new DecryptionWindow(file_loc, html_file, x, y, w, h);
 	} else {
+		errorSound();
 		fl_alert("No such file %s exists.", file_loc.c_str());
 	}
 }
