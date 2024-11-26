@@ -1,5 +1,4 @@
 - Sound effects for decryption
-- Fix bug (click on an encrypted page after you've already opened it)
 
 - Fix SQL queries to be bound
 - Remove libxml++ dependency (replace with libxml?) To eliminate glib dependencies.

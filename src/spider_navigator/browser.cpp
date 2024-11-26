@@ -225,6 +225,7 @@ void decryptCallback(Fl_Widget*, void* decryption_window) {
 
 	if (crypt_file(0, key, iv, enc_filepath.c_str(), dec_filepath.c_str(), des) < 0) {
 		fl_alert("Could not decrypt %s. Incorrect password.", window->filename().c_str());
+		remove(dec_filepath.c_str());
 		return;
 	}
 	
@@ -253,6 +254,7 @@ void decryptCallback(Fl_Widget*, void* decryption_window) {
 		window->hide();
 	} else {
 		fl_alert("Could not decrypt %s. Incorrect password.", window->filename().c_str());
+		remove(dec_filepath.c_str());
 	}
 }
 
