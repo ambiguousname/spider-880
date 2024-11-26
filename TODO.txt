@@ -1,0 +1,3 @@
+- Fix SQL queries to be bound
+- Remove libxml++ dependency (replace with libxml?) To eliminate glib dependencies.
+- Move Spider-880.exe to bin/ directory, make it work from there.
