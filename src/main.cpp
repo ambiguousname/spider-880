@@ -41,10 +41,11 @@ void writeSavefile() {
 void overrideCitizenSelection(Fl_Widget*) {
 	fl_alert("Guessing won't get you anywhere.\nLucky you have an internet connection.");
 	pagesEnabled = true;
-	createBlog(nullptr);
 	writeSavefile();
 
 	Browser::Initialize();
+	
+	createBlog(nullptr);
 }
 
 #include "win_screen.hpp"
