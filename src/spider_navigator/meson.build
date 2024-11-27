@@ -1,7 +1,7 @@
-cryptsab = subproject('cryptsab')
+cryptsab = subproject('cryptsab', required: true)
 cryptsab_dep = cryptsab.get_variable('cryptsab_dep')
 
-libxmlpp = dependency('libxml++-3.0')
+libxmlpp = dependency('libxml++-3.0', required: true)
 
 incdir = include_directories('../')
 
@@ -16,5 +16,7 @@ custom_target(
 	build_always_stale: true,
 	build_by_default: true,
 	depends: [cryptsab.get_variable('libcryptsab')],
-	command: [python, '@INPUT@', cryptsab.get_variable('libcryptsab').full_path(), '@OUTPUT@']
+	command: [python, '@INPUT@', cryptsab.get_variable('libcryptsab').full_path(), '@OUTPUT@'],
+	install: true,
+	install_dir: 'bin/spider_navigator'
 )
