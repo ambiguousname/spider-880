@@ -184,7 +184,7 @@ std::string selectFamily(int tier, int value) {
 	return "SELECT * FROM households WHERE family_status = " + std::to_string(value);
 }
 
-ChoiceCategory area_arr[3] = {{"Area", area_options}, {"District", area_options}, {"Subdistrict", area_options}};
+ChoiceCategory area_arr[3] = {{"Zip (?XX)", area_options}, {"Zip (X?X)", area_options}, {"Zip (XX?)", area_options}};
 
 ChoiceCategory income_arr[3] = {income_percent, income_range, income_range_fine};
 
