@@ -13,20 +13,24 @@ cpp_comp = meson.get_compiler('cpp')
 # https://mesonbuild.com/Installing.html
 fltk = cpp_comp.find_library('fltk', required: true)
 fltk_images = cpp_comp.find_library('fltk_images', required: true)
+fltk_gl = cpp_comp.find_library('fltk_gl', required: true)
 
-sqlite3 = dependency('sqlite3', required: true)
+opengl = cpp_comp.find_library('opengl32', required: true)
+glu = cpp_comp.find_library('glu32', required: true)
 
 glm = dependency('glm', required: true)
 glew = dependency('glew', required: true)
+
+sqlite3 = dependency('sqlite3', required: true)
 
 libxmlpp = dependency('libxml++-3.0', required: true)
 
 src = ['main.cpp', 'win_screen.cpp']
 windows = import('windows')
-if build_machine.system() == 'windows'
+if target_machine.system() == 'windows'
 	src += windows.compile_resources('./icon.rc', './main.rc')
 endif
 
-exe = executable('spider-880', src, link_args : links, dependencies: [fltk, fltk_images, sqlite3, glew, glm, libxmlpp], link_with: [utillib, navsab, databaselib], install: true)
+exe = executable('spider-880', src, link_args : links, dependencies: [fltk, fltk_images, fltk_gl, opengl, glu, glew, glm, sqlite3, libxmlpp], link_with: [utillib, navsab, databaselib], install: true)
 
 test('basic', exe)
