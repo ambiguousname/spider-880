@@ -24,7 +24,6 @@ class BrowserWindow : public Fl_Window {
 
 	std::string title;
 
-	void evaluateHead(htmlNodePtr head);
 	int evaluateHTML(std::string filepath, int x, int y, int w, int h);
 
 	public:

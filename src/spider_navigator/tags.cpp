@@ -22,27 +22,34 @@ HTMLNode::HTMLNode(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> par
 }
 
 void HTMLNode::parseChildren(std::shared_ptr<RootNode> root, htmlNodePtr const element) {
-	// if (auto bg = element->get_attribute("background-color")) {
-	// 	_background_color = std::stoi(bg->get_value());
-	// }
+	if (element->properties != nullptr) {
+		xmlAttrPtr property = element->properties;
+		while (property != nullptr) {
+			if (property->children == nullptr) {
+				continue;
+			}
 
-	// if (auto text = element->get_attribute("color")) {
-	// 	_text_color = std::stoi(text->get_value());
-	// }
+			if (strncmp((char*)property->name, "background-color", 17) == 0) {
+				_background_color = std::stoi((char*)property->children->content);
+			} else if (strncmp((char*)property->name, "color", 6) == 0) {
+				_text_color = std::stoi((char*)property->children->content);
+			}
+		}
+	}
 
-	// for (auto child : element->get_children()) {
-	// 	Glib::ustring name = child->get_name();
-
-	// 	parseChild(root, child, name);
-	// }
+	htmlNodePtr child = element->children;
+	while (child != nullptr) {
+		const xmlChar* name = child->name;
+		parseChild(root, child, name);
+	}
 }
 
 void HTMLNode::parseChild(std::shared_ptr<RootNode> root, htmlNodePtr node, const xmlChar * node_name) {
-	// if (node_name == "p") {
-	// 	_children.push_back(std::make_shared<P>(root, std::shared_ptr<HTMLNode>(this), node));
-	// } else if (node_name == "img") {
-	// 	_children.push_back(std::make_shared<Img>(root, std::shared_ptr<HTMLNode>(this), node));
-	// }
+	if (strncmp((char*)node_name, "p", 2) == 0) {
+		_children.push_back(std::make_shared<P>(root, std::shared_ptr<HTMLNode>(this), node));
+	} else if (strncmp((char*)node_name, "img", 4) == 0) {
+		_children.push_back(std::make_shared<Img>(root, std::shared_ptr<HTMLNode>(this), node));
+	}
 }
 
 void HTMLNode::drawChildren(int& x, int& y, int& w, int& h) {
@@ -106,7 +113,7 @@ int HTMLNode::handleEvent(int event) {
 }
 
 Body::Body(std::shared_ptr<Fl_Window> parent, htmlNodePtr const root, int x, int y, int w, int h) : Fl_Group(x, y, w, h), HTMLNode(nullptr, nullptr), _parent(parent) {
-	// parseChildren(std::shared_ptr<RootNode>(this), root);
+	parseChildren(std::shared_ptr<RootNode>(this), root);
 	end();
 }
 

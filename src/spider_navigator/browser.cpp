@@ -84,7 +84,17 @@ int BrowserWindow::evaluateHTML(std::string filepath, int x, int y, int w, int h
 				const xmlChar* child_name = root_child->name;
 
 				if (strncmp((char*)child_name, "head", 5) == 0) {
-					evaluateHead(root_child);
+					htmlNodePtr head_child = root_child->children;
+					while (head_child != nullptr) {
+						const xmlChar* child_name = head_child->name;
+						if (strncmp((char*)child_name, "title", 6) == 0) {
+							if (head_child->children != nullptr && child->children->type == XML_TEXT_NODE) {
+								title = std::string((char*)head_child->children->content);
+								label(title.c_str());
+							}
+						}
+						head_child = head_child->next;	
+					}
 				} else if (strncmp((char*)child_name, "body", 5) == 0) {
 					scrollbar = new Fl_Scroll(0, 25, w, h - 25);
 					body = new Body(std::shared_ptr<Fl_Window>(this), root_child, 0, 20, w, h - 20);
@@ -102,20 +112,6 @@ int BrowserWindow::evaluateHTML(std::string filepath, int x, int y, int w, int h
 		errorSound();
 		fl_alert("Failed to read %s", filepath.c_str());
 		return -1;
-	}
-}
-
-void BrowserWindow::evaluateHead(htmlNodePtr head) {
-	htmlNodePtr child = head->children;
-	while (child != nullptr) {
-		const xmlChar* child_name = child->name;
-		if (strncmp((char*)child_name, "title", 6) == 0) {
-			if (child->children != nullptr && child->children->type == XML_TEXT_NODE) {
-				title = std::string((char*)child->children->content);
-				label(title.c_str());
-			}
-		}
-		child = child->next;	
 	}
 }
 
