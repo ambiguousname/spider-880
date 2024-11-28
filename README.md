@@ -9,7 +9,7 @@ https://ambiguousname.itch.io/spider-880
 - [SQLite >=3.43.1](https://www.sqlite.org/index.html)
 - [Meson](https://mesonbuild.com/)
 - [M4](https://www.gnu.org/software/m4/)
-- [Python](https://www.python.org/)
+- [Python >= 3.11](https://www.python.org/)
 - [Faker](https://faker.readthedocs.io/en/master/)
 - [OpenSSL ^3.3.1](https://openssl.org/)
 - [libarchive >= 3.7.4](https://libarchive.org/)
