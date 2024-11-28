@@ -1,7 +1,6 @@
 subdir('spider_navigator')
 subdir('util')
 subdir('database')
-# fltk = dependency('fltk', version : '>=1.3.8')
 
 flags = run_command('fltk-config', '--ldflags', '--use-gl')
 
