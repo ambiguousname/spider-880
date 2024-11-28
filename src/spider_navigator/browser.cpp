@@ -58,7 +58,7 @@ int BrowserWindow::evaluateHTML(std::string filepath) {
 		// }
 	} else {
 		errorSound();
-		fl_alert("Failed to read %s", filepath);
+		fl_alert("Failed to read %s", filepath.c_str());
 		return -1;
 	}
 }
@@ -106,7 +106,7 @@ std::set<std::string> visited_pages;
 
 void Browser::Initialize() {
 	LIBXML_TEST_VERSION
-	htmlParserCtxtPtr html_ctx = htmlNewParserCtxt();
+	html_ctx = htmlNewParserCtxt();
 
 	if (html_ctx == NULL) {
 		errorSound();
