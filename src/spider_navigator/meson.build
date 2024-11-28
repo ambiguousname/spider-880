@@ -7,7 +7,7 @@ incdir = include_directories('../')
 
 navsab = static_library('navsab', ['browser.cpp', 'tags.cpp'], dependencies: [cryptsab_dep, libxml], include_directories: incdir)
 
-python = find_program('python')
+python = find_program('python3')
 
 custom_target(
 	'pages', 
