@@ -2,10 +2,6 @@ subdir('spider_navigator')
 subdir('util')
 subdir('database')
 
-flags = run_command('fltk-config', '--ldflags', '--use-gl')
-
-links = flags.stdout().strip().split(' ')
-
 cpp_comp = meson.get_compiler('cpp')
 
 # TODO: Make this a custom install script? Instead of having to search for it.
@@ -28,6 +24,6 @@ if target_machine.system() == 'windows'
 	src += windows.compile_resources('./icon.rc', './main.rc')
 endif
 
-exe = executable('spider-880', src, link_args : links, dependencies: [fltk, fltk_images, fltk_gl, opengl, glu, glew, glm, sqlite3], link_with: [utillib, navsab, databaselib], install: true)
+exe = executable('spider-880', src, dependencies: [fltk, fltk_images, fltk_gl, opengl, glu, glew, glm, sqlite3], link_with: [utillib, navsab, databaselib], install: true)
 
 test('basic', exe)
