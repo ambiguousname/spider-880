@@ -1,5 +1,6 @@
 #pragma once
 #include <openssl/types.h>
+#include <stddef.h>
 
 OSSL_LIB_CTX* lib_ctx_local_providers(const char* folder);
 void free_lib_ctx(OSSL_LIB_CTX* ctx);

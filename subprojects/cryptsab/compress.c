@@ -4,6 +4,10 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+#include <string.h>
+#include <errno.h>
+#include <stddef.h>
+
 #define ERR(archive, e) fprintf(stderr, "%s: %s\n", e, archive_error_string(archive));
 
 int copy_archive(struct archive* a, struct archive* b) {
