@@ -59,7 +59,7 @@ int BrowserWindow::evaluateHTML(std::string filepath, int x, int y, int w, int h
 		
 		htmlNodePtr root = nullptr;
 
-		while (child->next != nullptr) {
+		while (child != nullptr) {
 			if (child->type == XML_ELEMENT_NODE) {
 				root = child;
 				break;
@@ -81,9 +81,9 @@ int BrowserWindow::evaluateHTML(std::string filepath, int x, int y, int w, int h
 			if (root_child->type == XML_ELEMENT_NODE) {
 				const xmlChar* child_name = root_child->name;
 
-				if (strncmp((char*)child_name, "head", 5)) {
+				if (strncmp((char*)child_name, "head", 5) == 0) {
 					evaluateHead(root_child);
-				} else if (strncmp((char*)child_name, "body", 5)) {
+				} else if (strncmp((char*)child_name, "body", 5) == 0) {
 					scrollbar = new Fl_Scroll(0, 25, w, h - 25);
 					body = new Body(std::shared_ptr<Fl_Window>(this), root_child, 0, 20, w, h - 20);
 					scrollbar->end();
@@ -107,7 +107,7 @@ void BrowserWindow::evaluateHead(htmlNodePtr head) {
 	htmlNodePtr child = head->children;
 	while (child != nullptr) {
 		const xmlChar* child_name = child->name;
-		if (strncmp((char*)child_name, "title", 6)) {
+		if (strncmp((char*)child_name, "title", 6) == 0) {
 			if (child->children != nullptr && child->children->type == XML_TEXT_NODE) {
 				title = std::string((char*)child->children->content);
 				label(title.c_str());
