@@ -13,7 +13,7 @@ https://ambiguousname.itch.io/spider-880
 - [Faker](https://faker.readthedocs.io/en/master/)
 - [OpenSSL ^3.3.1](https://openssl.org/)
 - [libarchive >= 3.7.4](https://libarchive.org/)
-- [libxml++ 3.0](https://libxmlplusplus.github.io/libxmlplusplus/)
+- [libxml2](https://gitlab.gnome.org/GNOME/libxml2)
 
 # Building
 

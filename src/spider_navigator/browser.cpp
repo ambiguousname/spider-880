@@ -22,35 +22,55 @@ void showHelp(Fl_Widget*, void* w) {
 	Browser::NewWindow("gertwig_blog", "index.html", window->x() + 10, window->y() + 10, window->w(), window->h());
 }
 
+htmlParserCtxtPtr html_ctx;
+
+int BrowserWindow::evaluateHTML(std::string filepath) {
+	htmlDocPtr doc = htmlCtxtReadFile(html_ctx, filepath.c_str(), NULL, 0);
+
+	if (doc != NULL) {
+		if (html_ctx->valid == 0) {
+			errorSound();
+			xmlFreeDoc(doc);
+			fl_alert("XML parsing error %i: %s", html_ctx->errNo, html_ctx->lastError.message);
+			return -1;
+		}
+
+		if (doc->children != nullptr) {
+			fl_alert("%s", doc->children->name);
+		}
+
+		xmlFreeDoc(doc);
+
+		return 0;
+
+		// xmlpp::Node::NodeList children = root->get_children();
+		// for (auto child : children) {
+		// 	Glib::ustring child_name = child->get_name();
+
+		// 	if (child_name == "head") {
+		// 		evaluateHead(dynamic_cast<xmlpp::Element*>(child));
+		// 	} else if (child_name == "body") {
+		// 		scrollbar = new Fl_Scroll(0, 25, w, h - 25);
+		// 		body = new Body(std::shared_ptr<Fl_Window>(this), dynamic_cast<xmlpp::Element*>(child), 0, 20, w, h - 20);
+		// 		scrollbar->end();
+		// 		scrollbar->type(Fl_Scroll::VERTICAL);
+		// 	}
+		// }
+	} else {
+		errorSound();
+		fl_alert("Failed to read %s", filepath);
+		return -1;
+	}
+}
+
 BrowserWindow::BrowserWindow(std::string filepath, int x, int y, int w, int h) : Fl_Window(x, y, w, h), menu_bar(0, 0, w, 20) {
 	menu_bar.add("NavSab", 0, 0, 0, FL_MENU_INACTIVE);
 	menu_bar.add("Help/About", FL_CTRL+'a', aboutCallback);
 	menu_bar.add("Help/Website", FL_CTRL+'w', showHelp, this);
-
-	try {
-		xmlpp::DomParser parser(filepath);
-		xmlpp::Document* d = parser.get_document();
-		xmlpp::Element* root = d->get_root_node();
-
-		xmlpp::Node::NodeList children = root->get_children();
-		for (auto child : children) {
-			Glib::ustring child_name = child->get_name();
-
-			if (child_name == "head") {
-				evaluateHead(dynamic_cast<xmlpp::Element*>(child));
-			} else if (child_name == "body") {
-				scrollbar = new Fl_Scroll(0, 25, w, h - 25);
-				body = new Body(std::shared_ptr<Fl_Window>(this), dynamic_cast<xmlpp::Element*>(child), 0, 20, w, h - 20);
-				scrollbar->end();
-				scrollbar->type(Fl_Scroll::VERTICAL);
-			}
-		}
-	} catch (xmlpp::exception& e) {
-		errorSound();
-		fl_alert("Could not parse: %s", e.what());
-		body = nullptr;
-	}
 	
+	body = nullptr;
+	evaluateHTML(filepath);
+
 	resizable(this);
 	end();
 }
@@ -62,20 +82,20 @@ void BrowserWindow::draw() {
 	Fl_Window::draw();
 }
 
-void BrowserWindow::evaluateHead(xmlpp::Element* head) {
-	if (head != nullptr) {
-		xmlpp::Node::NodeList children = head->get_children();
-		for (auto child : children) {
-			Glib::ustring child_name = child->get_name();
+void BrowserWindow::evaluateHead(htmlNodePtr head) {
+	// if (head != nullptr) {
+	// 	xmlpp::Node::NodeList children = head->get_children();
+	// 	for (auto child : children) {
+	// 		Glib::ustring child_name = child->get_name();
 
-			if (child_name == "title") {
-				if (auto t = dynamic_cast<xmlpp::TextNode*>(child->get_first_child())) {
-					title = t->get_content();
-					label(title.c_str());	
-				}
-			}
-		}
-	}
+	// 		if (child_name == "title") {
+	// 			if (auto t = dynamic_cast<xmlpp::TextNode*>(child->get_first_child())) {
+	// 				title = t->get_content();
+	// 				label(title.c_str());	
+	// 			}
+	// 		}
+	// 	}
+	// }
 }
 
 
@@ -85,6 +105,15 @@ OSSL_PROVIDER* pvdr;
 std::set<std::string> visited_pages;
 
 void Browser::Initialize() {
+	LIBXML_TEST_VERSION
+	htmlParserCtxtPtr html_ctx = htmlNewParserCtxt();
+
+	if (html_ctx == NULL) {
+		errorSound();
+		fl_alert("Could not create HTML Parser Context.");
+		return;
+	}
+
 	visited_pages = std::set<std::string>();
 
 	libctx = lib_ctx_local_providers("./ossl-modules");
@@ -136,6 +165,8 @@ void Browser::Initialize() {
 void Browser::Uninitialize() {
 	unload_provider(pvdr);
 	free_lib_ctx(libctx);
+	htmlFreeParserCtxt(html_ctx);
+	xmlCleanupParser();
 }
 
 void Browser::VisitPage(std::string filepath) {

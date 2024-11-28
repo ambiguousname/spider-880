@@ -21,28 +21,28 @@ HTMLNode::HTMLNode(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> par
 	}
 }
 
-void HTMLNode::parseChildren(std::shared_ptr<RootNode> root, xmlpp::Element* const element) {
-	if (auto bg = element->get_attribute("background-color")) {
-		_background_color = std::stoi(bg->get_value());
-	}
+void HTMLNode::parseChildren(std::shared_ptr<RootNode> root, htmlNodePtr const element) {
+	// if (auto bg = element->get_attribute("background-color")) {
+	// 	_background_color = std::stoi(bg->get_value());
+	// }
 
-	if (auto text = element->get_attribute("color")) {
-		_text_color = std::stoi(text->get_value());
-	}
+	// if (auto text = element->get_attribute("color")) {
+	// 	_text_color = std::stoi(text->get_value());
+	// }
 
-	for (auto child : element->get_children()) {
-		Glib::ustring name = child->get_name();
+	// for (auto child : element->get_children()) {
+	// 	Glib::ustring name = child->get_name();
 
-		parseChild(root, child, name);
-	}
+	// 	parseChild(root, child, name);
+	// }
 }
 
-void HTMLNode::parseChild(std::shared_ptr<RootNode> root, xmlpp::Node* node, Glib::ustring node_name) {
-	if (node_name == "p") {
-		_children.push_back(std::make_shared<P>(root, std::shared_ptr<HTMLNode>(this), node));
-	} else if (node_name == "img") {
-		_children.push_back(std::make_shared<Img>(root, std::shared_ptr<HTMLNode>(this), node));
-	}
+void HTMLNode::parseChild(std::shared_ptr<RootNode> root, htmlNodePtr node, const xmlChar * node_name) {
+	// if (node_name == "p") {
+	// 	_children.push_back(std::make_shared<P>(root, std::shared_ptr<HTMLNode>(this), node));
+	// } else if (node_name == "img") {
+	// 	_children.push_back(std::make_shared<Img>(root, std::shared_ptr<HTMLNode>(this), node));
+	// }
 }
 
 void HTMLNode::drawChildren(int& x, int& y, int& w, int& h) {
@@ -105,8 +105,8 @@ int HTMLNode::handleEvent(int event) {
 	return 0;
 }
 
-Body::Body(std::shared_ptr<Fl_Window> parent, xmlpp::Element* const root, int x, int y, int w, int h) : Fl_Group(x, y, w, h), HTMLNode(nullptr, nullptr), _parent(parent) {
-	parseChildren(std::shared_ptr<RootNode>(this), root);
+Body::Body(std::shared_ptr<Fl_Window> parent, htmlNodePtr const root, int x, int y, int w, int h) : Fl_Group(x, y, w, h), HTMLNode(nullptr, nullptr), _parent(parent) {
+	// parseChildren(std::shared_ptr<RootNode>(this), root);
 	end();
 }
 
@@ -142,11 +142,11 @@ double Text::addContent(int ptr, int& start_ptr, int& size, std::string& word) {
 	return w;
 }
 
-Text::Text(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node, int position_info) : HTMLNode(root, parent) {
+Text::Text(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, htmlNodePtr text_node, int position_info) : HTMLNode(root, parent) {
 	if (text_node == nullptr) {
 		return;
 	}
-	_content = text_node->get_content();
+	// _content = text_node->get_content();
 	_content_w = 0;
 
 	if (position_info & TextPositionInfo::FIRST) {
@@ -260,18 +260,18 @@ void Text::drawChildren(int& x, int& y, int& w, int& h) {
 	_node_h += _base_content_h + _base_content_descent;
 }
 
-P::P(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::Node* const node) : HTMLNode(root, parent) {
-	parseChildren(root, dynamic_cast<xmlpp::Element*>(node));
+P::P(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, htmlNodePtr const node) : HTMLNode(root, parent) {
+	// parseChildren(root, dynamic_cast<htmlNodePtr>(node));
 	_parent->addInteractive(std::shared_ptr<HTMLNode>(this));
 }
 
-void P::parseChild(std::shared_ptr<RootNode> root, xmlpp::Node* node, Glib::ustring node_name) {
-	int position = ((node->get_next_sibling() == nullptr) << 1) | (node->get_previous_sibling() == nullptr);
-	if (auto text = dynamic_cast<xmlpp::TextNode*>(node)) {
-		_children.push_back(std::make_shared<Text>(root, std::shared_ptr<HTMLNode>(this), text, position));
-	} else if (node_name == "a") {
-		_children.push_back(std::make_shared<A>(root, std::shared_ptr<HTMLNode>(this), node, position));
-	} 
+void P::parseChild(std::shared_ptr<RootNode> root, htmlNodePtr node, const xmlChar* node_name) {
+	// int position = ((node->get_next_sibling() == nullptr) << 1) | (node->get_previous_sibling() == nullptr);
+	// if (auto text = dynamic_cast<xmlpp::TextNode*>(node)) {
+	// 	_children.push_back(std::make_shared<Text>(root, std::shared_ptr<HTMLNode>(this), text, position));
+	// } else if (node_name == "a") {
+	// 	_children.push_back(std::make_shared<A>(root, std::shared_ptr<HTMLNode>(this), node, position));
+	// } 
 }
 
 void P::drawChildren(int& x, int& y, int& w, int& h) {
@@ -333,27 +333,27 @@ void P::setChildrenHighlight(bool highlight) {
 	}
 }
 
-A::A(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::Node* node, int position_info) : Text(root, parent, dynamic_cast<xmlpp::TextNode*>(node->get_first_child()), position_info) {
-	if (auto e = dynamic_cast<xmlpp::Element*>(node)) {
-		if (auto href = e->get_attribute("href")) {
-			filepath = href->get_value();
-			full_path = std::format("spider_navigator/{0}", filepath);
+A::A(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, htmlNodePtr node, int position_info) : Text(root, parent, node->children, position_info) {
+	// if (auto e = dynamic_cast<xmlpp::Element*>(node)) {
+	// 	if (auto href = e->get_attribute("href")) {
+	// 		filepath = href->get_value();
+	// 		full_path = std::format("spider_navigator/{0}", filepath);
 
-			bool is_file = false;
-			for (auto c : filepath) {
-				if (c == '/' && !is_file) {
-					is_file = true;
-					continue;
-				}
+	// 		bool is_file = false;
+	// 		for (auto c : filepath) {
+	// 			if (c == '/' && !is_file) {
+	// 				is_file = true;
+	// 				continue;
+	// 			}
 
-				if (is_file) {
-					filename += c;
-				} else {
-					site += c;
-				}
-			}
-		}
-	}
+	// 			if (is_file) {
+	// 				filename += c;
+	// 			} else {
+	// 				site += c;
+	// 			}
+	// 		}
+	// 	}
+	// }
 	_text_color = 4;
 	_parent->addInteractive(std::shared_ptr<HTMLNode>(this));
 
@@ -393,14 +393,14 @@ void A::drawChildren(int& x, int& y, int& w, int& h) {
 	Text::drawChildren(x, y, w, h);
 }
 
-Img::Img(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::Node* const node) : HTMLNode(root, parent) {
-	if (auto i = dynamic_cast<xmlpp::Element*>(node)) {
-		auto a = i->get_attribute("src");
-		if (a != nullptr) {
-			Glib::ustring src = a->get_value();
-			box = std::make_unique<ImageBox>(src.c_str());
-		}
-	}
+Img::Img(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, htmlNodePtr const node) : HTMLNode(root, parent) {
+	// if (auto i = dynamic_cast<xmlpp::Element*>(node)) {
+	// 	auto a = i->get_attribute("src");
+	// 	if (a != nullptr) {
+	// 		Glib::ustring src = a->get_value();
+	// 		box = std::make_unique<ImageBox>(src.c_str());
+	// 	}
+	// }
 }
 
 void Img::drawChildren(int&, int& y, int& w, int& h) {

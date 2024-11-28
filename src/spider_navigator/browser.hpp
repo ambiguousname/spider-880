@@ -23,7 +23,8 @@ class BrowserWindow : public Fl_Window {
 
 	std::string title;
 
-	void evaluateHead(xmlpp::Element* head);
+	void evaluateHead(htmlNodePtr head);
+	int evaluateHTML(std::string filepath);
 
 	public:
 	BrowserWindow(std::string filepath, int x, int y, int w, int h);

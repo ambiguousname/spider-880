@@ -7,7 +7,7 @@
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Window.H>
 #include "util/image_box.hpp"
-#include <libxml++/libxml++.h>
+#include <libxml/HTMLparser.h>
 
 class Body;
 
@@ -29,8 +29,8 @@ class HTMLNode {
 	int _highlight_bg = FL_BLUE;
 	int _highlight_text = FL_WHITE;
 
-	void parseChildren(std::shared_ptr<RootNode> root, xmlpp::Element* const element);
-	virtual void parseChild(std::shared_ptr<RootNode> root, xmlpp::Node* const node, Glib::ustring node_name);
+	void parseChildren(std::shared_ptr<RootNode> root, htmlNodePtr const element);
+	virtual void parseChild(std::shared_ptr<RootNode> root, htmlNodePtr const node, const xmlChar* node_name);
 
 	int x_margin = 15;
 
@@ -72,7 +72,7 @@ class Body : public Fl_Group, public HTMLNode {
 	std::shared_ptr<Fl_Window> _parent;
 
 	public:
-	Body(std::shared_ptr<Fl_Window> parent, xmlpp::Element* const root, int x, int y, int w, int h);
+	Body(std::shared_ptr<Fl_Window> parent, htmlNodePtr const root, int x, int y, int w, int h);
 	~Body() { _parent.reset(); }
 	void draw() override;
 	int handle(int event);
@@ -109,7 +109,7 @@ class Text : public HTMLNode {
 	public:
 	bool highlight = false;
 	
-	Text(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::TextNode* text_node, int position_info);
+	Text(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, htmlNodePtr text_node, int position_info);
 
 	void drawChildren(int& x, int& y, int& w, int& h) override;
 };
@@ -124,7 +124,7 @@ class A : public Text {
 	int visited_color = 13;
 
 	public:
-	A(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::Node* node, int position_info);
+	A(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, htmlNodePtr node, int position_info);
 
 	int handleEvent(int event) override;
 
@@ -133,10 +133,10 @@ class A : public Text {
 
 class P : public HTMLNode {
 	protected:
-	void parseChild(std::shared_ptr<RootNode> root, xmlpp::Node* const node, Glib::ustring node_name) override;	
+	void parseChild(std::shared_ptr<RootNode> root, htmlNodePtr const node, const xmlChar * node_name) override;	
 
 	public:
-	P(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::Node* const node);
+	P(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, htmlNodePtr const node);
 	
 	void drawChildren(int& x, int& y, int& w, int& h) override;
 
@@ -149,7 +149,7 @@ class P : public HTMLNode {
 class Img : public HTMLNode {
 	std::unique_ptr<ImageBox> box;
 	public:
-	Img(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, xmlpp::Node* const node);
+	Img(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, htmlNodePtr const node);
 	~Img() { box.release(); }
 
 	void drawChildren(int& x, int& y, int& w, int& h) override;
