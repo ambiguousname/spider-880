@@ -24,52 +24,13 @@ void showHelp(Fl_Widget*, void* w) {
 
 htmlParserCtxtPtr html_ctx;
 
-int BrowserWindow::evaluateHTML(std::string filepath) {
-	htmlDocPtr doc = htmlCtxtReadFile(html_ctx, filepath.c_str(), NULL, 0);
-
-	if (doc != NULL) {
-		if (html_ctx->valid == 0) {
-			errorSound();
-			xmlFreeDoc(doc);
-			fl_alert("XML parsing error %i: %s", html_ctx->errNo, html_ctx->lastError.message);
-			return -1;
-		}
-
-		if (doc->children != nullptr) {
-			fl_alert("%s", doc->children->name);
-		}
-
-		xmlFreeDoc(doc);
-
-		return 0;
-
-		// xmlpp::Node::NodeList children = root->get_children();
-		// for (auto child : children) {
-		// 	Glib::ustring child_name = child->get_name();
-
-		// 	if (child_name == "head") {
-		// 		evaluateHead(dynamic_cast<xmlpp::Element*>(child));
-		// 	} else if (child_name == "body") {
-		// 		scrollbar = new Fl_Scroll(0, 25, w, h - 25);
-		// 		body = new Body(std::shared_ptr<Fl_Window>(this), dynamic_cast<xmlpp::Element*>(child), 0, 20, w, h - 20);
-		// 		scrollbar->end();
-		// 		scrollbar->type(Fl_Scroll::VERTICAL);
-		// 	}
-		// }
-	} else {
-		errorSound();
-		fl_alert("Failed to read %s", filepath.c_str());
-		return -1;
-	}
-}
-
 BrowserWindow::BrowserWindow(std::string filepath, int x, int y, int w, int h) : Fl_Window(x, y, w, h), menu_bar(0, 0, w, 20) {
 	menu_bar.add("NavSab", 0, 0, 0, FL_MENU_INACTIVE);
 	menu_bar.add("Help/About", FL_CTRL+'a', aboutCallback);
 	menu_bar.add("Help/Website", FL_CTRL+'w', showHelp, this);
 	
 	body = nullptr;
-	evaluateHTML(filepath);
+	evaluateHTML(filepath, x, y, w, h);
 
 	resizable(this);
 	end();
@@ -82,20 +43,78 @@ void BrowserWindow::draw() {
 	Fl_Window::draw();
 }
 
-void BrowserWindow::evaluateHead(htmlNodePtr head) {
-	// if (head != nullptr) {
-	// 	xmlpp::Node::NodeList children = head->get_children();
-	// 	for (auto child : children) {
-	// 		Glib::ustring child_name = child->get_name();
 
-	// 		if (child_name == "title") {
-	// 			if (auto t = dynamic_cast<xmlpp::TextNode*>(child->get_first_child())) {
-	// 				title = t->get_content();
-	// 				label(title.c_str());	
-	// 			}
-	// 		}
-	// 	}
-	// }
+int BrowserWindow::evaluateHTML(std::string filepath, int x, int y, int w, int h) {
+	htmlDocPtr doc = htmlCtxtReadFile(html_ctx, filepath.c_str(), NULL, 0);
+
+	if (doc != NULL) {
+		if (html_ctx->valid == 0) {
+			errorSound();
+			xmlFreeDoc(doc);
+			fl_alert("XML parsing error %i: %s", html_ctx->errNo, html_ctx->lastError.message);
+			return -1;
+		}
+
+		htmlNodePtr child = doc->children;
+		
+		htmlNodePtr root = nullptr;
+
+		while (child->next != nullptr) {
+			if (child->type == XML_ELEMENT_NODE) {
+				root = child;
+				break;
+			}
+			child = child->next;
+		}
+
+		if (root == nullptr) {
+			xmlFreeDoc(doc);
+			
+			errorSound();
+			fl_alert("Could not find HTML root.");
+			return -1;
+		}
+
+		htmlNodePtr root_child = root->children;
+
+		while (root_child != nullptr)  {
+			if (root_child->type == XML_ELEMENT_NODE) {
+				const xmlChar* child_name = root_child->name;
+
+				if (strncmp((char*)child_name, "head", 5)) {
+					evaluateHead(root_child);
+				} else if (strncmp((char*)child_name, "body", 5)) {
+					scrollbar = new Fl_Scroll(0, 25, w, h - 25);
+					body = new Body(std::shared_ptr<Fl_Window>(this), root_child, 0, 20, w, h - 20);
+					scrollbar->end();
+					scrollbar->type(Fl_Scroll::VERTICAL);
+				}
+			}
+			root_child = root_child->next;
+		}
+
+		xmlFreeDoc(doc);
+
+		return 0;
+	} else {
+		errorSound();
+		fl_alert("Failed to read %s", filepath.c_str());
+		return -1;
+	}
+}
+
+void BrowserWindow::evaluateHead(htmlNodePtr head) {
+	htmlNodePtr child = head->children;
+	while (child != nullptr) {
+		const xmlChar* child_name = child->name;
+		if (strncmp((char*)child_name, "title", 6)) {
+			if (child->children != nullptr && child->children->type == XML_TEXT_NODE) {
+				title = std::string((char*)child->children->content);
+				label(title.c_str());
+			}
+		}
+		child = child->next;	
+	}
 }
 
 
