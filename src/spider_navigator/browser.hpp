@@ -3,7 +3,6 @@
 #include <string>
 #include <FL/Fl_Scroll.H>
 #include <FL/Fl_Menu_Bar.H>
-#include "tags.hpp"
 
 namespace Browser {
 	void Initialize();
@@ -14,6 +13,8 @@ namespace Browser {
 	void VisitPage(std::string filepath);
 	bool VisitedPage(std::string filepath);
 }
+
+class Body;
 
 class BrowserWindow : public Fl_Window {
 	Fl_Menu_Bar menu_bar;

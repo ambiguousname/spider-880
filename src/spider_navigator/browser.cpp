@@ -12,6 +12,8 @@ extern "C" {
 #include <set>
 #include <util/base_sounds.hpp>
 
+#include "tags.hpp"
+
 void aboutCallback(Fl_Widget*, void*) {
 	errorSound();
 	fl_alert("Bureau of Sabotage Network Navigator\nBy Brian Gertwig");
