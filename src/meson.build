@@ -23,7 +23,7 @@ glew = dependency('glew', required: true)
 
 sqlite3 = dependency('sqlite3', required: true)
 
-libxmlpp = dependency('libxml++-3.0', required: true)
+libxml = dependency('libxml2', required: true)
 
 src = ['main.cpp', 'win_screen.cpp']
 windows = import('windows')
@@ -31,6 +31,6 @@ if target_machine.system() == 'windows'
 	src += windows.compile_resources('./icon.rc', './main.rc')
 endif
 
-exe = executable('spider-880', src, link_args : links, dependencies: [fltk, fltk_images, fltk_gl, opengl, glu, glew, glm, sqlite3, libxmlpp], link_with: [utillib, navsab, databaselib], install: true)
+exe = executable('spider-880', src, link_args : links, dependencies: [fltk, fltk_images, fltk_gl, opengl, glu, glew, glm, sqlite3, libxml], link_with: [utillib, navsab, databaselib], install: true)
 
 test('basic', exe)
