@@ -34,6 +34,8 @@ void HTMLNode::parseChildren(std::shared_ptr<RootNode> root, htmlNodePtr const e
 			} else if (strncmp((char*)property->name, "color", 6) == 0) {
 				_text_color = std::stoi((char*)property->children->content);
 			}
+
+			property = property->next;
 		}
 	}
 
@@ -41,6 +43,8 @@ void HTMLNode::parseChildren(std::shared_ptr<RootNode> root, htmlNodePtr const e
 	while (child != nullptr) {
 		const xmlChar* name = child->name;
 		parseChild(root, child, name);
+
+		child = child->next;
 	}
 }
 
@@ -153,7 +157,7 @@ Text::Text(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, htm
 	if (text_node == nullptr) {
 		return;
 	}
-	// _content = text_node->get_content();
+	_content = std::string((char*)text_node->content);
 	_content_w = 0;
 
 	if (position_info & TextPositionInfo::FIRST) {
@@ -268,17 +272,17 @@ void Text::drawChildren(int& x, int& y, int& w, int& h) {
 }
 
 P::P(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, htmlNodePtr const node) : HTMLNode(root, parent) {
-	// parseChildren(root, dynamic_cast<htmlNodePtr>(node));
+	parseChildren(root, node);
 	_parent->addInteractive(std::shared_ptr<HTMLNode>(this));
 }
 
 void P::parseChild(std::shared_ptr<RootNode> root, htmlNodePtr node, const xmlChar* node_name) {
-	// int position = ((node->get_next_sibling() == nullptr) << 1) | (node->get_previous_sibling() == nullptr);
-	// if (auto text = dynamic_cast<xmlpp::TextNode*>(node)) {
-	// 	_children.push_back(std::make_shared<Text>(root, std::shared_ptr<HTMLNode>(this), text, position));
-	// } else if (node_name == "a") {
-	// 	_children.push_back(std::make_shared<A>(root, std::shared_ptr<HTMLNode>(this), node, position));
-	// } 
+	int position = ((node->next == nullptr) << 1) | (node->prev == nullptr);
+	if (node->type == XML_TEXT_NODE) {
+		_children.push_back(std::make_shared<Text>(root, std::shared_ptr<HTMLNode>(this), node, position));
+	} else if (strncmp((char*)node_name, "a", 2) == 0) {
+		_children.push_back(std::make_shared<A>(root, std::shared_ptr<HTMLNode>(this), node, position));
+	} 
 }
 
 void P::drawChildren(int& x, int& y, int& w, int& h) {
@@ -341,26 +345,36 @@ void P::setChildrenHighlight(bool highlight) {
 }
 
 A::A(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, htmlNodePtr node, int position_info) : Text(root, parent, node->children, position_info) {
-	// if (auto e = dynamic_cast<xmlpp::Element*>(node)) {
-	// 	if (auto href = e->get_attribute("href")) {
-	// 		filepath = href->get_value();
-	// 		full_path = std::format("spider_navigator/{0}", filepath);
+	if (node->type == XML_ELEMENT_NODE) {
+		xmlAttrPtr property = node->properties;
+		while (property != nullptr) {
+			if (property->children == nullptr) {
+				continue;
+			}
 
-	// 		bool is_file = false;
-	// 		for (auto c : filepath) {
-	// 			if (c == '/' && !is_file) {
-	// 				is_file = true;
-	// 				continue;
-	// 			}
+			if (strncmp((char*)property->name, "href", 5) == 0) {
+				filepath = std::string((char*)property->children->content);
+				full_path = std::format("spider_navigator/{0}", filepath);
 
-	// 			if (is_file) {
-	// 				filename += c;
-	// 			} else {
-	// 				site += c;
-	// 			}
-	// 		}
-	// 	}
-	// }
+				bool is_file = false;
+				for (auto c : filepath) {
+					if (c == '/' && !is_file) {
+						is_file = true;
+						continue;
+					}
+
+					if (is_file) {
+						filename += c;
+					} else {
+						site += c;
+					}
+				}
+				break;
+			}
+
+			property = property->next;
+		}
+	}
 	_text_color = 4;
 	_parent->addInteractive(std::shared_ptr<HTMLNode>(this));
 
@@ -401,13 +415,21 @@ void A::drawChildren(int& x, int& y, int& w, int& h) {
 }
 
 Img::Img(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, htmlNodePtr const node) : HTMLNode(root, parent) {
-	// if (auto i = dynamic_cast<xmlpp::Element*>(node)) {
-	// 	auto a = i->get_attribute("src");
-	// 	if (a != nullptr) {
-	// 		Glib::ustring src = a->get_value();
-	// 		box = std::make_unique<ImageBox>(src.c_str());
-	// 	}
-	// }
+	if (node->type == XML_ELEMENT_NODE) {
+		xmlAttrPtr property = node->properties;
+		while (property != nullptr) {
+			if (property->children == nullptr) {
+				continue;
+			}
+
+			if (strncmp((char*)property->name, "src", 4) == 0) {
+				const char* src = (char*)property->children->content;
+				box = std::make_unique<ImageBox>(src);
+			}
+
+			property = property->next;
+		}
+	}
 }
 
 void Img::drawChildren(int&, int& y, int& w, int& h) {
