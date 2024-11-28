@@ -75,7 +75,7 @@ std::vector<ChoiceOptions> area_options {{"0", 0}, {"1", 1}, {"2", 2}, {"3", 3},
 // TODO: Make these binding instead.
 std::string selectArea(int tier, int value) {
 	// TODO: These should really use sqlite_prepare.
-	std::string base_selector = "SELECT * FROM households WHERE SUBSTR(households.zip, " + std::to_string(tier + 1) + ") = '" + std::to_string(value) + "'";
+	std::string base_selector = "SELECT * FROM households WHERE SUBSTR(households.zip, " + std::to_string(tier + 1) + ", 1) = '" + std::to_string(value) + "'";
 	if (value == 0 && tier < 2) {
 		base_selector += " OR LENGTH(households.zip) <= " + std::to_string(2 - tier);
 	}
