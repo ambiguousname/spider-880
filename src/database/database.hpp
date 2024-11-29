@@ -18,7 +18,7 @@ class SQLColumns {
 	void update(char* key, char* value);
 	column_key id;
 
-	~SQLColumns() {
+	virtual ~SQLColumns() {
 		id.release();
 	}
 };
