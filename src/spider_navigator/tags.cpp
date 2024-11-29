@@ -3,7 +3,11 @@
 #include <FL/fl_ask.H>
 #include <FL/Fl.H>
 #include <typeinfo>
+
+#ifdef __cpp_lib_format
 #include <format>
+#endif
+
 #include <util/base_sounds.hpp>
 
 #include "browser.hpp"
@@ -354,7 +358,12 @@ A::A(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, htmlNodeP
 
 			if (strncmp((char*)property->name, "href", 5) == 0) {
 				filepath = std::string((char*)property->children->content);
+
+				#ifdef __cpp_lib_format
 				full_path = std::format("spider_navigator/{0}", filepath);
+				#else
+				full_path = "spider_navigator/" + filepath;
+				#endif
 
 				bool is_file = false;
 				for (auto c : filepath) {

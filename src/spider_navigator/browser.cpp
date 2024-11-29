@@ -8,7 +8,11 @@ extern "C" {
 #include <FL/Fl_Return_Button.H>
 #include <FL/Fl_Input.H>
 #include <sys/stat.h>
+
+#ifdef __cpp_lib_format
 #include <format>
+#endif
+
 #include <set>
 #include <util/base_sounds.hpp>
 
@@ -229,7 +233,11 @@ class DecryptionWindow : public Fl_Window {
 	std::string filename() const { return _filename; }
 
 	DecryptionWindow(std::string filepath, std::string filename, int x, int y, int w, int h) : Fl_Window(x, y, w, h, filepath.c_str()), _filepath(filepath), _filename(filename) {
+		#ifdef __cpp_lib_format
 		_enc_filepath = std::format("{0}.enc", filepath);
+		#else
+		_enc_filepath = filepath + ".enc";
+		#endif
 
 		std::string label = std::format("The file {0}.enc is encrypted. Please enter a password:", filename);
 		Fl_Box* box = new Fl_Box(FL_DOWN_BOX, 0, h/2, w, h/5, 0);
@@ -325,13 +333,23 @@ void decryptCallback(Fl_Widget*, void* decryption_window) {
 }
 
 void Browser::NewWindow(std::string site, std::string html_file, int x, int y, int w, int h) {
+	#ifdef __cpp_lib_format
 	std::string file_loc = std::format("spider_navigator/{0}/{1}", site, html_file);
+	#else
+	std::string file_loc = "spider_navigator/" + site + "/" + html_file;
+	#endif
+
 	if (access(file_loc.c_str(), F_OK) == 0) {
 		browserFromFile(file_loc, x, y, w, h);
 		return;
 	}
 
+	#ifdef __cpp_lib_format
 	std::string encrypted_file_loc = std::format("{0}.enc", file_loc);
+	#else
+	std::string encrypted_file_loc = file_loc + ".enc";
+	#endif
+
 	if (access(encrypted_file_loc.c_str(), F_OK) == 0) {
 		new DecryptionWindow(file_loc, html_file, x, y, w, h);
 		return;
@@ -339,7 +357,11 @@ void Browser::NewWindow(std::string site, std::string html_file, int x, int y, i
 
 	unsigned char name[16];
 
+	#ifdef __cpp_lib_format
 	std::string name_pwd = std::format("WEBPAGE:{0}", site);
+	#else
+	std::string name_pwd = "WEBPAGE:" + site;
+	#endif
 
 	if (derive_key_md4(libctx, name_pwd.c_str(), name) < 0) {
 		errorSound();
@@ -349,7 +371,12 @@ void Browser::NewWindow(std::string site, std::string html_file, int x, int y, i
 
 
 	std::string filename = filenameFromHash(name);
+	
+	#ifdef __cpp_lib_format
 	std::string file = std::format("spider_navigator/{0}.tar.z.enc", filename);
+	#else
+	std::string file = "spider_navigator/" + filename + ".tar.z.enc";
+	#endif
 
 	if (access(file.c_str(), F_OK) == -1) {
 		errorSound();
@@ -381,7 +408,11 @@ void Browser::NewWindow(std::string site, std::string html_file, int x, int y, i
 		return;
 	}
 
+	#ifdef __cpp_lib_format
 	std::string decrypted_file = std::format("spider_navigator/{0}.tar.z", filename);
+	#else
+	std::string decrypted_file = "spider_navigator/" + filename + ".tar.z";
+	#endif
 
 	if (crypt_file(0, key, iv, file.c_str(), decrypted_file.c_str(), des) < 0) {
 		errorSound();
@@ -391,7 +422,7 @@ void Browser::NewWindow(std::string site, std::string html_file, int x, int y, i
 
 	free_cipher(des);
 
-	if (tar_z_decompress(decrypted_file.c_str(), std::format("spider_navigator/{0}", "./").c_str()) < 0) {
+	if (tar_z_decompress(decrypted_file.c_str(), "spider_navigator/./") < 0) {
 		errorSound();
 		fl_alert("Could not decompress %s.", decrypted_file.c_str());
 		return;
