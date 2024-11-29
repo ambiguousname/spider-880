@@ -1,4 +1,5 @@
 - Add licenses to both releases
+- Fix whatever's going on with Linux OpenGL stuff
 - Linux release build
 
 - Fix SQL queries to be bound
