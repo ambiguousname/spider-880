@@ -14,6 +14,7 @@ extern "C" {
 #endif
 
 #include <set>
+#include <cstring>
 #include <util/base_sounds.hpp>
 
 #include "tags.hpp"

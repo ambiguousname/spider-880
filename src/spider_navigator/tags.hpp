@@ -57,7 +57,7 @@ class HTMLNode {
 	void addInteractive(std::shared_ptr<HTMLNode> node) { _interactiveNodes.push_back(node); }
 
 	HTMLNode(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent);
-	~HTMLNode() { _parent.reset(); _root.reset(); _enteredHandler.reset(); for (auto c: _children) { c.reset(); } for (auto i : _interactiveNodes) { i.reset(); } }
+	virtual ~HTMLNode() { _parent.reset(); _root.reset(); _enteredHandler.reset(); for (auto c: _children) { c.reset(); } for (auto i : _interactiveNodes) { i.reset(); } }
 	
 	/// @brief Draw the node at the given position.
 	/// @param x X-position to draw of the node. The node can change its own starting position if it determines that there is not sufficient space. X can only go up, never down.
