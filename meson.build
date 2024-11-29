@@ -7,5 +7,15 @@ if build_machine.system() == 'windows'
   add_global_arguments('-DWIN32', language : 'cpp')
 endif
 
+
+if target_machine.system() == 'linux'
+	# Link statically so we can hopefully aim for something distro-agnostic.
+  add_global_arguments(
+    '-static-libgcc',
+    '-static-libstdc++',
+    language: 'cpp'
+  )
+endif
+
 subdir('src')
 subdir('assets')

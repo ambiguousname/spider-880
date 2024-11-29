@@ -28,12 +28,8 @@ if target_machine.system() == 'windows'
 	src += windows.compile_resources('./icon.rc', './main.rc')
 endif
 
-if target_machine.system() == 'linux'
-	# Link statically so we can hopefully aim for something distro-agnostic.
-	link_args += '-static-libstdc++'
-endif
-
 
 exe = executable('spider-880', src, link_args: link_args, dependencies: dependencies, link_with: [utillib, databaselib, navsab], install: true)
+install_data('spider-880.sh', install_dir : 'bin')
 
 test('basic', exe)
