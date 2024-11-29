@@ -1,4 +1,4 @@
-- Add libxml license
+- Add licenses to both releases
 - Linux release build
 
 - Fix SQL queries to be bound

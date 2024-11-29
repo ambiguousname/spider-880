@@ -17,5 +17,7 @@ if target_machine.system() == 'linux'
   )
 endif
 
+install_data('BUILD_LICENSES', install_dir: '.')
+
 subdir('src')
 subdir('assets')
