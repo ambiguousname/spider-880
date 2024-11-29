@@ -17,6 +17,10 @@ void SoundManager::Initialize() {
 }
 
 bool SoundManager::Load(const char* path, Sound& out) {
+	if (access(path, F_OK) != 0) {
+		std::cerr << "Sound " << path << " does not exist." << std::endl;
+		return false;
+	}
 	ma_result result = ma_sound_init_from_file(&engine, path, 0, NULL, NULL, &out.sound);
 
 	if (result != MA_SUCCESS) {
