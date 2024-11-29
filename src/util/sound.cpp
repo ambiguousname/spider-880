@@ -18,6 +18,7 @@ void SoundManager::Initialize() {
 
 bool SoundManager::Load(const char* path, Sound& out) {
 	if (access(path, F_OK) != 0) {
+		out.loaded = false;
 		std::cerr << "Sound " << path << " does not exist." << std::endl;
 		return false;
 	}
@@ -38,22 +39,33 @@ void SoundManager::Uninitialize() {
 }
 
 void Sound::play() {
-	ma_sound_start(&sound);
+	if (loaded) {
+		ma_sound_start(&sound);
+	}
 }
 
 void Sound::stop() {
-	ma_sound_stop(&sound);
+	if (loaded) {
+		ma_sound_stop(&sound);
+	}
 }
 
 void Sound::setPitch(float pitch) {
-	ma_sound_set_pitch(&sound, pitch);
+	if (loaded) {
+		ma_sound_set_pitch(&sound, pitch);
+	}
 }
 
 void Sound::setLoop(bool shouldLoop) {
-	ma_sound_set_looping(&sound, shouldLoop);
+	if (loaded) {
+		ma_sound_set_looping(&sound, shouldLoop);
+	}
 }
 
 void Sound::awaitPlay() {
+	if (!loaded) {
+		return;
+	}
 	while (ma_sound_is_playing(&sound)) {
 		continue;
 	}
