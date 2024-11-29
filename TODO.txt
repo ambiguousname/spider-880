@@ -1,4 +1,5 @@
 - Add libxml license
+- Linux release build
 
 - Fix SQL queries to be bound
 - Move Spider-880.exe to bin/ directory, make it work from there.
