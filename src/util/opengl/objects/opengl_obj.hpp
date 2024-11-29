@@ -25,9 +25,9 @@ class Object {
 	GLuint vertices_vbo;
 
 	// These should be set in a shader GLSL:
-	GLuint position_idx = 0;
-	GLuint normal_idx = 1;
-	GLuint texcoord_idx = 2;
+	GLuint position_idx = 1;
+	GLuint normal_idx = 2;
+	GLuint texcoord_idx = 3;
 
 	void update_buffers();
 
