@@ -25,11 +25,7 @@ Fl_Color PaletteImage::drawPixel(int x, int y, uchar r, uchar g, uchar b) {
 
 void PaletteImage::prepareDraw(int w, int h) {
 	// Based on https://github.com/fltk/fltk/blob/master/src/Fl_Image.cxx
-	if (img_resized != nullptr) {
-		delete img_resized;
-		img_resized = nullptr;
-	}
-	img_resized = new uchar[w * h * _d];
+	img_resized.resize(w * h * _d);
 
 	resized_w = w;
 	resized_h = h;
@@ -50,7 +46,7 @@ void PaletteImage::prepareDraw(int w, int h) {
 	const uchar* old_ptr;
 
 	int channel_number;
-	for (dy = resized_h, sy = 0, yerr = resized_h, new_ptr = img_resized; dy > 0; dy--) {
+	for (dy = resized_h, sy = 0, yerr = resized_h, new_ptr = img_resized.data(); dy > 0; dy--) {
 		for (dx = resized_w, xerr = resized_w, old_ptr = img_dat + sy * line_step; dx > 0; dx--) {
 			for (channel_number=0; channel_number < _d; channel_number++) *new_ptr++ = old_ptr[channel_number];
 
@@ -73,7 +69,7 @@ void PaletteImage::prepareDraw(int w, int h) {
 }
 
 void PaletteImage::draw(int x, int y) {
-	fl_draw_image(img_resized, x, y, resized_w, resized_h, _d);
+	fl_draw_image(img_resized.data(), x, y, resized_w, resized_h, _d);
 }
 
 void PaletteImage::finishDraw() {
@@ -84,7 +80,6 @@ void PaletteImage::finishDraw() {
 
 PaletteImage::~PaletteImage() {
 	delete img_dat;
-	delete img_resized;
 }
 
 ImageBox::ImageBox(const char* image_loc) {

@@ -3,11 +3,13 @@
 #include <FL/Fl_Image.H>
 #include <FL/Fl_Widget.H>
 #include <memory>
+#include <vector>
+
 class PaletteImage {
 	protected:
 	uchar* img_dat;
 
-	uchar* img_resized = nullptr;
+	std::vector<uchar> img_resized;
 
 	int resized_w;
 	int resized_h;
@@ -49,7 +51,7 @@ class ImageBox {
 	std::unique_ptr<PaletteImage> saved_img;
 	public:
 	bool isValid = false;
-	
+
 	void getFullDimensions(int& out_w, int& out_h) { out_w = full_image->w(); out_h = full_image->h(); }
 	void prepareDraw(int x, int y, int w, int h);
 	void draw();
