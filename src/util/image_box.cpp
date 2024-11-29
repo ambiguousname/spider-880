@@ -88,7 +88,10 @@ PaletteImage::~PaletteImage() {
 }
 
 ImageBox::ImageBox(const char* image_loc) {
-	full_image = std::make_unique<Fl_PNG_Image>(image_loc);
+	if (access(image_loc, F_OK) == 0) {
+		full_image = std::make_unique<Fl_PNG_Image>(image_loc);
+		isValid = true;
+	}
 }
 
 void ImageBox::prepareDraw(int x, int y, int w, int h) {

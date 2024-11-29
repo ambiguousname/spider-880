@@ -434,6 +434,10 @@ Img::Img(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, htmlN
 			if (strncmp((char*)property->name, "src", 4) == 0) {
 				const char* src = (char*)property->children->content;
 				box = std::make_unique<ImageBox>(src);
+				if (!box->isValid) {
+					errorSound();
+					fl_alert("Cannot load image %s", src);
+				}
 			}
 
 			property = property->next;
@@ -442,15 +446,17 @@ Img::Img(std::shared_ptr<RootNode> root, std::shared_ptr<HTMLNode> parent, htmlN
 }
 
 void Img::drawChildren(int&, int& y, int& w, int& h) {
-	w = w * 3/4;
+	if (box->isValid) {
+		w = w * 3/4;
 
-	int full_w, full_h;
-	box->getFullDimensions(full_w, full_h);
-	double ratio = (double)full_h/(double)full_w;
-	h = ratio * w;
+		int full_w, full_h;
+		box->getFullDimensions(full_w, full_h);
+		double ratio = (double)full_h/(double)full_w;
+		h = ratio * w;
 
-	box->prepareDraw(x_margin * 2, y, w, h);
-	box->draw();
+		box->prepareDraw(x_margin * 2, y, w, h);
+		box->draw();
 
-	y += 20;
+		y += 20;
+	}
 }
