@@ -239,7 +239,11 @@ class DecryptionWindow : public Fl_Window {
 		_enc_filepath = filepath + ".enc";
 		#endif
 
+		#ifdef __cpp_lib_format
 		std::string label = std::format("The file {0}.enc is encrypted. Please enter a password:", filename);
+		#else
+		std::string label = "The file " + filename + ".enc is encrypted. Please enter a password:";
+		#endif
 		Fl_Box* box = new Fl_Box(FL_DOWN_BOX, 0, h/2, w, h/5, 0);
 		box->copy_label(label.c_str());
 		box->align(FL_ALIGN_TOP | FL_ALIGN_WRAP);
