@@ -70,3 +70,9 @@ void Sound::awaitPlay() {
 		continue;
 	}
 }
+
+Sound::~Sound() {
+	if (loaded) {
+		ma_sound_uninit(&sound);
+	}
+}

@@ -21,6 +21,8 @@ namespace SoundManager {
 		}
 
 		void awaitPlay();
+
+		~Sound();
 	};
 
 	void Initialize();
