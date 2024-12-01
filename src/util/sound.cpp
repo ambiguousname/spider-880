@@ -3,11 +3,17 @@
 #define MINIAUDIO_IMPLEMENTATION
 #include "miniaudio.h"
 
+#include <vector>
+
 using namespace SoundManager;
 
 ma_engine engine;
 
+std::vector<ma_sound*> sounds;
+
 void SoundManager::Initialize() {
+	sounds = std::vector<ma_sound*>();
+
 	ma_result result;
 	
 	result = ma_engine_init(NULL, &engine);
@@ -15,6 +21,7 @@ void SoundManager::Initialize() {
 		std::cerr << "Could not initialize audio engine." << std::endl;
 	}
 }
+
 
 bool SoundManager::Load(const char* path, Sound& out) {
 	if (access(path, F_OK) != 0) {
@@ -31,10 +38,16 @@ bool SoundManager::Load(const char* path, Sound& out) {
 	}
 
 	out.loaded = true;
+
+	sounds.push_back(&out.sound);
+
 	return true;
 }
 
 void SoundManager::Uninitialize() {
+	for (auto s : sounds) {
+		ma_sound_uninit(s);
+	}
 	ma_engine_uninit(&engine);
 }
 
@@ -68,11 +81,5 @@ void Sound::awaitPlay() {
 	}
 	while (ma_sound_is_playing(&sound)) {
 		continue;
-	}
-}
-
-Sound::~Sound() {
-	if (loaded) {
-		ma_sound_uninit(&sound);
 	}
 }
