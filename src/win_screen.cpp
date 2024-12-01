@@ -46,7 +46,6 @@ void WinScreen::glDraw(const mat4& projection, const mat4& view, float time) {
 	if (!isClosing && tick > 600) {
 		isClosing = true;
 		endSound.stop();
-		fullscreen();
 		// Adding this to the main thread makes it memory safe to close:
 		Fl::add_timeout(1.0, winScreen);
 	}
