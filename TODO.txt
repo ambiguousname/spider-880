@@ -1,5 +1,7 @@
 - Add licenses to both releases
-- Fix whatever's going on with Linux OpenGL stuff (fixed it, just remove libGL.so)
+- Fix whatever's going on with Linux OpenGL stuff (fixed it, just remove libGL.so) (nope, didn't fix it, need to check again)
+- Should also remove libuuid
+- Linux fullscreen OpenGL
 - Linux release build
 
 - Fix SQL queries to be bound
