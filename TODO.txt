@@ -1,6 +1,7 @@
 - Add licenses to both releases
 - Fix whatever's going on with Linux OpenGL stuff (fixed it, just remove libGL.so) (nope, didn't fix it, need to check again)
 - Should also remove libuuid
+- Remove libxml and libarchive debug symbols?
 - Linux fullscreen OpenGL
 - Linux release build
 
