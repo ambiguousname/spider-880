@@ -3,10 +3,14 @@
 #include "opengl_shader.hpp"
 // TODO: Fix.
 // This optimization problem happens only on Linux.
+#ifdef __linux__
 #pragma GCC push_options
 #pragma GCC optimize ("O0")
+#endif
 #include <memory>
+#ifdef __linux__
 #pragma GCC pop_options
+#endif
 #include <vector>
 
 #include <glm/glm.hpp>
