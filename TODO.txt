@@ -1,12 +1,10 @@
 - Add licenses to both releases
-- Fix whatever's going on with Linux OpenGL stuff (fixed it, just remove libGL.so) (nope, didn't fix it, need to check again)
+- Test on VM and fresh Windows machine
 - Issues with OpenGL on linux:
   - Release optimizes out some important parts of <memory> that I can't figure out. (Kinda fixed)
   - Both release AND debug are broken (Fl::gl_visual is what breaks this) (Fixed)
 
-- Should also remove libuuid
 - Remove libxml and libarchive debug symbols?
-- Linux fullscreen OpenGL
 - Linux release build
 
 - Fix SQL queries to be bound
