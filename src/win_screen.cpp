@@ -16,6 +16,11 @@ WinScreen::WinScreen() : GlWindow(0, 0, 300, 300, "You Win :)") {
 	mode(FL_RGB | FL_DEPTH | FL_OPENGL3);
 	end();
 	show();
+	
+	// In case we get some trouble from the window manager:
+	int x, y, width, height;
+	Fl::screen_work_area(x, y, width, height);
+	this->resize(x, y, width, height);
 	fullscreen();
 
 	SoundManager::Load("./assets/startup.wav", endSound);

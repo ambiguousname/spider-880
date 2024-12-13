@@ -3,6 +3,8 @@
 #include "opengl_shader.hpp"
 // TODO: Fix.
 // This optimization problem happens only on Linux.
+// There's some sort of bug here with this not jelling well with OpenGL, leading to a black screen.
+// Probably something to do with the shared_ptr<Shader> or shared_ptr<ObjectGeometry> types.
 #ifdef __linux__
 #pragma GCC push_options
 #pragma GCC optimize ("O0")
