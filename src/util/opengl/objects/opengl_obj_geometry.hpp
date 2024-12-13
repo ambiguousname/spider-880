@@ -1,8 +1,12 @@
 #pragma once
 #include "../gl.hpp"
 #include "opengl_shader.hpp"
-
+// TODO: Fix.
+// This optimization problem happens only on Linux.
+#pragma GCC push_options
+#pragma GCC optimize ("O0")
 #include <memory>
+#pragma GCC pop_options
 #include <vector>
 
 #include <glm/glm.hpp>
