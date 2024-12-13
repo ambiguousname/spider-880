@@ -79,9 +79,6 @@ void ObjectGeometry::update_buffers() {
 void ObjectGeometry::draw(const mat4& model, const mat4& projection, const mat4& view, float time) {
 	if (shader != nullptr){
 		shader->useProgram();
-	}
-
-	if (shader != nullptr) {
 		shader->setAttrs(glm::value_ptr(model), glm::value_ptr(projection), glm::value_ptr(view), time);
 	}
 
