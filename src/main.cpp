@@ -108,8 +108,6 @@ int main(int argc, char **argv) {
 	SoundManager::Load("./assets/startup.wav", startup);
 	startup.play();
 
-	Fl::gl_visual(FL_RGB | FL_DEPTH | FL_OPENGL3);
-
 	Fl::run();
 
 	SoundManager::Sound close;
