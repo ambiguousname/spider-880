@@ -27,6 +27,8 @@ WinScreen::WinScreen() : GlWindow(0, 0, 300, 300, "You Win :)") {
 	endSound.setLoop(true);
 	endSound.setPitch(0.1f);
 	endSound.play();
+
+	time(&tick);
 }
 
 void WinScreen::initialize() {
@@ -43,12 +45,13 @@ void winScreen(void*) {
 
 bool isClosing = false;
 
-void WinScreen::glDraw(const mat4& projection, const mat4& view, float time) {
-	tick++;
+void WinScreen::glDraw(const mat4& projection, const mat4& view, float t) {
 	test->rotate(radians(0.1f), vec3(1.0f, 1.0f, 1.0f));
-	test->draw(projection, view, time);
+	test->draw(projection, view, t);
 	// camera.translate(vec3(0.0f, 0.0f, -0.1f));
-	if (!isClosing && tick > 600) {
+	time_t now;
+	time(&now);
+	if (!isClosing && difftime(now, tick) > 7) {
 		isClosing = true;
 		endSound.stop();
 		// Adding this to the main thread makes it memory safe to close:
