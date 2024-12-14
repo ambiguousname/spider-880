@@ -1,12 +1,9 @@
-- Add licenses to both releases
-- Test on VM and fresh Windows machine
+- Test on fresh Windows machine
 - Issues with OpenGL on linux:
   - Release optimizes out some important parts of <memory> that I can't figure out. (Kinda fixed)
   - Both release AND debug are broken (Fl::gl_visual is what breaks this) (Fixed)
 
 - Remove libxml and libarchive debug symbols?
-- Linux release build
-
 - Fix SQL queries to be bound
 - Move Spider-880.exe to bin/ directory, make it work from there.
 - Is there a way to limit DLL dependencies for some libraries where we don't need everything? (libarchive, for example uses liblzma and libbz2 which we don't need)
